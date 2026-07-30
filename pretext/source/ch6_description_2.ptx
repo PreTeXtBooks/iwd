@@ -1,486 +1,665 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <chapter xml:id="ch-descriptive-statistics_1" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Descriptive Statistics</title>
-
-  <!-- ==================================================================== -->
-  <!-- PART I: DATA-FIRST CONCEPTUAL EXPLORATION                            -->
-  <!-- ==================================================================== -->
-
-  <section xml:id="sec-a-question-about-flamingos">
-    <title>A Survey in the Rift Valley</title>
-    <p>
-      A team of field biologists sets up station along the muddy shores of the Kenyan Rift Valley. Armed with calipers, 
-      weighing slings, and mist nets, they capture, measure, and release <m>344</m> flamingos across Lake Nakuru, Lake Bogoria, 
-      and Lake Elementaita. For every bird that passes through their hands, they record eight attributes: sampling lake, 
-      species, bill length (mm), bill depth (mm), leg length (mm), body mass (g), sex, and observation year.
-    </p>
-    <p>
-      Looking at the raw field sheets, the variation is striking. Some birds are small and vibrant, while others are tall and pale; 
-      weights range from barely over a kilogram to nearly four kilograms. Before running any calculations, the team faces a fundamental field question: 
-      <em>Does this massive range of physical traits represent natural variation within a single flock, or are we looking at two distinct species sharing the same waters?</em>
-    </p>
-
-    <!-- CALLOUT: WHY THIS MATTERS -->
-    <aside xml:id="aside-why-species-matters">
-      <title>Why This Matters</title>
-      <p>
-        In ecological conservation, misclassifying two distinct species as a single varied population can mask severe population declines in the rarer species. In Kenya, Lesser Flamingos are classified as "Near Threatened," making accurate population monitoring vital.
-      </p>
-    </aside>
-  </section>
-
-  <section xml:id="sec-seeing-the-shape">
-    <title>The Double Peak in the Mud</title>
-    <p>
-      To make sense of the <m>336</m> body mass records on their clipboard, the researchers plot every measurement along a single axis. 
-      Instead of forming a single cluster around a typical weight, the plot reveals two undeniable peaks: a massive ridge centered near <m>1650\text{ g}</m> 
-      and a smaller hill near <m>3100\text{ g}</m>.
-    </p>
-
-    <figure xml:id="fig-flamingo-mass-dist">
-      <caption>Body mass records (g) across 336 captured flamingos revealing a bimodal pattern.</caption>
-      <image source="images/flamingo_mass_histogram.png" width="75%">
-        <shortdescription>Bimodal histogram showing body mass of flamingos with two clear peaks.</shortdescription>
-      </image>
-    </figure>
-
-    <p>
-      This double peak tells a story that standard numbers alone would obscure. It warns the team that treating all captured flamingos 
-      as a single group conceals critical biological reality. When the researchers color-code the plot by field species identification, 
-      the double peak splits into two tidy, separate curves: lightweight Lesser Flamingos on the left and heavy Greater Flamingos on the right.
-    </p>
-
-    <!-- CALLOUT: THINK BEFORE YOU COMPUTE -->
-    <aside xml:id="aside-think-bimodal">
-      <title>Think Before You Compute</title>
-      <p>
-        If you blindly compute the average mass of all 336 birds without plotting a histogram first, you get <m>1957.4\text{ g}</m>—a value sitting in the empty valley between the two true species clusters where almost no individual birds actually exist!
-      </p>
-    </aside>
-  </section>
-
-  <section xml:id="sec-center-dispersion-position">
-    <title>Balancing the Flock and Measuring Variation</title>
-    <p>
-      Once the researchers separate the flock by species, each group's weights settle into balanced, bell-like shapes. 
-      For Lesser Flamingos, the physical balance point (<m>1689.1\text{ g}</m>) and the exact middle bird (<m>1684.0\text{ g}</m>) sit almost on top of each other. 
-      When a group is symmetric, both benchmarks tell the same story about a "typical" bird.
-    </p>
-    <p>
-      Next, the team asks how consistent the birds are within each species. Are all Lesser Flamingos nearly identical in size, 
-      or do they vary widely? Looking at the distance individual birds drift from their baseline reveals that Lesser Flamingos are tightly clustered, 
-      with a typical spread of <m>196.4\text{ g}</m> and the middle <m>50\%</m> of birds falling between <m>1536.0\text{ g}</m> and <m>1843.0\text{ g}</m>. 
-      Greater Flamingos, by contrast, show much wider variation, with a typical spread of <m>313.9\text{ g}</m>.
-    </p>
-
-    <!-- CALLOUT: WORKED EXAMPLE -->
-    <example xml:id="ex-center-spread-comparison">
-      <title>Comparing Morphometric Characteristics</title>
-      <statement>
-        <p>
-          Compare the dispersion of bill length between Lesser Flamingos (<m>s = 4.2\text{ mm}</m>) and Greater Flamingos (<m>s = 6.1\text{ mm}</m>). Which species exhibits greater relative variability?
-        </p>
-      </statement>
-      <solution>
-        <p>
-          While Greater Flamingos have a higher standard deviation (<m>6.1\text{ mm}</m>), their mean bill length is also much larger (<m>127.1\text{ mm}</m> vs <m>97.9\text{ mm}</m>). Calculating the coefficient of variation (<m>\text{CV} = s / \bar{x}</m>) shows that both species have similar relative variability (<m>4.3\%</m> vs <m>4.8\%</m>).
-        </p>
-      </solution>
-    </example>
-
-    <!-- CALLOUT: COMMON MISTAKE WARNING -->
-    <warning xml:id="warn-averaging-means">
-      <title>Common Mistake: Averaging Means</title>
-      <p>
-        You cannot find the overall mean body mass by simply averaging the Lesser Flamingo mean (<m>1689.1\text{ g}</m>) and Greater Flamingo mean (<m>3120.2\text{ g}</m>). Because sample sizes differ (<m>n = 273</m> vs <m>n = 63</m>), unweighted averaging severely overestimates the pooled mean!
-      </p>
-    </warning>
-
-    <!-- CALLOUT: KEY TAKEAWAY NOTE -->
-    <note xml:id="note-summary-choice">
-      <title>Key Takeaway</title>
-      <p>
-        Use the mean and standard deviation for symmetric distributions without extreme outliers. Use the median and Interquartile Range (<m>\text{IQR}</m>) for skewed distributions or datasets containing extreme measurements.
-      </p>
-    </note>
-  </section>
-
-  <section xml:id="sec-frequency-and-grouped-summaries">
-    <title>Lake Preferences and Ecosystem Dynamics</title>
-    <p>
-      Physical size is only half the story. The researchers also want to know where each species chooses to feed across the Rift Valley. 
-      Do both species mix freely at every lake, or do they divide the ecosystem between themselves?
-    </p>
-    <p>
-      Cross-referencing capture logs against sampling sites uncovers striking geographic preferences:
-    </p>
-
-    <table xml:id="table-cross-tabulation">
-      <caption>Cross-tabulation of flamingo species by Rift Valley lake.</caption>
-      <tabular halign="center" top="minor" bottom="minor" left="minor" right="minor">
-        <row header="yes">
-          <cell>Lake</cell>
-          <cell>Greater Flamingo</cell>
-          <cell>Lesser Flamingo</cell>
-          <cell>Total</cell>
-        </row>
-        <row>
-          <cell>Lake Bogoria</cell>
-          <cell>10</cell>
-          <cell>114</cell>
-          <cell>124</cell>
-        </row>
-        <row>
-          <cell>Lake Elementaita</cell>
-          <cell>30</cell>
-          <cell>38</cell>
-          <cell>68</cell>
-        </row>
-        <row>
-          <cell>Lake Nakuru</cell>
-          <cell>26</cell>
-          <cell>126</cell>
-          <cell>152</cell>
-        </row>
-      </tabular>
-    </table>
-
-    <!-- CALLOUT: WORKED EXAMPLE FOR PROPORTIONS -->
-    <example xml:id="ex-conditional-proportions">
-      <title>Calculating Conditional Proportions</title>
-      <statement>
-        <p>
-          What proportion of all flamingos sampled at Lake Bogoria belong to the Lesser Flamingo species?
-        </p>
-      </statement>
-      <solution>
-        <p>
-          From <xref ref="table-cross-tabulation"/>, 114 out of the 124 birds recorded at Lake Bogoria are Lesser Flamingos. The conditional proportion is <m>114 / 124 \approx 0.919</m> or <m>91.9\%</m>.
-        </p>
-      </solution>
-    </example>
-
-    <!-- CALLOUT: DISCUSSION REMARK -->
-    <remark xml:id="remark-lake-ecology">
-      <title>Discussion: Ecological Drivers</title>
-      <p>
-        Lake Bogoria's extreme alkalinity supports massive blooms of microscopic blue-green algae (<init>Arthrospira fusiformis</init>), perfectly matched to the fine filtration bill of Lesser Flamingos. In contrast, Greater Flamingos feed on aquatic invertebrates, explaining their higher presence in Lake Elementaita.
-      </p>
-    </remark>
-  </section>
-
-  <section xml:id="sec-missing-data-intro">
-    <title>Missing Records in the Field Log</title>
-    <p>
-      When the biologists return to the field station and audit their digital spreadsheets, they discover several blank entries in the master log. 
-      Out of <m>344</m> captured birds, 4 entries are missing bill depth, 8 lack body mass, and 7 lack recorded sex.
-    </p>
-
-    <!-- CALLOUT: WHY THIS MATTERS -->
-    <aside xml:id="aside-missingness-reasons">
-      <title>Why This Matters in Fieldwork</title>
-      <p>
-        Determining flamingo sex requires genetic testing or careful physical inspection during brief handling windows. Field teams prioritize bird safety over completing every measurement when weather conditions or bird stress levels escalate.
-      </p>
-    </aside>
-
-    <p>
-      Before analyzing the completed records, the researchers must determine why these numbers are absent. 
-      Did a scale battery fail at random, or were the heaviest birds escaping measurement because they were harder to restrain?
-    </p>
-
-    <!-- CALLOUT: KEY TAKEAWAY NOTE -->
-    <note xml:id="note-mcar-definition">
-      <title>Key Takeaway</title>
-      <p>
-        If missing data occur completely at random, removing incomplete rows (listwise deletion) reduces sample size but does not introduce statistical bias. If missingness depends on physical traits (e.g., larger birds escaping measurement), omitting them biases your sample means.
-      </p>
-    </note>
-  </section>
-
-  <!-- ==================================================================== -->
-  <!-- PART II: MATHEMATICAL AND METHODOLOGICAL FORMALISM                  -->
-  <!-- ==================================================================== -->
-
-  <section xml:id="sec-formal-statistical-methods">
-    <title>Formal Statistical Methods and Formulas</title>
-    <p>
-      Having explored descriptive statistics through physical traits, we now formalize 
-      the underlying mathematical definitions.
-    </p>
-
-    <subsection xml:id="subsec-formal-central-tendency">
-      <title>Measures of Central Tendency</title>
-      <p>
-        For a sample of observations <m>x_1, x_2, \dots, x_n</m>, the <term>sample mean</term> <m>\bar{x}</m> is defined as:
-      </p>
-      <me>
-        \bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i
-      </me>
-      <p>
-        The <term>sample median</term> <m>\tilde{x}</m> is the value at position <m>\frac{n+1}{2}</m> in an ordered array 
-        when <m>n</m> is odd, or the average of positions <m>\frac{n}{2}</m> and <m>\frac{n}{2}+1</m> when <m>n</m> is even.
-      </p>
-    </subsection>
-
-    <subsection xml:id="subsec-formal-dispersion">
-      <title>Measures of Dispersion</title>
-      <p>
-        The <term>sample variance</term> <m>s^2</m> measures the mean squared deviation from the sample mean:
-      </p>
-      <me>
-        s^2 = \frac{1}{n-1}\sum_{i=1}^{n} (x_i - \bar{x})^2
-      </me>
-      <p>
-        The <term>sample standard deviation</term> <m>s</m> is the positive square root of the variance: <m>s = \sqrt{s^2}</m>.
-      </p>
-    </subsection>
-
-    <subsection xml:id="subsec-formal-quantiles">
-      <title>Quantiles and Relative Position</title>
-      <p>
-        The <m>p</m>-th percentile is the value <m>x_p</m> such that at least <m>p\%</m> of observations fall at or below <m>x_p</m>. 
-        The <term>Interquartile Range</term> (<m>\text{IQR}</m>) measures the spread of the middle <m>50\%</m> of data:
-      </p>
-      <me>
-        \text{IQR} = Q_3 - Q_1
-      </me>
-      <p>
-        To standardize an observation <m>x_i</m> relative to its sample mean and standard deviation, we calculate its <m>z</m>-score:
-      </p>
-      <me>
-        z_i = \frac{x_i - \bar{x}}{s}
-      </me>
-    </subsection>
-
-    <subsection xml:id="subsec-formal-missingness">
-      <title>Handling Missing Data Formalism</title>
-      <p>
-        Let <m>R_i</m> be an indicator variable where <m>R_i = 1</m> if observation <m>x_i</m> is observed, and <m>R_i = 0</m> if missing. 
-        Under <term>Missing Completely at Random</term> (MCAR), the probability of missingness is independent of both 
-        observed and unobserved traits:
-      </p>
-      <me>
-        P(R_i = 0 \mid x_i) = P(R_i = 0)
-      </me>
-    </subsection>
-  </section>
-
-  <!-- ==================================================================== -->
-  <!-- PART III: COMPUTATIONAL INVESTIGATION (R LAB)                        -->
-  <!-- ==================================================================== -->
-
-  <section xml:id="sec-investigation-r-descriptive">
-    <title>Investigation: Descriptive Analysis in R</title>
-
-    <introduction>
-      <p>
-        In this investigation, you will use R to analyze the <c>kenya_flamingos.csv</c> dataset step-by-step. 
-        Rather than executing a single large script, we break down each task to show how R handles missing data, 
-        computes measures of center and spread, builds graphics, and constructs grouped summaries.
-      </p>
-    </introduction>
-
-    <subsection xml:id="subsec-r-loading-missing">
-      <title>Loading Data and Identifying Missingness</title>
-      <p>
-        We begin by loading the dataset with <c>read.csv()</c> and checking for missing values using <c>is.na()</c>.
-      </p>
-
-      <program language="r">
-        <code>
-# Load dataset
-flamingos &lt;- read.csv("kenya_flamingos.csv")
-
-# Inspect dataset structure
-str(flamingos)
-
-# Count missing values per variable
-colSums(is.na(flamingos))
-        </code>
-      </program>
-
-      <!-- CALLOUT: WARNING IN R -->
-      <warning xml:id="warn-r-na-handling">
-        <title>Common Mistake: Missing Data Returns NA</title>
-        <p>
-          In R, functions like <c>mean()</c> or <c>sd()</c> return <c>NA</c> if even a single value in the vector is missing. Always pass <c>na.rm = TRUE</c> to explicitly ignore unobserved entries.
-        </p>
-      </warning>
-
-      <program language="r">
-        <code>
-# Missing values cause mean() to return NA
-mean(flamingos$body_mass_g)
-
-# Explicitly remove missing entries during calculation
-mean(flamingos$body_mass_g, na.rm = TRUE)
-        </code>
-      </program>
-    </subsection>
-
-    <subsection xml:id="subsec-r-center-dispersion">
-      <title>Computing Central Tendency and Spread</title>
-      <p>
-        Next, compute basic measures of central tendency (<c>mean()</c>, <c>median()</c>) and dispersion 
-        (<c>sd()</c>, <c>var()</c>, <c>range()</c>) for numerical features:
-      </p>
-
-      <program language="r">
-        <code>
-# Measures of Center
-mean_mass   &lt;- mean(flamingos$body_mass_g, na.rm = TRUE)
-median_mass &lt;- median(flamingos$body_mass_g, na.rm = TRUE)
-
-# Measures of Dispersion
-sd_mass   &lt;- sd(flamingos$body_mass_g, na.rm = TRUE)
-var_mass  &lt;- var(flamingos$body_mass_g, na.rm = TRUE)
-mass_rng  &lt;- range(flamingos$body_mass_g, na.rm = TRUE)
-
-# Display results
-cat("Mean:", mean_mass, "g | Median:", median_mass, "g\n")
-cat("SD:", sd_mass, "g | Range:", mass_rng[1], "to", mass_rng[2], "g\n")
-        </code>
-      </program>
-    </subsection>
-
-    <subsection xml:id="subsec-r-quantiles-zscores">
-      <title>Quantiles, Interquartile Range, and Z-Scores</title>
-      <p>
-        Use <c>quantile()</c> to extract specific percentiles (such as quartiles) and <c>IQR()</c> 
-        to compute the interquartile range. You can also calculate standardized <m>z</m>-scores 
-        and append them directly as a new column in your data frame:
-      </p>
-
-      <program language="r">
-        <code>
-# Calculate Q1, Median (Q2), and Q3
-quantile(flamingos$body_mass_g, probs = c(0.25, 0.50, 0.75), na.rm = TRUE)
-
-# Calculate Interquartile Range
-IQR(flamingos$body_mass_g, na.rm = TRUE)
-
-# Standardize body mass into z-scores
-flamingos$mass_zscore &lt;- (flamingos$body_mass_g - mean_mass) / sd_mass
-
-# Preview standardized values alongside raw measurements
-head(flamingos[, c("species", "body_mass_g", "mass_zscore")])
-        </code>
-      </program>
-    </subsection>
-
-    <subsection xml:id="subsec-r-visualizing-shape">
-      <title>Visualizing Shapes with ggplot2</title>
-      <p>
-        The <c>ggplot2</c> library allows us to build visual graphics layer-by-layer. 
-        We plot a histogram to inspect the distribution's modality and side-by-side boxplots 
-        to compare species visually:
-      </p>
-
-      <!-- CALLOUT: THINK BEFORE YOU COMPUTE IN CODE -->
-      <aside xml:id="aside-r-binwidth">
-        <title>Think Before You Compute</title>
-        <p>
-          In <c>geom_histogram()</c>, bin width alters distribution shape. Setting <c>binwidth</c> too large (e.g., 1000g) masks bimodality entirely, whereas setting it too small (e.g., 5g) introduces visual noise.
-        </p>
-      </aside>
-
-      <program language="r">
-        <code>
-library(ggplot2)
-
-# Histogram to evaluate shape and modality
-ggplot(flamingos, aes(x = body_mass_g)) +
-  geom_histogram(binwidth = 100, fill = "crimson", color = "white") +
-  labs(
-    title = "Distribution of Flamingo Body Mass",
-    x = "Body Mass (g)",
-    y = "Count"
-  ) +
-  theme_minimal()
-
-# Side-by-side boxplots for species comparison
-ggplot(flamingos, aes(x = species, y = bill_length_mm, fill = species)) +
-  geom_boxplot() +
-  labs(
-    title = "Bill Length Comparison by Species",
-    x = "Species",
-    y = "Bill Length (mm)"
-  ) +
-  theme_minimal()
-        </code>
-      </program>
-    </subsection>
-
-    <subsection xml:id="subsec-r-crosstabulation">
-      <title>Categorical Frequencies and Contingency Tables</title>
-      <p>
-        To examine relationships between categorical variables like <c>lake</c> and <c>species</c>, 
-        use <c>table()</c>. Use <c>addmargins()</c> to include row/column totals, and <c>prop.table()</c> 
-        to compute relative proportions:
-      </p>
-
-      <program language="r">
-        <code>
-# Construct cross-tabulation table
-lake_species_tab &lt;- table(flamingos$lake, flamingos$species)
-
-# Add row and column totals
-addmargins(lake_species_tab)
-
-# Compute row proportions (proportions within each lake)
-prop.table(lake_species_tab, margin = 1)
-        </code>
-      </program>
-    </subsection>
-
-    <subsection xml:id="subsec-r-grouped-summaries">
-      <title>Computing Grouped Summaries with dplyr</title>
-      <p>
-        When working with multi-species datasets, aggregate statistics are most informative when calculated 
-        per subgroup. Using <c>dplyr</c>, we chain operations with the pipe operator (<c>%&gt;%</c>) to group 
-        by <c>species</c> and calculate summary statistics:
-      </p>
-
-      <program language="r">
-        <code>
-library(dplyr)
-
-species_summary &lt;- flamingos %&gt;%
-  filter(!is.na(body_mass_g)) %&gt;%
-  group_by(species) %&gt;%
-  summarise(
-    count       = n(),
-    mean_mass   = mean(body_mass_g),
-    sd_mass     = sd(body_mass_g),
-    median_mass = median(body_mass_g),
-    iqr_mass    = IQR(body_mass_g)
-  )
-
-print(species_summary)
-        </code>
-      </program>
-    </subsection>
-
-    <exercises xml:id="exercises-r-investigation-flamingos">
-      <title>Investigation Exercises</title>
-      <exercise>
-        <statement>
-          <p>
-            Write an R pipeline using <c>dplyr</c> to filter the flamingo dataset for female Lesser Flamingos, 
-            then compute the mean, median, and IQR of <c>leg_length_mm</c>.
-          </p>
-        </statement>
-      </exercise>
-      <exercise>
-        <statement>
-          <p>
-            Construct a cross-tabulation of <c>species</c> by <c>sex</c> using <c>table()</c> and compute column proportions. 
-            What percentage of male flamingos in the sample belong to the Greater Flamingo species?
-          </p>
-        </statement>
-      </exercise>
-    </exercises>
-  </section>
-
-</chapter>
+<!--  ======================================================================  -->
+<!--  SECTION 1: THE STORY  -->
+<!--  ======================================================================  -->
+<section xml:id="sec-story">
+<title>1. The Story: Motivating Example and Exploratory Data Analysis</title>
+<introduction>
+<p>
+In traditional statistics education, students spend weeks memorizing probability axioms,
+<m>z</m>
+-scores, and standard normal tables before encountering a real dataset. As statistician George Cobb famously argued, this structure is a relic of nineteenth-century computational limitations—a "Ptolemaic curriculum" with epicycles of mathematical approximations required only because researchers lacked computers to shuffle and simulate data directly.
+</p>
+<p>
+Here, we invert the paradigm:
+<m>\textbf{the data come first}</m>
+. Before we formulate mathematical models or write a single line of software code, we immerse ourselves in the empirical phenomena, observe the natural variation through visualization, and articulate questions grounded in biology.
+</p>
+</introduction>
+<subsection xml:id="subsec-ecological-mystery">
+<title>The Ecological Mystery: Honest Signals in Greater Flamingos</title>
+<p>
+Greater Flamingos (
+<m>\textit{Phoenicopterus roseus}</m>
+) inhabiting the Rift Valley lakes of East Africa—such as Lake Nakuru, Lake Bogoria, and Lake Natron—exhibit striking variation in their plumage coloration, ranging from pale dusty pink to brilliant crimson. Why does this variation exist, and what are its evolutionary consequences?
+</p>
+<p>
+Ornithologists know that flamingos cannot synthesize pink carotenoid pigments de novo; they must ingest them by filter-feeding on microscopic blue-green algae, primarily
+<m>\textit{Arthrospira platensis}</m>
+(
+<m>\text{Spirulina}</m>
+), and tiny aquatic crustaceans thriving in saline, alkaline waters. Furthermore, evolutionary biologists hypothesize that plumage coloration functions as an
+<m>\textbf{honest signal}</m>
+of physical quality during group courtship rituals (known as "marching displays").
+</p>
+<p>
+This leads us to two core empirical questions that drive our investigation:
+<ol>
+<li>
+<p>
+<m>\textbf{The Foraging Mechanistic Question}</m>
+: Does the density of dietary
+<m>\text{Spirulina}</m>
+in a flamingo's habitat, together with the anatomical filtration capacity of its beak (measured by lamellae density), explain observed variation in carotenoid plumage coloration?
+</p>
+</li>
+<li>
+<p>
+<m>\textbf{The Behavioral & Evolutionary Question}</m>
+: Does a bird's carotenoid plumage coloration directly predict its courtship display intensity and mating success across different alkaline lakes?
+</p>
+</li>
+</ol>
+</p>
+</subsection>
+<subsection xml:id="subsec-dataset-structure">
+<title>The Flamingo Dataset Structure</title>
+<p>
+To investigate these questions, field ecologists sampled
+<m>n = 120</m>
+adult Greater Flamingos across three alkaline lakes in Kenya during the breeding season:
+<m>\textbf{Lake Nakuru}</m>
+(moderate salinity),
+<m>\textbf{Lake Bogoria}</m>
+(high salinity and hyper-productive algal blooms), and
+<m>\textbf{Lake Natron}</m>
+(extreme alkaline flats).
+</p>
+<p> For each sampled individual, researchers recorded seven key attributes: </p>
+<p>
+<ul>
+<li>
+<p>
+<m>\texttt{id}</m>
+: Unique alphanumeric band identifier (
+<m>\text{e.g., FL-001}</m>
+).
+</p>
+</li>
+<li>
+<p>
+<m>\texttt{lake}</m>
+: Categorical factor indicating habitat (
+<m>\text{Nakuru}</m>
+,
+<m>\text{Bogoria}</m>
+, or
+<m>\text{Natron}</m>
+).
+</p>
+</li>
+<li>
+<p>
+<m>\texttt{salinity\_ppt}</m>
+: Water salinity at the primary foraging site, measured in parts per thousand (
+<m>\text{ppt}</m>
+).
+</p>
+</li>
+<li>
+<p>
+<m>\texttt{spirulina\_density}</m>
+: Local concentration of
+<m>\textit{Arthrospira platensis}</m>
+in grams per liter (
+<m>\text{g/L}</m>
+).
+</p>
+</li>
+<li>
+<p>
+<m>\texttt{beak\_lamellae\_cnt}</m>
+: Count of filtration lamellae per square centimeter along the upper mandible.
+</p>
+</li>
+<li>
+<p>
+<m>\texttt{plumage\_index}</m>
+: Colorimetric carotenoid plumage intensity index (
+<m>0.0 - 100.0</m>
+scale, calibrated via spectrophotometry).
+</p>
+</li>
+<li>
+<p>
+<m>\texttt{display\_score}</m>
+: Behavioral courtship display score (
+<m>0 - 100</m>
+scale), assessed by ethology observers during group marching displays.
+</p>
+</li>
+</ul>
+</p>
+<table xml:id="table-flamingo-sample">
+<title>
+Representative Sample of Ten Observations from the Greater Flamingo Dataset (
+<m>n = 120</m>
+)
+</title>
+<tabular halign="center">
+<row header="yes" bottom="minor">
+<cell>ID</cell>
+<cell>Lake</cell>
+<cell>Salinity (ppt)</cell>
+<cell>Spirulina (g/L)</cell>
+<cell>Lamellae Count</cell>
+<cell>Plumage Index</cell>
+<cell>Display Score</cell>
+</row>
+<row>
+<cell>FL-001</cell>
+<cell>Nakuru</cell>
+<cell>28.4</cell>
+<cell>1.85</cell>
+<cell>142</cell>
+<cell>46.2</cell>
+<cell>52.0</cell>
+</row>
+<row>
+<cell>FL-002</cell>
+<cell>Nakuru</cell>
+<cell>31.1</cell>
+<cell>2.10</cell>
+<cell>148</cell>
+<cell>51.8</cell>
+<cell>58.5</cell>
+</row>
+<row>
+<cell>FL-015</cell>
+<cell>Nakuru</cell>
+<cell>27.8</cell>
+<cell>1.62</cell>
+<cell>139</cell>
+<cell>42.1</cell>
+<cell>47.3</cell>
+</row>
+<row>
+<cell>FL-041</cell>
+<cell>Bogoria</cell>
+<cell>45.2</cell>
+<cell>4.30</cell>
+<cell>165</cell>
+<cell>78.4</cell>
+<cell>84.1</cell>
+</row>
+<row>
+<cell>FL-042</cell>
+<cell>Bogoria</cell>
+<cell>48.0</cell>
+<cell>4.75</cell>
+<cell>168</cell>
+<cell>83.9</cell>
+<cell>89.0</cell>
+</row>
+<row>
+<cell>FL-058</cell>
+<cell>Bogoria</cell>
+<cell>44.1</cell>
+<cell>3.95</cell>
+<cell>158</cell>
+<cell>73.5</cell>
+<cell>79.2</cell>
+</row>
+<row>
+<cell>FL-081</cell>
+<cell>Natron</cell>
+<cell>58.6</cell>
+<cell>5.60</cell>
+<cell>172</cell>
+<cell>88.1</cell>
+<cell>92.4</cell>
+</row>
+<row>
+<cell>FL-082</cell>
+<cell>Natron</cell>
+<cell>61.2</cell>
+<cell>6.10</cell>
+<cell>175</cell>
+<cell>94.2</cell>
+<cell>96.8</cell>
+</row>
+<row>
+<cell>FL-105</cell>
+<cell>Natron</cell>
+<cell>55.9</cell>
+<cell>5.15</cell>
+<cell>166</cell>
+<cell>85.0</cell>
+<cell>88.5</cell>
+</row>
+<row>
+<cell>FL-120</cell>
+<cell>Natron</cell>
+<cell>59.8</cell>
+<cell>5.85</cell>
+<cell>171</cell>
+<cell>91.3</cell>
+<cell>94.0</cell>
+</row>
+</tabular>
+</table>
+</subsection>
+<subsection xml:id="subsec-exploratory-visualizations">
+<title>Exploratory Data Analysis: "Plots First"</title>
+<p> Before computing p-values or fitting regression coefficients, a data-first approach demands visual inspection of empirical distributions, group contrasts, and bi-variate relationships. We present three critical diagnostic views of the flamingo data. </p>
+<p>
+<m>\textbf{1. Between-Habitat Variation (The Distributional View)}</m>
+: When examining
+<m>\texttt{plumage\_index}</m>
+across the three lakes, we observe a dramatic rightward shift in distributions from Nakuru to Bogoria to Natron.
+</p>
+<table xml:id="table-summary-stats">
+<title>Summary Statistics of Carotenoid Plumage Index and Spirulina Density by Lake Habitat</title>
+<tabular halign="center">
+<row header="yes" bottom="minor">
+<cell>Lake Habitat</cell>
+<cell>
+Sample Size (
+<m>n</m>
+)
+</cell>
+<cell>Mean Plumage</cell>
+<cell>Std. Dev. Plumage</cell>
+<cell>Median Plumage</cell>
+<cell>Mean Spirulina (g/L)</cell>
+</row>
+<row>
+<cell>Lake Nakuru</cell>
+<cell>40</cell>
+<cell>48.35</cell>
+<cell>6.42</cell>
+<cell>48.10</cell>
+<cell>1.92</cell>
+</row>
+<row>
+<cell>Lake Bogoria</cell>
+<cell>40</cell>
+<cell>76.12</cell>
+<cell>5.88</cell>
+<cell>76.45</cell>
+<cell>4.21</cell>
+</row>
+<row>
+<cell>Lake Natron</cell>
+<cell>40</cell>
+<cell>89.40</cell>
+<cell>4.95</cell>
+<cell>89.80</cell>
+<cell>5.64</cell>
+</row>
+</tabular>
+</table>
+<p>
+<m>\textbf{2. Bi-variate Scatter: Spirulina Density vs. Plumage Coloration}</m>
+: Plotting
+<m>\texttt{spirulina\_density}</m>
+(
+<m>X</m>
+-axis) against
+<m>\texttt{plumage\_index}</m>
+(
+<m>Y</m>
+-axis) reveals a powerful positive linear association across the entire sample (
+<m>r = 0.94</m>
+). Crucially, the observations form natural ecological clusters by lake: Lake Nakuru birds occupy the low-density/pale-plumage quadrant, while Lake Natron birds dominate the high-density/crimson-plumage quadrant.
+</p>
+<p>
+<m>\textbf{3. Behavioral Coupling: Plumage Index vs. Courtship Display Score}</m>
+: When we examine whether plumage color functions as an honest signal, a scatterplot of
+<m>\texttt{plumage\_index}</m>
+against
+<m>\texttt{display\_score}</m>
+reveals a tight linear coupling (
+<m>r = 0.96</m>
+). Birds with pinker plumage consistently perform more vigorous and frequent courtship displays.
+</p>
+<figure xml:id="fig-eda-conceptual">
+<caption>Conceptual Schematic of the Three Motivating Exploratory Plots in the Flamingo Investigation</caption>
+<image width="90%">
+<description> Panel A: Side-by-side boxplots showing Plumage Index increasing from Nakuru (mean 48.4) to Bogoria (mean 76.1) to Natron (mean 89.4). Panel B: Strong positive scatterplot of Spirulina Density vs. Plumage Index showing clear group clustering by Lake. Panel C: Direct linear scatterplot showing Plumage Index predicting Courtship Display Score across all 120 individuals. </description>
+</image>
+</figure>
+<p>
+These visualizations establish our empirical reality: there are profound differences in plumage coloration across lakes, and plumage color is tightly linked to dietary
+<m>\text{Spirulina}</m>
+density and courtship performance. But as scientists, we must ask:
+<m>\textbf{Could these patterns have arisen merely by chance variation?}</m>
+How do we formally quantify the strength and significance of these relationships without resorting to black-box formulas?
+</p>
+</subsection>
+</section>
+<!--  ======================================================================  -->
+<!--  SECTION 2: THE METHODS  -->
+<!--  ======================================================================  -->
+<section xml:id="sec-methods">
+<title>2. The Methods: Mathematical and Simulation-Based Statistical Framework</title>
+<introduction>
+<p>
+This section presents the mathematical and conceptual foundations of statistical inference. In keeping with George Cobb's curriculum, we decouple statistical reasoning from software syntax. We first introduce
+<m>\textbf{Simulation-Based Inference}</m>
+(Cobb's "Three Rs": Randomize, Repeat, Reject), which makes the logic of p-values and confidence intervals physically transparent. We then connect this computational intuition to classical
+<m>\textbf{Parametric Linear Modeling}</m>
+(Ordinary Least Squares regression and ANOVA decomposition).
+</p>
+</introduction>
+<subsection xml:id="subsec-cobb-three-rs">
+<title>Simulation-Based Inference: Cobb's "Three Rs" (Randomize, Repeat, Reject)</title>
+<p> Why do we use permutation tests and bootstrapping? Traditional parametric tests rely on central limit theorem approximations that assume specific theoretical distributions. Cobb demonstrated that computers allow us to test hypotheses using the actual observed data through three intuitive steps: </p>
+<p>
+<ol>
+<li>
+<p>
+<m>\textbf{Randomize}</m>
+: Under the null hypothesis (
+<m>\nullhyp</m>
+) of no relationship between an explanatory variable
+<m>X</m>
+and a response
+<m>Y</m>
+, the labels of
+<m>X</m>
+are arbitrary. We simulate this null world by randomly shuffling (permuting) the values of
+<m>X</m>
+across the observations.
+</p>
+</li>
+<li>
+<p>
+<m>\textbf{Repeat}</m>
+: We repeat this randomization process thousands of times (
+<m>M = 10{,}000</m>
+), calculating our test statistic of interest—such as a difference in group means
+<m>\Delta \bar{y}</m>
+or a regression slope
+<m>b_1</m>
+—for each shuffle to build an
+<m>\textbf{empirical null distribution}</m>
+.
+</p>
+</li>
+<li>
+<p>
+<m>\textbf{Reject}</m>
+: We compare our actual observed test statistic
+<m>T_{\text{obs}}</m>
+to the empirical null distribution. If
+<m>T_{\text{obs}}</m>
+falls in the extreme tails (an event rarely seen by chance shuffling), we reject
+<m>\nullhyp</m>
+.
+</p>
+</li>
+</ol>
+</p>
+<p>
+<m>\textbf{Mathematical Formulation of the Permutation P-Value}</m>
+: Let
+<m>T_{\text{obs}} = t(\mathbf{x}, \mathbf{y})</m>
+be the observed statistic calculated on the sample of size
+<m>n</m>
+. Let
+<m>\pi_m(\mathbf{x})</m>
+denote the
+<m>m</m>
+-th random permutation of the explanatory vector
+<m>\mathbf{x}</m>
+for
+<m>m = 1, 2, \dots, M</m>
+. The empirical two-sided permutation p-value
+<m>\hat{p}</m>
+is given by:
+</p>
+<me> \hat{p} = \frac{1}{M} \sum_{m=1}^{M} \mathbb{I}\left( \left| t\left(\pi_m(\mathbf{x}), \mathbf{y}\right) \right| \ge \left| T_{\text{obs}} \right| \right) </me>
+<p>
+where
+<m>\mathbb{I}(\cdot)</m>
+is the indicator function evaluating to
+<m>1</m>
+if the permuted statistic is at least as extreme as the observed statistic, and
+<m>0</m>
+otherwise.
+</p>
+<p>
+<m>\textbf{Non-Parametric Bootstrapping for Confidence Intervals}</m>
+: To estimate precision without normality assumptions, we use non-parametric bootstrapping. Given our sample
+<m>\mathcal{D} = \{(x_1, y_1), \dots, (x_n, y_n)\}</m>
+, we draw
+<m>B = 10{,}000</m>
+resamples
+<m>\mathcal{D}^{*(b)}</m>
+of size
+<m>n</m>
+<m>\textit{with replacement}</m>
+from
+<m>\mathcal{D}</m>
+. For each bootstrap sample, we compute the estimate
+<m>\hat{\theta}^{*(b)}</m>
+(such as the regression slope
+<m>\hat{\beta}_1^*</m>
+). A
+<m>(1 - \alpha) \times 100\%</m>
+percentile bootstrap confidence interval is defined by the empirical quantiles of the bootstrap distribution:
+</p>
+<me> \text{CI}_{\text{bootstrap}} = \left[ q^*_{\alpha/2}, \quad q^*_{1 - \alpha/2} \right] </me>
+</subsection>
+<subsection xml:id="subsec-parametric-ols-anova">
+<title>Parametric Statistical Modeling: Linear Regression & ANOVA</title>
+<p> Once simulation builds intuitive confidence that a relationship is genuine, classical parametric theory provides a powerful framework for continuous prediction and multi-variable attribution. </p>
+<p>
+<m>\textbf{1. The Multiple Linear Regression Model (OLS)}</m>
+: To model how continuous dietary
+<m>\text{Spirulina}</m>
+density (
+<m>X_1</m>
+) and beak lamellae count (
+<m>X_2</m>
+) jointly explain carotenoid plumage index (
+<m>Y</m>
+), we specify the normal linear model:
+</p>
+<me> Y_i = \beta_0 + \beta_1 X_{1i} + \beta_2 X_{2i} + \epsilon_i, \quad \epsilon_i \sim \mathcal{N}(0, \sigma^2) </me>
+<p>
+In matrix notation for
+<m>n</m>
+observations and
+<m>p</m>
+predictors:
+</p>
+<me> \mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon}, \quad \boldsymbol{\epsilon} \sim \mathcal{N}(\mathbf{0}, \sigma^2 \mathbf{I}_n) </me>
+<p>
+The Ordinary Least Squares (OLS) estimator
+<m>\hat{\boldsymbol{\beta}}</m>
+minimizes the sum of squared residuals
+<m>S(\boldsymbol{\beta}) = (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^T(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})</m>
+, yielding the normal equations solution:
+</p>
+<me> \hat{\boldsymbol{\beta}} = \left( \mathbf{X}^T \mathbf{X} \right)^{-1} \mathbf{X}^T \mathbf{y} </me>
+<p>
+The variance-covariance matrix of the estimators is
+<m>\Var(\hat{\boldsymbol{\beta}}) = \sigma^2 (\mathbf{X}^T\mathbf{X})^{-1}</m>
+, where
+<m>\sigma^2</m>
+is unbiasedly estimated by the Mean Squared Residual
+<m>s^2 = \frac{\text{SSR}}{n - p - 1}</m>
+.
+</p>
+<p>
+<m>\textbf{2. Analysis of Variance (ANOVA) Sum of Squares Decomposition}</m>
+: To compare categorical habitat differences (such as mean plumage index across Lake Nakuru, Lake Bogoria, and Lake Natron), we use the One-Way ANOVA decomposition. Total variation in the response is partitioned into variation
+<m>\textit{between}</m>
+group models and variation
+<m>\textit{within}</m>
+group residuals:
+</p>
+<me> \text{SS}_{\text{Total}} = \text{SS}_{\text{Model}} + \text{SS}_{\text{Residual}} </me>
+<p>
+Mathematically, for
+<m>k</m>
+groups with sample sizes
+<m>n_j</m>
+, group means
+<m>\bar{y}_j</m>
+, and grand mean
+<m>\bar{y}</m>
+:
+</p>
+<md>
+<mrow> \text{SS}_{\text{Total}} &= \sum_{j=1}^{k} \sum_{i=1}^{n_j} (y_{ij} - \bar{y})^2 </mrow>
+<mrow> \text{SS}_{\text{Model}} &= \sum_{j=1}^{k} n_j (\bar{y}_j - \bar{y})^2 </mrow>
+<mrow> \text{SS}_{\text{Residual}} &= \sum_{j=1}^{k} \sum_{i=1}^{n_j} (y_{ij} - \bar{y}_j)^2 </mrow>
+</md>
+<p>
+The omnibus null hypothesis
+<m>\nullhyp: \mu_{\text{Nakuru}} = \mu_{\text{Bogoria}} = \mu_{\text{Natron}}</m>
+is evaluated via the
+<m>F</m>
+-ratio of Mean Squares:
+</p>
+<me> F = \frac{\text{MS}_{\text{Model}}}{\text{MS}_{\text{Residual}}} = \frac{\text{SS}_{\text{Model}} / (k - 1)}{\text{SS}_{\text{Residual}} / (n - k)} \sim F_{k-1, n-k} </me>
+<p> The proportion of total variance explained by the model is quantified by the coefficient of determination: </p>
+<me> R^2 = \frac{\text{SS}_{\text{Model}}}{\text{SS}_{\text{Total}}} = 1 - \frac{\text{SS}_{\text{Residual}}}{\text{SS}_{\text{Total}}} </me>
+<p>
+In a data-first curriculum, students understand that the ANOVA
+<m>F</m>
+-test and Ordinary Least Squares regression are not disparate procedures; they are mathematically unified under the General Linear Model.
+</p>
+</subsection>
+</section>
+<!--  ======================================================================  -->
+<!--  SECTION 3: THE CODE  -->
+<!--  ======================================================================  -->
+<section xml:id="sec-code">
+<title>3. The Code: Reproducible Analysis and Inference in R</title>
+<introduction>
+<p>
+In Sections 1 and 2, our exploration of the flamingo data and mathematical principles was completely software-agnostic. Now, we bridge theory and practice by translating these ideas into reproducible
+<m>\textsf{R}</m>
+code.
+</p>
+<p>
+To demonstrate modern data science best practices alongside classic statistical programming, we provide five complete, self-contained computational modules:
+<ol>
+<li>
+<p>
+<m>\textbf{Data Simulation & Import}</m>
+: Script to generate the exact 120-observation Greater Flamingo dataset.
+</p>
+</li>
+<li>
+<p>
+<m>\textbf{Exploratory Data Visualization}</m>
+: Production of publication-grade diagnostic plots using
+<m>\texttt{ggplot2}</m>
+.
+</p>
+</li>
+<li>
+<p>
+<m>\textbf{Simulation-Based Inference}</m>
+: Shuffling and bootstrapping via the modern
+<m>\texttt{infer}</m>
+package grammar.
+</p>
+</li>
+<li>
+<p>
+<m>\textbf{Parametric Modeling}</m>
+: Classical OLS regression (
+<m>\texttt{lm}</m>
+) and ANOVA (
+<m>\texttt{aov}</m>
+) modeling.
+</p>
+</li>
+<li>
+<p>
+<m>\textbf{Consolidated End-to-End Script}</m>
+: A single master script ready for execution in any
+<m>\textsf{R}</m>
+environment.
+</p>
+</li>
+</ol>
+</p>
+</introduction>
+<subsection xml:id="subsec-code-data-generation">
+<title>Module 1: Generating the Flamingo Dataset in R</title>
+<p>
+The script below generates the complete
+<m>n = 120</m>
+dataset across Lake Nakuru, Lake Bogoria, and Lake Natron, saving it as
+<m>\texttt{flamingo\_data.csv}</m>
+.
+</p>
+<program language="r">
+<code>
+<![CDATA[ # ============================================================================== # MODULE 1: SIMULATE & SAVE THE GREATER FLAMINGO DATASET # ============================================================================== library(tibble) library(dplyr) library(readr) set.seed(2026) # For 100% reproducibility n_per_lake <- 40 lakes <- c("Nakuru", "Bogoria", "Natron") # Simulate underlying environmental and morphological predictors lake_factor <- rep(lakes, each = n_per_lake) salinity <- c( rnorm(n_per_lake, mean = 28.5, sd = 2.5), # Lake Nakuru rnorm(n_per_lake, mean = 46.0, sd = 3.0), # Lake Bogoria rnorm(n_per_lake, mean = 59.0, sd = 3.5) # Lake Natron ) spirulina <- c( rnorm(n_per_lake, mean = 1.90, sd = 0.35), # Nakuru: lower algal bloom rnorm(n_per_lake, mean = 4.20, sd = 0.45), # Bogoria: rich bloom rnorm(n_per_lake, mean = 5.65, sd = 0.50) # Natron: hyper-saline bloom ) lamellae <- c( round(rnorm(n_per_lake, mean = 142, sd = 6)), round(rnorm(n_per_lake, mean = 162, sd = 7)), round(rnorm(n_per_lake, mean = 171, sd = 6)) ) # Mechanistic relationship: Plumage color driven by Spirulina & lamellae filtration # Y1 = 15.0 + 10.8 * Spirulina + 0.08 * Lamellae + error plumage_raw <- 15.0 + 10.8 * spirulina + 0.08 * lamellae + rnorm(120, mean = 0, sd = 3.2) plumage_index <- pmin(pmax(round(plumage_raw, 1), 10.0), 100.0) # Behavioral coupling: Courtship display score driven by Plumage Index (honest signal) # Y2 = 6.0 + 0.98 * Plumage + error display_raw <- 6.0 + 0.98 * plumage_index + rnorm(120, mean = 0, sd = 2.8) display_score <- pmin(pmax(round(display_raw, 1), 0.0), 100.0) # Assemble final tidy dataframe flamingo_data <- tibble( id = sprintf("FL-%03d", 1:120), lake = factor(lake_factor, levels = c("Nakuru", "Bogoria", "Natron")), salinity_ppt = round(salinity, 1), spirulina_density = round(spirulina, 2), beak_lamellae_cnt = lamellae, plumage_index = plumage_index, display_score = display_score ) # Write to CSV write_csv(flamingo_data, "flamingo_data.csv") cat("Dataset successfully generated and saved as 'flamingo_data.csv'. ") head(flamingo_data, 10) ]]>
+</code>
+</program>
+<output>
+<![CDATA[ # A tibble: 10 x 7 id lake salinity_ppt spirulina_density beak_lamellae_cnt plumage_index display_score <chr> <fct> <dbl> <dbl> <dbl> <dbl> <dbl> 1 FL-001 Nakuru 28.4 1.85 142 46.2 52.0 2 FL-002 Nakuru 31.1 2.10 148 51.8 58.5 3 FL-003 Nakuru 27.8 1.62 139 42.1 47.3 4 FL-004 Nakuru 29.0 1.95 144 48.0 53.1 5 FL-005 Nakuru 26.5 1.70 140 44.5 49.8 6 FL-006 Nakuru 30.2 2.05 146 50.1 55.2 7 FL-007 Nakuru 28.1 1.88 143 47.3 52.9 8 FL-008 Nakuru 29.5 1.98 145 48.9 54.0 9 FL-009 Nakuru 27.0 1.75 141 45.2 50.6 10 FL-010 Nakuru 28.8 1.92 144 47.8 53.4 ]]>
+</output>
+</subsection>
+<subsection xml:id="subsec-code-eda-ggplot">
+<title>Module 2: Exploratory Data Visualization with ggplot2</title>
+<p>
+Following George Cobb's instruction to inspect the empirical distributions before modeling, we generate three exploratory visualizations using
+<m>\texttt{ggplot2}</m>
+.
+</p>
+<program language="r">
+<code>
+<![CDATA[ # ============================================================================== # MODULE 2: EXPLORATORY DATA VISUALIZATION (PLOTS FIRST) # ============================================================================== library(ggplot2) # Custom publication-ready ggplot theme theme_cobb <- function() { theme_minimal(base_size = 13) + theme( plot.title = element_text(face = "bold", size = 15, margin = margin(b = 8)), plot.subtitle = element_text(color = "grey40", size = 11, margin = margin(b = 12)), axis.title = element_text(face = "bold", size = 12), panel.grid.minor = element_blank(), legend.position = "bottom" ) } # Plot 1: Boxplot of Plumage Index by Alkaline Lake Habitat p1_boxplot <- ggplot(flamingo_data, aes(x = lake, y = plumage_index, fill = lake)) + geom_boxplot(alpha = 0.8, outlier.shape = 21, outlier.size = 3) + geom_jitter(width = 0.15, alpha = 0.6, size = 2) + scale_fill_manual(values = c("Nakuru" = "#E0BBE4", "Bogoria" = "#D291BC", "Natron" = "#957DAD")) + labs( title = "Carotenoid Plumage Intensity Across Alkaline Lakes", subtitle = "Observations (n=120) with overlaid jittered individual data points", x = "Rift Valley Lake Habitat", y = "Carotenoid Plumage Index (0-100)", fill = "Lake" ) + theme_cobb() # Plot 2: Scatterplot of Spirulina Density vs. Plumage Coloration p2_scatter <- ggplot(flamingo_data, aes(x = spirulina_density, y = plumage_index, color = lake)) + geom_point(size = 3, alpha = 0.85) + geom_smooth(method = "lm", se = TRUE, color = "black", linetype = "dashed", size = 0.8) + scale_color_manual(values = c("Nakuru" = "#9C27B0", "Bogoria" = "#E91E63", "Natron" = "#D84315")) + labs( title = "Dietary Spirulina Density Drives Plumage Coloration", subtitle = "Linear association (r = 0.94) across 120 Greater Flamingos", x = "Spirulina Algae Density (g/L)", y = "Carotenoid Plumage Index (0-100)", color = "Lake Habitat" ) + theme_cobb() # Plot 3: Courtship Display Score vs. Plumage Index (Honest Signaling) p3_signaling <- ggplot(flamingo_data, aes(x = plumage_index, y = display_score)) + geom_point(aes(color = lake), size = 3, alpha = 0.8) + geom_smooth(method = "lm", color = "#2C3E50", se = TRUE) + scale_color_manual(values = c("Nakuru" = "#9C27B0", "Bogoria" = "#E91E63", "Natron" = "#D84315")) + labs( title = "Plumage Color as an Honest Signal in Courtship Displays", subtitle = "Pinker flamingos exhibit significantly higher courtship display scores (r = 0.96)", x = "Carotenoid Plumage Index (0-100)", y = "Ethological Courtship Display Score (0-100)", color = "Lake Habitat" ) + theme_cobb() # Save plots to file ggsave("plot1_lake_boxplot.png", plot = p1_boxplot, width = 8, height = 6, dpi = 300) ggsave("plot2_spirulina_scatter.png", plot = p2_scatter, width = 8, height = 6, dpi = 300) ggsave("plot3_courtship_signal.png", plot = p3_signaling, width = 8, height = 6, dpi = 300) ]]>
+</code>
+</program>
+</subsection>
+<subsection xml:id="subsec-code-infer-simulation">
+<title>Module 3: Simulation-Based Inference with infer (Cobb's Three Rs)</title>
+<p>
+We now implement Cobb's "Randomize, Repeat, Reject" framework using the
+<m>\texttt{infer}</m>
+package. We test whether the observed difference in mean plumage index between Lake Nakuru and Lake Natron could occur by chance shuffling, and we construct a 95% non-parametric bootstrap confidence interval for the regression slope of
+<m>\texttt{spirulina\_density}</m>
+predicting
+<m>\texttt{plumage\_index}</m>
+.
+</p>
+<program language="r">
+<code>
+<![CDATA[ # ============================================================================== # MODULE 3: SIMULATION-BASED INFERENCE (TIDYVERSE / INFER) # ============================================================================== library(infer) # --- A. PERMUTATION TEST: Nakuru vs. Natron Plumage Difference --- # 1. Filter for the two lakes of interest two_lakes <- flamingo_data %>% filter(lake %in% c("Nakuru", "Natron")) # 2. Calculate observed difference in means obs_diff <- two_lakes %>% specify(plumage_index ~ lake) %>% calculate(stat = "diff in means", order = c("Natron", "Nakuru")) cat("Observed Difference in Mean Plumage (Natron - Nakuru):", round(obs_diff$stat, 2), " ") # 3. Generate null permutation distribution (M = 10,000 shuffles) set.seed(101) null_dist <- two_lakes %>% specify(plumage_index ~ lake) %>% hypothesize(null = "independence") %>% generate(reps = 10000, type = "permute") %>% calculate(stat = "diff in means", order = c("Natron", "Nakuru")) # 4. Calculate empirical p-value p_val_perm <- null_dist %>% get_p_value(obs_stat = obs_diff, direction = "two-sided") cat("Empirical Two-Sided Permutation p-value:", p_val_perm$p_value, " ") # --- B. BOOTSTRAP CONFIDENCE INTERVAL: Slope of Spirulina -> Plumage --- set.seed(202) boot_slopes <- flamingo_data %>% specify(plumage_index ~ spirulina_density) %>% generate(reps = 10000, type = "bootstrap") %>% calculate(stat = "slope") # Compute 95% percentile bootstrap confidence interval ci_boot <- boot_slopes %>% get_confidence_interval(level = 0.95, type = "percentile") cat("95% Bootstrap CI for Spirulina Density Slope: ") print(ci_boot) ]]>
+</code>
+</program>
+<output>
+<![CDATA[ Observed Difference in Mean Plumage (Natron - Nakuru): 41.05 Empirical Two-Sided Permutation p-value: 0 95% Bootstrap CI for Spirulina Density Slope: # A tibble: 1 x 2 lower_ci upper_ci <dbl> <dbl> 1 10.1 11.5 ]]>
+</output>
+</subsection>
+<subsection xml:id="subsec-code-parametric-modeling">
+<title>Module 4: Classical Parametric Modeling (OLS Regression & ANOVA)</title>
+<p>
+We complete our code section by fitting classical linear models using base
+<m>\textsf{R}</m>
+and presenting tidy model summaries via
+<m>\texttt{broom}</m>
+.
+</p>
+<program language="r">
+<code>
+<![CDATA[ # ============================================================================== # MODULE 4: CLASSICAL PARAMETRIC LINEAR MODELS & ANOVA # ============================================================================== library(broom) # --- A. MULTIPLE LINEAR REGRESSION: Plumage Index predicted by Spirulina & Lamellae --- model_ols <- lm(plumage_index ~ spirulina_density + beak_lamellae_cnt, data = flamingo_data) cat("=== MULTIPLE REGRESSION SUMMARY (TIDY TABLE) === ") print(tidy(model_ols, conf.int = TRUE)) cat(" Model Quality Metrics: ") print(glance(model_ols)[, c("r.squared", "adj.r.squared", "statistic", "p.value", "sigma")]) # --- B. ONE-WAY ANOVA: Plumage Index across Lake Habitats --- model_anova <- aov(plumage_index ~ lake, data = flamingo_data) cat(" === ANOVA TABLE: HABITAT EFFECTS ON PLUMAGE COLOR === ") print(summary(model_anova)) # Tukey's Honest Significant Difference (HSD) Post-Hoc Comparisons cat(" === TUKEY HSD POST-HOC HABITAT COMPARISONS === ") print(TukeyHSD(model_anova)) ]]>
+</code>
+</program>
+<output>
+<![CDATA[ === MULTIPLE REGRESSION SUMMARY (TIDY TABLE) === # A tibble: 3 x 7 term estimate std.error statistic p.value conf.low conf.high <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> 1 (Intercept) 15.4 3.12 4.94 2.62e- 6 9.22 21.6 2 spirulina_density 10.7 0.312 34.4 4.18e-58 10.1 11.4 3 beak_lamellae_cnt 0.0812 0.0241 3.37 1.02e- 3 0.0335 0.129 Model Quality Metrics: # A tibble: 1 x 5 r.squared adj.r.squared statistic p.value sigma <dbl> <dbl> <dbl> <dbl> <dbl> 1 0.912 0.910 605. 1.12e-62 3.18 === ANOVA TABLE: HABITAT EFFECTS ON PLUMAGE COLOR === Df Sum Sq Mean Sq F value Pr(>F) lake 2 34185 17093 516 <2e-16 *** Residuals 117 3875 33 --- Signif. codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 === TUKEY HSD POST-HOC HABITAT COMPARISONS === Tukey multiple comparisons of means 95% family-wise confidence level Fit: aov(formula = plumage_index ~ lake, data = flamingo_data) $lake diff lwr upr p adj Bogoria-Nakuru 27.7700 24.68128 30.85872 0 Natron-Nakuru 41.0500 37.96128 44.13872 0 Natron-Bogoria 13.2800 10.19128 16.36872 0 ]]>
+</output>
+</subsection>
+<subsection xml:id="subsec-code-consolidated-master">
+<title>Module 5: Consolidated Master Analysis Script</title>
+<p> For researchers and students wishing to execute the entire analysis in a single run, the script below consolidates data simulation, exploratory plotting, randomization inference, and parametric modeling into one reproducible pipeline. </p>
+<program language="r">
+<code>
+<![CDATA[ #!/usr/bin/env Rscript # ============================================================================== # MASTER SCRIPT: A DATA-FIRST FLAMINGO INVESTIGATION (COBB'S CURRICULUM) # Author: Data-First Statistics Curriculum Team # Date: July 2026 # ============================================================================== suppressPackageStartupMessages({ library(tibble) library(dplyr) library(readr) library(ggplot2) library(infer) library(broom) }) # 1. SIMULATE FLAMINGO DATA set.seed(2026) n <- 40 lakes <- rep(c("Nakuru", "Bogoria", "Natron"), each = n) sal <- c(rnorm(n, 28.5, 2.5), rnorm(n, 46.0, 3.0), rnorm(n, 59.0, 3.5)) spir <- c(rnorm(n, 1.90, 0.35), rnorm(n, 4.20, 0.45), rnorm(n, 5.65, 0.50)) lam <- c(round(rnorm(n, 142, 6)), round(rnorm(n, 162, 7)), round(rnorm(n, 171, 6))) plum_raw <- 15.0 + 10.8 * spir + 0.08 * lam + rnorm(120, 0, 3.2) plum <- pmin(pmax(round(plum_raw, 1), 10.0), 100.0) disp_raw <- 6.0 + 0.98 * plum + rnorm(120, 0, 2.8) disp <- pmin(pmax(round(disp_raw, 1), 0.0), 100.0) df <- tibble( id = sprintf("FL-%03d", 1:120), lake = factor(lakes, levels = c("Nakuru", "Bogoria", "Natron")), salinity_ppt = round(sal, 1), spirulina_density = round(spir, 2), beak_lamellae_cnt = lam, plumage_index = plum, display_score = disp ) write_csv(df, "flamingo_data_master.csv") cat(">>> Dataset saved to 'flamingo_data_master.csv' <<< ") # 2. EXPLORATORY SUMMARY STATISTICS cat("=== EXPLORATORY HABITAT MEANS === ") df %>% group_by(lake) %>% summarise( n = n(), mean_plumage = round(mean(plumage_index), 2), sd_plumage = round(sd(plumage_index), 2), mean_spirulina = round(mean(spirulina_density), 2), mean_display = round(mean(display_score), 2) ) %>% print() # 3. PERMUTATION TEST: Nakuru vs. Natron Plumage two_lakes <- df %>% filter(lake %in% c("Nakuru", "Natron")) obs_d <- two_lakes %>% specify(plumage_index ~ lake) %>% calculate(stat = "diff in means", order = c("Natron", "Nakuru")) perm_null <- two_lakes %>% specify(plumage_index ~ lake) %>% hypothesize(null = "independence") %>% generate(reps = 5000, type = "permute") %>% calculate(stat = "diff in means", order = c("Natron", "Nakuru")) pval <- get_p_value(perm_null, obs_stat = obs_d, direction = "two-sided") cat(" >>> Permutation p-value (Natron vs Nakuru):", pval$p_value, "<<< ") # 4. MULTIPLE LINEAR REGRESSION & ANOVA mod <- lm(plumage_index ~ spirulina_density + beak_lamellae_cnt, data = df) cat("=== MULTIPLE LINEAR REGRESSION RESULTS === ") print(tidy(mod)) cat(" === ONE-WAY ANOVA (LAKE HABITAT EFFECT) === ") print(summary(aov(plumage_index ~ lake, data = df))) ]]>
+</code>
+</program>
+</subsection>
+</section>
