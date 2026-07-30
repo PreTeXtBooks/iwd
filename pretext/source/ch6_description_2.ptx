@@ -8,16 +8,16 @@
 
   <introduction>
     <p>
-      Before we make decisions about populations, test hypotheses, or build
+      Before we can make decisions about populations, test hypotheses, or build
       predictive models, we want to first understand the data in front of us.
       This chapter introduces <term>descriptive statistics</term>: the art and
       science of summarising raw observations into meaningful patterns.
-      Rather than abstract definitions, we'll ground every concept in a
-      research question from synthetic data.
+      Rather than abstract definitions, we'll ground every concept in some synthetic
+      data and research questions with ecological consequences.
     </p>
 
     <p>
-      Our story begins at the shores of Kenya's Rift Valley, where field
+      Our story begins at the muddy shores of Kenya's Rift Valley, where field
       biologists face a deceptively simple question:
       <em>How many distinct flamingo species did we actually capture?</em> The
       answer will reveal why visualisation matters before computation, why
@@ -25,13 +25,14 @@
       downstream analysis.
     </p>
   </introduction>
-
   <!-- ============================================================ -->
   <!-- PART 1: THE STORY -->
   <!-- ============================================================ -->
   <section xml:id="sec-flamingo-story">
-    <title>Part 1: The Story</title>
-      <p><alert>The Field Study: Capturing and Measuring Flamingos</alert></p>
+    <title>Part 1: The Story — A Real Field Problem</title>
+
+    <subsection xml:id="subsec-field-setup">
+      <title>The Field Study: Capturing and Measuring Flamingos</title>
 
       <p>
         A team of field biologists sets up stations along the muddy shores of
@@ -74,13 +75,16 @@
           making accurate population monitoring vital.
         </p>
       </note>
-      
-      <p><alert>
+    </subsection>
+
+    <subsection xml:id="subsec-data-loading-audit">
+      <title>
         From Field Sheets to Digital Records: Loading and Auditing the Data
-      </alert></p>
+      </title>
 
       <p>
-        The first step in any analysis is it to <em>inspect</em>.
+        The first step in any analysis is not to compute—it is to
+        <em>inspect</em>.
         The field team transcribes their handwritten measurements into a digital
         spreadsheet, column by column.
         But field conditions are unpredictable.
@@ -125,15 +129,13 @@
           statistical bias.
           If missingness depends on physical traits (e.g., larger birds escaping
           measurement because they were harder to restrain), omitting them
-          biases your sample means. This is because you want your sample to be
-          representative of the population, but if we have birds missing due to 
-          non-randomess, then the sample is not representative.
+          biases your sample means.
         </p>
       </note>
+    </subsection>
 
-    <p><alert>
-      Visualising the Raw Data: What the Histogram Reveals
-    </p></alert>
+    <subsection xml:id="subsec-visualise-mass">
+      <title>Visualising the Raw Data: What the Histogram Reveals</title>
 
       <p>
         To make sense of the 336 body mass records on their clipboard, the
@@ -156,7 +158,7 @@
         This double peak tells a story that standard numbers alone would
         obscure.
         It warns the team that treating all captured flamingos as a single group
-        conceals biological reality.
+        conceals critical biological reality.
         When the researchers color-code the plot by field species
         identification, the double peak splits into two tidy, separate curves:
         lightweight Lesser Flamingos on the left and heavy Greater Flamingos on
@@ -168,16 +170,16 @@
 
         <p>
           If you blindly compute the average mass of all 336 birds without
-          plotting a histogram first, you get 1957.4 g. This value sits in the
+          plotting a histogram first, you get 1957.4 g—a value sitting in the
           empty valley between the two true species clusters where
           <em>almost no individual birds actually exist</em>!
           This demonstrates why visualisation must precede summarisation.
         </p>
       </warning>
+    </subsection>
 
-      <p><alert>
-        Measuring the Center: Mean, Median, and Balance
-      </alert></p>
+    <subsection xml:id="subsec-central-tendency">
+      <title>Measuring the Center: Mean, Median, and Balance</title>
 
       <p>
         Once the researchers separate the flock by species, each group's weights
@@ -223,10 +225,12 @@
         <strong>Greater Flamingo body mass:</strong> Mean = 3120.2 g (exact
         value to be verified from data).
       </p>
+    </subsection>
 
-      <p><alert>
+    <subsection xml:id="subsec-dispersion">
+      <title>
         Measuring Spread: How Much Do Birds Vary Within Each Species?
-      </alert></p>
+      </title>
 
       <p>
         Next, the team asks: How consistent are the birds within each species?
@@ -365,11 +369,13 @@
           </ul>
         </p>
       </note>
+    </subsection>
 
-      <p><alert>
+    <subsection xml:id="subsec-lake-preferences">
+      <title>
         Lake Preferences and Ecosystem Dynamics: Cross-Tabulation and
         Conditional Proportions
-      </alert></p>
+      </title>
 
       <p>
         Physical size is only half the story.
@@ -507,25 +513,13 @@
           distribution.
         </p>
       </remark>
+    </subsection>
   </section>
-
   <!-- ============================================================ -->
-  <!-- PART 2: FORMAL STATISTICAL METHODS -->
+  <!-- BRIDGING NOTE -->
   <!-- ============================================================ -->
-  <section xml:id="sec-formal-methods">
-    <title>Part 2: Formal Statistical Methods and Formulas</title>
-
-    <introduction>
-      <p>
-        Having explored descriptive statistics through physical traits and
-        visualisations, we now formalise the underlying mathematical
-        definitions.
-        This section provides precise notation and formulas for all measures
-        introduced in the flamingo narrative.
-      </p>
-
-  <note xml:id="note-viz-and-eda">
-    <title>visualisation and Exploratory Analysis</title>
+  <note xml:id="note-vis-and-eda">
+    <title>Visualisation and Exploratory Analysis</title>
 
     <p>
       Throughout the flamingo narrative, we emphasised the importance of
@@ -548,7 +542,20 @@
       interpreting descriptive statistics: the numbers that summarise your data.
     </p>
   </note>
+  <!-- ============================================================ -->
+  <!-- PART 2: FORMAL STATISTICAL METHODS -->
+  <!-- ============================================================ -->
+  <section xml:id="sec-formal-methods">
+    <title>Part 2: Formal Statistical Methods and Formulas</title>
 
+    <introduction>
+      <p>
+        Having explored descriptive statistics through physical traits and
+        visualisations, we now formalise the underlying mathematical
+        definitions.
+        This section provides precise notation and formulas for all measures
+        introduced in the flamingo narrative.
+      </p>
     </introduction>
 
     <subsection xml:id="subsec-central-tendency-formal">
@@ -854,8 +861,8 @@
       </p>
     </subsection>
 
-    <subsection xml:id="subsec-r-visualize">
-      <title>visualisation in R</title>
+    <subsection xml:id="subsec-r-visualise">
+      <title>Visualisation in R</title>
 
       <p>
         [Code for histograms, box plots, scatter plots, and cross-tabulation
@@ -863,7 +870,7 @@
       </p>
     </subsection>
 
-    <subsection xml:id="subsec-r-summarize">
+    <subsection xml:id="subsec-r-summarise">
       <title>Computing Descriptive Statistics</title>
 
       <p>
