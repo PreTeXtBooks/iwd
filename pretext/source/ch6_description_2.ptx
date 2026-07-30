@@ -1,29 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <chapter xml:id="descriptive-statistics">
-  <title>Descriptive Statistics: Understanding Flamingo Diversity Across the Kenyan Rift Valley</title>
+  <title>
+    Descriptive Statistics: Understanding Flamingo Diversity Across the Kenyan
+    Rift Valley
+  </title>
 
   <introduction>
     <p>
-      Before we can make decisions about populations, test hypotheses, or build predictive models, we must first understand the data in front of us. This chapter introduces <term>descriptive statistics</term>—the art and science of summarizing raw observations into meaningful patterns. Rather than abstract definitions, we'll ground every concept in a real research question that has genuine ecological consequences.
+      Before we make decisions about populations, test hypotheses, or build
+      predictive models, we want to first understand the data in front of us.
+      This chapter introduces <term>descriptive statistics</term>: the art and
+      science of summarising raw observations into meaningful patterns.
+      Rather than abstract definitions, we'll ground every concept in a
+      research question from synthetic data.
     </p>
+
     <p>
-      Our story begins at the muddy shores of Kenya's Rift Valley, where field biologists face a deceptively simple question: <em>How many distinct flamingo species did we actually capture?</em> The answer will reveal why visualization matters before computation, why summary statistics can mislead, and how data integrity affects every downstream analysis.
+      Our story begins at the shores of Kenya's Rift Valley, where field
+      biologists face a deceptively simple question:
+      <em>How many distinct flamingo species did we actually capture?</em> The
+      answer will reveal why visualisation matters before computation, why
+      summary statistics can mislead, and how data integrity affects every
+      downstream analysis.
     </p>
   </introduction>
 
   <!-- ============================================================ -->
   <!-- PART 1: THE STORY -->
   <!-- ============================================================ -->
-
   <section xml:id="sec-flamingo-story">
-    <title>Part 1: The Story — A Real Field Problem</title>
+    <title>Part 1: The Story</title>
+      <p><alert>The Field Study: Capturing and Measuring Flamingos</alert></p>
 
-    <subsection xml:id="subsec-field-setup">
-      <title>The Field Study: Capturing and Measuring Flamingos</title>
       <p>
-        A team of field biologists sets up stations along the muddy shores of the Kenyan Rift Valley. Armed with calipers, weighing slings, and mist nets, they capture, measure, and release 344 flamingos across Lake Nakuru, Lake Bogoria, and Lake Elementaita. For every bird that passes through their hands, they record eight attributes:
+        A team of field biologists sets up stations along the muddy shores of
+        the Kenyan Rift Valley.
+        Armed with calipers, weighing slings, and mist nets, they capture,
+        measure, and release 344 flamingos across Lake Nakuru, Lake Bogoria, and
+        Lake Elementaita.
+        For every bird that passes through their hands, they record eight
+        attributes:
       </p>
+
       <ul>
         <li>Sampling lake (categorical: Bogoria, Elementaita, or Nakuru)</li>
         <li>Species (categorical: field identification of species)</li>
@@ -34,179 +53,340 @@
         <li>Sex (categorical: field determination or genetic test)</li>
         <li>Observation year (numeric)</li>
       </ul>
+
       <p>
-        Looking at the raw field sheets, the variation is striking. Some birds are small and vibrant, while others are tall and pale; weights range from barely over a kilogram to nearly four kilograms. Before running any calculations, the team faces a fundamental field question: <em>Does this massive range of physical traits represent natural variation within a single flock, or are we looking at two distinct species sharing the same waters?</em>
+        Looking at the raw field sheets, the variation is striking.
+        Some birds are small and vibrant, while others are tall and pale;
+        weights range from barely over a kilogram to nearly four kilograms.
+        Before running any calculations, the team faces a fundamental field
+        question:
+        <em>Does this massive range of physical traits represent natural variation within a single flock, or are we looking at two distinct species sharing the same waters?</em>
       </p>
+
       <note>
         <title>Why This Matters</title>
+
         <p>
-          In ecological conservation, misclassifying two distinct species as a single varied population can mask severe population declines in the rarer species. In Kenya, Lesser Flamingos are classified as <q>Near Threatened,</q> making accurate population monitoring vital.
+          In ecological conservation, misclassifying two distinct species as a
+          single varied population can mask severe population declines in the
+          rarer species.
+          In Kenya, Lesser Flamingos are classified as <q>Near Threatened,</q>
+          making accurate population monitoring vital.
         </p>
       </note>
-    </subsection>
+      
+      <p><alert>
+        From Field Sheets to Digital Records: Loading and Auditing the Data
+      </alert></p>
 
-    <subsection xml:id="subsec-data-loading-audit">
-      <title>From Field Sheets to Digital Records: Loading and Auditing the Data</title>
       <p>
-        The first step in any analysis is not to compute—it is to <em>inspect</em>. The field team transcribes their handwritten measurements into a digital spreadsheet, column by column. But field conditions are unpredictable. Weather changes, battery failures, and bird stress levels all affect data completeness.
+        The first step in any analysis is it to <em>inspect</em>.
+        The field team transcribes their handwritten measurements into a digital
+        spreadsheet, column by column.
+        But field conditions are unpredictable.
+        Weather changes, battery failures, and bird stress levels all affect
+        data completeness.
       </p>
+
       <p>
-        When the biologists return to the field station and audit their digital spreadsheets, they discover several blank entries in the master log. Out of 344 captured birds:
+        When the biologists return to the field station and audit their digital
+        spreadsheets, they discover several blank entries in the master log.
+        Out of 344 captured birds:
       </p>
+
       <ul>
         <li>4 entries are missing bill depth</li>
         <li>8 lack body mass</li>
         <li>7 lack recorded sex</li>
       </ul>
+
       <p>
-        Before analyzing the completed records, the researchers must determine: <em>Why are these numbers absent? Did a scale battery fail at random, or were the heaviest birds escaping measurement because they were harder to restrain?</em>
+        Before analyzing the completed records, the researchers must determine:
+        <em>Why are these numbers absent? Did a scale battery fail at random, or were the heaviest birds escaping measurement because they were harder to restrain?</em>
       </p>
+
       <note>
         <title>Why This Matters in Fieldwork</title>
+
         <p>
-          Determining flamingo sex requires genetic testing or careful physical inspection during brief handling windows. Field teams prioritize bird safety over completing every measurement when weather conditions or bird stress levels escalate.
+          Determining flamingo sex requires genetic testing or careful physical
+          inspection during brief handling windows.
+          Field teams prioritise bird safety over completing every measurement
+          when weather conditions or bird stress levels escalate.
         </p>
       </note>
+
       <note xml:id="note-missing-data-bias">
         <title>Key Takeaway: When Does Missing Data Introduce Bias?</title>
+
         <p>
-          If missing data occur completely at random, removing incomplete rows (listwise deletion) reduces sample size but does not introduce statistical bias. If missingness depends on physical traits (e.g., larger birds escaping measurement because they were harder to restrain), omitting them biases your sample means.
+          If missing data occur completely at random, removing incomplete rows
+          (listwise deletion) reduces sample size but does not introduce
+          statistical bias.
+          If missingness depends on physical traits (e.g., larger birds escaping
+          measurement because they were harder to restrain), omitting them
+          biases your sample means. This is because you want your sample to be
+          representative of the population, but if we have birds missing due to 
+          non-randomess, then the sample is not representative.
         </p>
       </note>
-    </subsection>
 
-    <subsection xml:id="subsec-visualize-mass">
-      <title>Visualizing the Raw Data: What the Histogram Reveals</title>
+    <p><alert>
+      Visualising the Raw Data: What the Histogram Reveals
+    </p></alert>
+
       <p>
-        To make sense of the 336 body mass records on their clipboard, the researchers plot every measurement along a single axis. Instead of forming a single cluster around a typical weight, the plot reveals two undeniable peaks: a massive ridge centered near 1650 g and a smaller hill near 3100 g.
+        To make sense of the 336 body mass records on their clipboard, the
+        researchers plot every measurement along a single axis.
+        Instead of forming a single cluster around a typical weight, the plot
+        reveals two undeniable peaks: a massive ridge centered near 1650 g and a
+        smaller hill near 3100 g.
       </p>
+
       <figure xml:id="fig-mass-histogram">
-        <caption>Body mass records (g) across 336 captured flamingos revealing a bimodal pattern.</caption>
+        <caption>
+          Body mass records (g) across 336 captured flamingos revealing a
+          bimodal pattern.
+        </caption>
+
         <image source="images/flamingo-mass-histogram.png" width="60%"/>
       </figure>
+
       <p>
-        This double peak tells a story that standard numbers alone would obscure. It warns the team that treating all captured flamingos as a single group conceals critical biological reality. When the researchers color-code the plot by field species identification, the double peak splits into two tidy, separate curves: lightweight Lesser Flamingos on the left and heavy Greater Flamingos on the right.
+        This double peak tells a story that standard numbers alone would
+        obscure.
+        It warns the team that treating all captured flamingos as a single group
+        conceals biological reality.
+        When the researchers color-code the plot by field species
+        identification, the double peak splits into two tidy, separate curves:
+        lightweight Lesser Flamingos on the left and heavy Greater Flamingos on
+        the right.
       </p>
+
       <warning xml:id="warn-blind-average">
         <title>Think Before You Compute</title>
+
         <p>
-          If you blindly compute the average mass of all 336 birds without plotting a histogram first, you get 1957.4 g—a value sitting in the empty valley between the two true species clusters where <em>almost no individual birds actually exist</em>! This demonstrates why visualization must precede summarization.
+          If you blindly compute the average mass of all 336 birds without
+          plotting a histogram first, you get 1957.4 g. This value sits in the
+          empty valley between the two true species clusters where
+          <em>almost no individual birds actually exist</em>!
+          This demonstrates why visualisation must precede summarisation.
         </p>
       </warning>
-    </subsection>
 
-    <subsection xml:id="subsec-central-tendency">
-      <title>Measuring the Center: Mean, Median, and Balance</title>
-      <p>
-        Once the researchers separate the flock by species, each group's weights settle into balanced, bell-like shapes. For Lesser Flamingos, the physical balance point (1689.1 g) and the exact middle bird (1684.0 g) sit almost on top of each other. When a group is symmetric, both benchmarks tell the same story about a <q>typical</q> bird.
-      </p>
-      <definition>
-        <term>Mean</term>
-        <p>
-          The mean (or average) represents the balance point of the data. If you imagine each data value as a weight on a seesaw balanced at the mean, the seesaw stays level. It is sensitive to extreme values.
-        </p>
-      </definition>
-      <definition>
-        <term>Median</term>
-        <p>
-          The median is the middle value when all observations are ordered from smallest to largest. Half the data fall below it, half above. It is resistant to extreme values.
-        </p>
-      </definition>
-      <p>
-        <strong>Lesser Flamingo body mass:</strong> Mean = 1689.1 g, Median = 1684.0 g (nearly identical, indicating a symmetric distribution).
-      </p>
-      <p>
-        <strong>Greater Flamingo body mass:</strong> Mean = 3120.2 g (exact value to be verified from data).
-      </p>
-    </subsection>
+      <p><alert>
+        Measuring the Center: Mean, Median, and Balance
+      </alert></p>
 
-    <subsection xml:id="subsec-dispersion">
-      <title>Measuring Spread: How Much Do Birds Vary Within Each Species?</title>
       <p>
-        Next, the team asks: How consistent are the birds within each species? Are all Lesser Flamingos nearly identical in size, or do they vary widely?
+        Once the researchers separate the flock by species, each group's weights
+        settle into balanced, bell-like shapes.
+        For Lesser Flamingos, the physical balance point (1689.1 g) and the
+        exact middle bird (1684.0 g) sit almost on top of each other.
+        When a group is symmetric, both benchmarks tell the same story about a
+        <q>typical</q> bird.
       </p>
-      <p>
-        Looking at the distance individual birds drift from their baseline reveals that Lesser Flamingos are tightly clustered, with a typical spread of 196.4 g and the middle 50% of birds falling between 1536.0 g and 1843.0 g. Greater Flamingos, by contrast, show much wider variation, with a typical spread of 313.9 g.
-      </p>
+
       <definition>
-        <term>Standard Deviation (s)</term>
+        <term>
+          Mean
+        </term>
+
         <p>
-          The standard deviation measures how far, on average, individual observations stray from the mean. It is expressed in the same units as the original data (e.g., grams). A larger standard deviation indicates greater variability.
+          The mean (or average) represents the balance point of the data.
+          If you imagine each data value as a weight on a seesaw balanced at the
+          mean, the seesaw stays level.
+          It is sensitive to extreme values.
         </p>
       </definition>
+
       <definition>
-        <term>Interquartile Range (IQR)</term>
+        <term>
+          Median
+        </term>
+
         <p>
-          The IQR captures the spread of the middle 50% of data, spanning from the 25th percentile (Q1) to the 75th percentile (Q3). It is robust to extreme outliers.
+          The median is the middle value when all observations are ordered from
+          smallest to largest.
+          Half the data fall below it, half above.
+          It is resistant to extreme values.
         </p>
       </definition>
+
       <p>
-        <strong>Lesser Flamingo body mass:</strong> Standard deviation = 196.4 g, IQR = 1843.0 − 1536.0 = 307.0 g.
+        <strong>Lesser Flamingo body mass:</strong> Mean = 1689.1 g, Median =
+        1684.0 g (nearly identical, indicating a symmetric distribution).
       </p>
+
       <p>
-        <strong>Greater Flamingo body mass:</strong> Standard deviation = 313.9 g.
+        <strong>Greater Flamingo body mass:</strong> Mean = 3120.2 g (exact
+        value to be verified from data).
+      </p>
+
+      <p><alert>
+        Measuring Spread: How Much Do Birds Vary Within Each Species?
+      </alert></p>
+
+      <p>
+        Next, the team asks: How consistent are the birds within each species?
+        Are all Lesser Flamingos nearly identical in size, or do they vary
+        widely?
+      </p>
+
+      <p>
+        Looking at the distance individual birds drift from their baseline
+        reveals that Lesser Flamingos are tightly clustered, with a typical
+        spread of 196.4 g and the middle 50% of birds falling between 1536.0 g
+        and 1843.0 g.
+        Greater Flamingos, by contrast, show much wider variation, with a
+        typical spread of 313.9 g.
+      </p>
+
+      <definition>
+        <term>
+          Standard Deviation (s)
+        </term>
+
+        <p>
+          The standard deviation measures how far, on average, individual
+          observations stray from the mean.
+          It is expressed in the same units as the original data (e.g., grams).
+          A larger standard deviation indicates greater variability.
+        </p>
+      </definition>
+
+      <definition>
+        <term>
+          Interquartile Range (IQR)
+        </term>
+
+        <p>
+          The IQR captures the spread of the middle 50% of data, spanning from
+          the 25th percentile (Q1) to the 75th percentile (Q3).
+          It is robust to extreme outliers.
+        </p>
+      </definition>
+
+      <p>
+        <strong>Lesser Flamingo body mass:</strong> Standard deviation = 196.4
+        g, IQR = 1843.0 − 1536.0 = 307.0 g.
+      </p>
+
+      <p>
+        <strong>Greater Flamingo body mass:</strong> Standard deviation = 313.9
+        g.
       </p>
 
       <example xml:id="ex-cv-morphometrics">
         <title>Comparing Relative Variability Across Species</title>
+
         <statement>
           <p>
-            Compare the dispersion of bill length between Lesser Flamingos (<m>s = 4.2</m> mm) and Greater Flamingos (<m>s = 6.1</m> mm). Which species exhibits greater relative variability?
+            Compare the dispersion of bill length between Lesser Flamingos (
+            <m>s = 4.2</m> mm) and Greater Flamingos ( <m>s = 6.1</m> mm).
+            Which species exhibits greater relative variability?
           </p>
         </statement>
+
         <solution>
           <p>
-            While Greater Flamingos have a higher standard deviation (6.1 mm), their mean bill length is also much larger (127.1 mm vs 97.9 mm for Lesser Flamingos). Comparing standard deviations directly is misleading when the groups have different scales.
+            While Greater Flamingos have a higher standard deviation (6.1 mm),
+            their mean bill length is also much larger (127.1 mm vs 97.9 mm for
+            Lesser Flamingos).
+            Comparing standard deviations directly is misleading when the groups
+            have different scales.
           </p>
+
           <p>
-            To compare <em>relative</em> variability, we use the <term>coefficient of variation</term> (CV):
-            <me>\text{CV} = \frac{s}{\bar{x}} \times 100\%</me>
+            To compare <em>relative</em> variability, we use the
+            <term>coefficient of variation</term> (CV):
+            <me>
+              \text{CV} = \frac{s}{\bar{x}} \times 100\%
+            </me>
           </p>
+
           <p>
-            <strong>Lesser Flamingo:</strong> <m>\text{CV} = \frac{4.2}{97.9} \times 100\% = 4.3\%</m>
+            <strong>Lesser Flamingo:</strong>
+            <m>\text{CV} = \frac{4.2}{97.9} \times 100\% = 4.3\%</m>
           </p>
+
           <p>
-            <strong>Greater Flamingo:</strong> <m>\text{CV} = \frac{6.1}{127.1} \times 100\% = 4.8\%</m>
+            <strong>Greater Flamingo:</strong>
+            <m>\text{CV} = \frac{6.1}{127.1} \times 100\% = 4.8\%</m>
           </p>
+
           <p>
-            <strong>Conclusion:</strong> Both species have similar relative variability in bill length (4.3% vs 4.8%). The Greater Flamingo's higher absolute standard deviation reflects its larger body size, not greater biological variability.
+            <strong>Conclusion:</strong> Both species have similar relative
+            variability in bill length (4.3% vs 4.8%).
+            The Greater Flamingo's higher absolute standard deviation reflects
+            its larger body size, not greater biological variability.
           </p>
         </solution>
       </example>
 
       <remark xml:id="remark-avg-means">
         <title>Common Mistake: Averaging Means</title>
+
         <p>
-          You cannot find the overall mean body mass by simply averaging the Lesser Flamingo mean (1689.1 g) and Greater Flamingo mean (3120.2 g). Because sample sizes differ (<m>n = 273</m> vs <m>n = 63</m>), unweighted averaging severely overestimates the pooled mean!
+          You cannot find the overall mean body mass by simply averaging the
+          Lesser Flamingo mean (1689.1 g) and Greater Flamingo mean (3120.2 g).
+          Because sample sizes differ ( <m>n = 273</m> vs <m>n = 63</m> ),
+          unweighted averaging severely overestimates the pooled mean!
         </p>
+
         <p>
           To pool means correctly:
-          <me>\text{Pooled mean} = \frac{n_1 \bar{x}_1 + n_2 \bar{x}_2}{n_1 + n_2}</me>
+          <me>
+            \text{Pooled mean} = \frac{n_1 \bar{x}_1 + n_2 \bar{x}_2}{n_1 + n_2}
+          </me>
         </p>
       </remark>
 
       <note xml:id="note-measure-choice">
         <title>Key Takeaway: Choosing the Right Measure</title>
+
         <p>
           <ul>
-            <li>Use the <strong>mean and standard deviation</strong> for symmetric distributions without extreme outliers.</li>
-            <li>Use the <strong>median and IQR</strong> for skewed distributions or datasets containing extreme measurements.</li>
-            <li>Use the <strong>coefficient of variation</strong> when comparing spread across groups with different means.</li>
+            <li>
+              Use the <strong>mean and standard deviation</strong> for symmetric
+              distributions without extreme outliers.
+            </li>
+
+            <li>
+              Use the <strong>median and IQR</strong> for skewed distributions
+              or datasets containing extreme measurements.
+            </li>
+
+            <li>
+              Use the <strong>coefficient of variation</strong> when comparing
+              spread across groups with different means.
+            </li>
           </ul>
         </p>
       </note>
-    </subsection>
 
-    <subsection xml:id="subsec-lake-preferences">
-      <title>Lake Preferences and Ecosystem Dynamics: Cross-Tabulation and Conditional Proportions</title>
+      <p><alert>
+        Lake Preferences and Ecosystem Dynamics: Cross-Tabulation and
+        Conditional Proportions
+      </alert></p>
+
       <p>
-        Physical size is only half the story. The researchers also want to know where each species chooses to feed across the Rift Valley. Do both species mix freely at every lake, or do they divide the ecosystem between themselves?
+        Physical size is only half the story.
+        The researchers also want to know where each species chooses to feed
+        across the Rift Valley.
+        Do both species mix freely at every lake, or do they divide the
+        ecosystem between themselves?
       </p>
+
       <p>
-        Cross-referencing capture logs against sampling sites uncovers striking geographic preferences:
+        Cross-referencing capture logs against sampling sites uncovers striking
+        geographic preferences:
       </p>
+
       <table xml:id="table-cross-tab-lakes">
         <title>Flamingo Captures by Lake and Species</title>
+
         <tabular>
           <row header="yes">
             <cell>Lake</cell>
@@ -214,24 +394,28 @@
             <cell>Lesser Flamingo</cell>
             <cell>Total</cell>
           </row>
+
           <row>
             <cell>Lake Bogoria</cell>
             <cell>10</cell>
             <cell>114</cell>
             <cell>124</cell>
           </row>
+
           <row>
             <cell>Lake Elementaita</cell>
             <cell>30</cell>
             <cell>38</cell>
             <cell>68</cell>
           </row>
+
           <row>
             <cell>Lake Nakuru</cell>
             <cell>26</cell>
             <cell>126</cell>
             <cell>152</cell>
           </row>
+
           <row>
             <cell>Total</cell>
             <cell>66</cell>
@@ -242,256 +426,420 @@
       </table>
 
       <definition>
-        <term>Marginal Proportion</term>
+        <term>
+          Marginal Proportion
+        </term>
+
         <p>
-          A marginal proportion describes the overall frequency of a single category across all observations. For example, the proportion of all 344 flamingos captured at Lake Bogoria is <m>\frac{124}{344} = 36.0\%</m>.
+          A marginal proportion describes the overall frequency of a single
+          category across all observations.
+          For example, the proportion of all 344 flamingos captured at Lake
+          Bogoria is <m>\frac{124}{344} = 36.0\%</m>.
         </p>
       </definition>
 
       <definition>
-        <term>Conditional Proportion</term>
+        <term>
+          Conditional Proportion
+        </term>
+
         <p>
-          A conditional proportion restricts the denominator to a subset. It answers: <q>Given this condition (e.g., captured at Lake Bogoria), what proportion belongs to a particular category?</q>
+          A conditional proportion restricts the denominator to a subset.
+          It answers:
+          <q>Given this condition (e.g., captured at Lake Bogoria), what proportion belongs to a particular category?</q>
         </p>
       </definition>
 
       <example xml:id="ex-conditional-prop">
         <title>Calculating Conditional Proportions</title>
+
         <statement>
           <p>
-            What proportion of all flamingos sampled at Lake Bogoria belong to the Lesser Flamingo species?
+            What proportion of all flamingos sampled at Lake Bogoria belong to
+            the Lesser Flamingo species?
           </p>
         </statement>
+
         <solution>
           <p>
-            From <xref ref="table-cross-tab-lakes"/>, 114 out of the 124 birds recorded at Lake Bogoria are Lesser Flamingos. The conditional proportion is:
-            <me>\frac{114}{124} \approx 0.919 \text{ or } 91.9\%</me>
+            From <xref ref="table-cross-tab-lakes"/>, 114 out of the 124 birds
+            recorded at Lake Bogoria are Lesser Flamingos.
+            The conditional proportion is:
+            <me>
+              \frac{114}{124} \approx 0.919 \text{ or } 91.9\%
+            </me>
           </p>
         </solution>
       </example>
 
       <example xml:id="ex-relative-freq-lakes">
         <title>Relative Frequency of Lake Preference by Species</title>
+
         <statement>
           <p>
-            What proportion of all Lesser Flamingos (across all lakes) were captured at Lake Bogoria?
+            What proportion of all Lesser Flamingos (across all lakes) were
+            captured at Lake Bogoria?
           </p>
         </statement>
+
         <solution>
           <p>
-            From the table, 114 Lesser Flamingos were at Bogoria out of 278 total Lesser Flamingos:
-            <me>\frac{114}{278} \approx 0.410 \text{ or } 41.0\%</me>
+            From the table, 114 Lesser Flamingos were at Bogoria out of 278
+            total Lesser Flamingos:
+            <me>
+              \frac{114}{278} \approx 0.410 \text{ or } 41.0\%
+            </me>
           </p>
         </solution>
       </example>
 
       <remark xml:id="remark-ecological-drivers">
         <title>Discussion: Ecological Drivers of Lake Preference</title>
+
         <p>
-          Why do these patterns emerge? Lake Bogoria's extreme alkalinity supports massive blooms of microscopic blue-green algae (Arthrospira fusiformis), perfectly matched to the fine filtration bill of Lesser Flamingos. In contrast, Greater Flamingos feed on aquatic invertebrates, explaining their higher presence in Lake Elementaita. These differences in feeding ecology shape the observed spatial distribution.
+          Why do these patterns emerge?
+          Lake Bogoria's extreme alkalinity supports massive blooms of
+          microscopic blue-green algae (Arthrospira fusiformis), perfectly
+          matched to the fine filtration bill of Lesser Flamingos.
+          In contrast, Greater Flamingos feed on aquatic invertebrates,
+          explaining their higher presence in Lake Elementaita.
+          These differences in feeding ecology shape the observed spatial
+          distribution.
         </p>
       </remark>
-
-    </subsection>
-
   </section>
-
-  <!-- ============================================================ -->
-  <!-- BRIDGING NOTE -->
-  <!-- ============================================================ -->
-
-  <note xml:id="note-viz-and-eda">
-    <title>Visualization and Exploratory Analysis</title>
-    <p>
-      Throughout the flamingo narrative, we emphasized the importance of plotting data before summarizing it. The histogram revealed bimodality; cross-tabulation showed lake preferences. However, the formal techniques for creating and interpreting these visualizations—histograms, box plots, scatter plots, and more—are covered in depth in <xref ref="chap-data-visualization"/>. 
-    </p>
-    <p>
-      For a broader exploration of data patterns, relationships, and quality issues using both visualizations and summary statistics, see <xref ref="chap-exploratory-data-analysis"/>.
-    </p>
-    <p>
-      This chapter focuses specifically on computing, understanding, and interpreting descriptive statistics: the numbers that summarize your data.
-    </p>
-  </note>
 
   <!-- ============================================================ -->
   <!-- PART 2: FORMAL STATISTICAL METHODS -->
   <!-- ============================================================ -->
-
   <section xml:id="sec-formal-methods">
     <title>Part 2: Formal Statistical Methods and Formulas</title>
+
     <introduction>
       <p>
-        Having explored descriptive statistics through physical traits and visualizations, we now formalize the underlying mathematical definitions. This section provides precise notation and formulas for all measures introduced in the flamingo narrative.
+        Having explored descriptive statistics through physical traits and
+        visualisations, we now formalise the underlying mathematical
+        definitions.
+        This section provides precise notation and formulas for all measures
+        introduced in the flamingo narrative.
       </p>
+
+  <note xml:id="note-viz-and-eda">
+    <title>visualisation and Exploratory Analysis</title>
+
+    <p>
+      Throughout the flamingo narrative, we emphasised the importance of
+      plotting data before summarising it.
+      The histogram revealed bimodality; cross-tabulation showed lake
+      preferences.
+      However, the formal techniques for creating and interpreting these
+      visualisations—histograms, box plots, scatter plots, and more—are covered
+      in depth in <xref ref="chap-data-visualisation"/>.
+    </p>
+
+    <p>
+      For a broader exploration of data patterns, relationships, and quality
+      issues using both visualisations and summary statistics, see
+      <xref ref="chap-exploratory-data-analysis"/>.
+    </p>
+
+    <p>
+      This chapter focuses specifically on computing, understanding, and
+      interpreting descriptive statistics: the numbers that summarise your data.
+    </p>
+  </note>
+
     </introduction>
 
     <subsection xml:id="subsec-central-tendency-formal">
       <title>Measures of Central Tendency</title>
+
       <p>
         For a sample of observations <m>x_1, x_2, \ldots, x_n</m>, we define:
       </p>
 
       <definition>
-        <term>Sample Mean</term>
+        <term>
+          Sample Mean
+        </term>
+
         <p>
-          <me>\bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i</me>
-          The sample mean is the arithmetic average. It is the balance point of the data and is sensitive to extreme values.
+          <me>
+            \bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i
+          </me>
+          The sample mean is the arithmetic average.
+          It is the balance point of the data and is sensitive to extreme
+          values.
         </p>
       </definition>
 
       <definition>
-        <term>Sample Median</term>
+        <term>
+          Sample Median
+        </term>
+
         <p>
-          The sample median <m>\tilde{x}</m> is the value at position <m>\frac{n+1}{2}</m> in an ordered array when <m>n</m> is odd, or the average of positions <m>\frac{n}{2}</m> and <m>\frac{n}{2} + 1</m> when <m>n</m> is even. The median is resistant to extreme values.
+          The sample median <m>\tilde{x}</m> is the value at position
+          <m>\frac{n+1}{2}</m> in an ordered array when <m>n</m> is odd, or the
+          average of positions <m>\frac{n}{2}</m> and <m>\frac{n}{2} + 1</m>
+          when <m>n</m> is even.
+          The median is resistant to extreme values.
         </p>
       </definition>
 
       <definition>
-        <term>Mode</term>
+        <term>
+          Mode
+        </term>
+
         <p>
-          The mode is the value that appears most frequently in a dataset. A distribution can be unimodal (one peak), bimodal (two peaks), or multimodal (more than two peaks).
+          The mode is the value that appears most frequently in a dataset.
+          A distribution can be unimodal (one peak), bimodal (two peaks), or
+          multimodal (more than two peaks).
         </p>
       </definition>
-
     </subsection>
 
     <subsection xml:id="subsec-dispersion-formal">
       <title>Measures of Dispersion</title>
 
       <definition>
-        <term>Sample Variance</term>
+        <term>
+          Sample Variance
+        </term>
+
         <p>
-          <me>s^2 = \frac{1}{n-1} \sum_{i=1}^{n} (x_i - \bar{x})^2</me>
-          Variance measures the mean squared deviation from the sample mean. The denominator <m>n-1</m> (not <m>n</m>) provides an unbiased estimate of population variance.
+          <me>
+            s^2 = \frac{1}{n-1} \sum_{i=1}^{n} (x_i - \bar{x})^2
+          </me>
+          Variance measures the mean squared deviation from the sample mean.
+          The denominator <m>n-1</m> (not <m>n</m> ) provides an unbiased
+          estimate of population variance.
         </p>
       </definition>
 
       <definition>
-        <term>Sample Standard Deviation</term>
+        <term>
+          Sample Standard Deviation
+        </term>
+
         <p>
-          <me>s = \sqrt{s^2}</me>
-          The standard deviation is the positive square root of variance. It is expressed in the same units as the original data, making it more interpretable than variance.
+          <me>
+            s = \sqrt{s^2}
+          </me>
+          The standard deviation is the positive square root of variance.
+          It is expressed in the same units as the original data, making it more
+          interpretable than variance.
         </p>
       </definition>
 
       <definition>
-        <term>Range</term>
+        <term>
+          Range
+        </term>
+
         <p>
-          <me>\text{Range} = \max(x) - \min(x)</me>
-          The range is the difference between the largest and smallest observations. It is simple but highly sensitive to outliers.
+          <me>
+            \text{Range} = \max(x) - \min(x)
+          </me>
+          The range is the difference between the largest and smallest
+          observations.
+          It is simple but highly sensitive to outliers.
         </p>
       </definition>
 
       <definition>
-        <term>Interquartile Range (IQR)</term>
+        <term>
+          Interquartile Range (IQR)
+        </term>
+
         <p>
-          <me>\text{IQR} = Q_3 - Q_1</me>
-          where <m>Q_1</m> is the 25th percentile and <m>Q_3</m> is the 75th percentile. The IQR measures the spread of the middle 50% of data and is robust to outliers.
+          <me>
+            \text{IQR} = Q_3 - Q_1
+          </me>
+          where <m>Q_1</m> is the 25th percentile and <m>Q_3</m> is the 75th
+          percentile.
+          The IQR measures the spread of the middle 50% of data and is robust to
+          outliers.
         </p>
       </definition>
 
       <definition>
-        <term>Coefficient of Variation</term>
+        <term>
+          Coefficient of Variation
+        </term>
+
         <p>
-          <me>\text{CV} = \frac{s}{\bar{x}} \times 100\%</me>
-          The coefficient of variation standardizes the standard deviation relative to the mean. It is dimensionless and allows comparison of spread across groups with different scales.
+          <me>
+            \text{CV} = \frac{s}{\bar{x}} \times 100\%
+          </me>
+          The coefficient of variation standardises the standard deviation
+          relative to the mean.
+          It is dimensionless and allows comparison of spread across groups with
+          different scales.
         </p>
       </definition>
-
     </subsection>
 
     <subsection xml:id="subsec-quantiles-formal">
       <title>Quantiles and Relative Position</title>
 
       <definition>
-        <term><m>p</m>-th Percentile</term>
+        <term>
+          <m>
+            p
+          </m>
+          -th Percentile
+        </term>
+
         <p>
-          The <m>p</m>-th percentile is the value <m>x_p</m> such that at least <m>p\%</m> of observations fall at or below <m>x_p</m>. Common percentiles include <m>Q_1</m> (25th), the median (50th), and <m>Q_3</m> (75th).
+          The <m>p</m>-th percentile is the value <m>x_p</m> such that at least
+          <m>p\%</m> of observations fall at or below <m>x_p</m>.
+          Common percentiles include <m>Q_1</m> (25th), the median (50th), and
+          <m>Q_3</m> (75th).
         </p>
       </definition>
 
       <definition>
-        <term><m>z</m>-score</term>
+        <term>
+          <m>
+            z
+          </m>
+          -score
+        </term>
+
         <p>
-          <me>z_i = \frac{x_i - \bar{x}}{s}</me>
-          The <m>z</m>-score standardizes an observation relative to the sample mean and standard deviation. It tells how many standard deviations above or below the mean an observation lies.
+          <me>
+            z_i = \frac{x_i - \bar{x}}{s}
+          </me>
+          The <m>z</m>-score standardises an observation relative to the sample
+          mean and standard deviation.
+          It tells how many standard deviations above or below the mean an
+          observation lies.
         </p>
       </definition>
-
     </subsection>
 
     <subsection xml:id="subsec-proportions-formal">
       <title>Proportions and Relative Frequencies</title>
 
       <definition>
-        <term>Proportion (Relative Frequency)</term>
+        <term>
+          Proportion (Relative Frequency)
+        </term>
+
         <p>
-          <me>p = \frac{\text{count in category}}{\text{total count}}</me>
-          A proportion expresses a count as a fraction of the total. It ranges from 0 to 1 (or 0% to 100% when multiplied by 100).
+          <me>
+            p = \frac{\text{count in category}}{\text{total count}}
+          </me>
+          A proportion expresses a count as a fraction of the total.
+          It ranges from 0 to 1 (or 0% to 100% when multiplied by 100).
         </p>
       </definition>
 
       <definition>
-        <term>Marginal Proportion</term>
+        <term>
+          Marginal Proportion
+        </term>
+
         <p>
-          A marginal proportion is computed using the total count for a single variable (ignoring all others). For example:
-          <me>P(\text{Lake Bogoria}) = \frac{124}{344} = 0.360</me>
+          A marginal proportion is computed using the total count for a single
+          variable (ignoring all others).
+          For example:
+          <me>
+            P(\text{Lake Bogoria}) = \frac{124}{344} = 0.360
+          </me>
         </p>
       </definition>
 
       <definition>
-        <term>Conditional Proportion</term>
+        <term>
+          Conditional Proportion
+        </term>
+
         <p>
-          A conditional proportion restricts the denominator to a specific subset. Notation: <m>P(A | B)</m> reads <q>probability of A given B</q>:
-          <me>P(\text{Lesser Flamingo} \mid \text{Lake Bogoria}) = \frac{114}{124} = 0.919</me>
+          A conditional proportion restricts the denominator to a specific
+          subset.
+          Notation: <m>P(A | B)</m> reads <q>probability of A given B</q>:
+          <me>
+            P(\text{Lesser Flamingo} \mid \text{Lake Bogoria}) = \frac{114}{124} = 0.919
+          </me>
         </p>
       </definition>
-
     </subsection>
 
     <subsection xml:id="subsec-missing-formal">
       <title>Missing Data Formalism</title>
 
       <definition>
-        <term>Missing Completely at Random (MCAR)</term>
+        <term>
+          Missing Completely at Random (MCAR)
+        </term>
+
         <p>
-          Let <m>R_i</m> be an indicator variable where <m>R_i = 1</m> if observation <m>x_i</m> is observed, and <m>R_i = 0</m> if missing. Under MCAR, the probability of missingness is independent of both observed and unobserved traits:
-          <me>P(R_i = 0 \mid x_i) = P(R_i = 0)</me>
+          Let <m>R_i</m> be an indicator variable where <m>R_i = 1</m> if
+          observation <m>x_i</m> is observed, and <m>R_i = 0</m> if missing.
+          Under MCAR, the probability of missingness is independent of both
+          observed and unobserved traits:
+          <me>
+            P(R_i = 0 \mid x_i) = P(R_i = 0)
+          </me>
         </p>
       </definition>
 
       <definition>
-        <term>Missing at Random (MAR)</term>
+        <term>
+          Missing at Random (MAR)
+        </term>
+
         <p>
-          Under MAR, missingness may depend on observed variables but not on the unobserved value itself. For example, if sex is more likely to be missing for large birds, but missingness is explained entirely by bird size (which we observe), then it is MAR.
+          Under MAR, missingness may depend on observed variables but not on the
+          unobserved value itself.
+          For example, if sex is more likely to be missing for large birds, but
+          missingness is explained entirely by bird size (which we observe),
+          then it is MAR.
         </p>
       </definition>
 
       <note>
         <title>Impact on Analysis</title>
+
         <p>
           <ul>
-            <li><strong>MCAR:</strong> Simple deletion (listwise or pairwise) introduces no bias, only loss of power.</li>
-            <li><strong>MAR:</strong> Modern methods (multiple imputation, maximum likelihood) can work; simple deletion may introduce bias.</li>
-            <li><strong>Missing Not at Random (MNAR):</strong> Missingness depends on the unobserved value itself (e.g., unmeasured birds escaped). Requires sensitivity analysis or specialist techniques.</li>
+            <li>
+              <strong>MCAR:</strong> Simple deletion (listwise or pairwise)
+              introduces no bias, only loss of power.
+            </li>
+
+            <li>
+              <strong>MAR:</strong> Modern methods (multiple imputation, maximum
+              likelihood) can work; simple deletion may introduce bias.
+            </li>
+
+            <li>
+              <strong>Missing Not at Random (MNAR):</strong> Missingness depends
+              on the unobserved value itself (e.g., unmeasured birds escaped).
+              Requires sensitivity analysis or specialist techniques.
+            </li>
           </ul>
         </p>
       </note>
-
     </subsection>
-
   </section>
-
   <!-- ============================================================ -->
   <!-- PART 3: INVESTIGATION IN R (PLACEHOLDER) -->
   <!-- ============================================================ -->
-
   <section xml:id="sec-r-implementation">
     <title>Part 3: Investigation — Descriptive Analysis in R</title>
+
     <introduction>
       <p>
-        This section translates the flamingo narrative and formal definitions into working R code. Rather than showing R in isolation, we follow the pedagogical arc: load the data, inspect it, visualize it, then compute summary statistics.
+        This section translates the flamingo narrative and formal definitions
+        into working R code.
+        Rather than showing R in isolation, we follow the pedagogical arc: load
+        the data, inspect it, visualise it, then compute summary statistics.
       </p>
+
       <p>
         <em>[R code examples and implementations to be provided in a dedicated R-focused section.]</em>
       </p>
@@ -499,33 +847,39 @@
 
     <subsection xml:id="subsec-r-load">
       <title>Loading and Inspecting the Data</title>
+
       <p>
-        [Code for reading flamingo dataset, viewing first few rows, checking data types, identifying missing values.]
+        [Code for reading flamingo dataset, viewing first few rows, checking
+        data types, identifying missing values.]
       </p>
     </subsection>
 
     <subsection xml:id="subsec-r-visualize">
-      <title>Visualization in R</title>
+      <title>visualisation in R</title>
+
       <p>
-        [Code for histograms, box plots, scatter plots, and cross-tabulation tables using base R and ggplot2.]
+        [Code for histograms, box plots, scatter plots, and cross-tabulation
+        tables using base R and ggplot2.]
       </p>
     </subsection>
 
     <subsection xml:id="subsec-r-summarize">
       <title>Computing Descriptive Statistics</title>
+
       <p>
-        [Code for mean, median, standard deviation, IQR, percentiles, proportions, and conditional proportions.]
+        [Code for mean, median, standard deviation, IQR, percentiles,
+        proportions, and conditional proportions.]
       </p>
     </subsection>
-
   </section>
-
   <!-- ============================================================ -->
   <!-- PART 4: STACK QUESTIONS (PLACEHOLDER) -->
   <!-- ============================================================ -->
-
   <section xml:id="sec-stack-questions">
-    <title>Part 4: STACK Questions — Conceptual Checks and Computational Practice</title>
+    <title>
+      Part 4: STACK Questions — Conceptual Checks and Computational Practice
+    </title>
+
     <introduction>
       <p>
         <em>[A collection of STACK questions to reinforce key concepts, including multiple-choice checks on interpretation, numeric calculations with tolerance, and symbolic mathematics problems.]</em>
@@ -534,38 +888,48 @@
 
     <subsection xml:id="subsec-stack-conceptual">
       <title>Conceptual Multiple-Choice Questions</title>
+
       <p>
-        [STACK questions testing understanding of mean vs. median, when to use CV, interpretation of IQR, etc.]
+        [STACK questions testing understanding of mean vs.
+        median, when to use CV, interpretation of IQR, etc.]
       </p>
     </subsection>
 
     <subsection xml:id="subsec-stack-computation">
       <title>Computational Problems</title>
+
       <p>
-        [STACK questions requiring calculation of means, standard deviations, percentiles, proportions from datasets.]
+        [STACK questions requiring calculation of means, standard deviations,
+        percentiles, proportions from datasets.]
       </p>
     </subsection>
 
     <subsection xml:id="subsec-stack-interpretation">
       <title>Interpretation and Application</title>
+
       <p>
-        [STACK questions asking students to interpret visualizations, choose appropriate measures for given scenarios, and reason about missing data.]
+        [STACK questions asking students to interpret visualisations, choose
+        appropriate measures for given scenarios, and reason about missing
+        data.]
       </p>
     </subsection>
-
   </section>
-
   <!-- ============================================================ -->
   <!-- EXERCISES -->
   <!-- ============================================================ -->
-
   <exercises xml:id="exer-descriptive-stats">
     <title>Exercises</title>
 
     <exercise xml:id="exer-mean-vs-median">
       <statement>
         <p>
-          A conservation biologist measures the nesting success rate of 50 Lesser Flamingo colonies across three lakes. Most colonies succeed at rates between 70–90%, but one isolated colony at Lake Bogoria succeeded at only 15% due to a drought. Which measure—mean or median—would better represent the typical nesting success? Explain your reasoning.
+          A conservation biologist measures the nesting success rate of 50
+          Lesser Flamingo colonies across three lakes.
+          Most colonies succeed at rates between 70–90%, but one isolated colony
+          at Lake Bogoria succeeded at only 15% due to a drought.
+          Which measure—mean or median—would better represent the typical
+          nesting success?
+          Explain your reasoning.
         </p>
       </statement>
     </exercise>
@@ -573,7 +937,12 @@
     <exercise xml:id="exer-cv-interpretation">
       <statement>
         <p>
-          The mean bill depth of Lesser Flamingos is 16.4 mm with a standard deviation of 0.8 mm. For Greater Flamingos, the mean is 21.7 mm with a standard deviation of 1.2 mm. Which species shows greater relative variability in bill depth? Show your work.
+          The mean bill depth of Lesser Flamingos is 16.4 mm with a standard
+          deviation of 0.8 mm.
+          For Greater Flamingos, the mean is 21.7 mm with a standard deviation
+          of 1.2 mm.
+          Which species shows greater relative variability in bill depth?
+          Show your work.
         </p>
       </statement>
     </exercise>
@@ -581,11 +950,21 @@
     <exercise xml:id="exer-conditional-prop">
       <statement>
         <p>
-          Using the lake cross-tabulation (<xref ref="table-cross-tab-lakes"/>):
+          Using the lake cross-tabulation ( <xref ref="table-cross-tab-lakes"/>
+          ):
         </p>
+
         <ol>
-          <li>What proportion of all 344 flamingos were captured at Lake Elementaita?</li>
-          <li>Given that a flamingo was captured at Lake Elementaita, what is the probability it was a Greater Flamingo?</li>
+          <li>
+            What proportion of all 344 flamingos were captured at Lake
+            Elementaita?
+          </li>
+
+          <li>
+            Given that a flamingo was captured at Lake Elementaita, what is the
+            probability it was a Greater Flamingo?
+          </li>
+
           <li>Explain why your answers to (a) and (b) are different.</li>
         </ol>
       </statement>
@@ -594,7 +973,12 @@
     <exercise xml:id="exer-missing-data-bias">
       <statement>
         <p>
-          Seven flamingos have missing sex determinations in the dataset. Suppose all seven missing values are from birds over 3200 g (the largest birds captured). Would removing these seven rows introduce bias in the estimated mean body mass? Why or why not?
+          Seven flamingos have missing sex determinations in the dataset.
+          Suppose all seven missing values are from birds over 3200 g (the
+          largest birds captured).
+          Would removing these seven rows introduce bias in the estimated mean
+          body mass?
+          Why or why not?
         </p>
       </statement>
     </exercise>
@@ -602,16 +986,19 @@
     <exercise xml:id="exer-histogram-interpretation">
       <statement>
         <p>
-          Look at the body mass histogram (<xref ref="fig-mass-histogram"/>). Based on the visual, estimate:
+          Look at the body mass histogram ( <xref ref="fig-mass-histogram"/> ).
+          Based on the visual, estimate:
         </p>
+
         <ol>
           <li>How many distinct species does it suggest are present?</li>
           <li>Roughly where is the median body mass of the combined sample?</li>
-          <li>Why would reporting a single mean body mass for all 336 birds be misleading?</li>
+          <li>
+            Why would reporting a single mean body mass for all 336 birds be
+            misleading?
+          </li>
         </ol>
       </statement>
     </exercise>
-
   </exercises>
-
 </chapter>
