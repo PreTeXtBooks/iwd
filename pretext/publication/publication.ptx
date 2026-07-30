@@ -80,6 +80,16 @@
     <platform host="web" />
     <calculator model="none" />
     <search variant="default" />
+
+<knowl 
+      note="no"
+      warning="no"
+      remark="no"
+      aside="no"
+      example="no"
+      example-solution="no"
+      proof="no"
+    />
 </html>
   
   <!-- Common options -->
