@@ -37,12 +37,12 @@
       <p>
         Looking at the raw field sheets, the variation is striking. Some birds are small and vibrant, while others are tall and pale; weights range from barely over a kilogram to nearly four kilograms. Before running any calculations, the team faces a fundamental field question: <em>Does this massive range of physical traits represent natural variation within a single flock, or are we looking at two distinct species sharing the same waters?</em>
       </p>
-      <aside>
+      <note>
         <title>Why This Matters</title>
         <p>
           In ecological conservation, misclassifying two distinct species as a single varied population can mask severe population declines in the rarer species. In Kenya, Lesser Flamingos are classified as <q>Near Threatened,</q> making accurate population monitoring vital.
         </p>
-      </aside>
+      </note>
     </subsection>
 
     <subsection xml:id="subsec-data-loading-audit">
@@ -61,12 +61,12 @@
       <p>
         Before analyzing the completed records, the researchers must determine: <em>Why are these numbers absent? Did a scale battery fail at random, or were the heaviest birds escaping measurement because they were harder to restrain?</em>
       </p>
-      <aside>
+      <note>
         <title>Why This Matters in Fieldwork</title>
         <p>
           Determining flamingo sex requires genetic testing or careful physical inspection during brief handling windows. Field teams prioritize bird safety over completing every measurement when weather conditions or bird stress levels escalate.
         </p>
-      </aside>
+      </note>
       <note xml:id="note-missing-data-bias">
         <title>Key Takeaway: When Does Missing Data Introduce Bias?</title>
         <p>
