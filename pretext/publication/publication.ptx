@@ -34,7 +34,6 @@
     <projects level="2"/>
     <equations level="2"/>
     <footnotes level="2"/>
-    <divisions level="2" />
   </numbering>
 
     <!-- LaTeX specific options: set @print="yes" to get pdf set up   -->
