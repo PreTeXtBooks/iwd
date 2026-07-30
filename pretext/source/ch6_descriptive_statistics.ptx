@@ -8,7 +8,7 @@
 <!--  spine of the whole chapter; later sections refer back to it.     -->
 <!-- ================================================================= -->
 
-<chapter xml:id="ch-descriptive-statistics" xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xml:id="ch-descriptive-statistics-old" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Descriptive Statistics and Data Summarisation</title>
 
   <introduction xml:id="ch-descriptive-introduction">
