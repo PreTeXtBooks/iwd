@@ -42,7 +42,6 @@
     <!-- links the html version of asymptote graphics.                -->
   <latex print="no" sides="one">
     <asymptote links="no"/>
-    <page paper="A4" />
   </latex>
 
     <!-- This public server is for testing and demonstration of STACK q's only. -->
@@ -56,7 +55,9 @@
 
     <!-- Whether to knowl a particular elements is set here    -->
     <!-- Lots of elements have this possibility; see the guide -->
-    <knowl remark="yes" example="yes" proof="yes" listing="yes"/>
+    <!-- remark covers warning/note/tip/etc.; kept always-visible -->
+    <!-- alongside example and definition, per project styling -->
+    <knowl remark="no" example="no" definition="no" note="no" proof="yes" listing="yes"/>
     <!-- Specify the style of the html by giving names to      -->
     <!-- override defaults.  Ex: to use "style_oscarlevin.css" -->
     <!-- put <css style="oscarlevin"/>                         -->
@@ -77,27 +78,11 @@
       secondary-color="#F37021"
       primary-color-dark="#649BA3" />
     <!-- Enable interactive code blocks and code highlighting -->
-    <platform host="web" />
-    <calculator model="none" />
-    <search variant="default" />
-
-<knowl 
-      note="no"
-      warning="no"
-      remark="no"
-      aside="no"
-      example="no"
-      example-solution="no"
-      proof="no"
-    />
-</html>
+    <calculator model="none"/>
+  </html>
   
   <!-- Common options -->
   <common>
-    <!-- Show every component of an exercise in the main text. -->
-    <exercise-inline statement="yes" hint="yes" answer="yes" solution="yes" />
-    <exercise-divisional statement="yes" hint="yes" answer="yes" solution="yes" />
-
     <!-- Enable syntax highlighting for code blocks -->
     <chunking level="2"/>
     <tableofcontents level="2"/>
