@@ -8,7 +8,8 @@
       observational data. We anchor our inquiry in a synthetic dataset of 344 flamingos recorded across 
       three Kenyan Rift Valley lakes: Lake Nakuru, Lake Bogoria, and Lake Elementaita.
     </p>
-    <note>
+
+    <note xml:id="note-dataset-context">
       <title>Dataset Context</title>
       <p>
         The dataset <c>kenya_flamingos.csv</c> is a simulated (synthetic) dataset modeled after 
@@ -16,6 +17,23 @@
       </p>
     </note>
   </introduction>
+
+  <!-- CHAPTER OBJECTIVES CALLOUT BOX -->
+  <objectives xml:id="obj-descriptive-stats">
+    <title>Data-First Philosophy</title>
+    <introduction>
+      <p>
+        By engaging directly with the flamingo dataset, you will develop a data-first mindset for descriptive statistics:
+      </p>
+    </introduction>
+    <ul>
+      <li><p>Inspect raw data visually before computing numerical summary metrics.</p></li>
+      <li><p>Identify how multimodal and skewed distributions alter descriptive measures.</p></li>
+      <li><p>Select appropriate measures of center and spread based on distribution shape and robustness.</p></li>
+      <li><p>Analyze categorical relationships using contingency tables and conditional proportions.</p></li>
+      <li><p>Evaluate missing data patterns and execute reproducible computational workflows in R.</p></li>
+    </ul>
+  </objectives>
 
   <!-- ==================================================================== -->
   <!-- PART I: DATA-FIRST CONCEPTUAL EXPLORATION                            -->
@@ -32,6 +50,14 @@
       Before calculating any numerical summary, we begin with a foundational question: 
       <em>How can we tell whether physical differences reflect separate biological species or mere variation within a single species?</em>
     </p>
+
+    <!-- CALLOUT: WHY THIS MATTERS -->
+    <aside xml:id="aside-why-species-matters">
+      <title>Why This Matters</title>
+      <p>
+        In ecological conservation, misclassifying two distinct species as a single varied population can mask severe population declines in the rarer species. In Kenya, Lesser Flamingos are classified as "Near Threatened," making accurate population monitoring vital.
+      </p>
+    </aside>
   </section>
 
   <section xml:id="sec-seeing-the-shape">
@@ -40,17 +66,27 @@
       Plotting body mass across all <m>336</m> observed birds reveals a distinct double peak (bimodal shape), 
       with a primary cluster near <m>1650\text{ g}</m> and a smaller cluster near <m>3100\text{ g}</m>.
     </p>
+
     <figure xml:id="fig-flamingo-mass-dist">
       <caption>Distribution of flamingo body mass (g) showing bimodality.</caption>
       <image source="images/flamingo_mass_histogram.png" width="75%">
         <shortdescription>Bimodal histogram showing body mass of flamingos.</shortdescription>
       </image>
     </figure>
+
     <p>
       This bimodal shape indicates that treating all flamingos as a single homogeneous group hides 
       critical biological structure. Splitting the observations by species reveals two symmetric, 
       unimodal distributions corresponding to Lesser Flamingos and Greater Flamingos.
     </p>
+
+    <!-- CALLOUT: THINK BEFORE YOU COMPUTE -->
+    <aside xml:id="aside-think-bimodal">
+      <title>Think Before You Compute</title>
+      <p>
+        If you blindly compute the average mass of all 336 birds without plotting a histogram first, you get <m>1957.4\text{ g}</m>—a value sitting in the empty valley between the two true species clusters where almost no individual birds actually exist!
+      </p>
+    </aside>
   </section>
 
   <section xml:id="sec-center-dispersion-position">
@@ -61,13 +97,37 @@
       However, when distributions are skewed or contain extreme values, the mean shifts toward the tail, 
       while the median remains resistant.
     </p>
-    <p>
-      To measure variability (dispersion), we evaluate how widely observations spread around the center. 
-      Lesser Flamingo body mass exhibits a standard deviation of <m>196.4\text{ g}</m>, whereas Greater Flamingos 
-      have a standard deviation of <m>313.9\text{ g}</m>. Quantiles divide ordered observations into equal parts: 
-      the middle <m>50\%</m> of Lesser Flamingo body mass falls between <m>1536.0\text{ g}</m> (<m>Q_1</m>) and <m>1843.0\text{ g}</m> (<m>Q_3</m>), 
-      yielding an Interquartile Range (<m>\text{IQR}</m>) of <m>307.0\text{ g}</m>.
-    </p>
+
+    <!-- CALLOUT: WORKED EXAMPLE -->
+    <example xml:id="ex-center-spread-comparison">
+      <title>Comparing Morphometric Characteristics</title>
+      <statement>
+        <p>
+          Compare the dispersion of bill length between Lesser Flamingos (<m>s = 4.2\text{ mm}</m>) and Greater Flamingos (<m>s = 6.1\text{ mm}</m>). Which species exhibits greater relative variability?
+        </p>
+      </statement>
+      <solution>
+        <p>
+          While Greater Flamingos have a higher standard deviation (<m>6.1\text{ mm}</m>), their mean bill length is also much larger (<m>127.1\text{ mm}</m> vs <m>97.9\text{ mm}</m>). Calculating the coefficient of variation (<m>\text{CV} = s / \bar{x}</m>) shows that both species have similar relative variability (<m>4.3\%</m> vs <m>4.8\%</m>).
+        </p>
+      </solution>
+    </example>
+
+    <!-- CALLOUT: COMMON MISTAKE WARNING -->
+    <warning xml:id="warn-averaging-means">
+      <title>Common Mistake: Averaging Means</title>
+      <p>
+        You cannot find the overall mean body mass by simply averaging the Lesser Flamingo mean (<m>1689.1\text{ g}</m>) and Greater Flamingo mean (<m>3120.2\text{ g}</m>). Because sample sizes differ (<m>n = 273</m> vs <m>n = 63</m>), unweighted averaging severely overestimates the pooled mean!
+      </p>
+    </warning>
+
+    <!-- CALLOUT: KEY TAKEAWAY NOTE -->
+    <note xml:id="note-summary-choice">
+      <title>Key Takeaway</title>
+      <p>
+        Use the mean and standard deviation for symmetric distributions without extreme outliers. Use the median and Interquartile Range (<m>\text{IQR}</m>) for skewed distributions or datasets containing extreme measurements.
+      </p>
+    </note>
   </section>
 
   <section xml:id="sec-frequency-and-grouped-summaries">
@@ -76,6 +136,7 @@
       Categorical variables are summarized through counts and proportions. Cross-tabulating sampling lake 
       against species shows distinct habitat preferences across the Rift Valley:
     </p>
+
     <table xml:id="table-cross-tabulation">
       <caption>Cross-tabulation of flamingo species by Rift Valley lake.</caption>
       <tabular halign="center" top="minor" bottom="minor" left="minor" right="minor">
@@ -105,10 +166,29 @@
         </row>
       </tabular>
     </table>
-    <p>
-      Lesser Flamingos make up <m>91.9\%</m> of recorded birds at Lake Bogoria (<m>114/124</m>), whereas at Lake Elementaita, 
-      Greater Flamingos represent <m>44.1\%</m> of observations (<m>30/68</m>).
-    </p>
+
+    <!-- CALLOUT: WORKED EXAMPLE FOR PROPORTIONS -->
+    <example xml:id="ex-conditional-proportions">
+      <title>Calculating Conditional Proportions</title>
+      <statement>
+        <p>
+          What proportion of all flamingos sampled at Lake Bogoria belong to the Lesser Flamingo species?
+        </p>
+      </statement>
+      <solution>
+        <p>
+          From <xref ref="table-cross-tabulation"/>, 114 out of the 124 birds recorded at Lake Bogoria are Lesser Flamingos. The conditional proportion is <m>114 / 124 \approx 0.919</m> or <m>91.9\%</m>.
+        </p>
+      </solution>
+    </example>
+
+    <!-- CALLOUT: DISCUSSION REMARK -->
+    <remark xml:id="remark-lake-ecology">
+      <title>Discussion: Ecological Drivers</title>
+      <p>
+        Lake Bogoria's extreme alkalinity supports massive blooms of microscopic blue-green algae (<init>Arthrospira fusiformis</init>), perfectly matched to the fine filtration bill of Lesser Flamingos. In contrast, Greater Flamingos feed on aquatic invertebrates, explaining their higher presence in Lake Elementaita.
+      </p>
+    </remark>
   </section>
 
   <section xml:id="sec-missing-data-intro">
@@ -121,11 +201,22 @@
       <li><p><c>body_mass_g</c> is missing <m>8</m> values.</p></li>
       <li><p><c>sex</c> is missing <m>7</m> values.</p></li>
     </ul>
-    <p>
-      Unrecorded measurements occur due to field equipment limits or brief handling windows. 
-      Analysts must decide whether to remove incomplete observations (listwise deletion) 
-      or evaluate whether missingness introduces systematic bias.
-    </p>
+
+    <!-- CALLOUT: WHY THIS MATTERS -->
+    <aside xml:id="aside-missingness-reasons">
+      <title>Why This Matters in Fieldwork</title>
+      <p>
+        Determining flamingo sex requires genetic testing or careful physical inspection during brief handling windows. Field teams prioritize bird safety over completing every measurement when weather conditions or bird stress levels escalate.
+      </p>
+    </aside>
+
+    <!-- CALLOUT: KEY TAKEAWAY NOTE -->
+    <note xml:id="note-mcar-definition">
+      <title>Key Takeaway</title>
+      <p>
+        If missing data occur completely at random, removing incomplete rows (listwise deletion) reduces sample size but does not introduce statistical bias. If missingness depends on physical traits (e.g., larger birds escaping measurement), omitting them biases your sample means.
+      </p>
+    </note>
   </section>
 
   <!-- ==================================================================== -->
@@ -230,10 +321,13 @@ colSums(is.na(flamingos))
         </code>
       </program>
 
-      <p>
-        In R, mathematical functions like <c>mean()</c> return <c>NA</c> if any missing values are present. 
-        To calculate summary statistics while ignoring missing entries, set the argument <c>na.rm = TRUE</c>:
-      </p>
+      <!-- CALLOUT: WARNING IN R -->
+      <warning xml:id="warn-r-na-handling">
+        <title>Common Mistake: Missing Data Returns NA</title>
+        <p>
+          In R, functions like <c>mean()</c> or <c>sd()</c> return <c>NA</c> if even a single value in the vector is missing. Always pass <c>na.rm = TRUE</c> to explicitly ignore unobserved entries.
+        </p>
+      </warning>
 
       <program language="r">
         <code>
@@ -303,6 +397,14 @@ head(flamingos[, c("species", "body_mass_g", "mass_zscore")])
         We plot a histogram to inspect the distribution's modality and side-by-side boxplots 
         to compare species visually:
       </p>
+
+      <!-- CALLOUT: THINK BEFORE YOU COMPUTE IN CODE -->
+      <aside xml:id="aside-r-binwidth">
+        <title>Think Before You Compute</title>
+        <p>
+          In <c>geom_histogram()</c>, bin width alters distribution shape. Setting <c>binwidth</c> too large (e.g., 1000g) masks bimodality entirely, whereas setting it too small (e.g., 5g) introduces visual noise.
+        </p>
+      </aside>
 
       <program language="r">
         <code>
