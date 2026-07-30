@@ -129,7 +129,8 @@
           statistical bias.
           If missingness depends on physical traits (e.g., larger birds escaping
           measurement because they were harder to restrain), omitting them
-          biases your sample means.
+          biases your sample means. This is because you want your sample to be 
+          representative of your population.
         </p>
       </note>
     </subsection>
