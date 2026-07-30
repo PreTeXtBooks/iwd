@@ -1,0 +1,1710 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ================================================================= -->
+<!--  MIT 201 - Statistical Computing I                                -->
+<!--  Chapter: Descriptive Statistics and Data Summarisation           -->
+<!--                                                                   -->
+<!--  Data-first chapter. The motivating failure in Section 1 is the   -->
+<!--  spine of the whole chapter; later sections refer back to it.     -->
+<!-- ================================================================= -->
+
+<chapter xml:id="ch-descriptive-statistics" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>Descriptive Statistics and Data Summarisation</title>
+
+  <introduction xml:id="ch-descriptive-introduction">
+    <p>
+      A dataset of three hundred observations cannot be held in the mind all at
+      once. To reason about it at all we must compress it into a handful of
+      numbers, and the whole of descriptive statistics is the study of how to do
+      that compression well.
+    </p>
+
+    <p>
+      This chapter approaches the subject from the data rather than from the
+      formulas. We begin with a real question about a real dataset, answer it
+      with the most obvious summary available, and find that the answer is
+      badly wrong. Everything that follows <mdash /> central tendency,
+      dispersion, quantiles, frequency tables, grouped summaries, and the
+      treatment of missing values <mdash /> is developed as a response to that
+      failure. The formulas make far more sense once you have seen what goes
+      wrong without them.
+    </p>
+
+    <p>
+      <xref ref="sec-descriptive-in-r" /> is a reference section. It collects
+      the R implementation of everything developed in the earlier sections, and
+      may be read alongside them, after them, or skipped by a reader interested
+      only in the concepts.
+    </p>
+
+    <note xml:id="note-dataset-provenance">
+      <title>The dataset used throughout</title>
+      <p>
+        All examples in this chapter use <c>kenya_flamingos.csv</c>, which
+        records measurements on 344 flamingos from three Rift Valley soda
+        lakes.
+      </p>
+      <p>
+        This dataset is <em>synthetic</em>. The differences between the two
+        species in size and bill shape are grounded in real flamingo biology,
+        and the lake compositions reflect documented patterns, but the
+        individual measurements were generated rather than observed. It exists
+        for teaching. It should not be cited as evidence about real flamingo
+        populations.
+      </p>
+    </note>
+  </introduction>
+
+<!-- ================================================================= -->
+<!--  SECTION 1: the data-first hook                                   -->
+<!-- ================================================================= -->
+
+  <section xml:id="sec-flamingo-question">
+    <title>A Question About Flamingos</title>
+
+    <subsection xml:id="ss-three-lakes">
+      <title>Three lakes, two species, 344 birds</title>
+
+      <p>
+        Kenya's Rift Valley holds a chain of shallow, strongly alkaline soda
+        lakes. The alkalinity is hostile to most life but ideal for the
+        cyanobacteria and diatoms that flamingos filter-feed on, which is why
+        these lakes support some of the largest flamingo congregations
+        anywhere.
+      </p>
+
+      <p>
+        Two species share them. The <term>lesser flamingo</term> is the smaller
+        of the two, with a deep, sharply decurved bill adapted to filtering
+        cyanobacteria from the water column. The <term>greater flamingo</term>
+        is considerably larger, with a longer and shallower bill, and feeds
+        more on invertebrates in the sediment.
+      </p>
+
+      <p>
+        A field team has measured 344 birds across Lakes Nakuru, Bogoria and
+        Elementaita. Each row of the dataset describes one bird.
+      </p>
+
+      <table xml:id="table-flamingo-variables">
+        <title>Variables recorded for each bird in <c>kenya_flamingos.csv</c></title>
+        <tabular halign="left">
+          <row header="yes" bottom="minor">
+            <cell>Variable</cell>
+            <cell>Type</cell>
+            <cell>Description</cell>
+          </row>
+          <row><cell><c>lake</c></cell><cell>categorical</cell><cell>Nakuru, Bogoria or Elementaita</cell></row>
+          <row><cell><c>species</c></cell><cell>categorical</cell><cell>Greater Flamingo or Lesser Flamingo</cell></row>
+          <row><cell><c>bill_length_mm</c></cell><cell>numeric</cell><cell>Bill length in millimetres</cell></row>
+          <row><cell><c>bill_depth_mm</c></cell><cell>numeric</cell><cell>Bill depth at the base, in millimetres</cell></row>
+          <row><cell><c>leg_length_mm</c></cell><cell>numeric</cell><cell>Tarsus length in millimetres</cell></row>
+          <row><cell><c>body_mass_g</c></cell><cell>numeric</cell><cell>Body mass in grams</cell></row>
+          <row><cell><c>sex</c></cell><cell>categorical</cell><cell>male or female</cell></row>
+          <row><cell><c>year</c></cell><cell>numeric</cell><cell>Year of measurement (2021<ndash />2023)</cell></row>
+        </tabular>
+      </table>
+
+      <p>
+        Load the file and look at the first few rows.
+      </p>
+
+      <program language="r">
+        flamingos &lt;- read.csv("kenya_flamingos.csv", stringsAsFactors = TRUE)
+        head(flamingos)
+
+        #&gt;          lake          species bill_length_mm bill_depth_mm leg_length_mm
+        #&gt; 1     Bogoria  Lesser Flamingo          101.2          25.9         265.1
+        #&gt; 2      Nakuru Greater Flamingo          135.8          22.5         371.8
+        #&gt; 3      Nakuru  Lesser Flamingo           96.1          26.9         278.0
+        #&gt; 4 Elementaita Greater Flamingo          131.1          25.7         360.4
+        #&gt; 5      Nakuru  Lesser Flamingo           94.1          24.3         264.1
+        #&gt; 6      Nakuru  Lesser Flamingo           98.4          25.9         272.3
+        #&gt;   body_mass_g    sex year
+        #&gt; 1        1330 female 2022
+        #&gt; 2        2841 female 2023
+        #&gt; 3        1646   male 2022
+        #&gt; 4        3476   male 2022
+        #&gt; 5        1620 female 2021
+        #&gt; 6        1963   male 2022
+      </program>
+
+      <p>
+        Six rows is manageable. All 344 is not. This is the practical problem
+        descriptive statistics exists to solve: we need to compress the dataset
+        into a few numbers we can reason about. The remainder of this section
+        does that compression badly, on purpose.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-first-question">
+      <title>A first, obvious question</title>
+
+      <p>
+        <em>How big is a flamingo in the Rift Valley?</em>
+      </p>
+
+      <p>
+        This is the sort of question a conservation officer or a field
+        ecologist might genuinely ask. The instinctive move is to take the
+        average body mass.
+      </p>
+
+      <program language="r">
+        mean(flamingos$body_mass_g)
+        #&gt; [1] NA
+      </program>
+
+      <p>
+        Not what we expected. <c>R</c> has returned <c>NA</c>, meaning <q>not
+        available</q>, because some birds in the dataset have no recorded mass
+        and R refuses to quietly pretend otherwise. This is deliberate design,
+        and <xref ref="sec-missing-data" /> treats it properly. For now we tell
+        R to set the missing values aside.
+      </p>
+
+      <program language="r">
+        mean(flamingos$body_mass_g, na.rm = TRUE)
+        #&gt; [1] 1957.405
+      </program>
+
+      <p>
+        So the average Rift Valley flamingo weighs about
+        1957 g, just under two kilograms. That is our answer, and it is arithmetically
+        correct.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-something-wrong">
+      <title>Something is wrong</title>
+
+      <p>
+        Let us check how the birds sit relative to this average. How many of
+        them weigh less than 1957 g?
+      </p>
+
+      <program language="r">
+        mass &lt;- flamingos$body_mass_g
+
+        sum(mass &lt; 1957.405, na.rm = TRUE)
+        #&gt; [1] 253
+
+        sum(!is.na(mass))    # birds that actually have a recorded mass
+        #&gt; [1] 336
+      </program>
+
+      <observation xml:id="obs-three-quarters">
+        <title>The problem</title>
+        <p>
+          253 of the 336 measured birds, <em>75.3%</em>, weigh less than the
+          average bird. Three quarters of the flamingos are lighter than the
+          average flamingo.
+        </p>
+      </observation>
+
+      <p>
+        Pause on that before reading on. Nothing has gone wrong with the
+        arithmetic: <c>mean()</c> computed exactly what it is defined to
+        compute. So what has gone wrong?
+      </p>
+
+      <p>
+        The instinct at this point is to reach for a different function
+        <mdash /> perhaps the median is <q>more correct</q>. Let us try.
+      </p>
+
+      <program language="r">
+        median(mass, na.rm = TRUE)
+        #&gt; [1] 1758.5
+      </program>
+
+      <p>
+        1758.5 g, which is 199 g lower, about 11% below the mean. That is a
+        substantial disagreement between two numbers that both claim to
+        describe the same thing. Swapping one function for another has not
+        resolved anything; it has produced a second answer with no obvious
+        reason to prefer it.
+      </p>
+
+      <p>
+        The problem is not the function. <em>The problem is the question.</em>
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-shape-of-data">
+      <title>Looking at the shape of the data</title>
+
+      <p>
+        Rather than computing yet another summary, let us look at how the
+        masses are actually distributed. Group them into 500 g bands, labelled
+        in kilograms, and count.
+      </p>
+
+      <program language="r">
+        # Group into 500 g bands, labelled in kilograms
+        bands &lt;- cut(mass, breaks = seq(1000, 4000, by = 500),
+                     labels = c("1.0-1.5", "1.5-2.0", "2.0-2.5",
+                                "2.5-3.0", "3.0-3.5", "3.5-4.0"))
+        table(bands)
+
+        #&gt; bands
+        #&gt; 1.0-1.5 1.5-2.0 2.0-2.5 2.5-3.0 3.0-3.5 3.5-4.0
+        #&gt;      50     209      15      20      34       8
+      </program>
+
+      <p>
+        Read the counts across: 50, then 209, then a collapse to
+        <term>15</term>, then back up to 20, 34 and 8.
+      </p>
+
+      <p>
+        That dip is not noise. The data has two separate concentrations of mass
+        <mdash /> a large one below 2000 g and a smaller one above 2500 g
+        <mdash /> with a near-empty valley between them. A distribution with
+        two peaks is called <term>bimodal</term><idx><h>bimodal</h></idx>, and
+        it is precisely where our average landed: 1957 g sits on the shoulder
+        of the lower group, pointing into the gap.
+      </p>
+
+      <p>
+        The mean is the balance point of the data. When the data has two
+        clusters, the balance point falls between them, describing neither.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-resolution">
+      <title>The resolution</title>
+
+      <p>
+        We already know something that explains this. There are two species in
+        the dataset.
+      </p>
+
+      <program language="r">
+        table(flamingos$species)
+
+        #&gt; Greater Flamingo  Lesser Flamingo
+        #&gt;               66              278
+
+        tapply(mass, flamingos$species, mean, na.rm = TRUE)
+
+        #&gt; Greater Flamingo  Lesser Flamingo
+        #&gt;         3120.190         1689.070
+      </program>
+
+      <p>
+        There is the answer. Greater flamingos average about 3120 g; lesser
+        flamingos about 1689 g. These are not slightly different populations
+        <mdash /> the greater flamingo is nearly twice the mass of the lesser.
+        Because lesser flamingos outnumber greaters roughly four to one, the
+        pooled mean is dragged toward the lesser group but not all the way,
+        landing at 1957 g.
+      </p>
+
+      <p>
+        And 1957 g describes no bird in this dataset in any useful sense.
+      </p>
+
+      <ul>
+        <li>
+          <p>It is heavier than 91% of the lesser flamingos.</p>
+        </li>
+        <li>
+          <p>
+            It is lighter than <em>every single</em> greater flamingo. The
+            lightest greater in the dataset is 2347 g.
+          </p>
+        </li>
+      </ul>
+
+      <p>
+        Our summary statistic described a bird that does not exist: too heavy
+        to be a typical lesser, too light to be any greater at all.
+      </p>
+
+      <insight xml:id="insight-what-went-wrong">
+        <title>What actually went wrong</title>
+        <p>
+          The question <q>how big is a flamingo?</q> presupposes that there is
+          one kind of flamingo. The dataset contains two.
+        </p>
+        <p>
+          No choice of summary function could have fixed this, because the
+          error was not in the arithmetic. It lay in applying a
+          single-population summary to a two-population dataset. The mean
+          answered faithfully; we asked badly.
+        </p>
+      </insight>
+    </subsection>
+
+    <subsection xml:id="ss-what-descriptive-statistics-is">
+      <title>What descriptive statistics actually is</title>
+
+      <p>
+        It is tempting to define descriptive statistics as the set of functions
+        that summarise data. That definition is what leads students to memorise
+        <c>mean()</c>, <c>median()</c> and <c>sd()</c> and then misuse all
+        three.
+      </p>
+
+      <p>
+        A better definition: <em>a summary statistic is a deliberate decision
+        about what information to throw away.</em> The mean discards everything
+        except the balance point. The median discards everything except the
+        middle rank. Each is useful precisely because it discards; a summary
+        that kept all the information would just be the dataset again.
+      </p>
+
+      <p>
+        The skill, therefore, is not computing the summaries <mdash /> R
+        computes them for you. The skill is judging which information you can
+        afford to lose, and recognising when you have lost something that
+        mattered.
+      </p>
+
+      <p>
+        This section leaves us with three questions, which structure the rest
+        of the chapter.
+      </p>
+
+      <table xml:id="table-chapter-roadmap">
+        <title>Questions raised by <xref ref="sec-flamingo-question" />, and where they are answered</title>
+        <tabular halign="left">
+          <row header="yes" bottom="minor">
+            <cell>Question</cell>
+            <cell>Answered in</cell>
+          </row>
+          <row>
+            <cell>Which single number, if any, represents a <q>typical</q> value, and how do the candidates differ?</cell>
+            <cell><xref ref="sec-central-tendency" /></cell>
+          </row>
+          <row>
+            <cell>How do we describe how spread out the data is, and spread around what?</cell>
+            <cell><xref ref="sec-dispersion" /></cell>
+          </row>
+          <row>
+            <cell>How do we detect that a whole-dataset summary is misleading, ideally before it misleads us?</cell>
+            <cell><xref ref="sec-quantiles" /> through <xref ref="sec-grouped-summaries" /></cell>
+          </row>
+        </tabular>
+      </table>
+    </subsection>
+  </section>
+
+<!-- ================================================================= -->
+<!--  SECTION 2: central tendency                                      -->
+<!-- ================================================================= -->
+
+  <section xml:id="sec-central-tendency">
+    <title>Measures of Central Tendency</title>
+
+    <p>
+      A measure of central tendency<idx><h>central tendency</h></idx> answers
+      the question: if I had to pick one value to stand for this whole
+      variable, what would it be? There are three standard answers, and they
+      disagree in informative ways.
+    </p>
+
+    <subsection xml:id="ss-mean">
+      <title>The mean</title>
+
+      <p>
+        The arithmetic mean<idx><h>mean</h></idx> of <m>n</m> observations is
+        their total divided by their count:
+      </p>
+
+      <me>\bar{x} = \frac{x_1 + x_2 + \cdots + x_n}{n} = \frac{1}{n}\sum_{i=1}^{n} x_i</me>
+
+      <p>
+        Every observation contributes. That is the mean's strength <mdash /> it
+        uses all the information <mdash /> and equally its weakness: a single
+        extreme value can move it substantially, and it has no defence against
+        the bimodality we met in <xref ref="sec-flamingo-question" />.
+        Physically, it is the balance point of the distribution.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-median">
+      <title>The median</title>
+
+      <p>
+        Sort the values and take the middle one. With an even number of
+        observations, average the middle two.
+      </p>
+
+      <p>
+        The median<idx><h>median</h></idx> depends only on the <em>rank
+        order</em>, not on the magnitudes. Doubling the heaviest bird in the
+        dataset would not move it at all. This makes the median
+        <term>resistant</term> to outliers and to skew, at the cost of ignoring
+        most of the information in the data.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-mode">
+      <title>The mode</title>
+
+      <p>
+        The most frequently occurring value. The mode<idx><h>mode</h></idx> has
+        two properties the others lack, and one serious limitation.
+      </p>
+
+      <ul>
+        <li>
+          <p>
+            It is the <em>only</em> measure of central tendency available for
+            genuinely categorical data. There is no arithmetic mean of
+            <c>lake</c>, but there is a most common lake.
+          </p>
+        </li>
+        <li>
+          <p>
+            It is the only one that can report more than one centre, which is
+            exactly what our bimodal mass distribution needed.
+          </p>
+        </li>
+        <li>
+          <p>
+            For continuous data it is ill-defined. In our dataset almost every
+            mass is unique, so <q>the most frequent value</q> is close to
+            meaningless until the data is binned or a smooth density is
+            estimated.
+          </p>
+        </li>
+      </ul>
+
+      <p>
+        Base R has no <c>mode()</c> function for this purpose. Confusingly,
+        <c>mode()</c> does exist, but it reports a variable's storage type. For
+        categorical data the idiom is:
+      </p>
+
+      <program language="r">
+        names(sort(table(flamingos$lake), decreasing = TRUE))[1]
+        #&gt; [1] "Nakuru"
+      </program>
+
+    </subsection>
+
+    <subsection xml:id="ss-choosing-central">
+      <title>Choosing between them</title>
+
+      <table xml:id="table-choosing-central-tendency">
+        <title>When each measure of central tendency is appropriate</title>
+        <tabular halign="left">
+          <row header="yes" bottom="minor">
+            <cell>Measure</cell>
+            <cell>Use when</cell>
+            <cell>Avoid when</cell>
+          </row>
+          <row>
+            <cell>Mean</cell>
+            <cell>Data is roughly symmetric and unimodal; you need a value that uses all observations; you will do further arithmetic with it</cell>
+            <cell>Strong skew, outliers, or more than one cluster</cell>
+          </row>
+          <row>
+            <cell>Median</cell>
+            <cell>Data is skewed or contains outliers; you want a robust typical value</cell>
+            <cell>You need a statistic reflecting magnitudes, not just ranks</cell>
+          </row>
+          <row>
+            <cell>Mode</cell>
+            <cell>Data is categorical, or you need to detect multiple centres</cell>
+            <cell>Data is continuous and unbinned</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <remark xml:id="remark-mean-median-gap">
+        <title>The mean<ndash />median gap is a diagnostic</title>
+        <p>
+          For our flamingo masses the mean is 1957.4 and the median 1758.5. The
+          mean exceeds the median by 199 g.
+        </p>
+        <p>
+          As a rule of thumb, a mean noticeably greater than the median
+          indicates a right-skewed distribution: a tail of large values pulling
+          the balance point up. A mean below the median indicates left skew. A
+          mean approximately equal to the median is consistent with symmetry.
+        </p>
+        <p>
+          Comparing the two costs nothing and is among the cheapest warning
+          signs available. But note its limits. It tells you <em>that</em> the
+          distribution is asymmetric, not <em>why</em>. In our case the cause
+          was two species, and only looking at the distribution revealed that.
+        </p>
+      </remark>
+    </subsection>
+  </section>
+
+<!-- ================================================================= -->
+<!--  SECTION 3: dispersion                                            -->
+<!-- ================================================================= -->
+
+  <section xml:id="sec-dispersion">
+    <title>Measures of Dispersion</title>
+
+    <p>
+      Knowing the centre is not enough. Two lakes could have identical mean
+      masses while one holds birds of near-uniform size and the other a mixture
+      of extremes. Dispersion<idx><h>dispersion</h></idx> measures how spread
+      out the values are.
+    </p>
+
+    <subsection xml:id="ss-range-iqr">
+      <title>Range and interquartile range</title>
+
+      <p>
+        The <term>range</term> is the largest value minus the smallest. It is
+        trivial to compute and almost always inadequate: it uses exactly two
+        observations and discards the rest, and it can only grow as more data
+        is collected, which makes it unstable across samples of different
+        sizes. Note that R's <c>range()</c> returns the two endpoints rather
+        than the difference.
+      </p>
+
+      <program language="r">
+        range(mass, na.rm = TRUE)
+        #&gt; [1] 1206 3982
+      </program>
+
+      <p>
+        The <term>interquartile range</term><idx><h>interquartile range</h></idx>
+        is the width of the middle half of the data: the third quartile minus
+        the first. Like the median it is rank-based and resistant to outliers,
+        and it is the natural companion to the median.
+      </p>
+
+      <program language="r">
+        IQR(mass, na.rm = TRUE)
+        #&gt; [1] 384
+      </program>
+
+    </subsection>
+
+    <subsection xml:id="ss-variance">
+      <title>Variance</title>
+
+      <p>
+        Variance<idx><h>variance</h></idx> measures spread as the average
+        squared distance from the mean:
+      </p>
+
+      <me>s^2 = \frac{1}{n-1}\sum_{i=1}^{n}\left(x_i - \bar{x}\right)^2</me>
+
+      <p>
+        Two features of this formula deserve explanation.
+      </p>
+
+      <p>
+        <em>Why square the deviations?</em> Because the raw deviations from the
+        mean always sum to exactly zero <mdash /> that is what <q>balance
+        point</q> means <mdash /> so their average carries no information.
+        Squaring makes every contribution positive. It also weights large
+        deviations disproportionately, which is either a feature or a liability
+        depending on the data.
+      </p>
+
+      <p>
+        <em>Why divide by <m>n-1</m> rather than <m>n</m>?</em> Because we are
+        almost always estimating the variance of a population from a sample,
+        and the sample mean is itself estimated from the same data. The
+        observations are, on average, slightly closer to their own sample mean
+        than to the true population mean, so dividing by <m>n</m> would
+        systematically underestimate. Dividing by <m>n-1</m> corrects this. The
+        quantity <m>n-1</m> is the <term>degrees of
+        freedom</term><idx><h>degrees of freedom</h></idx>: once you know the
+        mean and any <m>n-1</m> of the observations, the last one is
+        determined.
+      </p>
+
+      <p>
+        R's <c>var()</c> uses the <m>n-1</m> divisor by default, which is what
+        you want for sample data.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-standard-deviation">
+      <title>Standard deviation</title>
+
+      <p>
+        Variance has one awkward property: its units are the square of the
+        original units. The variance of our masses is 362504 <m>g^2</m>, which
+        is not an interpretable quantity. Taking the square root returns us to
+        grams.
+      </p>
+
+      <me>s = \sqrt{s^2}</me>
+
+      <program language="r">
+        var(mass, na.rm = TRUE)
+        #&gt; [1] 362503.5
+
+        sd(mass, na.rm = TRUE)
+        #&gt; [1] 602.0827
+      </program>
+
+      <p>
+        So the standard deviation<idx><h>standard deviation</h></idx> is about
+        602 g, a typical distance from the mean expressed in grams. This is why
+        the standard deviation, and not the variance, is what gets reported in
+        practice.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-dispersion-around-what">
+      <title>Dispersion around what?</title>
+
+      <p>
+        Now apply the lesson of <xref ref="sec-flamingo-question" />. The
+        standard deviation of 602 g measures spread around 1957 g, a value we
+        established describes no bird. What happens if we compute it within
+        each species instead?
+      </p>
+
+      <table xml:id="table-pooled-vs-within">
+        <title>Body mass dispersion, pooled and within species</title>
+        <tabular halign="left">
+          <row header="yes" bottom="minor">
+            <cell>Group</cell>
+            <cell>n</cell>
+            <cell>Mean (g)</cell>
+            <cell>SD (g)</cell>
+          </row>
+          <row><cell>All birds pooled</cell><cell>336</cell><cell>1957.4</cell><cell>602.1</cell></row>
+          <row><cell>Greater Flamingo</cell><cell>63</cell><cell>3120.2</cell><cell>313.9</cell></row>
+          <row><cell>Lesser Flamingo</cell><cell>273</cell><cell>1689.1</cell><cell>196.4</cell></row>
+        </tabular>
+      </table>
+
+      <p>
+        The pooled standard deviation is roughly two to three times the
+        within-species figures. That excess is not biological variation among
+        flamingos. It is the gap between two species, misreported as
+        variability within one.
+      </p>
+
+      <remark xml:id="remark-dispersion-centre">
+        <title>Dispersion inherits the error in the centre</title>
+        <p>
+          A dispersion measure is only meaningful relative to the centre it is
+          measured around. If that centre is wrong, the dispersion inherits the
+          error and amplifies it.
+        </p>
+      </remark>
+    </subsection>
+  </section>
+
+<!-- ================================================================= -->
+<!--  SECTION 4: quantiles                                             -->
+<!-- ================================================================= -->
+
+  <section xml:id="sec-quantiles">
+    <title>Quantiles and Position</title>
+
+    <p>
+      Quantiles<idx><h>quantile</h></idx> generalise the median. The
+      <m>p</m>-th quantile is the value below which a proportion <m>p</m> of
+      the data falls. The median is the <m>0.5</m> quantile;
+      <term>quartiles</term> cut the data at <m>0.25</m>, <m>0.5</m> and
+      <m>0.75</m>; <term>percentiles</term> express the same idea on a
+      <m>0</m><ndash /><m>100</m> scale.
+    </p>
+
+    <program language="r">
+      quantile(mass, probs = c(0, 0.25, 0.5, 0.75, 1), na.rm = TRUE)
+
+      #&gt;      0%     25%     50%     75%    100%
+      #&gt; 1206.00 1570.25 1758.50 1954.25 3982.00
+    </program>
+
+    <p>
+      These five numbers are the <term>five-number summary</term>, and together
+      they carry considerably more information than a mean and a standard
+      deviation. Read them here:
+    </p>
+
+    <ul>
+      <li>
+        <p>
+          The middle half of all birds lies between 1570 g and 1954 g, a band
+          just 384 g wide.
+        </p>
+      </li>
+      <li>
+        <p>
+          But the maximum is 3982 g, more than 2000 g above the third quartile.
+        </p>
+      </li>
+    </ul>
+
+    <p>
+      That asymmetry <mdash /> a tight middle with a long reach on one side
+      only <mdash /> is the signature of a right-skewed or multi-cluster
+      distribution, visible without plotting anything. R's <c>summary()</c>
+      gives these together with the mean.
+    </p>
+
+    <program language="r">
+      summary(mass)
+
+      #&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's
+      #&gt;    1206    1570    1758    1957    1954    3982       8
+    </program>
+
+    <p>
+      Note that <c>summary()</c> reports the count of missing values as a
+      matter of course. Reading that number is not optional; see
+      <xref ref="sec-missing-data" />.
+    </p>
+  </section>
+
+<!-- ================================================================= -->
+<!--  SECTION 5: visualisation                                         -->
+<!-- ================================================================= -->
+
+  <section xml:id="sec-seeing-shape">
+    <title>Seeing the Shape of a Distribution</title>
+
+    <p>
+      Every numeric summary in the preceding three sections either missed the
+      two-species structure or, at best, hinted at it. The binned table in
+      <xref ref="ss-shape-of-data" /> revealed it immediately. That is not a
+      coincidence: numeric summaries compress, and plots do not. Where a
+      summary can hide a feature, a well-chosen plot generally cannot.
+    </p>
+
+    <p>
+      Four plot types cover most descriptive work.
+    </p>
+
+    <subsection xml:id="ss-histogram">
+      <title>Histogram</title>
+
+      <p>
+        A histogram<idx><h>histogram</h></idx> bins a continuous variable and
+        draws the counts as bars, the graphical form of the table we built in
+        <xref ref="ss-shape-of-data" />. This is the primary tool for seeing
+        <term>modality</term> and <term>skew</term>.
+      </p>
+
+      <program language="r">
+        hist(mass, breaks = 20,
+             main = "Body mass of Rift Valley flamingos",
+             xlab = "Body mass (g)")
+      </program>
+
+      <p>
+        The one parameter that matters is the bin width. Too wide and the two
+        peaks merge into one; too narrow and every bar becomes noise. Always
+        try several before drawing conclusions. A histogram is an argument, and
+        the bin width is a choice you are making within that argument.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-boxplot">
+      <title>Boxplot</title>
+
+      <p>
+        A boxplot<idx><h>boxplot</h></idx> draws the five-number summary as a
+        box, from the first to the third quartile with the median marked, plus
+        whiskers, flagging distant points individually. Boxplots are unmatched
+        for comparing groups side by side.
+      </p>
+
+      <program language="r">
+        boxplot(body_mass_g ~ species, data = flamingos,
+                ylab = "Body mass (g)")
+      </program>
+
+      <warning xml:id="warning-boxplot-modality">
+        <title>A boxplot cannot show modality</title>
+        <p>
+          A boxplot is built entirely from quantiles. A single boxplot of our
+          pooled body mass would show a box, a median line and some high points
+          flagged as outliers, and would give no indication whatsoever that the
+          data contains two distinct species.
+        </p>
+        <p>
+          Boxplots are excellent for comparing groups you have <em>already
+          identified</em>. They are poor for discovering that groups exist. If
+          you have not yet plotted a histogram or a density curve, do not trust
+          a boxplot to have told you the whole story.
+        </p>
+      </warning>
+    </subsection>
+
+    <subsection xml:id="ss-density-scatter">
+      <title>Density and scatter plots</title>
+
+      <p>
+        A <term>density plot</term> is a smoothed estimate of the distribution,
+        avoiding the arbitrariness of bin edges. It is useful for overlaying
+        groups on common axes.
+      </p>
+
+      <p>
+        A <term>scatter plot</term> shows the joint behaviour of two numeric
+        variables. It is the only one of the four that addresses
+        <em>relationships</em> rather than a single variable's distribution.
+      </p>
+
+      <table xml:id="table-which-plot">
+        <title>Matching the question to the plot</title>
+        <tabular halign="left">
+          <row header="yes" bottom="minor">
+            <cell>Question you are asking</cell>
+            <cell>Plot to reach for</cell>
+          </row>
+          <row><cell>Is this variable skewed? Does it have more than one peak?</cell><cell>Histogram, or density plot</cell></row>
+          <row><cell>How do these groups compare in centre and spread?</cell><cell>Boxplot, grouped</cell></row>
+          <row><cell>How are these two numeric variables related?</cell><cell>Scatter plot</cell></row>
+          <row><cell>How do counts compare across categories?</cell><cell>Bar chart of a frequency table</cell></row>
+        </tabular>
+      </table>
+    </subsection>
+  </section>
+
+<!-- ================================================================= -->
+<!--  SECTION 6: frequency and cross-tabulation                        -->
+<!-- ================================================================= -->
+
+  <section xml:id="sec-frequency-tables">
+    <title>Frequency Distributions and Cross-Tabulation</title>
+
+    <p>
+      Frequency tables<idx><h>frequency table</h></idx> count occurrences. For
+      a single categorical variable this is straightforward.
+    </p>
+
+    <program language="r">
+      table(flamingos$lake)
+
+      #&gt;     Bogoria Elementaita      Nakuru
+      #&gt;         124          68         152
+    </program>
+
+    <subsection xml:id="ss-cross-tabulation">
+      <title>Cross-tabulation</title>
+
+      <p>
+        A <term>cross-tabulation</term><idx><h>cross-tabulation</h></idx>, or
+        contingency table, counts the joint occurrences of two categorical
+        variables. It is the standard tool for asking whether they are
+        associated.
+      </p>
+
+      <program language="r">
+        table(flamingos$lake, flamingos$species)
+
+        #&gt;               Greater Flamingo  Lesser Flamingo
+        #&gt;   Bogoria                   10              114
+        #&gt;   Elementaita               30               38
+        #&gt;   Nakuru                    26              126
+      </program>
+
+      <p>
+        Raw counts are hard to compare when the row totals differ; Nakuru has
+        more than twice as many birds as Elementaita. Converting to <term>row
+        proportions</term>, so that each row sums to one, makes the pattern
+        legible.
+      </p>
+
+      <program language="r">
+        prop.table(table(flamingos$lake, flamingos$species), margin = 1)
+
+        #&gt;               Greater Flamingo  Lesser Flamingo
+        #&gt;   Bogoria                0.081            0.919
+        #&gt;   Elementaita            0.441            0.559
+        #&gt;   Nakuru                 0.171            0.829
+      </program>
+
+      <p>
+        Bogoria is overwhelmingly lesser flamingo, about 92%, while Elementaita
+        is close to an even split at 44 to 56. Species composition varies
+        substantially by lake, which is consistent with what is known about
+        these lakes: the more strongly alkaline waters favour the cyanobacteria
+        that lesser flamingos specialise in.
+      </p>
+
+      <p>
+        The choice of <c>margin</c> encodes a different question.
+        <c>margin = 1</c> gives row proportions, answering <q>of the birds at
+        this lake, what fraction are each species?</q> <c>margin = 2</c> gives
+        column proportions, answering <q>of this species, what fraction are at
+        each lake?</q> These are different questions with different answers.
+        Decide which you mean before you compute.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-binning">
+      <title>Binning continuous variables</title>
+
+      <warning xml:id="warning-tabulate-categorical">
+        <title>Cross-tabulate categorical variables, not continuous ones</title>
+        <p>
+          Applying <c>table()</c> to a continuous variable such as
+          <c>body_mass_g</c> produces a row for nearly every distinct value,
+          most with a count of one. The result is not a frequency distribution.
+          It is the original data, rearranged and harder to read.
+        </p>
+        <p>
+          Continuous variables must be <term>binned</term> first, using
+          <c>cut()</c>, which converts them into an ordered categorical
+          variable. That is exactly what <xref ref="ss-shape-of-data" /> did.
+        </p>
+        <p>
+          The choice of bin boundaries is a genuine analytical decision, not a
+          formatting detail. Different boundaries can hide or reveal structure.
+          As with histogram bin widths, try several.
+        </p>
+      </warning>
+
+      <p>
+        Binning in practice:
+      </p>
+
+      <program language="r">
+        flamingos$mass_band &lt;- cut(
+          flamingos$body_mass_g,
+          breaks = c(1000, 1500, 2000, 2500, 3000, 3500, 4000),
+          labels = c("1.0-1.5", "1.5-2.0", "2.0-2.5",
+                     "2.5-3.0", "3.0-3.5", "3.5-4.0"))
+
+        table(flamingos$mass_band, flamingos$species)
+
+        #&gt;           Greater Flamingo  Lesser Flamingo
+        #&gt;   1.0-1.5                0               50
+        #&gt;   1.5-2.0                0              209
+        #&gt;   2.0-2.5                1               14
+        #&gt;   2.5-3.0               20                0
+        #&gt;   3.0-3.5               34                0
+        #&gt;   3.5-4.0                8                0
+      </program>
+
+      <p>
+        This single table contains the whole argument of
+        <xref ref="sec-flamingo-question" />. The two species occupy almost
+        entirely separate mass bands, overlapping only in the 2.0<ndash />2.5 kg
+        row, where just one greater flamingo meets fourteen lessers. A pooled
+        average across these two columns was never going to describe anything
+        real.
+      </p>
+    </subsection>
+  </section>
+
+<!-- ================================================================= -->
+<!--  SECTION 7: grouped summaries                                     -->
+<!-- ================================================================= -->
+
+  <section xml:id="sec-grouped-summaries">
+    <title>Grouped Summaries</title>
+
+    <p>
+      The formal resolution to <xref ref="sec-flamingo-question" /> is to stop
+      summarising the dataset as a whole and start summarising <em>within
+      groups</em>. The pattern is called
+      <term>split<ndash />apply<ndash />combine</term><idx><h>split-apply-combine</h></idx>:
+      split the data by a grouping variable, apply a summary to each piece,
+      combine the results into a table.
+    </p>
+
+    <table xml:id="table-grouped-species">
+      <title>Body mass by species</title>
+      <tabular halign="left">
+        <row header="yes" bottom="minor">
+          <cell>species</cell><cell>n</cell><cell>mean (g)</cell>
+          <cell>sd (g)</cell><cell>median (g)</cell><cell>IQR (g)</cell>
+        </row>
+        <row><cell>Greater Flamingo</cell><cell>63</cell><cell>3120.2</cell><cell>313.9</cell><cell>3102.0</cell><cell>326.5</cell></row>
+        <row><cell>Lesser Flamingo</cell><cell>273</cell><cell>1689.1</cell><cell>196.4</cell><cell>1684.0</cell><cell>307.0</cell></row>
+      </tabular>
+    </table>
+
+    <p>
+      Two things are now visible that the pooled summary destroyed. First, the
+      species differ enormously in mean mass. Second, and less obvious, within
+      each species the mean and median now agree closely: 3120 against 3102,
+      and 1689 against 1684. The skew we detected in
+      <xref ref="sec-central-tendency" /> was <em>entirely</em> an artefact of
+      pooling. Neither species is individually skewed.
+    </p>
+
+    <p>
+      Grouping can use more than one variable.
+    </p>
+
+    <table xml:id="table-grouped-lake-species">
+      <title>Mean body mass by lake and species</title>
+      <tabular halign="left">
+        <row header="yes" bottom="minor">
+          <cell>lake</cell><cell>species</cell><cell>n</cell><cell>mean mass (g)</cell>
+        </row>
+        <row><cell>Bogoria</cell><cell>Greater Flamingo</cell><cell>10</cell><cell>2911.8</cell></row>
+        <row><cell>Bogoria</cell><cell>Lesser Flamingo</cell><cell>111</cell><cell>1651.6</cell></row>
+        <row><cell>Elementaita</cell><cell>Greater Flamingo</cell><cell>28</cell><cell>3152.1</cell></row>
+        <row><cell>Elementaita</cell><cell>Lesser Flamingo</cell><cell>37</cell><cell>1777.4</cell></row>
+        <row><cell>Nakuru</cell><cell>Greater Flamingo</cell><cell>25</cell><cell>3167.8</cell></row>
+        <row><cell>Nakuru</cell><cell>Lesser Flamingo</cell><cell>125</cell><cell>1696.2</cell></row>
+      </tabular>
+    </table>
+
+    <warning xml:id="warning-report-group-sizes">
+      <title>Always report the group sizes</title>
+      <p>
+        The greater flamingos at Bogoria average 2912 g against 3168 g at
+        Nakuru, a difference of 256 g that might look like a real between-lake
+        effect.
+      </p>
+      <p>
+        But <m>n = 10</m> at Bogoria. With a within-species standard deviation
+        of roughly 314 g, a sample of ten has a standard error near 100 g, so a
+        difference of this size is well within what sampling variation alone
+        would produce.
+      </p>
+      <p>
+        A grouped summary table without an <m>n</m> column invites exactly this
+        error. Include the counts every time. They are what tell your reader
+        which rows to take seriously.
+      </p>
+    </warning>
+  </section>
+
+<!-- ================================================================= -->
+<!--  SECTION 8: missing data                                          -->
+<!-- ================================================================= -->
+
+  <section xml:id="sec-missing-data">
+    <title>Missing Data</title>
+
+    <p>
+      We deferred this in <xref ref="ss-first-question" />. It deserves proper
+      treatment, because missing values are the norm in real data, and the way
+      you handle them silently changes every statistic you compute.
+    </p>
+
+    <program language="r">
+      colSums(is.na(flamingos))
+
+      #&gt;           lake        species bill_length_mm  bill_depth_mm  leg_length_mm
+      #&gt;              0              0              0              4              0
+      #&gt;    body_mass_g            sex           year
+      #&gt;              8              7              0
+    </program>
+
+    <p>
+      Eight birds have no recorded mass, four no bill depth, seven no sex. In
+      field ecology this is unremarkable: a bird escapes before every
+      measurement is taken, equipment fails, a record is illegible.
+    </p>
+
+    <subsection xml:id="ss-why-na">
+      <title>Why R returns NA rather than ignoring it</title>
+
+      <p>
+        Recall that <c>mean(flamingos$body_mass_g)</c> returned <c>NA</c>. This
+        is not R being unhelpful. <c>NA</c> means <q>there is a value here and
+        I do not know what it is</q>, and the mean of a set of numbers, one of
+        which is unknown, is genuinely unknown. R propagates the uncertainty
+        rather than concealing it.
+      </p>
+
+      <p>
+        This forces you to make an explicit decision. Software that silently
+        drops missing values does not remove the decision. It just makes the
+        decision for you, invisibly.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-na-rm">
+      <title>What na.rm = TRUE actually does</title>
+
+      <p>
+        It removes the missing observations and computes on what remains.
+        Stated plainly: <em>you are no longer analysing the sample you thought
+        you were.</em> Our mean of 1957 g is the mean of 336 birds, not 344.
+      </p>
+
+      <p>
+        It is essential to be clear that <c>na.rm = TRUE</c> is <em>not</em>
+        imputation. It does not estimate the missing values or fill them in. It
+        excludes those birds from that calculation entirely.
+      </p>
+
+      <p>
+        When is dropping safe?
+      </p>
+
+      <ul>
+        <li>
+          <p>
+            <em>Reasonably safe</em> when values are missing for reasons
+            unrelated to the values themselves <mdash /> a dropped clipboard, a
+            smudged record. The remaining birds are then still a fair sample.
+          </p>
+        </li>
+        <li>
+          <p>
+            <em>Not safe</em> when missingness is related to what you are
+            measuring. If the heaviest birds were the hardest to hold still and
+            so went unweighed, then dropping them biases your mean downward,
+            and no amount of careful computation on the remaining data will
+            recover it.
+          </p>
+        </li>
+      </ul>
+
+      <p>
+        You usually cannot tell which situation you are in from the data alone.
+        It requires knowing how the data was collected. What you can and must
+        do is report it: state how many observations were dropped and what
+        fraction of the total that represents.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-complete-cases">
+      <title>Complete cases and listwise deletion</title>
+
+      <p>
+        <c>complete.cases()</c> identifies rows with no missing values
+        anywhere.
+      </p>
+
+      <program language="r">
+        sum(complete.cases(flamingos))
+        #&gt; [1] 325
+
+        nrow(flamingos)
+        #&gt; [1] 344
+      </program>
+
+      <p>
+        Only 325 of 344 rows are complete: 19 rows, or 5.5%, have at least one
+        missing value. Note that this exceeds the 8 missing masses, because the
+        gaps fall in different rows for different variables.
+      </p>
+
+      <p>
+        Dropping every incomplete row, called <term>listwise
+        deletion</term><idx><h>listwise deletion</h></idx>, is convenient and
+        keeps every analysis on an identical sample, but it discards data
+        unnecessarily: a bird missing only its <c>sex</c> still has a perfectly
+        good mass measurement. For descriptive work, prefer <c>na.rm = TRUE</c>
+        variable by variable, and report the <m>n</m> for each.
+      </p>
+
+      <remark xml:id="remark-report-n">
+        <title>Report the n</title>
+        <p>
+          Never report a mean, a standard deviation or any other summary
+          without also reporting the <m>n</m> it was computed from.
+        </p>
+        <p>
+          In this dataset that alone distinguishes a summary over 344 birds
+          from one over 336, over 325, or <mdash /> after grouping by species
+          <mdash /> over 63 and 273. Those are different claims about different
+          samples, and a table that omits <m>n</m> makes them
+          indistinguishable.
+        </p>
+      </remark>
+    </subsection>
+  </section>
+
+<!-- ================================================================= -->
+<!--  SECTION 9: R reference section (optional reading)                -->
+<!-- ================================================================= -->
+
+  <section xml:id="sec-descriptive-in-r">
+    <title>Descriptive Statistics in R</title>
+
+    <introduction>
+      <p>
+        This section is a reference. The concepts are developed in
+        <xref ref="sec-flamingo-question" /> through
+        <xref ref="sec-missing-data" />; what follows is the R implementation,
+        collected in one place. Work through it at a console with the dataset
+        loaded, running each block rather than reading it.
+      </p>
+      <p>
+        Where both a base R and a <c>dplyr</c> approach exist, both are shown.
+        You should be able to read either, and may write in whichever you
+        prefer.
+      </p>
+    </introduction>
+
+    <subsection xml:id="ss-r-loading">
+      <title>Loading the data</title>
+
+      <program language="r">
+        # Set your working directory to wherever the file is saved
+        # setwd("~/MIT201")
+
+        flamingos &lt;- read.csv("kenya_flamingos.csv", stringsAsFactors = TRUE)
+      </program>
+
+      <p>
+        <c>stringsAsFactors = TRUE</c> converts the text columns into
+        <term>factors</term>, R's type for categorical data. This matters:
+        factors carry a fixed set of levels, which makes <c>table()</c>,
+        <c>boxplot()</c> and grouped operations behave sensibly. Since R 4.0.0
+        the default is <c>FALSE</c>, so set it explicitly.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-r-first-look">
+      <title>First look at any dataset</title>
+
+      <p>
+        Run these four before anything else, every time. They take seconds and
+        catch most import errors.
+      </p>
+
+      <program language="r">
+        dim(flamingos)         # rows and columns
+        #&gt; [1] 344   8
+
+        names(flamingos)       # variable names
+
+        str(flamingos)         # type and a preview of each variable
+
+        summary(flamingos)     # numeric summaries, plus counts for each factor
+      </program>
+
+      <p>
+        <c>str()</c> is the most valuable of the four. It tells you whether R
+        has read each variable as the type you intended. A numeric column
+        silently imported as a factor, usually caused by a stray text entry, is
+        one of the most common and most confusing data problems you will meet.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-r-central-tendency">
+      <title>Central tendency</title>
+
+      <program language="r">
+        mass &lt;- flamingos$body_mass_g
+
+        mean(mass, na.rm = TRUE)
+        #&gt; [1] 1957.405
+
+        median(mass, na.rm = TRUE)
+        #&gt; [1] 1758.5
+
+        # Mode for a categorical variable
+        sort(table(flamingos$species), decreasing = TRUE)
+        #&gt; Lesser Flamingo Greater Flamingo
+        #&gt;             278               66
+      </program>
+
+      <p>
+        For a mode of continuous data, bin it first with <c>cut()</c> and take
+        the most frequent band, or use <c>density()</c> and find its peak. Note
+        again that base R's <c>mode()</c> reports storage type, not the
+        statistical mode: <c>mode(mass)</c> returns <c>"numeric"</c>.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-r-dispersion">
+      <title>Dispersion and quantiles</title>
+
+      <program language="r">
+        range(mass, na.rm = TRUE)      # min and max, not the difference
+        #&gt; [1] 1206 3982
+
+        diff(range(mass, na.rm = TRUE))   # the range as a single number
+        #&gt; [1] 2776
+
+        var(mass, na.rm = TRUE)
+        #&gt; [1] 362503.5
+
+        sd(mass, na.rm = TRUE)
+        #&gt; [1] 602.0827
+
+        IQR(mass, na.rm = TRUE)
+        #&gt; [1] 384
+
+        quantile(mass, na.rm = TRUE)   # default: 0, 25, 50, 75, 100%
+
+        fivenum(mass)                  # Tukey five-number summary
+      </program>
+
+      <p>
+        A subtlety worth knowing: there are several defensible definitions of a
+        sample quantile when the requested position falls between two
+        observations. R implements nine, selectable via the <c>type</c>
+        argument, and defaults to <c>type = 7</c>. Other software may default
+        differently, so small discrepancies between R and, say, a spreadsheet
+        are usually this rather than an error.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-r-tables">
+      <title>Frequency tables and cross-tabulation</title>
+
+      <program language="r">
+        table(flamingos$lake)
+
+        table(flamingos$lake, flamingos$species)     # cross-tabulation
+
+        xtabs(~ lake + species, data = flamingos)    # same, formula interface
+
+        # Row proportions (margin = 1), column proportions (margin = 2)
+        prop.table(table(flamingos$lake, flamingos$species), margin = 1)
+        prop.table(table(flamingos$lake, flamingos$species), margin = 2)
+
+        # With row and column totals
+        addmargins(table(flamingos$lake, flamingos$species))
+      </program>
+
+      <p>
+        By default <c>table()</c> excludes missing values silently. Since our
+        <c>sex</c> variable has 7 NAs, this matters.
+      </p>
+
+      <program language="r">
+        table(flamingos$sex)
+        #&gt; female   male
+        #&gt;    170    167
+        #&gt; (sums to 337, not 344)
+
+        table(flamingos$sex, useNA = "ifany")   # make the missing values visible
+        #&gt; female   male   &lt;NA&gt;
+        #&gt;    170    167      7
+      </program>
+
+      <p>
+        Get into the habit of <c>useNA = "ifany"</c> when you first inspect a
+        categorical variable. A frequency table that quietly omits 7 birds is
+        exactly the kind of small discrepancy that goes unnoticed until your
+        totals stop matching.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-r-grouped">
+      <title>Grouped summaries</title>
+
+      <p>
+        In base R:
+      </p>
+
+      <program language="r">
+        # tapply: one summary function, one grouping variable
+        tapply(flamingos$body_mass_g, flamingos$species, mean, na.rm = TRUE)
+        #&gt; Greater Flamingo  Lesser Flamingo
+        #&gt;         3120.190         1689.070
+
+        # aggregate: formula interface, extends to several grouping variables
+        aggregate(body_mass_g ~ species, data = flamingos, FUN = mean)
+
+        aggregate(body_mass_g ~ lake + species, data = flamingos, FUN = mean)
+
+        # by(): a full summary() per group
+        by(flamingos$body_mass_g, flamingos$species, summary)
+      </program>
+
+      <p>
+        Be aware that <c>aggregate()</c> with a formula drops rows with missing
+        values in the modelled variables before it starts, so it silently uses
+        336 birds here, not 344. That is usually what you want, but you should
+        know it is happening.
+      </p>
+
+      <p>
+        With <c>dplyr</c>:
+      </p>
+
+      <program language="r">
+        library(dplyr)
+
+        flamingos %&gt;%
+          group_by(species) %&gt;%
+          summarise(
+            n      = sum(!is.na(body_mass_g)),
+            mean   = mean(body_mass_g, na.rm = TRUE),
+            sd     = sd(body_mass_g, na.rm = TRUE),
+            median = median(body_mass_g, na.rm = TRUE),
+            IQR    = IQR(body_mass_g, na.rm = TRUE)
+          )
+
+        #&gt; # A tibble: 2 x 6
+        #&gt;   species              n  mean    sd median   IQR
+        #&gt;   &lt;fct&gt;            &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+        #&gt; 1 Greater Flamingo    63 3120.  314.  3102.  326.
+        #&gt; 2 Lesser Flamingo    273 1689.  196.  1684.  307.
+      </program>
+
+      <p>
+        Note <c>n = sum(!is.na(body_mass_g))</c> rather than <c>n()</c>. The
+        latter counts rows in the group including those with missing mass,
+        which would not match the <m>n</m> your mean was actually computed
+        from. Grouping by two variables is the same call with
+        <c>group_by(lake, species)</c>.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-r-missing">
+      <title>Handling missing values</title>
+
+      <program language="r">
+        sum(is.na(flamingos$body_mass_g))    # count NAs in one variable
+        #&gt; [1] 8
+
+        colSums(is.na(flamingos))            # count NAs in every variable
+
+        sum(complete.cases(flamingos))       # rows with no NAs anywhere
+        #&gt; [1] 325
+
+        flamingos_complete &lt;- na.omit(flamingos)   # listwise deletion
+        nrow(flamingos_complete)
+        #&gt; [1] 325
+
+        # Which rows are incomplete?
+        flamingos[!complete.cases(flamingos), ]
+      </program>
+
+    </subsection>
+
+    <subsection xml:id="ss-r-plots">
+      <title>Visualisation</title>
+
+      <p>
+        Base graphics:
+      </p>
+
+      <program language="r">
+        hist(flamingos$body_mass_g, breaks = 20,
+             main = "Body mass of Rift Valley flamingos",
+             xlab = "Body mass (g)", col = "grey85")
+
+        boxplot(body_mass_g ~ species, data = flamingos,
+                ylab = "Body mass (g)", xlab = "")
+
+        plot(density(flamingos$body_mass_g, na.rm = TRUE),
+             main = "Density of flamingo body mass")
+
+        plot(body_mass_g ~ bill_length_mm, data = flamingos,
+             xlab = "Bill length (mm)", ylab = "Body mass (g)")
+
+        barplot(table(flamingos$lake), ylab = "Number of birds")
+      </program>
+
+      <p>
+        With <c>ggplot2</c>:
+      </p>
+
+      <program language="r">
+        library(ggplot2)
+
+        # The whole argument of Section 1 in a single plot
+        ggplot(flamingos, aes(x = body_mass_g, fill = species)) +
+          geom_histogram(bins = 30, alpha = 0.7, position = "identity") +
+          geom_vline(xintercept = 1957.4, linetype = "dashed") +
+          labs(x = "Body mass (g)", y = "Count",
+               title = "Two species, two distributions") +
+          theme_minimal()
+
+        ggplot(flamingos, aes(x = species, y = body_mass_g)) +
+          geom_boxplot() +
+          labs(x = NULL, y = "Body mass (g)") +
+          theme_minimal()
+      </program>
+
+      <p>
+        The first of these is worth running carefully. Colouring the histogram
+        by species makes the entire argument of
+        <xref ref="sec-flamingo-question" /> visible in a single image: two
+        clearly separated humps, with the overall mean falling in the trough
+        between them.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-r-reference">
+      <title>Function reference</title>
+
+      <table xml:id="table-r-function-reference">
+        <title>Descriptive statistics functions in R</title>
+        <tabular halign="left">
+          <row header="yes" bottom="minor">
+            <cell>Task</cell><cell>Base R</cell><cell>dplyr / tidyverse</cell>
+          </row>
+          <row><cell>Mean</cell><cell><c>mean(x, na.rm = TRUE)</c></cell><cell>same</cell></row>
+          <row><cell>Median</cell><cell><c>median(x, na.rm = TRUE)</c></cell><cell>same</cell></row>
+          <row><cell>Mode (categorical)</cell><cell><c>names(sort(table(x), decreasing = TRUE))[1]</c></cell><cell><c>count(df, var, sort = TRUE)</c></cell></row>
+          <row><cell>Variance / SD</cell><cell><c>var(x)</c>, <c>sd(x)</c></cell><cell>same</cell></row>
+          <row><cell>Range</cell><cell><c>range(x)</c>, <c>diff(range(x))</c></cell><cell>same</cell></row>
+          <row><cell>IQR</cell><cell><c>IQR(x, na.rm = TRUE)</c></cell><cell>same</cell></row>
+          <row><cell>Quantiles</cell><cell><c>quantile(x, probs, na.rm = TRUE)</c></cell><cell>same</cell></row>
+          <row><cell>Overall summary</cell><cell><c>summary(x)</c></cell><cell><c>skimr::skim(df)</c></cell></row>
+          <row><cell>Frequency table</cell><cell><c>table(x)</c></cell><cell><c>count(df, var)</c></cell></row>
+          <row><cell>Cross-tabulation</cell><cell><c>table(x, y)</c>, <c>xtabs(~ x + y)</c></cell><cell><c>count(df, x, y)</c></cell></row>
+          <row><cell>Proportions</cell><cell><c>prop.table(tab, margin)</c></cell><cell><c>mutate(prop = n / sum(n))</c></cell></row>
+          <row><cell>Bin a numeric variable</cell><cell><c>cut(x, breaks)</c></cell><cell>same</cell></row>
+          <row><cell>Grouped summary</cell><cell><c>tapply()</c>, <c>aggregate()</c></cell><cell><c>group_by()</c> then <c>summarise()</c></cell></row>
+          <row><cell>Count missing</cell><cell><c>sum(is.na(x))</c>, <c>colSums(is.na(df))</c></cell><cell>same</cell></row>
+          <row><cell>Complete rows</cell><cell><c>complete.cases(df)</c>, <c>na.omit(df)</c></cell><cell><c>drop_na(df)</c></cell></row>
+        </tabular>
+      </table>
+    </subsection>
+
+    <subsection xml:id="ss-correlation-trap">
+      <title>The same trap, in a different disguise</title>
+
+      <p>
+        <xref ref="sec-flamingo-question" /> showed a mean going wrong on
+        pooled data. The identical problem afflicts measures of relationship,
+        often more severely. Consider the correlation between bill length and
+        body mass.
+      </p>
+
+      <program language="r">
+        cor(flamingos$bill_length_mm, flamingos$body_mass_g, use = "complete.obs")
+        #&gt; [1] 0.8960
+
+        # Now within each species separately
+        by(flamingos, flamingos$species, function(d)
+           cor(d$bill_length_mm, d$body_mass_g, use = "complete.obs"))
+
+        #&gt; flamingos$species: Greater Flamingo
+        #&gt; [1] 0.1179
+        #&gt; flamingos$species: Lesser Flamingo
+        #&gt; [1] 0.3230
+      </program>
+
+      <p>
+        Pooled, the correlation is 0.90, strong enough to look like a firm
+        biological law that longer-billed flamingos are heavier. Within species
+        it collapses to 0.12 and 0.32.
+      </p>
+
+      <p>
+        The pooled figure is almost entirely an artefact. Greater flamingos
+        have both longer bills and greater mass than lesser flamingos, so
+        pooling the two species creates two widely separated clouds of points.
+        A straight line through both clouds fits well, but it is measuring the
+        gap <em>between</em> species, not any relationship <em>within</em>
+        either one.
+      </p>
+
+      <p>
+        Plot it and the artefact becomes obvious.
+      </p>
+
+      <program language="r">
+        ggplot(flamingos, aes(bill_length_mm, body_mass_g)) +
+          geom_point(aes(colour = species), alpha = 0.7) +
+          geom_smooth(method = "lm", se = FALSE, colour = "black") +
+          geom_smooth(aes(colour = species), method = "lm", se = FALSE) +
+          theme_minimal()
+      </program>
+
+      <p>
+        The black line cuts steeply across both clusters; the two coloured
+        lines within each cluster are close to flat. This effect, where a
+        relationship in pooled data reverses or vanishes once you account for a
+        grouping variable, is closely related to <term>Simpson's
+        paradox</term><idx><h>Simpson's paradox</h></idx>. It is among the most
+        consequential traps in applied statistics, and you will meet it again.
+      </p>
+    </subsection>
+  </section>
+
+<!-- ================================================================= -->
+<!--  EXERCISES                                                        -->
+<!-- ================================================================= -->
+
+  <exercises xml:id="exercises-descriptive-statistics">
+    <title>Exercises</title>
+
+    <exercise xml:id="ex-bill-depth-summary">
+      <statement>
+        <p>
+          Compute the mean, median, standard deviation and IQR of
+          <c>bill_depth_mm</c>, first for all birds and then separately by
+          species. This variable has 4 missing values <mdash /> report the
+          <m>n</m> for every figure you produce.
+        </p>
+      </statement>
+    </exercise>
+
+    <exercise xml:id="ex-bill-depth-interpretation">
+      <statement>
+        <p>
+          Lesser flamingos have deeper bills than greaters despite being the
+          smaller bird. Verify this from your answer to
+          <xref ref="ex-bill-depth-summary" />, and explain why a pooled mean
+          bill depth would be misleading here in a different way from the body
+          mass case in <xref ref="sec-flamingo-question" />.
+        </p>
+      </statement>
+    </exercise>
+
+    <exercise xml:id="ex-lake-sex-crosstab">
+      <statement>
+        <p>
+          Build a cross-tabulation of <c>lake</c> against <c>sex</c>, using
+          <c>useNA = "ifany"</c>. Convert it to row proportions. Does sex
+          composition appear to vary by lake, and does anything about the
+          missing values concern you?
+        </p>
+      </statement>
+    </exercise>
+
+    <exercise xml:id="ex-leg-length-grouped">
+      <statement>
+        <p>
+          Produce a grouped summary of <c>leg_length_mm</c> by species
+          <em>and</em> sex, including <m>n</m>. Which of the two grouping
+          variables accounts for more of the variation?
+        </p>
+      </statement>
+    </exercise>
+
+    <exercise xml:id="ex-bill-length-bands">
+      <statement>
+        <p>
+          Bin <c>bill_length_mm</c> into 5 mm bands with <c>cut()</c> and
+          cross-tabulate against species. At what bill length do the two
+          species stop overlapping?
+        </p>
+      </statement>
+    </exercise>
+
+    <exercise xml:id="ex-year-trend">
+      <statement>
+        <p>
+          The dataset spans 2021 to 2023. Compute mean body mass by year within
+          each species. Is there any evidence of a trend, and given the group
+          sizes, would you be willing to claim one?
+        </p>
+      </statement>
+    </exercise>
+  </exercises>
+
+<!-- =================================================================
+     STACK EXERCISES
+
+     PreTeXt has native support for STACK questions. See the PreTeXt
+     Guide, "STACK Exercises" (Overview 3.26, Topics 4.31), for the
+     markup. Assessed questions can therefore live in this same source
+     file rather than being maintained separately in Moodle.
+
+     Suggested coverage, based on the sections above:
+
+       * Interpretation over computation. Give a mean and a median and
+         ask what the gap implies about the distribution, rather than
+         asking for a mean to be computed from five numbers.
+       * The pooling trap. Present a grouped summary table and a pooled
+         one, and ask which is appropriate for a stated question.
+       * Reading a contingency table. Supply row and column proportions
+         of the same table and ask which answers a given question.
+       * Missing data. Give a summary reporting n = 336 from a dataset
+         of 344 and ask what must be stated alongside it.
+       * Choosing a plot. Given a question about the data, ask which of
+         histogram, boxplot, scatter or bar chart would answer it,
+         including a case where a boxplot would hide the answer.
+       * Randomised computation. Where calculation is genuinely wanted,
+         cut() band boundaries and quantile probabilities randomise
+         cleanly across variants.
+     ================================================================= -->
+
+</chapter>
