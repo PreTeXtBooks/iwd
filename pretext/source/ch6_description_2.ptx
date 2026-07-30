@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter xml:id="ch-descriptive-statistics" xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xml:id="ch-descriptive-statistics_1" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Descriptive Statistics: How Big is a Flamingo?</title>
 
   <introduction>
@@ -33,7 +33,7 @@
         Every row in our dataset represents an individual bird observed in the field.
       </p>
 
-      <table xml:id="table-flamingo-variables">
+      <table xml:id="table-flamingo-variables_1">
         <title>Variables in the Flamingo Dataset</title>
         <tabular halign="left">
           <row header="yes">
