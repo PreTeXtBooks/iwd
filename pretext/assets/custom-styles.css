@@ -67,6 +67,33 @@ pre,
   color: var(--link-active-text-color);
 }
 
+/* Box background colors for warning, example, definition, note.
+   These blocks are set to always-render inline (not knowled) via
+   publication.ptx, so these fills always show. */
+.warning.remark-like {
+  background-color: #FDECE0; /* light orange */
+  padding: 0.75rem 1rem 0.75rem 1.5rem;
+  border-radius: 4px;
+}
+
+.example.example-like {
+  background-color: #F2F2F2; /* light grey */
+  padding: 0.75rem 1rem 0.75rem 1.5rem;
+  border-radius: 4px;
+}
+
+.definition.definition-like {
+  background-color: #E6F4E8; /* light green */
+  padding: 0.75rem 1rem 0.75rem 1.5rem;
+  border-radius: 4px;
+}
+
+.note.remark-like {
+  background-color: #FDF6DC; /* light yellow */
+  padding: 0.75rem 1rem 0.75rem 1.5rem;
+  border-radius: 4px;
+}
+
 /* Match this theme's dark mode strategy (:root.dark-mode) */
 :root.dark-mode {
   --page-color: #0a0a0a;
@@ -76,4 +103,21 @@ pre,
   --page-border-color: #333333;
   --link-text-color: #C1FDE8;
   --link-active-text-color: #7DB1B8;
+}
+
+/* Dark-mode variants: desaturated/darker versions of the same hues */
+:root.dark-mode .warning.remark-like {
+  background-color: #4A3626;
+}
+
+:root.dark-mode .example.example-like {
+  background-color: #2E2E2E;
+}
+
+:root.dark-mode .definition.definition-like {
+  background-color: #23372A;
+}
+
+:root.dark-mode .note.remark-like {
+  background-color: #3E3A22;
 }
