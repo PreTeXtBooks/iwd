@@ -1,360 +1,330 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <chapter xml:id="ch-descriptive-statistics_1" xmlns:xi="http://www.w3.org/2001/XInclude">
-  <title>Descriptive Statistics: How Big is a Flamingo?</title>
+  <title>Descriptive Statistics: Kenyan Rift Valley Flamingos</title>
 
   <introduction>
     <p>
-      Statistical methods exist to answer questions raised by data. Before introducing formulas, definitions, or code, we begin with a real ecological story from the field.
+      Between 2021 and 2023, wildlife researchers measured 344 flamingos across three 
+      saline lakes in the Kenyan Rift Valley: Lake Nakuru, Lake Bogoria, and Lake Elementaita. 
+      The dataset records two distinct species—the Lesser Flamingo (<init>Phoeniconaias minor</init>) 
+      and the Greater Flamingo (<init>Phoeniconopterus roseus</init>)—along with morphometric 
+      measurements including body mass (g), bill length (mm), bill depth (mm), and leg length (mm).
+    </p>
+    <p>
+      In this chapter, we use this dataset to learn how to visualize, summarize, and compare 
+      distributions of real-world biological data.
     </p>
   </introduction>
 
-  <!-- ====================================================================== -->
-  <!-- PART 1: THE STORY AND EXPERIENCE                                       -->
-  <!-- ====================================================================== -->
-  <section xml:id="sec-part1-experience">
-    <title>PART 1 — Experiencing the Data</title>
+  <!-- ==================================================================== -->
+  <!-- SECTION 6.1: SOFTWARE-AGNOSTIC DATA VISUALIZATION                    -->
+  <!-- ==================================================================== -->
+  <section xml:id="sec-visualizing-flamingos">
+    <title>Visualizing Distributions in the Field</title>
 
-    <subsection xml:id="subsec-the-story">
-      <title>1.1 The Story</title>
-      <p>
-        Kenya's Rift Valley is home to some of the largest flamingo populations in the world. Lakes Nakuru, Bogoria, and Elementaita are famous for the vast pink flocks that gather along their shores, feeding on algae and other microscopic organisms in the shallow alkaline water.
-      </p>
-      <p>
-        Although people often speak simply of <q>flamingos</q>, the birds are not all the same. Two species are commonly found on these lakes: the <em>lesser flamingo</em> (<foreign>Phoeniconaias minor</foreign>), which is smaller and feeds mainly on cyanobacteria, and the <em>greater flamingo</em> (<foreign>Phoenicopterus roseus</foreign>), which is much larger and has a different feeding strategy.
-      </p>
-      <p>
-        Suppose a team of ecologists has measured hundreds of flamingos across these three lakes. Their aim is simple: to better understand the birds that live there.
-      </p>
-    </subsection>
+    <p>
+      When examining raw data from the field, tabular numbers can hide overall patterns. 
+      Consider the body mass of all 336 recorded flamingos in our sample, which spans 
+      from 1206.0 g to 3982.0 g. To understand how body mass is distributed across the 
+      population, we construct a frequency histogram.
+    </p>
 
-    <subsection xml:id="subsec-the-data">
-      <title>1.2 The Data</title>
-      <p>
-        Every row in our dataset represents an individual bird observed in the field.
-      </p>
+    <figure xml:id="fig-flamingo-mass-histogram">
+      <caption>Distribution of body mass (g) for 336 flamingos in Lake Nakuru, Bogoria, and Elementaita.</caption>
+      <image source="images/flamingo_mass_histogram.png" width="80%">
+        <shortdescription>A bimodal histogram showing two distinct clusters of body mass around 1650g and 3100g.</shortdescription>
+      </image>
+    </figure>
 
-      <table xml:id="table-flamingo-variables_1">
-        <title>Variables in the Flamingo Dataset</title>
-        <tabular halign="left">
-          <row header="yes">
-            <cell>Variable</cell>
-            <cell>Description</cell>
-            <cell>Type / Unit</cell>
-          </row>
-          <row>
-            <cell><c>bird_id</c></cell>
-            <cell>Unique identifier for each captured bird</cell>
-            <cell>Identifier</cell>
-          </row>
-          <row>
-            <cell><c>species</c></cell>
-            <cell>Flamingo species (Lesser or Greater)</cell>
-            <cell>Categorical</cell>
-          </row>
-          <row>
-            <cell><c>lake</c></cell>
-            <cell>Observation lake (Nakuru, Bogoria, Elementaita)</cell>
-            <cell>Categorical</cell>
-          </row>
-          <row>
-            <cell><c>mass_kg</c></cell>
-            <cell>Body mass of the bird</cell>
-            <cell>Continuous (kg)</cell>
-          </row>
-          <row>
-            <cell><c>wingspan_cm</c></cell>
-            <cell>Total wingspan measurement</cell>
-            <cell>Continuous (cm)</cell>
-          </row>
-          <row>
-            <cell><c>bill_length_mm</c></cell>
-            <cell>Bill length measurement</cell>
-            <cell>Continuous (mm)</cell>
-          </row>
-          <row>
-            <cell><c>sex</c></cell>
-            <cell>Recorded sex of the bird</cell>
-            <cell>Categorical</cell>
-          </row>
-        </tabular>
-      </table>
+    <p>
+      Notice that the histogram in <xref ref="fig-flamingo-mass-histogram"/> is not single-peaked. 
+      Instead, it is <term>bimodal</term>, exhibiting a major peak around 1650 g and a secondary, 
+      smaller peak near 3100 g. In ecology, multimodal distributions often signal the presence 
+      of distinct sub-populations mixed together.
+    </p>
 
-      <insight xml:id="box-think-before-compute-1">
-        <title>Think Before You Compute</title>
-        <p>
-          Before looking at any summaries, pause for a moment. Imagine you had collected these measurements yourself.
-        </p>
-        <p>
-          What would be the very first question you would ask about this dataset? There is no single correct answer. A good question is simply one that the data might help answer.
-        </p>
-      </insight>
-    </subsection>
+    <p>
+      When we split the data by species, the cause of the double peak becomes immediate: 
+      Lesser Flamingos (<m>n = 273</m>) form a symmetric cluster centered around 1689.1 g, 
+      whereas Greater Flamingos (<m>n = 63</m>) form a separate cluster centered around 3120.2 g.
+    </p>
 
-    <subsection xml:id="subsec-the-question">
-      <title>1.3 The Question</title>
-      <p>
-        How big is a flamingo?
-      </p>
-      <p>
-        This sounds like an easy question. We do not need complex formulas or probability theory yet—just a simple, practical question about the birds standing in Lake Nakuru.
-      </p>
-    </subsection>
-
-    <subsection xml:id="subsec-first-attempt">
-      <title>1.4 A First Attempt</title>
-      <p>
-        To answer <q>How big is a flamingo?</q>, a natural first attempt is to calculate the average (mean) body mass of all the flamingos in the sample.
-      </p>
-      <p>
-        When working with field measurements, we quickly encounter missing values (<c>NA</c>) where a measurement could not be taken safely. Removing missing values and calculating the mean gives a single value: approximately 2.95 kg.
-      </p>
-
-      <warning xml:id="warning-the-problem">
-        <title>The Problem</title>
-        <p>
-          Three quarters of the flamingos weigh less than the average flamingo!
-        </p>
-        <p>
-          Nothing is wrong with the arithmetic. The problem is that our summary does not appear to describe the birds very well.
-        </p>
-      </warning>
-
-      <insight xml:id="box-think-before-read-on">
-        <title>Think Before You Read On</title>
-        <p>
-          Why do you think this happened? Before reading further, write down one possible explanation.
-        </p>
-        <p>
-          Don't worry about whether you're right. Learning statistics begins by asking questions about surprising results.
-        </p>
-      </insight>
-    </subsection>
-
-    <subsection xml:id="subsec-looking-closely">
-      <title>1.5 Looking More Closely</title>
-      <p>
-        When we plot the distribution of flamingo body masses using a histogram, the reason for our strange result becomes immediately clear. The graph shows two distinct peaks (a <em>bimodal</em> distribution): one cluster around 1.8 kg and another around 3.8 kg.
-      </p>
-      <p>
-        The average of 2.95 kg falls right into the valley between the two peaks—a weight that almost no single flamingo actually has!
-      </p>
-      <p>
-        Imagine calculating the average height of every adult and every primary school child in one village. The average might be mathematically correct, but it would describe neither group particularly well. The problem is not the average itself—it is pretending that two different populations are one.
-      </p>
-    </subsection>
-
-    <subsection xml:id="subsec-what-have-we-learnt">
-      <title>1.6 What Have We Learnt?</title>
-
-      <assemblage xml:id="takeaway-part1">
-        <title>Key Takeaway</title>
-        <p>
-          We began with a perfectly reasonable question and a perfectly reasonable summary. Yet the answer turned out to be misleading.
-        </p>
-        <p>
-          Before choosing a statistical method, we first need to understand the structure of the data.
-        </p>
-      </assemblage>
-
-      <p>
-        In Part 2, we will develop the statistical tools that help us recognize situations like this and choose more appropriate summaries.
-      </p>
-    </subsection>
+    <figure xml:id="fig-flamingo-species-boxplot">
+      <caption>Comparative boxplots of bill length (mm) by species across Kenyan sampling sites.</caption>
+      <image source="images/flamingo_bill_boxplot.png" width="75%">
+        <shortdescription>Side-by-side boxplots comparing bill length between Greater Flamingos and Lesser Flamingos.</shortdescription>
+      </image>
+    </figure>
   </section>
 
-  <!-- ====================================================================== -->
-  <!-- PART 2: MAKING SENSE OF THE DATA                                       -->
-  <!-- ====================================================================== -->
-  <section xml:id="sec-part2-making-sense">
-    <title>PART 2 — Making Sense of the Data</title>
+  <!-- ==================================================================== -->
+  <!-- SECTION 6.2: SOFTWARE-AGNOSTIC CENTER AND SPREAD                     -->
+  <!-- ==================================================================== -->
+  <section xml:id="sec-center-and-spread">
+    <title>Measuring Center and Spread</title>
 
-    <subsection xml:id="subsec-center">
-      <title>2.1 How Can One Number Represent Many Observations?</title>
-      <p>
-        When summarizing a single numerical variable, we often look for a measure of <em>central tendency</em>—a single value that represents the middle or center of the data.
-      </p>
-      <p>
-        The <strong>sample mean</strong> (<m>\bar{x}</m>) is the arithmetic average:
-      </p>
-      <me>
-        \bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i
-      </me>
-      <p>
-        The <strong>median</strong> is the middle value when the data points are ordered from smallest to largest (the 50th percentile).
-      </p>
+    <p>
+      To summarize a numerical distribution, we require measures of central tendency and variation.
+      For a sample of measurements <m>x_1, x_2, \dots, x_n</m>, the <term>sample mean</term> <m>\bar{x}</m> is calculated as:
+    </p>
 
-      <insight xml:id="box-think-center">
-        <title>Think Before You Compute</title>
-        <p>
-          If a dataset contains a few extreme outliers (e.g., an recording error where a bird's mass is logged as 25 kg instead of 2.5 kg), which measure will change more: the mean or the median?
-        </p>
-      </insight>
+    <me>
+      \bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i
+    </me>
 
-      <warning xml:id="warning-mean-vs-median">
-        <title>Common Mistake</title>
-        <p>
-          Assuming the mean and median are interchangeable. The mean is sensitive to extreme values and skewness, while the median is <em>robust</em>. However, neither single number can properly summarize a distribution with multiple modes!
-        </p>
-      </warning>
+    <p>
+      Across all 344 bill length observations, the pooled mean bill length is 103.5 mm, with a sample 
+      standard deviation of <m>s = 12.4</m> mm. However, because our dataset combines two distinct species, 
+      the overall median is 99.1 mm and the interquartile range (<m>\text{IQR} = Q_3 - Q_1</m>) is 8.1 mm 
+      (<m>Q_1 = 95.9</m> mm, <m>Q_3 = 104.0</m> mm).
+    </p>
 
-      <assemblage xml:id="takeaway-center">
-        <title>Key Takeaway</title>
-        <p>
-          Use the mean for symmetric distributions without extreme outliers. Use the median when data are skewed or contain outliers. When data are multimodal, separate the groups before summarizing.
-        </p>
-      </assemblage>
-    </subsection>
+    <table xml:id="table-flamingo-summary-stats">
+      <caption>Summary statistics for body mass (g) and bill length (mm) by species.</caption>
+      <tabular halign="center" top="minor" bottom="minor" left="minor" right="minor">
+        <row header="yes">
+          <cell>Species</cell>
+          <cell>Variable</cell>
+          <cell>Count (<m>n</m>)</cell>
+          <cell>Mean (<m>\bar{x}</m>)</cell>
+          <cell>Std Dev (<m>s</m>)</cell>
+          <cell>Median</cell>
+          <cell>IQR</cell>
+        </row>
+        <row>
+          <cell>Lesser Flamingo</cell>
+          <cell>Body Mass (g)</cell>
+          <cell>273</cell>
+          <cell>1689.1</cell>
+          <cell>196.4</cell>
+          <cell>1684.0</cell>
+          <cell>307.0</cell>
+        </row>
+        <row>
+          <cell>Lesser Flamingo</cell>
+          <cell>Bill Length (mm)</cell>
+          <cell>278</cell>
+          <cell>97.9</cell>
+          <cell>4.2</cell>
+          <cell>97.7</cell>
+          <cell>5.7</cell>
+        </row>
+        <row>
+          <cell>Greater Flamingo</cell>
+          <cell>Body Mass (g)</cell>
+          <cell>63</cell>
+          <cell>3120.2</cell>
+          <cell>313.9</cell>
+          <cell>3102.0</cell>
+          <cell>326.5</cell>
+        </row>
+        <row>
+          <cell>Greater Flamingo</cell>
+          <cell>Bill Length (mm)</cell>
+          <cell>66</cell>
+          <cell>127.1</cell>
+          <cell>6.1</cell>
+          <cell>127.3</cell>
+          <cell>9.5</cell>
+        </row>
+      </tabular>
+    </table>
 
-    <subsection xml:id="subsec-spread">
-      <title>2.2 How Do We Describe Variation?</title>
-      <p>
-        Knowing the center is not enough. Two lakes could have flamingos with the exact same mean body mass of 2.5 kg, yet in Lake Nakuru all birds weigh between 2.4 kg and 2.6 kg, while in Lake Bogoria they weigh between 1.0 kg and 4.0 kg.
-      </p>
-      <p>
-        To quantify variation (spread), we use:
-      </p>
-      <p>
-        1. <strong>Range</strong>: <m>\text{Max} - \text{Min}</m>. Highly sensitive to outliers.
-      </p>
-      <p>
-        2. <strong>Interquartile Range (IQR)</strong>: The difference between the 75th percentile (<m>Q_3</m>) and the 25th percentile (<m>Q_1</m>):
-      </p>
-      <me>
-        \text{IQR} = Q_3 - Q_1
-      </me>
-      <p>
-        3. <strong>Sample Variance (<m>s^2</m>) and Standard Deviation (<m>s</m>)</strong>: Measures of average squared distance from the mean:
-      </p>
-      <me>
-        s^2 = \frac{1}{n - 1} \sum_{i=1}^{n} (x_i - \bar{x})^2, \quad s = \sqrt{s^2}
-      </me>
-
-      <insight xml:id="box-think-spread">
-        <title>Think Before You Compute</title>
-        <p>
-          Why do we divide by <m>n - 1</m> instead of <m>n</m> when calculating sample variance? What happens to standard deviation if we measure mass in grams instead of kilograms?
-        </p>
-      </insight>
-
-      <warning xml:id="warning-spread-units">
-        <title>Common Mistake</title>
-        <p>
-          Reporting variance without units or forgetting that variance is in squared units (<m>\text{kg}^2</m>). Standard deviation restores the original units of measurement (<m>\text{kg}</m>).
-        </p>
-      </warning>
-
-      <assemblage xml:id="takeaway-spread">
-        <title>Key Takeaway</title>
-        <p>
-          Spread tells us about the predictability and diversity of our data. Always pair a measure of center with an appropriate measure of spread (Mean with Standard Deviation; Median with IQR).
-        </p>
-      </assemblage>
-    </subsection>
-
-    <subsection xml:id="subsec-shape">
-      <title>2.3 How Do We Spot Misleading Summaries?</title>
-      <p>
-        Summary numbers can hide essential patterns. To avoid being misled, we investigate three aspects of shape:
-      </p>
-      <p>
-        * <strong>Modality</strong>: Does the distribution have one peak (unimodal), two peaks (bimodal), or many (multimodal)?
-      </p>
-      <p>
-        * <strong>Symmetry / Skewness</strong>: Is the distribution symmetric, right-skewed (long tail to the right), or left-skewed (long tail to the left)?
-      </p>
-      <p>
-        * <strong>Subgroups / Stratification</strong>: Are there distinct underlying categories (such as Lesser vs. Greater flamingos) that should be analyzed separately?
-      </p>
-
-      <assemblage xml:id="takeaway-shape">
-        <title>Key Takeaway</title>
-        <p>
-          Always plot your data before relying on numerical summaries. Visualizations reveal features that single numbers conceal.
-        </p>
-      </assemblage>
-    </subsection>
+    <p>
+      Notice in <xref ref="table-flamingo-summary-stats"/> that within each single species group, 
+      the mean and median are nearly identical (e.g., 1689.1 g mean vs. 1684.0 g median for Lesser Flamingos). 
+      This indicates that within a single species, body mass follows a symmetric distribution.
+    </p>
   </section>
 
-  <!-- ====================================================================== -->
-  <!-- PART 3: TURNING IDEAS INTO CODE                                        -->
-  <!-- ====================================================================== -->
-  <section xml:id="sec-part3-code">
-    <title>PART 3 — Turning Ideas into Code</title>
+  <!-- ==================================================================== -->
+  <!-- SECTION 6.3: RELATIONSHIPS BETWEEN VARIABLES                         -->
+  <!-- ==================================================================== -->
+  <section xml:id="sec-relationships">
+    <title>Relationships Between Categorical and Numerical Traits</title>
 
-    <subsection xml:id="subsec-r-implementation">
-      <title>3.1 Exploring the Data in R</title>
+    <p>
+      Ecologists often study how species are distributed across different habitat sites. 
+      <xref ref="table-lake-species-crosstab"/> summarizes the counts of flamingos observed at each lake.
+    </p>
+
+    <table xml:id="table-lake-species-crosstab">
+      <caption>Contingency table of flamingo species counts by Rift Valley lake.</caption>
+      <tabular halign="center" top="minor" bottom="minor" left="minor" right="minor">
+        <row header="yes">
+          <cell>Lake</cell>
+          <cell>Greater Flamingo</cell>
+          <cell>Lesser Flamingo</cell>
+          <cell>Total</cell>
+        </row>
+        <row>
+          <cell>Lake Bogoria</cell>
+          <cell>10</cell>
+          <cell>114</cell>
+          <cell>124</cell>
+        </row>
+        <row>
+          <cell>Lake Elementaita</cell>
+          <cell>30</cell>
+          <cell>38</cell>
+          <cell>68</cell>
+        </row>
+        <row>
+          <cell>Lake Nakuru</cell>
+          <cell>26</cell>
+          <cell>126</cell>
+          <cell>152</cell>
+        </row>
+        <row>
+          <cell>Total</cell>
+          <cell>66</cell>
+          <cell>278</cell>
+          <cell>344</cell>
+        </row>
+      </tabular>
+    </table>
+
+    <p>
+      From the contingency table, we calculate conditional proportions. For example, at Lake Bogoria, 
+      <m>114 / 124 \approx 91.9\%</m> of observed birds are Lesser Flamingos, reflecting the massive 
+      cyanobacteria blooms that attract filter-feeding Lesser Flamingos to Bogoria's alkaline waters.
+    </p>
+  </section>
+
+  <!-- ==================================================================== -->
+  <!-- SECTION 6.4: CONFINED R INVESTIGATION TUTORIAL                       -->
+  <!-- ==================================================================== -->
+  <section xml:id="sec-investigation-r-flamingos">
+    <title>Investigation: Analyzing Flamingo Data in R</title>
+
+    <introduction>
       <p>
-        Now that we understand <em>why</em> single summaries can fail, let's write code to inspect, visualize, and correctly analyze the flamingo dataset.
+        In this investigation, you will use R to reproduce the numerical summaries and 
+        visualizations presented in Sections 6.1 through 6.3 using the dataset 
+        <c>kenya_flamingos.csv</c>.
+      </p>
+    </introduction>
+
+    <subsection xml:id="subsec-r-loading-data">
+      <title>Loading the Dataset and Exploring Structure</title>
+      <p>
+        Begin by loading the CSV file into your R workspace and inspecting its dimensions:
       </p>
 
+      <program language="r">
+        <code>
+# Load the dataset
+flamingos &lt;- read.csv("kenya_flamingos.csv")
+
+# View the structure and first few rows
+str(flamingos)
+head(flamingos)
+        </code>
+      </program>
+    </subsection>
+
+    <subsection xml:id="subsec-r-summary-stats">
+      <title>Computing Summary Statistics</title>
       <p>
-        First, we calculate overall summary statistics and notice how missing values (<c>NA</c>) are handled:
+        Calculate overall summary statistics, as well as grouped measures by species using 
+        base R or the <c>dplyr</c> package:
       </p>
 
-<program language="r">
-<code>
-# Load required library
-library(tidyverse)
+      <program language="r">
+        <code>
+# Overall summary of body mass and bill length
+summary(flamingos$body_mass_g)
+mean(flamingos$bill_length_mm, na.rm = TRUE)
+sd(flamingos$bill_length_mm, na.rm = TRUE)
 
-# Compute overall mean and median mass (handling missing values)
+# Grouped summary statistics using dplyr
+library(dplyr)
+
 flamingos %&gt;%
+  group_by(species) %&gt;%
   summarise(
-    mean_mass   = mean(mass_kg, na.rm = TRUE),
-    median_mass = median(mass_kg, na.rm = TRUE),
-    sd_mass     = sd(mass_kg, na.rm = TRUE),
-    iqr_mass    = IQR(mass_kg, na.rm = TRUE)
+    count = n(),
+    mean_mass = mean(body_mass_g, na.rm = TRUE),
+    sd_mass   = sd(body_mass_g, na.rm = TRUE),
+    median_mass = median(body_mass_g, na.rm = TRUE),
+    iqr_mass  = IQR(body_mass_g, na.rm = TRUE)
   )
-</code>
-</program>
+        </code>
+      </program>
+    </subsection>
 
+    <subsection xml:id="subsec-r-visualizations">
+      <title>Generating Visualizations</title>
       <p>
-        Next, we plot a histogram to inspect the shape of the overall body mass distribution:
+        Recreate the histograms and side-by-side boxplots using <c>ggplot2</c>:
       </p>
 
-<program language="r">
-<code>
-# Visualizing overall mass distribution
-ggplot(flamingos, aes(x = mass_kg)) +
-  geom_histogram(binwidth = 0.2, fill = "pink", color = "darkred") +
+      <program language="r">
+        <code>
+library(ggplot2)
+
+# Histogram of body mass
+ggplot(flamingos, aes(x = body_mass_g)) +
+  geom_histogram(binwidth = 100, fill = "firebrick", color = "white") +
   labs(
-    title = "Body Mass Distribution of Flamingos in Rift Valley",
-    x = "Body Mass (kg)",
+    title = "Distribution of Flamingo Body Mass",
+    x = "Body Mass (g)",
     y = "Count"
   ) +
   theme_minimal()
-</code>
-</program>
 
+# Comparative boxplot of bill length by species
+ggplot(flamingos, aes(x = species, y = bill_length_mm, fill = species)) +
+  geom_boxplot() +
+  labs(
+    title = "Bill Length Comparison by Species",
+    x = "Species",
+    y = "Bill Length (mm)"
+  ) +
+  theme_minimal()
+        </code>
+      </program>
+    </subsection>
+
+    <subsection xml:id="subsec-r-contingency">
+      <title>Contingency Tables</title>
       <p>
-        Finally, recognizing the bimodal structure, we group by species to calculate separate, meaningful descriptive statistics for Lesser and Greater flamingos:
+        Construct a two-way cross-tabulation of sampling lakes and species:
       </p>
 
-<program language="r">
-<code>
-# Grouped summary by species
-flamingos %&gt;%
-  filter(!is.na(mass_kg)) %&gt;%
-  group_by(species) %&gt;%
-  summarise(
-    count       = n(),
-    mean_mass   = mean(mass_kg),
-    sd_mass     = sd(mass_kg),
-    median_mass = median(mass_kg),
-    iqr_mass    = IQR(mass_kg)
-  )
-</code>
-</program>
-    </subsection>
-  </section>
+      <program language="r">
+        <code>
+# Frequency table of lake vs. species
+lake_table &lt;- table(flamingos$lake, flamingos$species)
+addmargins(lake_table)
 
-  <!-- ====================================================================== -->
-  <!-- PART 4: EXERCISES AND STACK INTEGRATION                                -->
-  <!-- ====================================================================== -->
-  <section xml:id="sec-part4-exercises">
-    <title>PART 4 — STACK Questions and Exercises</title>
-    <p>
-      <em>Interactive STACK questions for practice and self-assessment will be integrated into this section.</em>
-    </p>
+# Proportions by lake (row proportions)
+prop.table(lake_table, margin = 1)
+        </code>
+      </program>
+    </subsection>
+
+    <exercises xml:id="exercises-r-flamingos-investigation">
+      <title>Investigation Exercises</title>
+
+      <exercise>
+        <statement>
+          <p>
+            Filter the dataset to include only flamingos sampled at Lake Nakuru in 2022. 
+            Calculate the mean and standard deviation of <c>leg_length_mm</c> for this subset.
+          </p>
+        </statement>
+      </exercise>
+
+      <exercise>
+        <statement>
+          <p>
+            Generate a scatterplot of <c>bill_length_mm</c> versus <c>body_mass_g</c> colored 
+            by <c>species</c>. Describe the direction and strength of the association.
+          </p>
+        </statement>
+      </exercise>
+    </exercises>
   </section>
 
 </chapter>
