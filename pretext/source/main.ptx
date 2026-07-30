@@ -25,6 +25,7 @@
 
     <!-- Introduction chapter -->
     <xi:include href="./ch1_intro.ptx" />
+    <xi:include href="./ch6_descriptive_statistics.ptx" />
 
     <!-- Additional chapters will be added here as the book develops -->
 
