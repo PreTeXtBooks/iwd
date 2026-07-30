@@ -34,6 +34,7 @@
     <projects level="2"/>
     <equations level="2"/>
     <footnotes level="2"/>
+    <divisions level="2" />
   </numbering>
 
     <!-- LaTeX specific options: set @print="yes" to get pdf set up   -->
@@ -42,6 +43,7 @@
     <!-- links the html version of asymptote graphics.                -->
   <latex print="no" sides="one">
     <asymptote links="no"/>
+    <page paper="A4" />
   </latex>
 
     <!-- This public server is for testing and demonstration of STACK q's only. -->
@@ -76,11 +78,17 @@
       secondary-color="#F37021"
       primary-color-dark="#649BA3" />
     <!-- Enable interactive code blocks and code highlighting -->
-    <calculator model="none"/>
-  </html>
+    <platform host="web" />
+    <calculator model="none" />
+    <search variant="default" />
+</html>
   
   <!-- Common options -->
   <common>
+    <!-- Show every component of an exercise in the main text. -->
+    <exercise-inline statement="yes" hint="yes" answer="yes" solution="yes" />
+    <exercise-divisional statement="yes" hint="yes" answer="yes" solution="yes" />
+
     <!-- Enable syntax highlighting for code blocks -->
     <chunking level="2"/>
     <tableofcontents level="2"/>
