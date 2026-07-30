@@ -2,53 +2,22 @@
 <chapter xml:id="ch-descriptive-statistics_1" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Descriptive Statistics</title>
 
-  <introduction>
-    <p>
-      In this chapter, we explore how to summarize, visualize, and formalize structural patterns in 
-      observational data. We anchor our inquiry in a synthetic dataset of 344 flamingos recorded across 
-      three Kenyan Rift Valley lakes: Lake Nakuru, Lake Bogoria, and Lake Elementaita.
-    </p>
-
-    <note xml:id="note-dataset-context">
-      <title>Dataset Context</title>
-      <p>
-        The dataset <c>kenya_flamingos.csv</c> is a simulated (synthetic) dataset modeled after 
-        real-world Rift Valley avian ecology for instructional purposes.
-      </p>
-    </note>
-  </introduction>
-
-  <!-- CHAPTER OBJECTIVES CALLOUT BOX -->
-  <objectives xml:id="obj-descriptive-stats">
-    <title>Data-First Philosophy</title>
-    <introduction>
-      <p>
-        By engaging directly with the flamingo dataset, you will develop a data-first mindset for descriptive statistics:
-      </p>
-    </introduction>
-    <ul>
-      <li><p>Inspect raw data visually before computing numerical summary metrics.</p></li>
-      <li><p>Identify how multimodal and skewed distributions alter descriptive measures.</p></li>
-      <li><p>Select appropriate measures of center and spread based on distribution shape and robustness.</p></li>
-      <li><p>Analyze categorical relationships using contingency tables and conditional proportions.</p></li>
-      <li><p>Evaluate missing data patterns and execute reproducible computational workflows in R.</p></li>
-    </ul>
-  </objectives>
-
   <!-- ==================================================================== -->
   <!-- PART I: DATA-FIRST CONCEPTUAL EXPLORATION                            -->
   <!-- ==================================================================== -->
 
   <section xml:id="sec-a-question-about-flamingos">
-    <title>A Question About Flamingos</title>
+    <title>A Survey in the Rift Valley</title>
     <p>
-      Field biologists studying the Kenyan Rift Valley want to understand how body size varies across 
-      species and geographical feeding grounds. Our sample records <m>344</m> individual birds across 8 variables: 
-      lake location, species, bill length (mm), bill depth (mm), leg length (mm), body mass (g), sex, and observation year.
+      A team of field biologists sets up station along the muddy shores of the Kenyan Rift Valley. Armed with calipers, 
+      weighing slings, and mist nets, they capture, measure, and release <m>344</m> flamingos across Lake Nakuru, Lake Bogoria, 
+      and Lake Elementaita. For every bird that passes through their hands, they record eight attributes: sampling lake, 
+      species, bill length (mm), bill depth (mm), leg length (mm), body mass (g), sex, and observation year.
     </p>
     <p>
-      Before calculating any numerical summary, we begin with a foundational question: 
-      <em>How can we tell whether physical differences reflect separate biological species or mere variation within a single species?</em>
+      Looking at the raw field sheets, the variation is striking. Some birds are small and vibrant, while others are tall and pale; 
+      weights range from barely over a kilogram to nearly four kilograms. Before running any calculations, the team faces a fundamental field question: 
+      <em>Does this massive range of physical traits represent natural variation within a single flock, or are we looking at two distinct species sharing the same waters?</em>
     </p>
 
     <!-- CALLOUT: WHY THIS MATTERS -->
@@ -61,23 +30,24 @@
   </section>
 
   <section xml:id="sec-seeing-the-shape">
-    <title>Seeing the Shape of a Distribution</title>
+    <title>The Double Peak in the Mud</title>
     <p>
-      Plotting body mass across all <m>336</m> observed birds reveals a distinct double peak (bimodal shape), 
-      with a primary cluster near <m>1650\text{ g}</m> and a smaller cluster near <m>3100\text{ g}</m>.
+      To make sense of the <m>336</m> body mass records on their clipboard, the researchers plot every measurement along a single axis. 
+      Instead of forming a single cluster around a typical weight, the plot reveals two undeniable peaks: a massive ridge centered near <m>1650\text{ g}</m> 
+      and a smaller hill near <m>3100\text{ g}</m>.
     </p>
 
     <figure xml:id="fig-flamingo-mass-dist">
-      <caption>Distribution of flamingo body mass (g) showing bimodality.</caption>
+      <caption>Body mass records (g) across 336 captured flamingos revealing a bimodal pattern.</caption>
       <image source="images/flamingo_mass_histogram.png" width="75%">
-        <shortdescription>Bimodal histogram showing body mass of flamingos.</shortdescription>
+        <shortdescription>Bimodal histogram showing body mass of flamingos with two clear peaks.</shortdescription>
       </image>
     </figure>
 
     <p>
-      This bimodal shape indicates that treating all flamingos as a single homogeneous group hides 
-      critical biological structure. Splitting the observations by species reveals two symmetric, 
-      unimodal distributions corresponding to Lesser Flamingos and Greater Flamingos.
+      This double peak tells a story that standard numbers alone would obscure. It warns the team that treating all captured flamingos 
+      as a single group conceals critical biological reality. When the researchers color-code the plot by field species identification, 
+      the double peak splits into two tidy, separate curves: lightweight Lesser Flamingos on the left and heavy Greater Flamingos on the right.
     </p>
 
     <!-- CALLOUT: THINK BEFORE YOU COMPUTE -->
@@ -90,12 +60,17 @@
   </section>
 
   <section xml:id="sec-center-dispersion-position">
-    <title>Center, Dispersion, and Position</title>
+    <title>Balancing the Flock and Measuring Variation</title>
     <p>
-      When a distribution is symmetric, its balance point (mean) and its midpoint (median) align closely. 
-      For example, Lesser Flamingos have a center around <m>1689.1\text{ g}</m> (mean) and <m>1684.0\text{ g}</m> (median). 
-      However, when distributions are skewed or contain extreme values, the mean shifts toward the tail, 
-      while the median remains resistant.
+      Once the researchers separate the flock by species, each group's weights settle into balanced, bell-like shapes. 
+      For Lesser Flamingos, the physical balance point (<m>1689.1\text{ g}</m>) and the exact middle bird (<m>1684.0\text{ g}</m>) sit almost on top of each other. 
+      When a group is symmetric, both benchmarks tell the same story about a "typical" bird.
+    </p>
+    <p>
+      Next, the team asks how consistent the birds are within each species. Are all Lesser Flamingos nearly identical in size, 
+      or do they vary widely? Looking at the distance individual birds drift from their baseline reveals that Lesser Flamingos are tightly clustered, 
+      with a typical spread of <m>196.4\text{ g}</m> and the middle <m>50\%</m> of birds falling between <m>1536.0\text{ g}</m> and <m>1843.0\text{ g}</m>. 
+      Greater Flamingos, by contrast, show much wider variation, with a typical spread of <m>313.9\text{ g}</m>.
     </p>
 
     <!-- CALLOUT: WORKED EXAMPLE -->
@@ -131,10 +106,13 @@
   </section>
 
   <section xml:id="sec-frequency-and-grouped-summaries">
-    <title>Frequency Distributions and Grouped Summaries</title>
+    <title>Lake Preferences and Ecosystem Dynamics</title>
     <p>
-      Categorical variables are summarized through counts and proportions. Cross-tabulating sampling lake 
-      against species shows distinct habitat preferences across the Rift Valley:
+      Physical size is only half the story. The researchers also want to know where each species chooses to feed across the Rift Valley. 
+      Do both species mix freely at every lake, or do they divide the ecosystem between themselves?
+    </p>
+    <p>
+      Cross-referencing capture logs against sampling sites uncovers striking geographic preferences:
     </p>
 
     <table xml:id="table-cross-tabulation">
@@ -192,15 +170,11 @@
   </section>
 
   <section xml:id="sec-missing-data-intro">
-    <title>Missing Data in the Field</title>
+    <title>Missing Records in the Field Log</title>
     <p>
-      In observational studies, datasets are rarely complete. In our sample of <m>344</m> flamingos:
+      When the biologists return to the field station and audit their digital spreadsheets, they discover several blank entries in the master log. 
+      Out of <m>344</m> captured birds, 4 entries are missing bill depth, 8 lack body mass, and 7 lack recorded sex.
     </p>
-    <ul>
-      <li><p><c>bill_depth_mm</c> is missing <m>4</m> values.</p></li>
-      <li><p><c>body_mass_g</c> is missing <m>8</m> values.</p></li>
-      <li><p><c>sex</c> is missing <m>7</m> values.</p></li>
-    </ul>
 
     <!-- CALLOUT: WHY THIS MATTERS -->
     <aside xml:id="aside-missingness-reasons">
@@ -209,6 +183,11 @@
         Determining flamingo sex requires genetic testing or careful physical inspection during brief handling windows. Field teams prioritize bird safety over completing every measurement when weather conditions or bird stress levels escalate.
       </p>
     </aside>
+
+    <p>
+      Before analyzing the completed records, the researchers must determine why these numbers are absent. 
+      Did a scale battery fail at random, or were the heaviest birds escaping measurement because they were harder to restrain?
+    </p>
 
     <!-- CALLOUT: KEY TAKEAWAY NOTE -->
     <note xml:id="note-mcar-definition">
