@@ -25,10 +25,18 @@
 
     <!-- Introduction chapter -->
     <xi:include href="./ch1_intro.ptx" />
-    <xi:include href="./ch6_descriptive_statistics.ptx" />
-    <xi:include href="./ch6_description_2.ptx" />
 
-    <!-- Additional chapters will be added here as the book develops -->
+    <!-- Chapter 2, Multilevel Data, not yet written. -->
+
+    <xi:include href="./ch3_exploring_data.ptx" />
+
+    <!-- Chapters 4-10 (Cleaning Data; Visualising Multidimensional Data;
+         Data Shapes; Handling Factors; Handling Missing Values; Measuring
+         and Observing Variability; Accounting for Variability) will be
+         added here as they are written. Their material is currently drafted,
+         unassigned, in ch6_descriptive_statistics.ptx and
+         ch6_description_2.ptx, which are kept on disk but no longer
+         included in the build. -->
 
     <!-- This chapter contains a wide variety of elements to  -->
     <!-- illustrate what pretext can do, plus links to more help.  -->

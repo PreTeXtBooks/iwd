@@ -8,7 +8,7 @@
 
   <introduction>
     <p>
-      Before we can make decisions about populations, test hypotheses, or build
+      Before we make decisions about populations, test hypotheses, or build
       predictive models, we want to first understand the data in front of us.
       This chapter introduces <term>descriptive statistics</term>: the art and
       science of summarising raw observations into meaningful patterns.
@@ -61,12 +61,31 @@
         weights range from barely over a kilogram to nearly four kilograms.
         Before running any calculations, the team faces a fundamental field
         question:
-        <em>Does this massive range of physical traits represent natural variation within a single flock, or are we looking at two distinct species sharing the same waters?</em>
+        <em>Does this massive range of physical traits represent natural
+        variation within a single flock, or are we looking at two distinct
+        species sharing the same waters?</em>
       </p>
+
+      <p>
+        Before you read any further, commit to an answer. One flock, or two
+        species hiding inside one dataset? What single piece of evidence, if
+        you could get it, would settle the question for you? Hold on to your
+        answer - the rest of this chapter is built around checking it.
+      </p>
+
+      <!--
+        INTERACTIVE IDEA: a short "make your prediction" widget here (e.g.
+        one flock / two species / not sure, plus a free-text "what evidence
+        would convince you") would let students commit before scrolling on.
+        Their prediction is then checked against the histogram in
+        subsec-visualise-mass. This is the highest-value interactivity point
+        in the chapter: the whole Cobb-style data-first argument only works
+        if the reader has actually staked out a guess first, rather than
+        reading the reveal cold.
+      -->
 
       <note>
         <title>Why This Matters</title>
-
         <p>
           In ecological conservation, misclassifying two distinct species as a
           single varied population can mask severe population declines in the
@@ -86,16 +105,39 @@
         The first step in any analysis is not to compute—it is to
         <em>inspect</em>.
         The field team transcribes their handwritten measurements into a digital
-        spreadsheet, column by column.
+        spreadsheet, column by column, saved as <c>kenya_flamingos.csv</c>.
         But field conditions are unpredictable.
         Weather changes, battery failures, and bird stress levels all affect
         data completeness.
       </p>
 
       <p>
-        When the biologists return to the field station and audit their digital
-        spreadsheets, they discover several blank entries in the master log.
-        Out of 344 captured birds:
+        Your task, before reading any further, is to be the biologist who
+        audits the log. Load the spreadsheet and inspect it column by column.
+        For each of the eight variables, how many entries are blank? Out of
+        344 captured birds, does every variable have 344 recorded values, or
+        are some incomplete?
+      </p>
+
+      <!--
+        INTERACTIVE IDEA: Rather than listing the missing counts here,
+        give students the means to find them for themselves:
+          - Embed a live R console (webR/PyodideR) pre-loaded with
+            kenya_flamingos.csv, with a single guided prompt: "run colSums
+            (is.na(flamingos)) and record what you find" — or, for students
+            before they meet R, a downloadable/openable spreadsheet with a
+            worksheet asking them to use COUNTBLANK() per column.
+          - Follow it with a short reveal ("Check your counts") rather than
+            printing the answer inline, so the numbers below only confirm
+            work the student has already done.
+          - A simple non-code alternative: an interactive table students can
+            sort/filter by each column to spot blanks visually, useful for a
+            CBC classroom without guaranteed computer access for every
+            learner.
+      -->
+
+      <p>
+        Compare your counts against what the field team found:
       </p>
 
       <ul>
@@ -105,9 +147,25 @@
       </ul>
 
       <p>
-        Before analyzing the completed records, the researchers must determine:
-        <em>Why are these numbers absent? Did a scale battery fail at random, or were the heaviest birds escaping measurement because they were harder to restrain?</em>
+        Finding the gaps is only half the job. The harder question is
+        <em>why</em> they are there, because the answer changes what you are
+        allowed to do next. In pairs or small groups, discuss: what could
+        cause bill depth, body mass, and sex specifically to be the variables
+        with gaps, rather than, say, lake or observation year? Did a scale
+        battery most plausibly fail at random, or were certain birds harder to
+        measure than others? Write down a reason for each of the three
+        variables before reading on.
       </p>
+
+      <!--
+        STACK QUESTION: tracker item "6: Missing Values" (row 126, ID 125,
+        Questions sheet). Status in the tracker is currently blank/not yet
+        built — flag to the STACK-authoring team as a candidate to prioritise
+        for this chapter, since nothing else in the bank tests missingness
+        reasoning directly. Good fit either right here (reasoning about why
+        specific variables are missing) or attached to note-missing-data-bias
+        below (reasoning about the consequence of dropping rows).
+      -->
 
       <note>
         <title>Why This Matters in Fieldwork</title>
@@ -117,8 +175,19 @@
           inspection during brief handling windows.
           Field teams prioritise bird safety over completing every measurement
           when weather conditions or bird stress levels escalate.
+          How close was your own reasoning to this?
         </p>
       </note>
+
+      <p>
+        Now the question that actually matters for your analysis: if you
+        simply delete every row with a missing value before computing a mean,
+        could that change the answer you get, or would it just cost you a
+        little sample size? Think about the heaviest birds specifically. If
+        they were also the birds most likely to be missing a mass
+        measurement, what would happen to your estimate of average body mass
+        after deletion? Would it read too high, too low, or about right?
+      </p>
 
       <note xml:id="note-missing-data-bias">
         <title>Key Takeaway: When Does Missing Data Introduce Bias?</title>
@@ -129,7 +198,7 @@
           statistical bias.
           If missingness depends on physical traits (e.g., larger birds escaping
           measurement because they were harder to restrain), omitting them
-          biases your sample means. This is because you want your sample to be 
+          biases your sample means. This is because you want your sample to be
           representative of your population.
         </p>
       </note>
@@ -139,12 +208,23 @@
       <title>Visualising the Raw Data: What the Histogram Reveals</title>
 
       <p>
-        To make sense of the 336 body mass records on their clipboard, the
-        researchers plot every measurement along a single axis.
-        Instead of forming a single cluster around a typical weight, the plot
-        reveals two undeniable peaks: a massive ridge centered near 1650 g and a
-        smaller hill near 3100 g.
+        336 body mass records sit on the clipboard, all now digitised. You
+        cannot hold 336 numbers in your head at once, so before computing
+        anything, plot every measurement along a single axis: a histogram of
+        body mass. Sketch, in your own notes, what shape you expect
+        <mdash /> a single hump, or something else <mdash /> given your earlier
+        guess about one flock versus two species. Then look.
       </p>
+
+      <!--
+        INTERACTIVE IDEA: an adjustable bin-width histogram (slider or a few
+        preset widths) built from the real body_mass_g column would let
+        students discover for themselves that a wide bin can hide the second
+        peak, and a very narrow one turns it into noise. That mirrors the
+        "always try several bin widths" caution in the companion chapter and
+        makes the choice of bin width feel like an analytical decision rather
+        than a default the software picked for them.
+      -->
 
       <figure xml:id="fig-mass-histogram">
         <caption>
@@ -154,6 +234,14 @@
 
         <image source="images/flamingo-mass-histogram.png" width="60%"/>
       </figure>
+
+      <p>
+        Instead of a single cluster around a typical weight, the plot reveals
+        two undeniable peaks: a massive ridge centered near 1650 g and a
+        smaller hill near 3100 g, with a near-empty gap between them. Does
+        this match what you sketched? What does a two-humped shape suggest
+        about your original question <mdash /> one flock, or two?
+      </p>
 
       <p>
         This double peak tells a story that standard numbers alone would
@@ -170,25 +258,45 @@
         <title>Think Before You Compute</title>
 
         <p>
-          If you blindly compute the average mass of all 336 birds without
-          plotting a histogram first, you get 1957.4 g—a value sitting in the
-          empty valley between the two true species clusters where
+          Before you compute it: given the histogram above, where do you
+          expect the average mass of all 336 birds to fall? Inside the lower
+          hump, inside the upper hump, or somewhere else? Now compute it.
+        </p>
+
+        <p>
+          The blind average of all 336 birds, taken without plotting a
+          histogram first, is 1957.4 g—a value sitting in the empty valley
+          between the two true species clusters where
           <em>almost no individual birds actually exist</em>!
-          This demonstrates why visualisation must precede summarisation.
+          Did your prediction land there? This demonstrates why visualisation
+          must precede summarisation.
         </p>
       </warning>
+
+      <!--
+        STACK QUESTION: several tracker items fit here as formative checks
+        immediately after the reveal —
+          - "Provide recommendations for constructing a histogram for given
+            data" (row 61, ID 60): choosing sensible bin widths, ties
+            directly to the interactive bin-width idea above.
+          - "Approximate percentile of a distribution presented as a
+            histogram" (row 53, ID 52, status: changes requested).
+          - "Data presentations-question 4 (Frequency table for the time
+            taken and a Histogram)" (row 87, ID 86): completing a histogram
+            from a frequency table, good bridge into the binning idea used
+            again in the lake cross-tabulation.
+      -->
     </subsection>
 
     <subsection xml:id="subsec-central-tendency">
       <title>Measuring the Center: Mean, Median, and Balance</title>
 
       <p>
-        Once the researchers separate the flock by species, each group's weights
-        settle into balanced, bell-like shapes.
-        For Lesser Flamingos, the physical balance point (1689.1 g) and the
-        exact middle bird (1684.0 g) sit almost on top of each other.
-        When a group is symmetric, both benchmarks tell the same story about a
-        <q>typical</q> bird.
+        Once the flock is separated by species, each group's weights settle
+        into balanced, bell-like shapes <mdash /> nothing like the two-humped
+        mess you found when the species were pooled. That raises a new
+        question: within a single species, is there still more than one
+        sensible way to describe a <q>typical</q> bird?
       </p>
 
       <definition>
@@ -218,14 +326,52 @@
       </definition>
 
       <p>
+        Now try it yourself, one species at a time. Using the definitions
+        above, work out the mean and the median of body mass within Lesser
+        Flamingos, then within Greater Flamingos. Before you compute either
+        median, predict: given the bell-like shape you saw for each species,
+        will mean and median land close together, or far apart? What would it
+        mean for your prediction to be wrong?
+      </p>
+
+      <!--
+        INTERACTIVE IDEA: rather than printing both values immediately, a
+        two-step reveal works well here — student enters/estimates their own
+        mean and median first (or drags a marker onto a plotted distribution
+        for each species), then the true values below appear as a check.
+      -->
+
+      <p>
+        Check your answers:
+      </p>
+
+      <p>
         <strong>Lesser Flamingo body mass:</strong> Mean = 1689.1 g, Median =
         1684.0 g (nearly identical, indicating a symmetric distribution).
       </p>
 
       <p>
-        <strong>Greater Flamingo body mass:</strong> Mean = 3120.2 g (exact
-        value to be verified from data).
+        <strong>Greater Flamingo body mass:</strong> Mean = 3120.2 g, Median =
+        3102.0 g (again nearly identical).
       </p>
+
+      <!--
+        STACK QUESTION: candidates for this subsection —
+          - "Arithmetic Mean Calculation for a Given Dataset" (row 12, ID 11,
+            status: Approved) — straightforward computational check.
+          - "Estimating the mean and median of data presented as a dotplot"
+            (row 17, ID 16, status: Ready for review) and the precipitation-
+            data variant (row 74, ID 73, status: Ready for review) — good fit
+            for the "predict, then compute" framing above, since a dotplot
+            makes the balance-point vs middle-value distinction visible.
+          - "Identifying advantages of using Mean" (row 93, ID 92, status:
+            Ready for review) — conceptual check on why the mean is preferred
+            when a group is symmetric, ties back to the definitions.
+          - "Selecting the false statement describing features of a
+            distribution" (row 54, ID 53, status: changes requested) — mean/
+            median/SD conceptual check; flag to the STACK team that this one
+            still needs revision before use.
+      -->
     </subsection>
 
     <subsection xml:id="subsec-dispersion">
@@ -234,18 +380,13 @@
       </title>
 
       <p>
-        Next, the team asks: How consistent are the birds within each species?
-        Are all Lesser Flamingos nearly identical in size, or do they vary
-        widely?
-      </p>
-
-      <p>
-        Looking at the distance individual birds drift from their baseline
-        reveals that Lesser Flamingos are tightly clustered, with a typical
-        spread of 196.4 g and the middle 50% of birds falling between 1536.0 g
-        and 1843.0 g.
-        Greater Flamingos, by contrast, show much wider variation, with a
-        typical spread of 313.9 g.
+        Knowing the centre of each species' mass is not the whole picture.
+        Look back at the color-coded plot: are the points within each species
+        clumped tightly around their mean, or scattered widely? Which species
+        <mdash /> Lesser or Greater <mdash /> do you expect to be more
+        consistent in body mass, and why might a species that specialises on
+        a narrow food source (microscopic algae, for Lesser Flamingos) be more
+        uniform in size than one with a broader diet?
       </p>
 
       <definition>
@@ -274,21 +415,58 @@
       </definition>
 
       <p>
+        Compute the standard deviation and IQR for each species yourself
+        before checking below. Does the species you predicted as
+        <q>more consistent</q> actually come out with the smaller spread?
+      </p>
+
+      <!--
+        INTERACTIVE IDEA: two side-by-side plots (or one overlaid) of Lesser
+        vs Greater body mass, each with a draggable pair of markers the
+        student positions at "one typical spread either side of the mean" —
+        compare the student's visual estimate against the computed SD and IQR
+        below. This also sets up the boxplot warning later: a boxplot of each
+        species side by side is the natural follow-on visualisation.
+      -->
+
+      <p>
         <strong>Lesser Flamingo body mass:</strong> Standard deviation = 196.4
         g, IQR = 1843.0 − 1536.0 = 307.0 g.
       </p>
 
       <p>
         <strong>Greater Flamingo body mass:</strong> Standard deviation = 313.9
-        g.
+        g, IQR = 326.5 g.
       </p>
+
+      <!--
+        STACK QUESTION: candidates for this subsection —
+          - "Estimating standard deviation of data presented as a dotplot"
+            (row 15, ID 14, status: Approved; a second, near-duplicate
+            version at row 16, ID 15, status: Ready for review) — matches the
+            "estimate before computing" prompt above well.
+          - "Finding Quartiles" (row 72, ID 71, status: Ready for review) and
+            "Find the range and quartiles using the data in a given stem and
+            leaf diagram" (row 90, ID 89, status: Ready for review) — IQR
+            practice.
+          - "Approximating the standard deviation given percentiles" (row 59,
+            ID 58) — connects SD back to the quantile language used for IQR,
+            useful as a bridge question.
+          - "Interpret and match dotplots to respective boxplots" (row 33, ID
+            32, status: Approved) — good fit once a boxplot is introduced for
+            comparing the two species' spread side by side.
+      -->
 
       <example xml:id="ex-cv-morphometrics">
         <title>Comparing Relative Variability Across Species</title>
 
         <statement>
           <p>
-            Compare the dispersion of bill length between Lesser Flamingos (
+            Before reading the numbers below, guess: which species do you
+            think shows <em>greater relative variability</em> in bill length
+            <mdash /> that is, more spread relative to its own typical size,
+            not just a bigger raw number? Now compare the dispersion of bill
+            length between Lesser Flamingos (
             <m>s = 4.2</m> mm) and Greater Flamingos ( <m>s = 6.1</m> mm).
             Which species exhibits greater relative variability?
           </p>
@@ -334,6 +512,16 @@
         <title>Common Mistake: Averaging Means</title>
 
         <p>
+          Here is a trap. Suppose someone hands you only the two group means
+          <mdash /> Lesser 1689.1 g, Greater 3120.2 g <mdash /> and no group
+          sizes, and asks for the overall mean body mass across all 336
+          birds. Before reading on, try it the obvious way: add the two means
+          and divide by two. What do you get, and how does it compare with
+          the pooled mean of 1957.4 g you would get by averaging all 336
+          birds together directly?
+        </p>
+
+        <p>
           You cannot find the overall mean body mass by simply averaging the
           Lesser Flamingo mean (1689.1 g) and Greater Flamingo mean (3120.2 g).
           Because sample sizes differ ( <m>n = 273</m> vs <m>n = 63</m> ),
@@ -346,6 +534,21 @@
             \text{Pooled mean} = \frac{n_1 \bar{x}_1 + n_2 \bar{x}_2}{n_1 + n_2}
           </me>
         </p>
+
+        <!--
+          STACK QUESTION: candidates for this remark —
+            - "Calculating the combined mean and standard deviation for two
+              datasets presented as dotplots" (row 42, ID 41, status: In
+              progress) and its variant with a missing value (row 43, ID 42,
+              status: In progress) — direct fit for the pooled-mean formula
+              above; flag both as in-progress to the STACK team since neither
+              is finished yet.
+            - "Calculate the corrected mean and standard deviation values"
+              (row 56, ID 55, status: changes requested) — a different
+              "watch the naive answer go wrong" trap (a measurement-scale
+              error rather than pooling), thematically close enough to pair
+              with this remark once revised.
+        -->
       </remark>
 
       <note xml:id="note-measure-choice">
@@ -387,9 +590,24 @@
       </p>
 
       <p>
-        Cross-referencing capture logs against sampling sites uncovers striking
-        geographic preferences:
+        Cross-referencing capture logs against sampling sites produces the
+        table below. Before reading any further interpretation, study it
+        yourself. Which lake has the most Lesser Flamingos in absolute terms?
+        Now look row by row instead of at the raw counts <mdash /> at which
+        lake does Lesser Flamingo make up the largest <em>share</em> of the
+        birds captured? Are those the same lake? If not, why not?
       </p>
+
+      <!--
+        INTERACTIVE IDEA: a toggle on the table between raw counts, row
+        proportions (share of each lake that is each species) and column
+        proportions (share of each species found at each lake) would let
+        students discover for themselves that "most Lesser Flamingos" and
+        "most Lesser-Flamingo-dominated" are different questions with
+        different answers, rather than being told this directly, as the
+        companion R-focused chapter does with prop.table(..., margin = 1)
+        versus margin = 2.
+      -->
 
       <table xml:id="table-cross-tab-lakes">
         <title>Flamingo Captures by Lake and Species</title>
@@ -462,8 +680,10 @@
 
         <statement>
           <p>
-            What proportion of all flamingos sampled at Lake Bogoria belong to
-            the Lesser Flamingo species?
+            Work this out yourself from <xref ref="table-cross-tab-lakes"/>
+            before checking the solution below. What proportion of all
+            flamingos sampled at Lake Bogoria belong to the Lesser Flamingo
+            species?
           </p>
         </statement>
 
@@ -484,8 +704,11 @@
 
         <statement>
           <p>
-            What proportion of all Lesser Flamingos (across all lakes) were
-            captured at Lake Bogoria?
+            Again, try this yourself first: what proportion of all Lesser
+            Flamingos (across all lakes) were captured at Lake Bogoria? Notice
+            that this is a different denominator from
+            <xref ref="ex-conditional-prop"/> <mdash /> make sure you can say
+            in your own words why.
           </p>
         </statement>
 
@@ -500,6 +723,29 @@
         </solution>
       </example>
 
+      <!--
+        STACK QUESTION: candidates for this subsection —
+          - "2.1.2: Pivot Table (Proportion)" (row 118, ID 117, status: not
+            yet started) — direct match for reading marginal vs conditional
+            proportions off a cross-tabulation like the lake/species table
+            above.
+          - "Fill in table with frequency, percentage and pie chart angle
+            values" (row 20, ID 19, status: Ready for review) — a
+            complementary proportions check using a pie-chart framing.
+          - "Selecting false statement describing presentation of data" (row
+            66, ID 65, status: changes requested) — broader interpretation
+            check across boxplots/scatterplots/pie charts/bar graphs/
+            frequency tables; useful as a wrap-up for this subsection once
+            revised.
+      -->
+
+      <p>
+        Before reading the ecological explanation below, discuss in pairs:
+        what could explain why Lesser Flamingos so heavily dominate Lake
+        Bogoria specifically, while Lake Elementaita is close to an even
+        split between the two species? Think about what each species eats.
+      </p>
+
       <remark xml:id="remark-ecological-drivers">
         <title>Discussion: Ecological Drivers of Lake Preference</title>
 
@@ -511,7 +757,7 @@
           In contrast, Greater Flamingos feed on aquatic invertebrates,
           explaining their higher presence in Lake Elementaita.
           These differences in feeding ecology shape the observed spatial
-          distribution.
+          distribution. How close was your group's explanation?
         </p>
       </remark>
     </subsection>
@@ -851,6 +1097,17 @@
       <p>
         <em>[R code examples and implementations to be provided in a dedicated R-focused section.]</em>
       </p>
+
+      <!--
+        INTERACTIVE IDEA, whole section: the strongest version of this
+        section is not static code blocks to read, but a live R console
+        (webR or similar) pre-loaded with kenya_flamingos.csv, with the
+        narrative posing a task ("run this, what do you get?") before each
+        code reveal, mirroring the predict-then-check pattern used
+        throughout Part 1. That keeps this section consistent with the rest
+        of the chapter's data-first framing instead of switching into a
+        pure reference-manual mode.
+      -->
     </introduction>
 
     <subsection xml:id="subsec-r-load">
@@ -860,6 +1117,14 @@
         [Code for reading flamingo dataset, viewing first few rows, checking
         data types, identifying missing values.]
       </p>
+
+      <!--
+        INTERACTIVE IDEA: this is the natural home for the "audit the data
+        yourself" task set up in subsec-data-loading-audit — instead of just
+        showing colSums(is.na(flamingos)), let the student run it themselves
+        here and compare against the counts they already found earlier in
+        the chapter.
+      -->
     </subsection>
 
     <subsection xml:id="subsec-r-visualise">
@@ -869,6 +1134,14 @@
         [Code for histograms, box plots, scatter plots, and cross-tabulation
         tables using base R and ggplot2.]
       </p>
+
+      <!--
+        INTERACTIVE IDEA: reproduce the bin-width exploration flagged in
+        subsec-visualise-mass here as actual runnable code (hist(mass,
+        breaks = ...) with a few different values of breaks), so the
+        "always try several bin widths" lesson is something the student does
+        rather than reads.
+      -->
     </subsection>
 
     <subsection xml:id="subsec-r-summarise">
@@ -878,6 +1151,14 @@
         [Code for mean, median, standard deviation, IQR, percentiles,
         proportions, and conditional proportions.]
       </p>
+
+      <!--
+        INTERACTIVE IDEA: have students compute mean/median/sd/IQR by species
+        here in code and check the results against the values they predicted
+        and hand-verified earlier in subsec-central-tendency and
+        subsec-dispersion, closing the loop between the narrative and the
+        tool.
+      -->
     </subsection>
   </section>
   <!-- ============================================================ -->
@@ -892,6 +1173,20 @@
       <p>
         <em>[A collection of STACK questions to reinforce key concepts, including multiple-choice checks on interpretation, numeric calculations with tolerance, and symbolic mathematics problems.]</em>
       </p>
+
+      <!--
+        The lists below are pulled from "Statistics and Probability Question
+        Tracker (1).xlsx" (Questions sheet), matched to this chapter's
+        content. Each item shows: tracker Name, tracker ID, and current
+        review status, so the STACK-authoring workflow can be checked before
+        anything is embedded. Several of these are also flagged inline, at
+        the point in the narrative where they would work best as an
+        immediate formative check rather than end-of-chapter practice; this
+        section is the consolidated view for building a chapter quiz/problem
+        set once the individual questions are ready. Items still marked
+        "changes requested" or "in progress" in the tracker are not ready to
+        embed yet and are noted as such.
+      -->
     </introduction>
 
     <subsection xml:id="subsec-stack-conceptual">
@@ -901,6 +1196,33 @@
         [STACK questions testing understanding of mean vs.
         median, when to use CV, interpretation of IQR, etc.]
       </p>
+
+      <!--
+        STACK QUESTION mapping (Questions sheet):
+          - "Identifying advantages of using Mean" (ID 92, Ready for review)
+            — also flagged in subsec-central-tendency.
+          - "Selecting the false statement describing features of a
+            distribution" (ID 53, changes requested) — mean/median/SD
+            conceptual check; also flagged in subsec-visualise-mass.
+          - "Measures of Location and Dispersion Applications-q3" (ID 94,
+            Ready for review) — characteristics of an ideal measure of
+            central tendency, pairs well with note-measure-choice.
+          - "Measures of Location and Dispersion Applications-q9" (ID 95,
+            Ready for review) — methods for finding the mode in a discrete
+            series; this chapter does not currently discuss the mode as a
+            formal measure, so either add a short mode subsection or drop
+            this item.
+          - "Interpret and match dotplots to respective boxplots" (ID 32,
+            Approved) and "1.2.2: Match boxplots to dotplots" (ID 113, status
+            not yet set) — two variants of the same conceptual link between
+            shape and the five-number summary; also flagged in
+            subsec-dispersion.
+          - "Interpret boxplots provided and identify the false statement"
+            (ID 62, status not yet set).
+          - "Selecting false statement describing presentation of data" (ID
+            65, changes requested) — broad interpretation across chart
+            types; also flagged in subsec-lake-preferences.
+      -->
     </subsection>
 
     <subsection xml:id="subsec-stack-computation">
@@ -910,6 +1232,41 @@
         [STACK questions requiring calculation of means, standard deviations,
         percentiles, proportions from datasets.]
       </p>
+
+      <!--
+        STACK QUESTION mapping (Questions sheet):
+          - "Arithmetic Mean Calculation for a Given Dataset" (ID 11,
+            Approved) — also flagged in subsec-central-tendency.
+          - "Estimating standard deviation of data presented as a dotplot"
+            (ID 14, Approved; near-duplicate ID 15, Ready for review) — also
+            flagged in subsec-dispersion.
+          - "Estimating the mean and median of data presented as a dotplot"
+            (ID 16, Ready for review) and the precipitation-data variant (ID
+            73, Ready for review) — also flagged in subsec-central-tendency.
+          - "Calculating the combined mean and standard deviation for two
+            datasets presented as dotplots" (ID 41, In progress) and its
+            missing-value variant (ID 42, In progress) — also flagged in
+            remark-avg-means; not embeddable until authoring finishes.
+          - "Calculate the corrected mean and standard deviation values" (ID
+            55, changes requested) — also flagged in remark-avg-means.
+          - "Approximating the standard deviation given percentiles" (ID 58,
+            status not yet set) — also flagged in subsec-dispersion.
+          - "Finding Quartiles" (ID 71, Ready for review), "Finding Medians
+            in Grouped data" (ID 72, Ready for review), and "Find the range
+            and quartiles using the data in a given stem and leaf diagram"
+            (ID 89, Ready for review) — IQR/median practice; also flagged in
+            subsec-dispersion.
+          - "Finding the quartile of a given marks distribution" (ID 64,
+            changes requested).
+          - "Calculating Summary Statistics for Cystic Fibrosis Patients'
+            PLmax Data" (ID 93, Ready for review) — quartiles, median, IQR
+            on a real (non-flamingo) clinical dataset; good as a transfer
+            task once students are comfortable with the flamingo data.
+          - "Use the data in the given table to Find the mean, median, sd,
+            variance-q1" (ID 96, Ready for review) — frequency-table
+            computation across all four measures at once, a natural
+            chapter-closing computational check.
+      -->
     </subsection>
 
     <subsection xml:id="subsec-stack-interpretation">
@@ -920,6 +1277,37 @@
         appropriate measures for given scenarios, and reason about missing
         data.]
       </p>
+
+      <!--
+        STACK QUESTION mapping (Questions sheet):
+          - "6: Missing Values" (ID 125, status not yet set) — also flagged
+            in subsec-data-loading-audit; currently the only tracker item
+            testing missingness reasoning, worth prioritising.
+          - "2.1.2: Pivot Table (Proportion)" (ID 117, status not yet set)
+            and "Fill in table with frequency, percentage and pie chart angle
+            values" (ID 19, Ready for review) — also flagged in
+            subsec-lake-preferences.
+          - "Provide recommendations for constructing a histogram for given
+            data" (ID 60, status not yet set), "Approximate percentile of a
+            distribution presented as a histogram" (ID 52, changes
+            requested), and "Data presentations-question 4 (Frequency table
+            for the time taken and a Histogram)" (ID 86, Ready for review) —
+            also flagged in subsec-visualise-mass.
+          - "Data presentations-question 1" (ID 85, Ready for review) —
+            reading counts within a range off a histogram.
+          - "Identify differences in two datasets downloaded as a csv file"
+            (ID 49, changes requested) — students download real maize-height
+            data, visualise it themselves, and interpret the result: closest
+            existing tracker item to the "explore it yourself" spirit this
+            chapter is aiming for, worth revisiting once revised.
+          - "Download external data and perform analysis to answer the
+            questions" (Njoro river discharge, ID 47) and "Climate Data"
+            (sunshine hours, ID 48) — open-ended real-dataset application
+            tasks; strong candidates for a closing "now try this on a new
+            dataset" activity, in the spirit of CBC's emphasis on
+            transferring a skill to an unfamiliar context rather than only
+            practising it on the worked example.
+      -->
     </subsection>
   </section>
   <!-- ============================================================ -->

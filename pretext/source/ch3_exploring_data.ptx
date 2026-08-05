@@ -1,0 +1,606 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ================================================================= -->
+<!--  Chapter 3: Exploring Data                                        -->
+<!--                                                                    -->
+<!--  Data-first chapter. Deliberately light: notice patterns, ask      -->
+<!--  questions, read a pivot table. No formal definitions of mean,     -->
+<!--  variance, missingness taxonomy, etc. - those are introduced only  -->
+<!--  when they are needed, in later chapters:                         -->
+<!--    - the "why is this blank" discussion    -> Cleaning Data        -->
+<!--    - coloured / faceted / relational plots -> Visualising          -->
+<!--      Multidimensional Data                                        -->
+<!--    - factors, grouping mechanics           -> Handling Factors     -->
+<!--    - MCAR/MAR/MNAR, deletion vs imputation -> Handling Missing     -->
+<!--      Values                                                       -->
+<!--    - formal mean/median/variance/SD/IQR    -> Measuring and        -->
+<!--      Observing Variability                                        -->
+<!--  This chapter's job is only to make the reader curious enough to   -->
+<!--  want those later chapters.                                       -->
+<!-- ================================================================= -->
+
+<chapter xml:id="ch-exploring-data" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>Exploring Data</title>
+
+  <introduction xml:id="intro-exploring-data">
+    <p>
+      <xref ref="ch-intro" /> got you comfortable clicking around in R and
+      RStudio, and the module's earlier look at this dataset introduced the
+      idea that it has a structure to it: individual birds, grouped within
+      lakes. Neither of those chapters asked you to draw a conclusion from the
+      data. This one does.
+    </p>
+
+    <p>
+      There is no formula to learn in this chapter, and nothing here is the
+      <q>correct</q> way to analyse anything. The goal is smaller and more
+      important than that: open the data, look at it, and let it surprise you.
+      Every method introduced later in this module <mdash /> cleaning,
+      multidimensional graphics, factors, formal treatment of missing values,
+      measures of variability <mdash /> exists to answer a question that this
+      chapter is going to raise and deliberately leave open.
+    </p>
+
+    <note xml:id="note-flamingo-dataset">
+      <title>The dataset used throughout this module</title>
+      <p>
+        Most examples in this module use <c>kenya_flamingos.csv</c>, which
+        records measurements on 344 flamingos caught, measured and released
+        across three Rift Valley soda lakes.
+      </p>
+      <p>
+        This dataset is <em>synthetic</em>. The differences between the two
+        species in size and bill shape are grounded in real flamingo biology,
+        and the lake compositions reflect documented patterns, but the
+        individual measurements were generated rather than observed. It exists
+        for teaching. It should not be cited as evidence about real flamingo
+        populations.
+      </p>
+    </note>
+  </introduction>
+
+<!-- ================================================================= -->
+<!--  SECTION 1: the data-first hook                                   -->
+<!-- ================================================================= -->
+
+  <section xml:id="sec-flamingo-hook">
+    <title>A Question About Flamingos</title>
+
+    <subsection xml:id="ss-three-lakes-two-species">
+      <title>Three lakes, two species, 344 birds</title>
+
+      <p>
+        Kenya's Rift Valley holds a chain of shallow, strongly alkaline soda
+        lakes. The alkalinity is hostile to most life but ideal for the
+        cyanobacteria and diatoms that flamingos filter-feed on, which is why
+        these lakes support some of the largest flamingo congregations
+        anywhere.
+      </p>
+
+      <p>
+        Two species share them. The <term>lesser flamingo</term> is the
+        smaller of the two, with a deep, sharply decurved bill adapted to
+        filtering cyanobacteria from the water column. The <term>greater
+        flamingo</term> is considerably larger, with a longer and shallower
+        bill, and feeds more on invertebrates in the sediment.
+      </p>
+
+      <p>
+        A field team has measured 344 birds across Lakes Nakuru, Bogoria and
+        Elementaita. Each row of the dataset describes one bird.
+      </p>
+
+      <table xml:id="table-flamingo-variables">
+        <title>Variables recorded for each bird in <c>kenya_flamingos.csv</c></title>
+        <tabular halign="left">
+          <row header="yes" bottom="minor">
+            <cell>Variable</cell>
+            <cell>Type</cell>
+            <cell>Description</cell>
+          </row>
+          <row><cell><c>lake</c></cell><cell>categorical</cell><cell>Nakuru, Bogoria or Elementaita</cell></row>
+          <row><cell><c>species</c></cell><cell>categorical</cell><cell>Greater Flamingo or Lesser Flamingo</cell></row>
+          <row><cell><c>bill_length_mm</c></cell><cell>numeric</cell><cell>Bill length in millimetres</cell></row>
+          <row><cell><c>bill_depth_mm</c></cell><cell>numeric</cell><cell>Bill depth at the base, in millimetres</cell></row>
+          <row><cell><c>leg_length_mm</c></cell><cell>numeric</cell><cell>Tarsus length in millimetres</cell></row>
+          <row><cell><c>body_mass_g</c></cell><cell>numeric</cell><cell>Body mass in grams</cell></row>
+          <row><cell><c>sex</c></cell><cell>categorical</cell><cell>male or female</cell></row>
+          <row><cell><c>year</c></cell><cell>numeric</cell><cell>Year of measurement (2021<ndash />2023)</cell></row>
+        </tabular>
+      </table>
+
+      <p>
+        Load the file and look at the first few rows. Do this yourself before
+        reading on <mdash /> what do you notice, just from six rows?
+      </p>
+
+      <program language="r">
+        flamingos &lt;- read.csv("kenya_flamingos.csv", stringsAsFactors = TRUE)
+        head(flamingos)
+
+        #&gt;          lake          species bill_length_mm bill_depth_mm leg_length_mm
+        #&gt; 1     Bogoria  Lesser Flamingo          101.2          25.9         265.1
+        #&gt; 2      Nakuru Greater Flamingo          135.8          22.5         371.8
+        #&gt; 3      Nakuru  Lesser Flamingo           96.1          26.9         278.0
+        #&gt; 4 Elementaita Greater Flamingo          131.1          25.7         360.4
+        #&gt; 5      Nakuru  Lesser Flamingo           94.1          24.3         264.1
+        #&gt; 6      Nakuru  Lesser Flamingo           98.4          25.9         272.3
+        #&gt;   body_mass_g    sex year
+        #&gt; 1        1330 female 2022
+        #&gt; 2        2841 female 2023
+        #&gt; 3        1646   male 2022
+        #&gt; 4        3476   male 2022
+        #&gt; 5        1620 female 2021
+        #&gt; 6        1963   male 2022
+      </program>
+
+      <p>
+        Even in six rows, the greater flamingos already look heavier and
+        longer-billed than the lesser flamingos. Six rows is manageable to
+        scan by eye. All 344 is not <mdash /> which is exactly the problem
+        this chapter is about: how do you get a feel for a dataset you cannot
+        just read?
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-first-obvious-question">
+      <title>A first, obvious question</title>
+
+      <p>
+        <em>How big is a flamingo in the Rift Valley?</em>
+      </p>
+
+      <p>
+        This is the sort of question a conservation officer or a field
+        ecologist might genuinely ask. The instinctive move is to add up the
+        masses of every bird and divide by how many birds there are <mdash />
+        the <term>average</term>.
+      </p>
+
+      <program language="r">
+        mean(flamingos$body_mass_g)
+        #&gt; [1] NA
+      </program>
+
+      <p>
+        Not what we expected. R has returned <c>NA</c>, <q>not available,</q>
+        because some birds in the dataset have no recorded mass and R refuses
+        to quietly pretend otherwise. Why some birds are missing a mass, and
+        what we are allowed to do about it, is a real question <mdash /> and
+        it is the subject of a later chapter, <term>Cleaning Data</term>, in
+        full. For now we just want an answer, so we tell R to set the missing
+        values aside.
+      </p>
+
+      <program language="r">
+        mean(flamingos$body_mass_g, na.rm = TRUE)
+        #&gt; [1] 1957.405
+      </program>
+
+      <p>
+        So the average Rift Valley flamingo weighs about 1957 g, just under
+        two kilograms. That is our answer, and the arithmetic behind it is
+        correct.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-something-is-wrong">
+      <title>Something is wrong</title>
+
+      <p>
+        Before moving on, sanity-check the answer. How many of the birds
+        actually weigh close to 1957 g? Let's ask something more specific:
+        how many weigh <em>less</em> than that.
+      </p>
+
+      <program language="r">
+        mass &lt;- flamingos$body_mass_g
+
+        sum(mass &lt; 1957.405, na.rm = TRUE)
+        #&gt; [1] 253
+
+        sum(!is.na(mass))    # birds that actually have a recorded mass
+        #&gt; [1] 336
+      </program>
+
+      <observation xml:id="obs-three-quarters">
+        <title>The problem</title>
+        <p>
+          253 of the 336 measured birds, <em>75.3%</em>, weigh less than the
+          average bird. Three quarters of the flamingos are lighter than the
+          average flamingo.
+        </p>
+      </observation>
+
+      <p>
+        Pause on that before reading on. Nothing has gone wrong with the
+        arithmetic <mdash /> <c>mean()</c> computed exactly what it is defined
+        to compute. So what has gone wrong?
+      </p>
+
+      <p>
+        The instinct at this point is to reach for a different summary,
+        perhaps the <term>median</term> (sort the values and take the middle
+        one) is <q>more correct.</q> Let's try it.
+      </p>
+
+      <program language="r">
+        median(mass, na.rm = TRUE)
+        #&gt; [1] 1758.5
+      </program>
+
+      <p>
+        1758.5 g, which is 199 g lower than the mean <mdash /> about 11%
+        below it. That is a substantial disagreement between two numbers that
+        both claim to describe the same thing. Swapping one summary for
+        another hasn't resolved anything; it has produced a second answer with
+        no obvious reason to prefer it over the first.
+      </p>
+
+      <p>
+        The problem is not which summary we picked. <em>The problem is the
+        question.</em>
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-shape-of-the-data">
+      <title>Looking at the shape of the data</title>
+
+      <p>
+        Rather than computing yet another single number, let's look at how
+        the masses are actually distributed. Group them into 500 g bands,
+        labelled in kilograms, and count how many birds fall in each.
+      </p>
+
+      <program language="r">
+        # Group into 500 g bands, labelled in kilograms
+        bands &lt;- cut(mass, breaks = seq(1000, 4000, by = 500),
+                     labels = c("1.0-1.5", "1.5-2.0", "2.0-2.5",
+                                "2.5-3.0", "3.0-3.5", "3.5-4.0"))
+        table(bands)
+
+        #&gt; bands
+        #&gt; 1.0-1.5 1.5-2.0 2.0-2.5 2.5-3.0 3.0-3.5 3.5-4.0
+        #&gt;      50     209      15      20      34       8
+      </program>
+
+      <p>
+        Read the counts across: 50, then 209, then a collapse to
+        <term>15</term>, then back up to 20, 34 and 8. The same picture is
+        easier to take in as a histogram.
+      </p>
+
+      <figure xml:id="fig-mass-histogram">
+        <caption>
+          Body mass (g) of 336 captured flamingos, showing two separate
+          concentrations of mass rather than one.
+        </caption>
+        <image source="images/flamingo-mass-histogram.png" width="60%"/>
+        <description>
+          A histogram of body mass with two separated peaks: a tall one
+          around 1.5-2.0 kg and a shorter one around 3.0-3.5 kg, with very
+          few birds in between.
+        </description>
+      </figure>
+
+      <p>
+        That dip in the middle is not noise. The data has two separate
+        concentrations of mass <mdash /> a large one below 2000 g and a
+        smaller one above 2500 g <mdash /> with a near-empty valley between
+        them. A distribution with two peaks like this is called
+        <term>bimodal</term><idx><h>bimodal</h></idx>, and it is precisely
+        where our average landed: 1957 g sits on the shoulder of the lower
+        group, pointing into the gap.
+      </p>
+
+      <p>
+        The mean is the balance point of the data. When the data has two
+        clusters, the balance point falls between them, describing neither.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-splitting-by-species">
+      <title>The resolution</title>
+
+      <p>
+        We already know something that might explain this: there are two
+        species in the dataset. Split the masses by species and look at each
+        group on its own.
+      </p>
+
+      <program language="r">
+        table(flamingos$species)
+
+        #&gt; Greater Flamingo  Lesser Flamingo
+        #&gt;               66              278
+
+        tapply(mass, flamingos$species, mean, na.rm = TRUE)
+
+        #&gt; Greater Flamingo  Lesser Flamingo
+        #&gt;         3120.190         1689.070
+      </program>
+
+      <p>
+        There is the answer. Greater flamingos average about 3120 g; lesser
+        flamingos about 1689 g. These are not slightly different populations
+        <mdash /> the greater flamingo is nearly twice the mass of the lesser.
+        Because lesser flamingos outnumber greaters roughly four to one, the
+        pooled average is dragged toward the lesser group but not all the way,
+        landing at 1957 g <mdash /> a value that describes no bird in this
+        dataset in any useful sense.
+      </p>
+
+      <ul>
+        <li>
+          <p>It is heavier than 91% of the lesser flamingos.</p>
+        </li>
+        <li>
+          <p>
+            It is lighter than <em>every single</em> greater flamingo. The
+            lightest greater in the dataset is 2347 g.
+          </p>
+        </li>
+      </ul>
+
+      <insight xml:id="insight-what-went-wrong">
+        <title>What actually went wrong</title>
+        <p>
+          The question <q>how big is a flamingo?</q> presupposes that there is
+          one kind of flamingo. The dataset contains two.
+        </p>
+        <p>
+          No choice of summary function could have fixed this on its own,
+          because the error was not in the arithmetic. It lay in applying a
+          single-population summary to a two-population dataset. The mean
+          answered faithfully; we asked badly. Noticing that <mdash /> before
+          trusting a single number <mdash /> is what this chapter is about.
+        </p>
+      </insight>
+    </subsection>
+
+    <subsection xml:id="ss-what-next">
+      <title>What this chapter has, and hasn't, done</title>
+
+      <p>
+        Nothing in this section required a formula. Loading the data, asking
+        a plain-language question, computing an obvious average, and noticing
+        that it didn't add up <mdash /> that was enough to uncover real
+        structure in the data. That is the whole method of this chapter: look
+        first, and let what you see tell you what to ask next.
+      </p>
+
+      <p>
+        It has also deliberately left several things unresolved. We waved a
+        hand at the missing masses. We used <q>mean</q> and <q>median</q>
+        without defining them carefully, or asking how much a group's spread
+        matters, or what happens when we compare groups of very different
+        sizes. We looked at one histogram and one table, not the many other
+        ways this data could be pictured. Each of those loose ends is picked
+        up properly later in the module.
+      </p>
+
+      <table xml:id="table-roadmap-exploring">
+        <title>Loose ends from this chapter, and where they get resolved</title>
+        <tabular halign="left">
+          <row header="yes" bottom="minor">
+            <cell>What we glossed over here</cell>
+            <cell>Picked up properly in</cell>
+          </row>
+          <row>
+            <cell>Why some birds have no recorded mass, and whether it's safe to ignore them</cell>
+            <cell><term>Cleaning Data</term></cell>
+          </row>
+          <row>
+            <cell>Colouring, faceting, and otherwise plotting more than one variable at once</cell>
+            <cell><term>Visualising Multidimensional Data</term></cell>
+          </row>
+          <row>
+            <cell>What <c>species</c>, <c>lake</c> and <c>sex</c> actually are to R, and how grouping works mechanically</cell>
+            <cell><term>Handling Factors</term></cell>
+          </row>
+          <row>
+            <cell>Formal rules for when dropping missing values is, and isn't, safe</cell>
+            <cell><term>Handling Missing Values</term></cell>
+          </row>
+          <row>
+            <cell>What the mean and median actually are, and how to measure spread rather than eyeballing it</cell>
+            <cell><term>Measuring and Observing Variability</term></cell>
+          </row>
+        </tabular>
+      </table>
+    </subsection>
+  </section>
+
+<!-- ================================================================= -->
+<!--  SECTION 2: pivot tables                                          -->
+<!-- ================================================================= -->
+
+  <section xml:id="sec-pivot-tables">
+    <title>Pivot Tables: Where Do the Birds Live?</title>
+
+    <introduction>
+      <p>
+        Body mass is only one variable. The dataset also records which lake
+        each bird was caught at. Do the two species mix freely across all
+        three lakes, or does each lake favour one species over the other? A
+        <term>pivot table</term><idx><h>pivot table</h></idx> <mdash />
+        counting how often combinations of two categorical variables occur
+        together <mdash /> is the natural first tool for this, whether you
+        build it in R, in a spreadsheet, or by hand from a small enough
+        dataset.
+      </p>
+    </introduction>
+
+    <subsection xml:id="ss-a-simple-pivot-table">
+      <title>Counting lake against species</title>
+
+      <p>
+        In R, the same function that gave us a one-way count of species gives
+        a two-way count when handed two variables.
+      </p>
+
+      <program language="r">
+        table(flamingos$lake, flamingos$species)
+
+        #&gt;               Greater Flamingo  Lesser Flamingo
+        #&gt;   Bogoria                   10              114
+        #&gt;   Elementaita               30               38
+        #&gt;   Nakuru                    26              126
+      </program>
+
+      <table xml:id="table-lake-species-crosstab">
+        <title>Flamingo captures by lake and species</title>
+        <tabular halign="left">
+          <row header="yes" bottom="minor">
+            <cell>Lake</cell>
+            <cell>Greater Flamingo</cell>
+            <cell>Lesser Flamingo</cell>
+            <cell>Total</cell>
+          </row>
+          <row><cell>Bogoria</cell><cell>10</cell><cell>114</cell><cell>124</cell></row>
+          <row><cell>Elementaita</cell><cell>30</cell><cell>38</cell><cell>68</cell></row>
+          <row><cell>Nakuru</cell><cell>26</cell><cell>126</cell><cell>152</cell></row>
+          <row><cell>Total</cell><cell>66</cell><cell>278</cell><cell>344</cell></row>
+        </tabular>
+      </table>
+
+      <p>
+        Before reading on: which lake has caught the most lesser flamingos, in
+        raw numbers? Now ask a different question <mdash /> at which lake do
+        lesser flamingos make up the <em>largest share</em> of the birds
+        caught there? Look at the table again. Are those the same lake?
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-row-column-proportions">
+      <title>Two different questions, two different proportions</title>
+
+      <p>
+        Nakuru has the most lesser flamingos in absolute terms, 126, simply
+        because Nakuru is the biggest sample of the three lakes. But relative
+        to each lake's own total, Bogoria is where lesser flamingos dominate
+        most heavily:
+      </p>
+
+      <me>\frac{114}{124} \approx 0.919, \quad \text{compared with} \quad \frac{126}{152} \approx 0.829 \text{ at Nakuru}</me>
+
+      <p>
+        These are two genuinely different questions, and mixing them up is
+        one of the easiest mistakes to make when reading a pivot table.
+      </p>
+
+      <ul>
+        <li>
+          <p>
+            <q>Of the birds at Bogoria, what fraction are lesser flamingos?</q>
+            divides each row by its own row total.
+          </p>
+        </li>
+        <li>
+          <p>
+            <q>Of all lesser flamingos, what fraction were caught at
+            Bogoria?</q> divides down each column instead.
+          </p>
+        </li>
+      </ul>
+
+      <program language="r">
+        # row proportions: within each lake, split by species
+        prop.table(table(flamingos$lake, flamingos$species), margin = 1)
+
+        #&gt;               Greater Flamingo  Lesser Flamingo
+        #&gt;   Bogoria                0.081            0.919
+        #&gt;   Elementaita            0.441            0.559
+        #&gt;   Nakuru                 0.171            0.829
+      </program>
+
+      <p>
+        Read this way, Bogoria is overwhelmingly lesser flamingo (92%), while
+        Elementaita is close to an even split (44% greater, 56% lesser).
+        Species composition clearly varies by lake. Neither the raw counts
+        nor the row proportions are <q>more correct</q> than the other <mdash
+        /> they answer different questions, and it is worth deciding which
+        question you actually mean before you compute either one.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-lake-ecology">
+      <title>Why might this be?</title>
+
+      <p>
+        Before reading the explanation, discuss with a neighbour: what could
+        explain why lesser flamingos so heavily dominate Bogoria specifically,
+        while Elementaita is close to an even split? Think about what each
+        species eats.
+      </p>
+
+      <remark xml:id="remark-lake-ecology">
+        <title>A possible ecological explanation</title>
+        <p>
+          Lake Bogoria's extreme alkalinity supports massive blooms of the
+          microscopic cyanobacteria that lesser flamingos are specially
+          adapted to filter-feed on. Greater flamingos rely more on
+          invertebrates in the sediment, food that is less concentrated at
+          Bogoria's most alkaline waters, which is consistent with their
+          stronger presence at Elementaita.
+        </p>
+        <p>
+          Notice what kind of claim this is: a plausible story that fits the
+          pattern, not something the pivot table itself proves. The table
+          tells you <em>that</em> composition differs by lake; it takes
+          outside knowledge of flamingo biology to say <em>why</em>.
+        </p>
+      </remark>
+    </subsection>
+  </section>
+
+<!-- ================================================================= -->
+<!--  EXERCISES                                                        -->
+<!-- ================================================================= -->
+
+  <exercises xml:id="exercises-exploring-data">
+    <title>Exercises</title>
+
+    <exercise xml:id="ex-explore-bill-length">
+      <statement>
+        <p>
+          Before computing anything, predict: do you expect
+          <c>bill_length_mm</c> to look like a single hump, or two, once
+          plotted? Now load the data, plot a histogram of
+          <c>bill_length_mm</c>, and check. If you see more than one hump,
+          try colouring or splitting by <c>species</c> and see whether that
+          explains it, the way splitting by species explained the body mass
+          pattern in <xref ref="ss-splitting-by-species" />.
+        </p>
+      </statement>
+    </exercise>
+
+    <exercise xml:id="ex-explore-lake-sex">
+      <statement>
+        <p>
+          Build a pivot table of <c>lake</c> against <c>sex</c>, the same way
+          <xref ref="ss-a-simple-pivot-table" /> built one for <c>lake</c>
+          against <c>species</c>. Does the balance of males and females look
+          different from lake to lake? Say which comparison <mdash /> row
+          proportions or column proportions <mdash /> you used to answer that,
+          and why you chose it.
+        </p>
+      </statement>
+    </exercise>
+
+    <exercise xml:id="ex-explore-write-up">
+      <statement>
+        <p>
+          Pick any one numeric variable in the dataset other than
+          <c>body_mass_g</c> or <c>bill_length_mm</c>. Look at it <mdash />
+          however you like: a histogram, a table of rounded values, sorting
+          it and scanning by eye. Write two or three sentences describing
+          what you notice and one question it raises that you cannot yet
+          answer. There is no single correct answer here; the point is
+          practising the habit of looking before summarising.
+        </p>
+      </statement>
+    </exercise>
+  </exercises>
+
+</chapter>
