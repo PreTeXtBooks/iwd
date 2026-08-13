@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ================================================================= -->
+<!--  Chapter 7: Handling Factors                                      -->
+<!--                                                                    -->
+<!--  STATUS: opening story only, per the user's explicit request       -->
+<!--  ("write this as a story for the start of the Handling Factors     -->
+<!--  chapter"). The "what is a factor / creating, inspecting,          -->
+<!--  reordering, combining, dropping levels" mechanics section has NOT -->
+<!--  been written yet - deliberately, so the sensitive story below     -->
+<!--  can be reviewed on its own before the rest of the chapter is      -->
+<!--  built on top of it.                                               -->
+<!--                                                                    -->
+<!--  This story concerns apartheid-era and post-apartheid South        -->
+<!--  African census race/population-group classification. Every       -->
+<!--  factual claim below was independently verified via web search    -->
+<!--  before writing, against multiple sources including primary       -->
+<!--  legislative text summaries, an official census microdata         -->
+<!--  codebook, Statistics South Africa's own published census          -->
+<!--  results, and a peer-reviewed academic source. Sources used:      -->
+<!--    - Union of South Africa. Population Registration Act, 1950      -->
+<!--      (Act No. 30 of 1950). Established legal racial               -->
+<!--      classification (White, Coloured, Native/Bantu, later Asian);  -->
+<!--      foundational apartheid legislation.                           -->
+<!--    - Coloured subdivision (Cape Coloured, Cape Malay, Griqua,      -->
+<!--      Chinese, Indian, Other Asiatic, Other Coloured) established   -->
+<!--      by Proclamation No. 46 of 1959.                                -->
+<!--    - The 1980 census category list (20 of up to 34 codes) was      -->
+<!--      pulled directly from the actual POPGRP variable codebook,     -->
+<!--      South Africa Population Census 1980, hosted by the World      -->
+<!--      Bank Microdata Library - a primary source, not a secondary    -->
+<!--      summary.                                                      -->
+<!--    - Population Registration Act Repeal Act, 1991 (Act No. 114 of  -->
+<!--      1991), assented 27 June 1991, commenced 28 June 1991 - ended  -->
+<!--      legal racial classification.                                  -->
+<!--    - Khalfani, A.A. and Zuberi, T. (2001). "Racial classification  -->
+<!--      and the modern census in South Africa, 1911-1996." Race and   -->
+<!--      Society, 4(2), 161-176. Peer-reviewed source for the shift to -->
+<!--      self-identification from the 1996 census onward, and the     -->
+<!--      1996 self-reported figures (Black/African 77%, Coloured 9%,   -->
+<!--      White 11%, Asian/Indian 2.6%, Other 0.9%).                    -->
+<!--    - Statistics South Africa (2023). Census 2022: Statistical      -->
+<!--      Release P0301.4. Pretoria: Stats SA. Real 2022 figures        -->
+<!--      (Black African 81.4% / 50,486,856; Coloured 8.2%; White 7.3%  -->
+<!--      / 4,504,252, down from 4,586,838 in 2011; Indian/Asian 2.7%). -->
+<!--  I could not verify one specific claim relayed to the user by      -->
+<!--  ChatGPT (a purported verbatim Stats SA statement that population- -->
+<!--  group classification "was used by the apartheid government to    -->
+<!--  divide the population into distinct groups on which apartheid     -->
+<!--  policies were based") as an exact quotable line from a specific   -->
+<!--  Stats SA document, so it is NOT quoted below. The underlying      -->
+<!--  substance is well supported by other means instead - multiple     -->
+<!--  independent sources confirm the Population Registration Act was  -->
+<!--  the legal foundation later apartheid segregation laws (Group      -->
+<!--  Areas Act 1950, Bantu Authorities Act 1951) were built on - and   -->
+<!--  that substance is what is stated below, without the disputed      -->
+<!--  quote attribution.                                                -->
+<!--                                                                    -->
+<!--  Handled deliberately with care given the subject matter: framed   -->
+<!--  throughout as a real historical and administrative fact, not a    -->
+<!--  neutral or purely technical curiosity, and not for shock value.   -->
+<!-- ================================================================= -->
+
+<chapter xml:id="ch-handling-factors" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>Handling Factors</title>
+
+  <introduction xml:id="intro-handling-factors">
+    <p>
+      <xref ref="ch-data-shapes" /> argued that shape is not only rows and
+      columns; it includes what an observation and a variable actually
+      represent. A <term>factor</term><idx><h>factor</h></idx> is R's way of
+      representing a categorical variable: a fixed, named set of
+      <term>levels</term> that a variable is allowed to take. It is easy to
+      treat a factor as a purely technical device <mdash /> a column of
+      labels, nothing more. The story below is about a case where the
+      labels were never neutral, where they were imposed by a state on an
+      entire population, where they changed meaning over time, and where
+      that change makes a seemingly simple comparison genuinely difficult
+      to do correctly.
+    </p>
+
+    <p>
+      This is real history, and it is treated as such here: not as a
+      convenient or dramatic data-wrangling puzzle, but as a case where a
+      system of classification materially shaped where people could live,
+      work, and belong, and whose consequences the country is still
+      accounting for in its own statistics today.
+    </p>
+  </introduction>
+
+<!-- ================================================================= -->
+<!--  SECTION 1: When a category changes the data                      -->
+<!-- ================================================================= -->
+
+  <section xml:id="sec-population-group-factors">
+    <title>When a Category Changes the Data</title>
+
+    <introduction>
+      <p>
+        Imagine two datasets describing the population of South Africa.
+        One was collected in 1980, under apartheid. The other was collected
+        in 2022, nearly three decades after apartheid ended. Both contain a
+        variable called <c>population_group</c>. You might reasonably think
+        you could compare them directly. You cannot, and the reason why is
+        the subject of this chapter.
+      </p>
+    </introduction>
+
+    <subsection xml:id="ss-factors-legal-classification">
+      <title>A classification imposed by law</title>
+
+      <p>
+        From 1950, every person in South Africa was legally required to be
+        classified into a racial category under the Population Registration
+        Act (Act No. 30 of 1950). The Act established four main categories
+        <mdash /> White, Coloured, Native (later <q>Bantu</q>), and, once
+        added, Asian <mdash /> and this classification became the
+        administrative foundation that later apartheid laws were built on
+        and enforced through, including the Group Areas Act, which
+        determined where a person of each classification was permitted to
+        live, and the Bantu Authorities Act, which restructured governance
+        for the population classified as Native. By 1959, under Proclamation
+        No. 46, the Coloured category itself had been subdivided further
+        still: Cape Coloured, Cape Malay, Griqua, Chinese, Indian, Other
+        Asiatic, and Other Coloured, distinguished using criteria that
+        included physical appearance and the area a person lived in.
+      </p>
+
+      <p>
+        This was not a system for describing a population as researchers
+        might observe it. It was a system for sorting people into groups
+        that the state then treated differently under the law, and the
+        people being classified generally had no say in which category they
+        were assigned to.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-factors-1980-census">
+      <title>What the 1980 census actually recorded</title>
+
+      <p>
+        The categories used in practice were far more detailed than <q>four
+        main groups</q> suggests. The population-group variable in South
+        Africa's 1980 census codebook lists, among its coded values: White;
+        Cape Coloured, Cape Malay, Griqua, and Other Coloured; Chinese,
+        Indian, and Other Asian; and, for the population classified as
+        Black, separate codes for Xhosa, Zulu, Swazi, South Ndebele, North
+        Ndebele, North Sotho, South Sotho, Tswana, Shangaan/Tsonga, Venda,
+        Lemba, and Other Blacks.
+      </p>
+
+      <p>
+        Read as a factor, <c>population_group</c> in 1980 did not have four
+        levels. It had at least twenty, encoding not just <q>race</q> as
+        the Act defined it, but ethnic and linguistic subdivisions within
+        the category the state classified as Black, subdivisions that
+        served the administrative logic of apartheid <mdash /> including,
+        eventually, the assignment of people to <q>homelands</q> along
+        ethnic lines.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-factors-self-classification">
+      <title>The law was repealed. The variable didn't disappear.</title>
+
+      <p>
+        The Population Registration Act was repealed by the Population
+        Registration Act Repeal Act (Act No. 114 of 1991), which ended
+        legal racial classification in South Africa from June 1991.
+        Statistics South Africa did not stop collecting population-group
+        data after apartheid ended. What changed was the basis on which it
+        was collected: from the 1996 census onward, population group has
+        been <term>self-identified</term> <mdash /> a respondent's own
+        answer <mdash /> rather than a classification imposed under law.
+        The 1996 census recorded self-reported population groups of
+        Black/African (77%), White (11%), Coloured (9%), Asian/Indian
+        (2.6%), and Other (0.9%).
+      </p>
+
+      <p>
+        By Census 2022, Statistics South Africa's published results used
+        five categories: Black African (81.4% of the population, some
+        50.5 million people), Coloured (8.2%), White (7.3%, roughly 4.5
+        million people, down from 4.59 million in 2011), Indian/Asian
+        (2.7%), and Other.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-factors-the-problem">
+      <title>Which old category maps to which new one?</title>
+
+      <p>
+        Now suppose you actually want to compare 1980 and 2022: how has the
+        population in each group changed over four decades? You cannot
+        write <c>population ~ population_group + year</c> and treat
+        <c>population_group</c> as if it means the same thing in both
+        years, because it does not.
+      </p>
+
+      <p>
+        Some of the mapping is reasonably direct: the categories legally
+        defined as White in 1980 and self-identified as White in 2022 refer
+        to broadly the same group, collected in a different way. But <q>Cape
+        Malay</q> and <q>Griqua</q>, coded separately in 1980 as
+        subdivisions of Coloured, do not appear at all in the 2022
+        categories; they are presumably folded into <q>Coloured</q>, but
+        the 2022 data alone cannot tell you that, and no amount of
+        relabelling factor levels in R can recover a distinction the newer
+        collection method never asked about. In the other direction, the
+        nine or more separate ethnic codes recorded within the 1980
+        <q>Black</q> classification <mdash /> Xhosa, Zulu, Tswana, Venda,
+        and the rest <mdash /> collapse into a single <q>Black African</q>
+        category in 2022. Going from 1980 to 2022, you can aggregate levels
+        together with reasonable confidence. Going from 2022 back to 1980,
+        the information needed to disaggregate simply is not there.
+      </p>
+
+      <insight xml:id="insight-factors-not-neutral">
+        <title>A factor level is not a neutral label</title>
+        <p>
+          The levels of <c>population_group</c> in 1980 were not a smaller,
+          less accurate version of the levels used in 2022. They were
+          produced by an entirely different process, with a different
+          purpose, under a different legal and political system, asking a
+          different question of the people being counted <mdash /> a
+          question, in 1980, that people did not get to answer for
+          themselves. Fixing a comparison like this is not a matter of
+          renaming <c>Bantu</c> to <c>Black African</c> and moving on. It
+          requires knowing what each classification system was built to do,
+          who defined its categories, and what changed between one system
+          and the next <mdash /> and even then, some of what changed cannot
+          be recovered from the data alone.
+        </p>
+      </insight>
+
+      <p>
+        A factor, in other words, is not just R syntax for a column of
+        text. It represents a classification system that someone, at some
+        point, chose to impose on the world. Sometimes, as here, that
+        choice was made under a legal system built specifically to divide
+        people unequally. Understanding a factor's levels means
+        understanding that choice, not just typing <c>levels()</c> and
+        reading off whatever comes back.
+      </p>
+
+      <p>
+        <term>Sources:</term> Population Registration Act, 1950 (Act No. 30
+        of 1950), and Population Registration Act Repeal Act, 1991 (Act No.
+        114 of 1991), Parliament of South Africa. South Africa Population
+        Census 1980, population-group variable codebook, World Bank
+        Microdata Library. Khalfani, A.A. and Zuberi, T. (2001). <q>Racial
+        classification and the modern census in South Africa,
+        1911<ndash />1996.</q> <em>Race and Society</em>, 4(2), 161<ndash />176.
+        Statistics South Africa (2023). <em>Census 2022: Statistical
+        Release P0301.4.</em> Pretoria: Stats SA.
+      </p>
+    </subsection>
+  </section>
+
+</chapter>

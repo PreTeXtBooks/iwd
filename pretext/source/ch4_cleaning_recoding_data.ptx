@@ -1,0 +1,1045 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ================================================================= -->
+<!--  Chapter 4: Cleaning and Recoding Data                            -->
+<!--                                                                    -->
+<!--  Opens with the West Africa Ebola outbreak (2014-2016), drawing on -->
+<!--  two real, verified papers:                                       -->
+<!--    - Owada et al. (2016), Frontiers in Public Health 4:163           -->
+<!--      (Sierra Leone national surveillance data problems)            -->
+<!--    - Roshania et al. (2016), Global Health: Science and Practice   -->
+<!--      4(3), 394-409 (IMC's multicountry clinical data collection)   -->
+<!--  Then a real worked example from this course's own STACK question  -->
+<!--  bank (tracker ID 76, "missing values 1" - crop grown/sold/profit  -->
+<!--  data, Moodle entryid=108891), narrated from the tracker's review  -->
+<!--  comments rather than invented numbers, since the live STACK XML   -->
+<!--  has not been exported into assets/stack/ yet - see the comment    -->
+<!--  below sec-stack-crop-example for what to do once it is.           -->
+<!--  The PHE and gene-name stories from the previous draft are kept,   -->
+<!--  demoted to supporting asides after the two lead stories.          -->
+<!-- ================================================================= -->
+
+<chapter xml:id="ch-cleaning-recoding" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>Cleaning and Recoding Data</title>
+
+  <introduction xml:id="intro-cleaning-recoding">
+    <p>
+      <xref ref="ch-exploring-data" /> quietly skipped over something. When
+      <c>mean(flamingos$body_mass_g)</c> returned <c>NA</c>, we set the
+      missing values aside with <c>na.rm = TRUE</c> and moved on, promising
+      to come back to it properly. This chapter is that promise kept, and
+      more besides.
+    </p>
+
+    <p>
+      <term>Cleaning</term> is the work of finding what is wrong, missing or
+      inconsistent in a dataset before you trust it. <term>Recoding</term> is
+      the work of transforming variables, categories, and codes into a form
+      that actually answers your question. Both sound like housekeeping
+      <mdash /> something to clear out of the way before the real analysis
+      starts. They are not. The decisions you make while cleaning and
+      recoding decide what a missing value is allowed to mean, which records
+      count, and which get quietly set aside <mdash /> which makes them part
+      of the analysis, not preparation for it. Skip them, rush them, or hand
+      them to software without supervision, and you can get a confident,
+      precisely wrong answer out the other end. That happened, at the
+      largest possible scale, during the deadliest outbreak of Ebola virus
+      disease in history.
+    </p>
+  </introduction>
+
+<!-- ================================================================= -->
+<!--  SECTION 1: Ebola, West Africa 2014-2016                          -->
+<!-- ================================================================= -->
+
+  <section xml:id="sec-ebola-data">
+    <title>A Preventable Disaster</title>
+
+    <introduction>
+      <p>
+        From 2014 to 2016, an outbreak of Ebola virus disease swept
+        through Guinea, Liberia, and Sierra Leone. There were more than
+        11,000 reported deaths — the largest Ebola epidemic ever
+        recorded.
+      </p>
+
+      <p>
+        Fighting an epidemic this size depends on knowing, as close to
+        real time as possible, where cases are appearing, how fast they are
+        growing, and who each infected person has been in contact with. All
+        of that depends on data. Two independent accounts, written by
+        people who worked inside the response, describe how that
+        data was managed at both the national level and in individual
+        treatment centres. One of these accounts is very explicit about the
+        consequence: the state of the data management system <q>may have 
+        contributed to the magnitude and long duration of the outbreak.</q>
+        This is a story about how failing to clean and reconcile data through
+        duplicate records, inconsistent values, and incomplete data
+        may have helped an epidemic run longer and grow larger, resulting in
+        over 11,000 deaths.
+      </p>
+    </introduction>
+
+    <subsection xml:id="ss-ebola-two-systems">
+      <title>Two systems, neither reliable on its own</title>
+      <p>
+        Owada et al. (2016) describe a national data management system
+        built from two parallel tools that were never properly reconciled
+        with each other: The Epi Info VHF line list database, and an Excel-based
+        line list.
+      </p>
+
+      <p>
+        Every case was meant to be recorded on a paper "case
+        investigation form" (CIF). This was to be filled in in the field,
+        and then subsequently entered into the <term>Epi Info VHF line
+        list database</term>, a tool built by the US Centers for Disease
+        Control specifically for outbreak case and contact-tracing data.
+        In principle, it supported multiple people entering data
+        at once and merging district databases into a national one.
+        In practice, most district data managers were not
+        experienced users of the software, duplicate records were
+        genuinely difficult to detect and merge once created, and CIFs
+        routinely arrived late at the district response centres. This meant
+        the VHF database was never fully up to date, even late in the
+        outbreak.
+      </p>
+
+      <p>
+        To add, laboratory results and case investigation data were often
+        entered <em>independently</em> of each other instead of the lab
+        result being added to the existing associated case record.
+        This meant that the same case could end up as two separate database
+        entries, with no link to combine them together.
+      </p>
+
+      <p>
+        As well as the Epi Info database, district teams also kept a second,
+        entirely separate
+        <term>Excel-based line list</term>. This was built mainly from laboratory
+        sample results and contained a subset of the CIF variables like age,
+        sex, location, and the dates a sample was collected, received, and
+        tested. The district teams found that this was quicker to produce
+        reports and visualise the situation.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-ebola-collection">
+      <title>Incomplete at the source</title>
+      <p>
+        Even when the systems worked as designed, the data was
+        often incomplete. Many CIF records had no date of onset, sex,
+        age, and/or residence. These are all gaps that the authors
+        attribute to inadequate training and supervision of surveillance
+        officers under outbreak conditions.
+      </p>
+
+      <p>
+        In addition, the number of deaths from EVD were hard to pin down.
+        Confirming a death was
+        EVD-related required a post-mortem mouth swab, which was
+        often not taken in areas that
+        continued traditional burial practices. This meant that the count of
+        <em>confirmed</em> EVD deaths likely
+        understated the true number. In the other direction, before the outbreak, Sierra
+        Leone was already dealing with malaria severe enough
+        to account for roughly 38% of hospital admissions and about 30% of
+        under-five deaths. Importantly, malaria shares clinical features
+        with EVD. That overlap plausibly delayed recognition of genuine EVD
+        cases, and risked malaria deaths being misclassified as EVD deaths.
+        The same underlying data problem of incomplete, hard-to-verify
+        records pushed the death count in both directions at once,
+        for different reasons, in different places.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-ebola-transmission">
+      <title>Lost between the form and the file</title>
+
+      <p>
+        The intended process was that two copies of the
+        original CIF would be produced for every death, and
+        three copies for every suspected living case:
+        one to accompany the sample to the laboratory, one to the
+        district response centre, and for suspected cases, one to stay with
+        the patient. In the early period of the outbreak this process did
+        not function effectively. Reporting of deaths from holding centres,
+        community care centres and treatment centres had no clear, structured
+        process until daily phone calls were later introduced, and
+        burial teams, treatment centres, and laboratories used inconsistent
+        definitions when counting deaths in the first place. A meaningful
+        amount of information was simply never transmitted anywhere it could
+        be used.
+      </p>
+
+      <p>
+        What did arrive still had to be compiled, and there was no
+        consolidated database that captured and linked every data source in
+        a structured way. Each district response centre had adopted its own
+        method for recording cases, and inconsistency in the Excel line-list
+        format across districts caused ongoing problems merging and
+        aggregating cases into national totals. In the authors' own words,
+        <q>much of the data has never found its way into any structured
+        database and may never be recoverable.</q>
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-ebola-cfr">
+      <title>A number that was biased whichever way you calculated it</title>
+
+      <p>
+        The clearest illustration of what this cost is
+        the <term>case fatality rate</term> (CFR). CFR is the confirmed
+        deaths divided
+        by confirmed cases. This basic number in an outbreak helps
+        track both how dangerous the disease is, and how contained it is.
+      </p>
+
+      <p>
+        Undercounting deaths means that the CFR calculation was biased downward,
+        and the severity of the situation is underestimated.
+        Further, if you restrict the calculation to cases with a known final
+        outcome (alive or dead), then a new bias is introduced:
+        <q>alive</q> could only be recorded once a patient's hospitalisation
+        had fully concluded, while a death could be recorded as soon as it
+        happened. Cases still awaiting an outcome were therefore more likely,
+        at any given moment, to eventually resolve as deaths than the data
+        so far suggested, which biases <em>this</em> version of the CFR
+        upward instead. Neither calculation was wrong in the sense of
+        containing an arithmetic error, but both were systematically biased, in
+        opposite directions, by exactly the same underlying data problems.
+      </p>
+
+      <insight xml:id="insight-ebola-cfr-lesson">
+        <title>No clean number was hiding underneath</title>
+        <p>
+          There was no clean version of this number sitting underneath the
+          messy data. The data management failures described above added noise
+          around a true value, but also changed which direction the bias in the
+          headline statistic ran.
+          The system meant to hold the full picture could
+          not be trusted to give one, so analysts instead used laboratory data
+          for day-to-day situation reports for the rest of the outbreak.
+        </p>
+      </insight>
+
+      <p>
+        The authors are explicit that this was never fully resolved: a
+        complete cleaning and reconciliation of all case data was never
+        finalised.
+        Even at the end of the outbreak, a large number of suspected
+        cases remained permanently unclassified - neither confirmed
+        as EVD nor ruled out.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-ebola-clinical">
+      <title>The same failure, one level down</title>
+
+      <p>
+        Roshania et al. (2016) tell a parallel story from inside the
+        treatment centres themselves. International Medical Corps ran five
+        Ebola Treatment Units across Liberia and Sierra Leone, treating more
+        than 2,500 patients and amassing over 25,000 pages of clinical,
+        epidemiological, and operational data over the course of the
+        epidemic.
+      </p>
+
+      <p>
+        Even a single, well-resourced organisation running its own units
+        under its own protocols could not keep that data consistent.
+
+      <ul>
+        <li>
+          <p>
+            Different treatment units recorded different variables in
+            different formats. For example, units used Microsoft Access,
+            other units used Excel. This data had to be reconciled before
+            it could be analysed together.
+          </p>
+        </li>
+        <li>
+          <p>
+            Data-entry was not consistent. It varied between
+            treatment units and, within a treatment unit.
+            This made it difficult to track the severity of the epidemic.
+            More patients meant more
+            data to enter, and staff availability did not scale up to
+            match. The moment data quality was most likely to slip was
+            at the peak of the outbreak <mdash /> exactly the moment
+            when accurate data mattered most.
+          </p>
+        </li>
+        <li>
+          <p>
+            Paper forms were filled out inside the high-risk treatment zone.
+            However, these forms physically degraded from repeated chlorine
+            disinfection. Getting
+            the data out safely meant reading forms through a fence and
+            copying them by hand, photographing them across a barrier, or
+            sending someone in full protective equipment purely to
+            photograph paperwork with a waterproof camera.
+            Every additional step introduced opportunities for transcription
+            errors, typos, missing values, or misread information. 
+            This gives an additional challenge of ensuring that the
+            data remained accurate as it moved from the original form into
+            a usable dataset. Small errors introduced during the
+            transfer could easily become part of the analysis and ultimately
+            affect the decisions made from the data.
+          </p>
+        </li>
+        <li>
+          <p>
+            Some variables, such as recent bush meat consumption or travel
+            history, were recorded in some forms and not others,
+            making a combined dataset impossible without deciding
+            what to do about the gap.
+          </p>
+        </li>
+        <li>
+          <p>
+            The same clinical sign was written down under different names in
+            different places (<q>red injected eyes,</q>
+            <q>conjunctivitis,</q> <q>hemorrhagic eyes</q>) and had
+            to be manually recoded into a single consistent variable before
+            it meant anything as data.
+          </p>
+        </li>
+      </ul>
+      </p>
+
+      <p>
+        An initial quality audit <mdash /> a random sample of patient records
+        compared field by field against the original scanned charts <mdash />
+        found error rates high enough that the organisation had to re-enter
+        large sections of the dataset by hand. Even then, resources were
+        limited enough that a choice had to be made about what to re-enter:
+        triage data was redone for every patient, but the more detailed
+        daily rounding and treatment data was only redone for patients
+        confirmed EVD-positive. After that effort, they reached roughly 99%
+        accuracy. Getting there took a dedicated data-cleaning team working
+        <em>after the fact</em>, months later, on data collected under some
+        of the most dangerous conditions imaginable.
+      </p>
+
+      <p>
+        The organisation's own retrospective judgement is blunt: <q>much
+        time and effort could have been saved through closer oversight and
+        real-time quality assurance assessments in the field.</q> The
+        cleaning was not the problem. Doing all of it afterward, once the
+        epidemic had already moved on, was.
+      </p>
+
+      <insight xml:id="insight-ebola-lesson">
+        <title>Cleaning was not optional overhead here</title>
+        <p>
+          In both accounts, the failure to standardise, deduplicate, and
+          consolidate case data was not a data-management inconvenience
+          sitting alongside the real work of fighting the epidemic. It
+          <em>was</em> the epidemic response, failing at one of its most
+          basic tasks: knowing, accurately, what was happening. When you
+          cannot calculate a case fatality rate or reliably merge two
+          districts' records, you cannot see the outbreak clearly enough to
+          fight it well.
+        </p>
+      </insight>
+
+      <p>
+        <term>Sources:</term> Owada, K., Eckmanns, T., Kamara, K.O.B. and
+        Olu, O.O. (2016). <q>Epidemiological Data Management during an
+        Outbreak of Ebola Virus Disease: Key Issues and Observations from
+        Sierra Leone.</q> <em>Frontiers in Public Health</em>, 4, 163.
+        Roshania, R. et al. (2016).
+        <q>Successful Implementation of a Multicountry Clinical Surveillance
+        and Data Collection System for Ebola Virus Disease in West Africa:
+        Findings and Lessons Learned.</q> <em>Global Health: Science and
+        Practice</em>, 4(3), 394<ndash />409.
+      </p>
+    </subsection>
+  </section>
+
+<!-- ================================================================= -->
+<!--  SECTION 2: the STACK question that exemplifies this              -->
+<!-- ================================================================= -->
+
+  <section xml:id="sec-stack-crop-example">
+    <title>The Same Mistake, Closer to Home</title>
+
+    <introduction>
+      <p>
+        The scale is nowhere near comparable, but the underlying mistake in
+        the Ebola data <mdash /> deciding, without quite deciding, what an
+        absence in the data actually means <mdash /> shows up constantly at
+        far smaller scale. It shows up in this course's own assessment
+        material.
+      </p>
+    </introduction>
+
+    <subsection xml:id="ss-stack-crop-task">
+      <title>Grown, sold, and profitable <mdash /> or not</title>
+
+      <p>
+        One question in this course's question bank gives students data on
+        crops: whether each crop was grown, whether it was sold, and the
+        profit recorded. The task is simple to state: which crop was most
+        profitable, and which was least?
+      </p>
+
+      <p>
+        A student's real, documented attempt at this question filtered the
+        data to rows where the crop was sold, then calculated the average
+        profit for each crop from that filtered set. By that approach,
+        sorghum came out most profitable and millet least. The answer was
+        marked wrong, and the student could not see why <mdash /> the
+        arithmetic, on the data they had kept, was entirely correct.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-stack-crop-resolution">
+      <title>What the filter quietly threw away</title>
+
+      <p>
+        Filtering to <q>sold</q> discarded every case where a crop was grown
+        but <em>not</em> sold <mdash /> and threw those cases away in
+        exactly the same manner as crops that were never grown at all, even
+        though the two situations mean very different things. A crop that
+        was grown and went unsold is a real economic outcome: money and
+        effort spent, no return. A crop that was never grown is simply not
+        part of the question.
+      </p>
+
+      <p>
+        Treating a grown-but-unsold crop as a profit of <term>zero</term>,
+        rather than discarding it, and excluding only the crops that were
+        never grown, reverses the ranking completely: millet becomes the
+        most profitable crop, and sorghum the least.
+      </p>
+
+      <insight xml:id="insight-stack-crop-lesson">
+        <title>The filter was the analysis</title>
+        <p>
+          Nothing about the mean calculation itself was wrong, in either
+          version. The entire result was decided at the filtering step,
+          before any arithmetic happened, by a choice about what an
+          <q>absent</q> value meant that was never made deliberately. This
+          is the exact shape of the Ebola failures above, compressed into
+          one line of code: <c>filter(sold == "yes")</c> looks like tidying
+          the data up, and is actually a substantive claim about what the
+          missing sales represent. Cleaning and recoding decisions are not
+          preparation <em>before</em> the analysis. They routinely
+          <em>are</em> the analysis, whether or not you notice yourself
+          making them.
+        </p>
+      </insight>
+    </subsection>
+
+    <!--
+      STACK QUESTION: tracker ID 76, "missing values 1" (Moodle question
+      bank entryid=108891, course 248). Reviewed and ready; narrated above
+      from the tracker's review-comment thread rather than reproduced with
+      invented numbers, since the live STACK XML has not yet been exported
+      into pretext/assets/stack/. Once exported, embed it directly here as
+      an <exercise> wrapping <stack label="..." source="stack/..."/>,
+      matching the pattern already used in ch1_intro.ptx, and this narrated
+      version can be trimmed back to a short lead-in.
+    -->
+  </section>
+
+<!-- ================================================================= -->
+<!--  SECTION 3: it happened again, elsewhere                          -->
+<!-- ================================================================= -->
+
+  <section xml:id="sec-phe-disaster">
+    <title>Aside: The Same Failure Mode, on Another Continent</title>
+
+    <introduction>
+      <p>
+        Neither the scale nor the setting of the Ebola story is what
+        matters most here. Six years later, with vastly more resources
+        available, a strikingly similar failure hit another outbreak
+        response <mdash /> not in West Africa, but in England, during
+        COVID-19.
+      </p>
+    </introduction>
+
+    <subsection xml:id="ss-phe-pipeline">
+      <title>One pipeline, one file format</title>
+
+      <p>
+        Positive COVID-19 test results from testing labs across England were
+        sent out as CSV files. Those files were imported into a template
+        built on the old Excel <c>.xls</c> format <mdash /> the format Excel
+        used before 2007 <mdash /> and forwarded on to contact tracers, whose
+        job was to find and notify everyone each infected person had been in
+        contact with.
+      </p>
+
+      <p>
+        Nobody chose to lose data on purpose. The pipeline had been working,
+        file after file, for months.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-phe-ceiling">
+      <title>The ceiling nobody was watching for</title>
+
+      <p>
+        The old <c>.xls</c> format has a hard limit of 65,536 rows per sheet.
+        Because each test result occupied several rows once the template's
+        columns were filled in, a single file could hold only around 1,400
+        test records before it was full.
+      </p>
+
+      <p>
+        When a file hit that ceiling, Excel did not raise an error. It did
+        not warn anyone that data was being left out. It simply stopped
+        accepting new rows. Every test result beyond row 65,536 was silently
+        dropped from the file that reached contact tracers, as if it had
+        never been reported at all.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-phe-cost">
+      <title>What it cost</title>
+
+      <p>
+        Between 25 September and 2 October 2020, 15,841 positive test results
+        were lost this way. The people behind those results were not
+        notified as positive cases in time, and <mdash /> just as seriously
+        <mdash /> the people they had been in contact with were not traced
+        and told to isolate, during a period when the outbreak was actively
+        growing.
+      </p>
+
+      <p>
+        The technical fault was fixed within days, by splitting the incoming
+        files into smaller batches that stayed under the row limit. The
+        health secretary at the time, Matt Hancock, said the underlying cause
+        was a legacy system that a decision had already been made in July to
+        replace. The system that failed in September was one everyone
+        already knew needed retiring. It just had not been retired yet.
+      </p>
+
+      <insight xml:id="insight-phe-lesson">
+        <title>The failure was silence, not error</title>
+        <p>
+          A crash would have been noticed immediately. A file that simply
+          stops growing, with no warning and no error message, looks exactly
+          like a file that succeeded. Just as with the Ebola case data,
+          nothing about the output told anyone that anything had gone
+          wrong. Checking that the number of rows you exported matches the
+          number of rows you expected is one of the cheapest habits in data
+          cleaning, and this is exactly what it exists to catch.
+        </p>
+      </insight>
+
+      <p>
+        <term>Sources:</term> UK Government, <q>Slides to accompany
+        coronavirus press conference, CMO, 31 October 2020;</q>
+        <url href="https://www.theregister.com/2020/10/05/excel_england_coronavirus_contact_error/" visual="theregister.com, 5 October 2020" />.
+      </p>
+    </subsection>
+  </section>
+
+<!-- ================================================================= -->
+<!--  SECTION 4: the recoding disaster                                 -->
+<!-- ================================================================= -->
+
+  <section xml:id="sec-gene-names">
+    <title>Aside: Recoding You Didn't Ask For</title>
+
+    <introduction>
+      <p>
+        Ebola and PHE are both about data disappearing. This one is about
+        data quietly turning into something else <mdash /> and it did not
+        happen once. It happened, unnoticed, across an entire scientific
+        field, for more than a decade.
+      </p>
+    </introduction>
+
+    <subsection xml:id="ss-genes-literal-software">
+      <title>A very literal-minded piece of software</title>
+
+      <p>
+        Human genes have short alphanumeric names: <c>SEPT2</c>,
+        <c>MARCH1</c>, <c>DEC1</c>. Genomics researchers routinely list
+        hundreds of them in spreadsheets as part of their published research.
+      </p>
+
+      <p>
+        Microsoft Excel, with its default settings, tries to be helpful. If a
+        cell's contents look like a date <mdash /> and <c>SEPT2</c> looks
+        enough like <q>2 September</q> to qualify <mdash /> Excel silently
+        converts it, storing <c>2-Sep</c> in the cell instead of the gene name
+        that was typed. <c>MARCH1</c> becomes <c>1-Mar</c>. No warning is
+        shown. The gene name is simply gone, replaced by a date that has
+        nothing to do with the data.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-genes-scale">
+      <title>How widespread</title>
+
+      <p>
+        In 2016, researchers Mark Ziemann, Yotam Eren and Assam El-Osta
+        screened the supplementary data files of 3,597 papers published in
+        18 leading genomics journals between 2005 and 2015. Roughly
+        <term>one in five</term> of the papers that included a
+        supplementary Excel gene list had at least one gene name silently
+        corrupted into a date or a number this way.
+      </p>
+
+      <p>
+        These were not obscure, unread papers. They were published,
+        peer-reviewed research, and the corrupted supplementary files were
+        exactly the files other researchers would download and build on.
+        Nobody had decided to recode <c>SEPT2</c> into a date. The software
+        had done it for them, and it had gone unnoticed for years at a time,
+        across an entire discipline.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-genes-fix">
+      <title>The fix nobody wanted to need</title>
+
+      <p>
+        By 2020 the problem was serious enough that the body responsible for
+        official human gene names, the HUGO Gene Nomenclature Committee
+        (HGNC), renamed twenty-seven genes specifically to stop this from
+        happening. <c>MARCH1</c> became <c>MARCHF1</c>. <c>SEPT1</c> became
+        <c>SEPTIN1</c>. The genes themselves had not changed. Their names
+        were changed because it was easier to rename twenty-seven genes than
+        to get every spreadsheet in the world to stop guessing.
+      </p>
+
+      <insight xml:id="insight-genes-lesson">
+        <title>Recoding is not always something you choose to do</title>
+        <p>
+          Every time you import a spreadsheet, a piece of software has
+          already made decisions about how to interpret every cell <mdash />
+          what looks like a number, what looks like a date, what looks like
+          text <mdash /> before you have looked at any of it yourself.
+          Cleaning data is not just fixing values that are obviously wrong.
+          It includes checking that nothing was silently <q>fixed</q> for
+          you, incorrectly, before you ever opened the file.
+        </p>
+      </insight>
+
+      <p>
+        <term>Sources:</term> Ziemann, M., Eren, Y. and El-Osta, A. (2016).
+        <q>Gene name errors are widespread in the scientific literature.</q>
+        <em>Genome Biology</em>, 17, 177;
+        <url href="https://www.genenames.org" visual="genenames.org" />
+        (HGNC, 2020 renaming guidelines).
+      </p>
+    </subsection>
+  </section>
+
+<!-- ================================================================= -->
+<!--  SECTION 5: applied to the flamingo data                          -->
+<!-- ================================================================= -->
+
+  <section xml:id="sec-cleaning-applied">
+    <title>Cleaning and Recoding, Applied</title>
+
+    <introduction>
+      <p>
+        The <c>kenya_flamingos.csv</c> you loaded in
+        <xref ref="ch-exploring-data" /> was already tidy: consistent lake
+        names, consistent species labels, a sensible column for each
+        variable. It did not start that way. Every dataset that looks that
+        clean has already had this chapter done to it, by someone, before you
+        ever saw it. This section does that work.
+      </p>
+    </introduction>
+
+    <subsection xml:id="ss-bad-data-taxonomy">
+      <title>Naming what you're looking for</title>
+
+      <p>
+        <q>Bad data</q> is not one problem. It is a handful of distinct
+        problems that happen to all get called the same name, and each one
+        needs a different fix. This chapter deals with three of them
+        directly.
+      </p>
+
+      <ul>
+        <li>
+          <p>
+            <term>Inconsistent values</term> <mdash /> the same real-world
+            thing, recorded in more than one way, so that R (or anyone
+            counting by hand) treats it as several different things. This is
+            the lake-name problem below, and it is exactly what
+            <xref ref="sec-gene-names" /> shows going wrong at the scale of
+            an entire research field, when the software does the
+            <q>recoding</q> for you without telling you.
+          </p>
+        </li>
+        <li>
+          <p>
+            <term>Duplicate records</term> <mdash /> the same case, entered
+            more than once, usually because two systems or two people
+            recorded it independently and nothing forced the records back
+            together. <xref ref="ss-ebola-two-systems" /> is this problem at
+            the scale of a national epidemic response.
+          </p>
+        </li>
+        <li>
+          <p>
+            <term>Implausible values</term> <mdash /> an entry that is
+            plausible-<em>looking</em> but cannot actually be true: a decimal
+            point in the wrong place, a unit mixed up, a typo that still
+            produces a valid number. These are the most dangerous errors of
+            all, precisely because nothing about them looks wrong until you
+            check.
+          </p>
+        </li>
+      </ul>
+
+      <p>
+        Two more categories that get lumped in under <q>bad data</q> are
+        deliberately not covered here. <term>Missing values</term> get a
+        chapter of their own, <term>Handling Missing Values</term>, because
+        the interesting question there is not how to spot a gap but what to
+        do about it once you have. <term>Outliers</term> <mdash /> genuine,
+        correctly recorded extreme values <mdash /> are a different problem
+        again, and are covered properly once you have the statistical tools
+        to say <em>how</em> extreme is extreme, in
+        <term>Measuring and Observing Variability</term>. Confusing an
+        outlier with an implausible value is itself a mistake worth avoiding:
+        one is real and needs to be understood, the other is wrong and needs
+        to be fixed.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-clean-inconsistent-labels">
+      <title>Inconsistent categories</title>
+
+      <p>
+        Field data is transcribed by different people, on different days,
+        sometimes typed in a hurry. A more realistic first look at the raw
+        <c>lake</c> column, before anyone tidied it, might look like this.
+      </p>
+
+      <program language="r">
+        raw_lake &lt;- c("Bogoria", "bogoria", "BOGORIA", "Bogoria ",
+                      "Nakuru", "Nakuru", "Elementaita", "elementaita")
+        table(raw_lake)
+
+        #&gt; raw_lake
+        #&gt;     Bogoria    bogoria    BOGORIA   Bogoria  Elementaita elementaita
+        #&gt;           1          1          1          1           1           1
+        #&gt;      Nakuru
+        #&gt;           2
+      </program>
+
+      <p>
+        To R, <c>"Bogoria"</c>, <c>"bogoria"</c>, <c>"BOGORIA"</c> and
+        <c>"Bogoria "</c> (with a trailing space) are four different values,
+        not one. Any count or grouping done on this column before cleaning it
+        would quietly split Bogoria's birds into four separate categories.
+      </p>
+
+      <program language="r">
+        clean_lake &lt;- trimws(raw_lake)          # remove leading/trailing spaces
+        clean_lake &lt;- tools::toTitleCase(tolower(clean_lake))  # consistent case
+        table(clean_lake)
+
+        #&gt; clean_lake
+        #&gt;     Bogoria Elementaita      Nakuru
+        #&gt;           4           2           2
+      </program>
+
+      <p>
+        Two functions, applied before anything else touches the column, and
+        the four accidental categories collapse back into one real one. This
+        is unglamorous work, and it is also exactly the kind of check the
+        gene-name story shows the cost of skipping.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-clean-duplicates">
+      <title>Duplicate records</title>
+
+      <p>
+        <xref ref="ss-ebola-two-systems" /> described the same case being
+        entered twice, once from the laboratory result and once from the
+        case investigation form, with nothing forcing the two back together.
+        The R-scale version of that problem is just as easy to miss.
+      </p>
+
+      <program language="r">
+        bird_id &lt;- c(101, 102, 103, 103, 104)
+        duplicated(bird_id)
+        #&gt; [1] FALSE FALSE FALSE  TRUE FALSE
+
+        sum(duplicated(bird_id))
+        #&gt; [1] 1
+      </program>
+
+      <p>
+        <c>duplicated()</c> flags every occurrence of a value <em>after</em>
+        its first appearance, which is why counting <c>TRUE</c>s tells you
+        how many extra rows exist, not how many birds are involved. A single
+        duplicated ID is easy to spot in a vector of five. In a dataset of
+        344 birds it is not, which is exactly why checking for duplicate IDs
+        belongs in a routine cleaning pass rather than something you do only
+        when a total looks suspicious.
+      </p>
+
+      <p>
+        Notice what <c>duplicated()</c> cannot tell you: <em>why</em> the
+        record was duplicated, or which of the two copies, if they disagree
+        with each other, is correct. That judgement call is the same one
+        Sierra Leone's response teams faced at national scale <mdash /> a
+        duplicate is a signal to go and look, not a problem <c>duplicated()</c>
+        solves for you on its own.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-clean-implausible">
+      <title>Implausible values</title>
+
+      <p>
+        The lake-name problem was visible the moment you tabulated the
+        column. This one is not: a value that is perfectly well-formed,
+        sits quietly among correct ones, and is still wrong.
+      </p>
+
+      <program language="r">
+        bill &lt;- c(101.2, 96.1, 1012, 98.4, 94.1)
+        summary(bill)
+
+        #&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+        #&gt;    94.1    96.1    98.4   280.4   101.2  1012.0
+      </program>
+
+      <p>
+        No lesser flamingo has a 1,012 mm bill; the real bird measured
+        101.2 mm, and a decimal point was lost somewhere between the field
+        sheet and the spreadsheet. Unlike the lake-name problem,
+        <c>table()</c> is no help here <mdash /> every value is numeric and
+        individually plausible, and nothing about <c>1012</c> looks like an
+        error in isolation. What gives it away is knowing something about
+        flamingos: bill lengths in this dataset simply do not reach four
+        figures. A basic sanity-range check catches exactly this.
+      </p>
+
+      <program language="r">
+        which(bill &lt; 50 | bill &gt; 200)
+        #&gt; [1] 3
+      </program>
+
+      <p>
+        A range check like this only works because someone supplied the
+        range <mdash /> R has no idea, on its own, what a plausible flamingo
+        bill length is. This is the one category of bad data in this chapter
+        that genuinely cannot be caught by a general-purpose function; it
+        requires knowing something about the thing being measured.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-clean-checking-what-doesnt-fit">
+      <title>Checking systematically, not just when something looks wrong</title>
+
+      <p>
+        <xref ref="ch-exploring-data" /> discovered the missing masses by
+        accident, because <c>mean()</c> returned <c>NA</c>. A proper cleaning
+        pass checks every column, deliberately, rather than waiting to be
+        surprised.
+      </p>
+
+      <program language="r">
+        colSums(is.na(flamingos))
+
+        #&gt;           lake        species bill_length_mm  bill_depth_mm  leg_length_mm
+        #&gt;              0              0              0              4              0
+        #&gt;    body_mass_g            sex           year
+        #&gt;              8              7              0
+      </program>
+
+      <p>
+        Four missing bill depths, eight missing masses, seven missing sexes.
+        Finding the gaps is only half the job. The more useful question is
+        <em>why</em> those three variables specifically, and not
+        <c>lake</c> or <c>year</c>, are the ones with gaps <mdash /> the same
+        question, at vastly smaller stakes, that Owada et al. were asking
+        about incomplete case investigation forms. In fieldwork, determining
+        sex often requires closer handling or genetic testing that a
+        stressed or struggling bird may not get; a scale battery can fail
+        mid-morning and every mass after that point goes unrecorded for the
+        rest of the day. Reasoning like this, before deciding what to do
+        about the gaps, is what turns <q>the data has missing values</q> into
+        something you can actually act on <mdash /> and it is the question
+        <xref ref="ch-exploring-data" /> deliberately left open, and that
+        <term>Handling Missing Values</term> will return to formally.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-recoding-variables">
+      <title>Recoding variables</title>
+
+      <p>
+        Cleaning fixes values that are wrong. Recoding changes values that
+        are already correct into a form better suited to the question being
+        asked. The <c>sex</c> column is a realistic case: different people
+        entering data by hand might use <c>"M"</c>, <c>"m"</c>,
+        <c>"male"</c> or <c>"Male"</c> for the same thing.
+      </p>
+
+      <program language="r">
+        raw_sex &lt;- c("M", "male", "Male", "F", "female", "f")
+
+        clean_sex &lt;- factor(
+          ifelse(tolower(substr(raw_sex, 1, 1)) == "m", "male", "female")
+        )
+        table(clean_sex)
+
+        #&gt; clean_sex
+        #&gt; female   male
+        #&gt;      3      3
+      </program>
+
+      <p>
+        A second, common kind of recoding creates a new categorical variable
+        out of a numeric one, so it can be used for grouping or plotting. R's
+        factors carry a fixed, named set of <term>levels</term>, and renaming
+        them is a recode in its own right.
+      </p>
+
+      <program language="r">
+        flamingos$species_short &lt;- factor(
+          flamingos$species,
+          levels = c("Greater Flamingo", "Lesser Flamingo"),
+          labels = c("Greater", "Lesser")
+        )
+        levels(flamingos$species_short)
+        #&gt; [1] "Greater" "Lesser"
+      </program>
+
+      <p>
+        Nothing about the underlying birds has changed. What has changed is
+        how easy the variable is to read, tabulate, and plot <mdash /> which
+        is the entire point of recoding, and exactly the point that went
+        wrong, silently, in the gene-name story above. It is also exactly
+        the choice <mdash /> what to do with an absence, or a category that
+        does not quite fit <mdash /> that decided the outcome in
+        <xref ref="ss-stack-crop-resolution" />.
+      </p>
+    </subsection>
+  </section>
+
+<!-- ================================================================= -->
+<!--  OBJECTIVES                                                       -->
+<!-- ================================================================= -->
+
+  <objectives xml:id="objectives-cleaning-recoding">
+    <title>By the end of this topic you will be able to</title>
+    <ul>
+      <li><p>Understand why data cleaning matters, including from real cases where skipping it caused measurable harm.</p></li>
+      <li><p>Identify and handle common data quality issues: inconsistent categories, duplicate records, implausible values, and unexplained gaps.</p></li>
+      <li><p>Recode variables deliberately, and recognise when software may have already recoded something for you without asking.</p></li>
+      <li><p>Recognise a filtering or recoding decision as a substantive analytical choice, not neutral tidying, particularly around what an absent value is taken to mean.</p></li>
+    </ul>
+  </objectives>
+
+<!-- ================================================================= -->
+<!--  EXERCISES                                                        -->
+<!-- ================================================================= -->
+
+  <exercises xml:id="exercises-cleaning-recoding">
+    <title>Exercises</title>
+
+    <exercise xml:id="ex-clean-crop-recap">
+      <statement>
+        <p>
+          In your own words, explain why filtering the crop data to
+          <c>sold == "yes"</c> before averaging (<xref ref="ss-stack-crop-task" />)
+          produced a wrong answer even though the averaging itself was done
+          correctly. Then describe one other variable, in any dataset you
+          have worked with, where <q>missing</q> and <q>zero</q> would mean
+          genuinely different things, and explain what filtering it out
+          would silently assume.
+        </p>
+      </statement>
+    </exercise>
+
+    <exercise xml:id="ex-clean-ebola-check">
+      <statement>
+        <p>
+          <xref ref="ss-ebola-two-systems" /> describes case data being entered
+          independently in two places, laboratory records and case
+          investigation forms, with no process forcing the two back
+          together. Suggest one concrete check, applied at the point of data
+          entry rather than afterwards, that could have caught a duplicate
+          case before it reached a national situation report.
+        </p>
+      </statement>
+    </exercise>
+
+    <exercise xml:id="ex-clean-phe-check">
+      <statement>
+        <p>
+          <xref ref="ss-phe-cost" /> notes that the PHE failure was dangerous
+          specifically because it was silent: the file that lost data looked
+          exactly like a file that hadn't. Suggest one concrete check that,
+          if run automatically every time a file was produced, would have
+          caught this problem within a day rather than a week.
+        </p>
+      </statement>
+    </exercise>
+
+    <exercise xml:id="ex-clean-lake-labels">
+      <statement>
+        <p>
+          Using the <c>raw_lake</c> vector from <xref ref="ss-clean-inconsistent-labels" />
+          as a starting point, write R code that produces a clean factor
+          with exactly three levels, without using <c>tools::toTitleCase()</c>.
+          There is more than one correct approach.
+        </p>
+      </statement>
+    </exercise>
+
+    <exercise xml:id="ex-clean-duplicate-ids">
+      <statement>
+        <p>
+          Using the <c>bird_id</c> vector from <xref ref="ss-clean-duplicates" />,
+          write R code that returns the actual duplicated <em>values</em>
+          (not just <c>TRUE</c>/<c>FALSE</c> flags). Then explain, in your
+          own words, why a low count from <c>sum(duplicated(x))</c> is
+          reassuring but not sufficient on its own <mdash /> what would you
+          still need to check before trusting that the data has no
+          duplicate-record problem?
+        </p>
+      </statement>
+    </exercise>
+
+    <exercise xml:id="ex-clean-implausible-check">
+      <statement>
+        <p>
+          <xref ref="ss-clean-implausible" /> catches an implausible bill
+          length using a hard-coded range, <c>bill &lt; 50 | bill &gt; 200</c>.
+          Suggest a plausible range check for <c>leg_length_mm</c> and for
+          <c>body_mass_g</c>, using whatever you can infer from the numbers
+          already given elsewhere in this module. What is the risk of
+          setting a range check too narrow, as opposed to too wide?
+        </p>
+      </statement>
+    </exercise>
+
+    <exercise xml:id="ex-recode-mass-class">
+      <statement>
+        <p>
+          Recode <c>body_mass_g</c> into a new categorical variable
+          <c>size_class</c> with two levels, <q>light</q> and <q>heavy</q>,
+          split at 2500 g. Then cross-tabulate <c>size_class</c> against
+          <c>species</c>. Does the split you chose separate the two species
+          cleanly, or does it cut through one of them? What does that tell
+          you about choosing a threshold for a recode versus choosing one for
+          a plot?
+        </p>
+      </statement>
+    </exercise>
+  </exercises>
+
+</chapter>

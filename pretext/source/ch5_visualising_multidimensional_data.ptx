@@ -1,0 +1,677 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ================================================================= -->
+<!--  Chapter 5: Visualising Multidimensional Data                     -->
+<!--                                                                    -->
+<!--  Two-part structure, as specified by the user:                    -->
+<!--    1. "Following the Giants" - originally an illustrative,        -->
+<!--       user-authored elephant scenario. Replaced with a REAL, cited-->
+<!--       study after the user asked whether a real one existed:      -->
+<!--       Wall, J., Hahn, N., Carroll, S., Mwiu, S., Goss, M.,         -->
+<!--       Sairowua, W., Tiedeman, K., Kiambi, S., Omondi, P.,          -->
+<!--       Douglas-Hamilton, I. and Wittemyer, G. (2024). "Land use     -->
+<!--       drives differential resource selection by African elephants -->
+<!--       in the Greater Mara Ecosystem, Kenya." Movement Ecology,    -->
+<!--       12, 11. Verified via PMC (PMC10832223) before writing:      -->
+<!--       58 elephants collared Sept 2011-Apr 2022, hourly GPS fixes, -->
+<!--       49 elephants / 834,138 GPS locations retained for analysis  -->
+<!--       (1,176,287 raw positions collected in total), variables     -->
+<!--       recorded alongside location include NDVI/land cover, slope, -->
+<!--       drainage, human infrastructure incl. agriculture, season    -->
+<!--       (wet/dry) and time of day. Real finding: agricultural       -->
+<!--       expansion and fencing are primary threats to corridor       -->
+<!--       connectivity, and resource selection differs by sex and by  -->
+<!--       protected vs. unprotected land. The "researchers stumped by -->
+<!--       a spreadsheet, then had an aha moment" framing is a teaching-->
+<!--       device, not something the paper itself narrates - kept      -->
+<!--       honest below (see the note after ss-mara-findings) rather   -->
+<!--       than presented as the paper's own account of its process.   -->
+<!--       SECOND VERIFICATION PASS: every number and quote in this    -->
+<!--       section (58 elephants, dates, hourly fixes, 1,176,287 raw / -->
+<!--       834,138 retained / 26 male 416,215 locations / 23 female    -->
+<!--       417,923 locations, 18,758 sq km, the covariate list, the    -->
+<!--       "generally considered incompatible" quote, the Mau-Mara     -->
+<!--       connectivity finding "we did not find evidence of this      -->
+<!--       connection over 11 years", and the protection-gradient      -->
+<!--       plasticity finding) was independently re-checked against    -->
+<!--       verbatim quotes pulled from the PMC full text a second time,-->
+<!--       after the user asked for the story to be "100% real and     -->
+<!--       legit" - not just re-derived from the first summarised      -->
+<!--       fetch. All confirmed exact.                                 -->
+<!--    2. The Gapminder activity - REAL, well-documented dataset (the  -->
+<!--       gapminder R package / Gapminder Foundation). Numbers (1,704  -->
+<!--       obs, 142 countries, 1952-2007) as supplied by the user match -->
+<!--       the package's actual, extremely well-known contents.        -->
+<!--    3. sec-viz-gallery - four more real, cited cases added on the   -->
+<!--       user's request (Minard 1869, Nightingale 1858, Snow 1854,    -->
+<!--       Challenger 1986), each independently verified via web search -->
+<!--       before writing. Note: the Challenger section is written to   -->
+<!--       flag Tufte's account as CONTESTED, not settled fact - some   -->
+<!--       historians dispute how much a better chart alone would have  -->
+<!--       changed NASA's decision, and dispute the fidelity of Tufte's -->
+<!--       own reconstructed chart. Also note: Snow's "pump handle"     -->
+<!--       story is flagged as commonly overstated - the outbreak was   -->
+<!--       already declining when the handle was removed.               -->
+<!-- ================================================================= -->
+
+<chapter xml:id="ch-visualising-multidimensional-data" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>Visualising Multidimensional Data</title>
+
+  <introduction xml:id="intro-visualising-multidimensional">
+    <p>
+      <xref ref="ch-cleaning-recoding" /> was about trusting your data.
+      This chapter is about actually <em>seeing</em> it. A clean, correctly
+      coded dataset with more than two or three variables is still, on its
+      own, just a table <mdash /> and a table of more than a few hundred
+      rows tells a human reader almost nothing. The moment a dataset has
+      real structure to it (groups, locations, time, several measurements
+      per case) the question stops being <q>is this value right?</q> and
+      becomes <q>how do I look at several things at once?</q>
+    </p>
+  </introduction>
+
+<!-- ================================================================= -->
+<!--  SECTION 1: Following the Giants                                  -->
+<!-- ================================================================= -->
+
+  <section xml:id="sec-following-the-giants">
+    <title>Following the Giants</title>
+
+    <introduction>
+      <p>
+        Between September 2011 and April 2022, researchers working across
+        the Greater Mara Ecosystem in Kenya fitted 58 elephants with GPS
+        collars recording location roughly every hour. By the time Wall et
+        al. (2024) published their analysis, the collars had produced
+        1,176,287 raw GPS positions; 49 of the elephants, 26 male and 23
+        female, contributed 834,138 of those positions to the final
+        analysis. Alongside every location, the data were paired with
+        vegetation cover, slope, distance to water, the presence of human
+        infrastructure such as roads and agriculture, the season (wet or
+        dry), and time of day.
+      </p>
+    </introduction>
+
+    <subsection xml:id="ss-mara-scale">
+      <title>Over a million rows is not something anyone reads</title>
+
+      <p>
+        Nobody scrolls through 834,138 rows looking for a pattern. At that
+        scale, a spreadsheet stops being a way to look at data and becomes
+        just a way to store it. Understanding what these elephants were
+        doing required combining GPS location with every one of those
+        environmental variables at once, across an area spanning both
+        protected reserve land and unprotected land under human use <mdash />
+        which is exactly the kind of question a table cannot answer and a
+        well-built visualisation can.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-mara-findings">
+      <title>What the combined view showed</title>
+
+      <p>
+        Mapping elephant locations against land-use and vegetation layers
+        revealed that resource selection <mdash /> which habitats elephants
+        actively chose, versus merely passed through <mdash /> differed
+        sharply depending on where an elephant was. Elephants showed strong
+        selection for closed-canopy forest and consistently avoided open
+        grassland, and this avoidance was markedly stronger in unprotected
+        areas than inside protected reserves. Male and female elephants
+        differed in how they used the landscape, most sharply within the
+        Mara Reserve itself. And elephants moving through protected land
+        showed far more behavioural flexibility than those constrained by
+        human-dominated landscapes outside it.
+      </p>
+
+      <p>
+        The combined home ranges of the tracked elephants covered 18,758
+        square kilometres, spanning both protected and unprotected zones.
+        Historically, elephants may have moved regularly between the Mau
+        forest and the Mara <mdash /> but across the full eleven years of
+        tracking, the researchers found no evidence that this connection
+        still exists. Agriculture and fencing, the study concludes, are
+        <q>generally considered incompatible with healthy elephant ranging
+        behaviour,</q> and it is precisely in the unprotected land between
+        reserves, where those pressures are concentrated, that a
+        once-plausible corridor has gone quiet.
+      </p>
+
+      <insight xml:id="insight-elephants-lesson">
+        <title>Not more data. The same data, seen jointly.</title>
+        <p>
+          None of this <mdash /> the forest preference, the sex differences,
+          the corridor gone quiet under agricultural pressure <mdash /> is
+          visible from any single column of the dataset, or even from
+          location data on its own. It only becomes visible once location is
+          examined <em>jointly</em> with land cover, protection status, sex
+          and season, together, in the same analysis and the same maps. The
+          collars did not need to collect more data to reveal this. The data
+          needed to be looked at with enough variables in view at once.
+        </p>
+      </insight>
+
+      <table xml:id="table-mara-dimensions">
+        <title>What had to be held in view at once to find these patterns</title>
+        <tabular halign="left">
+          <row header="yes" bottom="minor">
+            <cell>Held in view</cell>
+            <cell>Variable(s)</cell>
+            <cell>What it contributed</cell>
+          </row>
+          <row><cell>Position</cell><cell>latitude, longitude</cell><cell>where each elephant actually was</cell></row>
+          <row><cell>Land cover</cell><cell>NDVI, vegetation cover</cell><cell>forest vs. grassland preference</cell></row>
+          <row><cell>Zone</cell><cell>protected vs. unprotected</cell><cell>where avoidance and plasticity differed</cell></row>
+          <row><cell>Individual</cell><cell>sex</cell><cell>where the sharpest behavioural split appeared</cell></row>
+          <row><cell>Human pressure</cell><cell>agriculture, fencing, roads</cell><cell>why the Mau<ndash />Mara corridor has gone quiet</cell></row>
+        </tabular>
+      </table>
+
+      <p>
+        Five things, held in view together, none of them new data collection
+        <mdash /> the same shape as every dimension added in
+        <xref ref="sec-gapminder" /> below.
+      </p>
+
+      <p>
+        Throughout this chapter, you will learn how to build exactly that
+        kind of view: visualisations that hold several variables in view at
+        once, rather than one table or one chart per variable.
+      </p>
+
+      <p>
+        <term>Source:</term> Wall, J., Hahn, N., Carroll, S., Mwiu, S.,
+        Goss, M., Sairowua, W., Tiedeman, K., Kiambi, S., Omondi, P.,
+        Douglas-Hamilton, I. and Wittemyer, G. (2024). <q>Land use drives
+        differential resource selection by African elephants in the
+        Greater Mara Ecosystem, Kenya.</q> <em>Movement Ecology</em>, 12, 11.
+      </p>
+    </subsection>
+  </section>
+
+<!-- ================================================================= -->
+<!--  SECTION 2: Gapminder                                             -->
+<!-- ================================================================= -->
+
+  <section xml:id="sec-gapminder">
+    <title>Building Up Dimensions: The Gapminder Activity</title>
+
+    <introduction>
+      <p>
+        Hans Rosling's Gapminder data make the same point as the elephants,
+        with a dataset you can actually hold in your hands. The data are
+        completely open, and a cleaned excerpt is bundled directly into R as
+        the <c>gapminder</c> package: 1,704 observations covering 142
+        countries from 1952 to 2007, with one row per country per year and
+        columns for <c>country</c>, <c>continent</c>, <c>year</c>,
+        <c>lifeExp</c> (life expectancy), <c>pop</c> (population), and
+        <c>gdpPercap</c> (GDP per person).
+      </p>
+
+      <p>
+        A single row tells you almost nothing interesting. What made
+        Rosling's presentation of this data famous was building it up, one
+        variable at a time, into a single animated chart <mdash /> the exact
+        idea behind <xref ref="sec-following-the-giants" />, with a dataset
+        small enough to work through by hand.
+      </p>
+    </introduction>
+
+    <subsection xml:id="ss-gapminder-2d">
+      <title>Two dimensions: does money buy a longer life?</title>
+
+      <p>
+        Start with the most basic possible question: is a country's income
+        related to how long its people live? Two variables, two axes.
+      </p>
+
+      <program language="r">
+        library(gapminder)
+        library(ggplot2)
+
+        gapminder_2007 &lt;- subset(gapminder, year == 2007)
+
+        ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp)) +
+          geom_point() +
+          scale_x_log10() +
+          labs(x = "GDP per capita (log scale)", y = "Life expectancy")
+      </program>
+
+      <p>
+        Even this bare scatterplot shows a clear upward trend, though
+        income is logged on the x-axis because a handful of very rich
+        countries would otherwise crush the rest of the points into one
+        corner. But every point is currently the same colour and the same
+        size <mdash /> a Norwegian point and a Nigerian point are visually
+        identical except for position.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-gapminder-3d">
+      <title>Three dimensions: adding continent</title>
+
+      <p>
+        Map <c>continent</c> onto colour, and a third variable appears in
+        the same chart without adding a single new axis.
+      </p>
+
+      <program language="r">
+        ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp, colour = continent)) +
+          geom_point() +
+          scale_x_log10() +
+          labs(x = "GDP per capita (log scale)", y = "Life expectancy")
+      </program>
+
+      <p>
+        The trend from <xref ref="ss-gapminder-2d" /> is still there, but
+        now it has structure: African countries cluster toward the lower
+        left, European countries toward the upper right, and the spread
+        within each continent becomes visible for the first time. Nothing
+        about the underlying data changed. One aesthetic mapping did.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-gapminder-4d">
+      <title>Four dimensions: adding population</title>
+
+      <p>
+        Map <c>pop</c> onto point size, and the chart gains a fourth
+        variable, turning a scatterplot into a bubble chart.
+      </p>
+
+      <program language="r">
+        ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp,
+                                   colour = continent, size = pop)) +
+          geom_point(alpha = 0.7) +
+          scale_x_log10() +
+          scale_size_continuous(range = c(1, 15)) +
+          labs(x = "GDP per capita (log scale)", y = "Life expectancy",
+               size = "Population")
+      </program>
+
+      <p>
+        China and India, similar in income and life expectancy to several
+        smaller countries, now visibly dominate the chart by sheer size.
+        That is real information <mdash /> population <mdash /> that a plain
+        scatterplot could not have shown without a second, separate chart.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-gapminder-5d">
+      <title>Five dimensions: adding time</title>
+
+      <p>
+        The chart so far is a single snapshot, 2007 only. Rosling's original
+        animated the chart across every year in the data, letting countries
+        move as their income and life expectancy changed. Without animation
+        software, the same fifth dimension <mdash /> time <mdash /> can be
+        shown as small multiples, one panel per year.
+      </p>
+
+      <program language="r">
+        ggplot(gapminder, aes(x = gdpPercap, y = lifeExp,
+                              colour = continent, size = pop)) +
+          geom_point(alpha = 0.7) +
+          scale_x_log10() +
+          scale_size_continuous(range = c(1, 10)) +
+          facet_wrap(~ year) +
+          labs(x = "GDP per capita (log scale)", y = "Life expectancy",
+               size = "Population")
+      </program>
+
+      <p>
+        Read left to right, top to bottom, and entire countries visibly
+        migrate across the panel: life expectancy climbing steadily almost
+        everywhere, even where income barely moves; the occasional sharp
+        reversal, a bubble dropping backward in a single panel, worth
+        investigating rather than dismissing as noise. (If you have the
+        <c>gganimate</c> package installed, the same five variables can be
+        drawn as a single moving chart, <c>transition_time(year)</c>, closer
+        to Rosling's original.)
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-gapminder-summary">
+      <title>What just happened</title>
+
+      <p>
+        Five variables, five aesthetics, and not one extra table.
+      </p>
+
+      <table xml:id="table-gapminder-dimensions">
+        <title>Dimensions added to the Gapminder chart, one at a time</title>
+        <tabular halign="left">
+          <row header="yes" bottom="minor">
+            <cell>Dimension</cell>
+            <cell>Aesthetic</cell>
+            <cell>Variable</cell>
+          </row>
+          <row><cell>1st &amp; 2nd</cell><cell>x, y position</cell><cell><c>gdpPercap</c>, <c>lifeExp</c></cell></row>
+          <row><cell>3rd</cell><cell>colour</cell><cell><c>continent</c></cell></row>
+          <row><cell>4th</cell><cell>size</cell><cell><c>pop</c></cell></row>
+          <row><cell>5th</cell><cell>facet / animation frame</cell><cell><c>year</c></cell></row>
+        </tabular>
+      </table>
+
+      <p>
+        Each new variable was added as a new <term>aesthetic mapping</term>,
+        not a new chart, a new axis, or a new table. That is the whole
+        technique this chapter is teaching, and <xref ref="sec-following-the-giants" />
+        was the same idea before it had a name: GPS location, land cover,
+        protection status, sex and season, held together in one analysis
+        rather than one table per variable, is what turned 834,138 rows of
+        coordinates into a finding about forest preference, sex differences
+        and a corridor gone quiet. Five variables again, in substance if not
+        in a single ggplot call <mdash /> the same move as
+        <xref ref="ss-gapminder-4d" />, just with a resource-selection model
+        standing in for <c>colour =</c> and <c>size =</c>.
+      </p>
+
+      <p>
+        <term>Source:</term> Bryan, J. <c>gapminder</c> R package,
+        data curated by the Gapminder Foundation
+        (<url href="https://www.gapminder.org" visual="gapminder.org" />),
+        based on the work of Hans Rosling.
+      </p>
+    </subsection>
+  </section>
+
+<!-- ================================================================= -->
+<!--  SECTION 3: a short gallery                                       -->
+<!-- ================================================================= -->
+
+  <section xml:id="sec-viz-gallery">
+    <title>A Short Gallery: When Two Dimensions Weren't Enough</title>
+
+    <introduction>
+      <p>
+        The elephants and Gapminder are recent examples of a much older
+        idea. Long before <c>ggplot2</c>, before spreadsheets, before
+        computers, people were solving exactly this problem <mdash /> a
+        table or a simple chart that cannot show what actually matters
+        <mdash /> by finding a way to hold several variables in one image at
+        once. Four examples, spanning more than 150 years, make the case
+        better than any single modern one can on its own.
+      </p>
+    </introduction>
+
+    <subsection xml:id="ss-viz-minard">
+      <title>Minard's map of Napoleon's Russian campaign (1869)</title>
+
+      <p>
+        Charles Joseph Minard was a retired French civil engineer, 80 years
+        old, when he published a single lithograph that Edward Tufte later
+        called <q>possibly the best statistical graphic ever drawn.</q> It
+        depicts Napoleon's catastrophic 1812 invasion of Russia and the
+        retreat that followed.
+      </p>
+
+      <p>
+        A bar chart of monthly troop losses would need several separate
+        charts to show army size, geographic position, direction of travel,
+        and the temperature that killed so many soldiers on the retreat.
+        Minard fit all of it into one image. A tan band, its width scaled at
+        precisely one millimetre per ten thousand men, traces the army's
+        advance eastward toward Moscow, drawn directly onto a map so that
+        position and army size are shown together. A black band, same
+        scale, traces the retreat back. Beneath the map, a separate strip
+        plots temperature against date along the retreat route, so the
+        collapse in troop numbers can be read directly against the cold that
+        caused so much of it.
+      </p>
+
+      <p>
+        Six variables, one image: geography, direction of travel, troop
+        numbers, the route itself, temperature, and time. The tan band
+        starts near the Polish border at 422,000 men and narrows steadily
+        marching into Russia, losing soldiers to disease and combat even
+        before Moscow. The retreat band is where the graphic becomes
+        devastating: it thins almost to nothing by the time it reaches the
+        same border, months later, at around 10,000 survivors, while the
+        temperature strip beneath falls below <m>-30^\circ\text{C}</m> at the
+        worst of it.
+      </p>
+
+      <p>
+        A table of monthly casualty figures existed and always existed. It
+        could not make the collapse visible the way the combined graphic
+        does, because a table cannot show a retreating army's position, its
+        shrinking size, and the falling temperature all bearing on each
+        other at once, in a single glance.
+      </p>
+
+      <p>
+        <term>Source:</term> Minard, C.J. (1869). <em>Carte figurative des
+        pertes successives en hommes de l'Armée Française dans la campagne
+        de Russie 1812<ndash />1813.</em> Described in Tufte, E.R. (1983).
+        <em>The Visual Display of Quantitative Information.</em> Cheshire,
+        CT: Graphics Press.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-viz-nightingale">
+      <title>Nightingale's Coxcomb (1858)</title>
+
+      <p>
+        In 1858, Florence Nightingale published a report built almost
+        entirely around one number she needed British officials to stop
+        ignoring: of the soldiers who died during the Crimean War, the
+        overwhelming majority died not in battle but of preventable disease
+        in military hospitals.
+      </p>
+
+      <p>
+        She could have reported a single national mortality rate. Instead
+        she built what became known as the <term>coxcomb</term>, or rose
+        diagram: a circular chart of twelve wedges, one per month, each
+        wedge's area scaled to that month's deaths, each wedge divided by
+        colour into three causes <mdash /> preventable disease, wounds from
+        battle, and all other causes. As with Minard's map, the point is not
+        one summary number but a pattern developing over time, visible only
+        because time, cause, and magnitude are encoded in the same image.
+      </p>
+
+      <p>
+        The pattern is stark. In the war's first winter, before a Sanitary
+        Commission arrived in March 1855 to overhaul hygiene in the camps
+        and hospitals, the wedges for disease dwarf the wedges for wounds,
+        month after month. After the Commission's reforms, the wedges shrink
+        sharply. A table of the same monthly totals contains identical
+        information; it does not make the argument nearly as forcefully,
+        because a table asks the reader to do the comparing themselves,
+        while the coxcomb does the comparing for them, at a glance.
+      </p>
+
+      <p>
+        Nightingale was a trained statistician petitioning a government that
+        had shown little appetite for reading tables of army mortality
+        statistics. The diagram is credited as a direct influence on the
+        sanitary reforms, in the military and more broadly, that followed.
+      </p>
+
+      <p>
+        <term>Source:</term> Nightingale, F. (1858). <em>Notes on Matters
+        Affecting the Health, Efficiency, and Hospital Administration of
+        the British Army, Founded Chiefly on the Experience of the Late
+        War.</em> London: Harrison and Sons.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-viz-snow">
+      <title>John Snow's cholera map (1854)</title>
+
+      <p>
+        In late August 1854, cholera broke out in Soho, London, killing over
+        600 people within a few weeks, concentrated overwhelmingly around
+        Broad Street. Cholera was widely believed at the time to spread
+        through <q>miasma,</q> bad air, rather than water; there was no
+        accepted mechanism connecting the disease to anything as specific as
+        a single pump.
+      </p>
+
+      <p>
+        The physician John Snow suspected otherwise, and tested it by
+        mapping rather than tabulating. On a street plan of the
+        neighbourhood, he marked a dash for every recorded death at the
+        address where it occurred, and marked every local water pump. The
+        map made a pattern visible that a table of addresses and death
+        counts could not: deaths clustered tightly around a single pump on
+        Broad Street and thinned with distance from it, while households
+        with their own water supply, or a nearby brewery whose workers drank
+        almost none of the local water, had almost no cases at all.
+      </p>
+
+      <p>
+        Location and death count, combined in a single image, did what
+        neither could do alone. Snow presented the map to the local parish
+        and persuaded them to remove the handle from the Broad Street pump.
+        The outbreak was already declining by that point, so the act did not
+        single-handedly end it <mdash /> that specific detail is often
+        overstated <mdash /> but the map itself provided the first strong
+        evidence that cholera spread through contaminated water rather than
+        air, and a later well inspection found the pump's water supply sat
+        near a leaking cesspit, connecting the map's pattern to an actual
+        physical cause.
+      </p>
+
+      <p>
+        <term>Source:</term> Snow, J. (1855). <em>On the Mode of
+        Communication of Cholera</em> (2nd ed.). London: John Churchill.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-viz-challenger">
+      <title>The Challenger disaster (1986)</title>
+
+      <p>
+        On 28 January 1986, the Space Shuttle Challenger broke apart 73
+        seconds after launch, killing all seven crew members. The immediate
+        cause was the failure of an O-ring seal on a solid rocket booster, a
+        component engineers at Morton Thiokol, the manufacturer, had already
+        flagged as a concern in cold weather.
+      </p>
+
+      <p>
+        The night before launch, those engineers argued against flying,
+        worried specifically about the forecast temperature. Ambient
+        temperature at launch was later measured at 36°F, with the
+        temperature at the failed joint itself estimated at 28<ndash />31°F
+        <mdash /> roughly 15 degrees colder than any previous launch. Their
+        argument did not persuade NASA management, and the launch went
+        ahead.
+      </p>
+
+      <p>
+        Edward Tufte's later analysis, in <em>Visual Explanations</em>
+        (1997), argues that part of why the engineers failed to persuade
+        anyone was how their evidence was presented. Under time pressure,
+        their chart plotted O-ring damage only for flights that had already
+        shown some, leaving out every fully successful flight. Displayed
+        that way, the relationship between cold and damage does not
+        obviously stand out. Tufte reconstructed the same data as a single
+        chart of temperature against O-ring damage for <em>every</em>
+        flight, successful or not. Plotted that way, the relationship is
+        difficult to miss, and the forecast launch temperature sits clearly
+        outside the range of every previous flight.
+      </p>
+
+      <p>
+        This case is genuinely contested, and worth reading that way rather
+        than as a clean morality tale. Some historians of the disaster argue
+        Tufte's account overstates how much a better chart alone would have
+        changed the outcome, given the institutional and schedule pressures
+        NASA management was under regardless of what any chart showed, and
+        some note that even Tufte's reconstructed chart is not fully
+        faithful to the data available that night. What is not contested is
+        the underlying point: a chart showing only part of the relevant data
+        <mdash /> here, only the flights with problems <mdash /> can hide
+        exactly the pattern a reader most needs to see. Showing all of it is
+        what makes a relationship visible or invisible.
+      </p>
+
+      <p>
+        <term>Sources:</term> Presidential Commission on the Space Shuttle
+        Challenger Accident (1986). <em>Report to the President.</em>
+        Washington, DC: US Government Printing Office. Tufte, E.R. (1997).
+        <em>Visual Explanations: Images and Quantities, Evidence and
+        Narrative.</em> Cheshire, CT: Graphics Press.
+      </p>
+    </subsection>
+  </section>
+
+<!-- ================================================================= -->
+<!--  OBJECTIVES                                                       -->
+<!-- ================================================================= -->
+
+  <objectives xml:id="objectives-visualising-multidimensional">
+    <title>By the end of this topic you will be able to</title>
+    <ul>
+      <li><p>Explain why a large, clean dataset can still be unreadable without visualisation.</p></li>
+      <li><p>Add variables to a plot using aesthetic mappings (colour, size, facet) rather than separate tables or charts.</p></li>
+      <li><p>Build up a multidimensional visualisation incrementally, one variable at a time, and describe what each addition reveals.</p></li>
+      <li><p>Choose an appropriate encoding (colour vs. size vs. facet vs. animation) for a given variable and dataset.</p></li>
+    </ul>
+  </objectives>
+
+<!-- ================================================================= -->
+<!--  EXERCISES                                                        -->
+<!-- ================================================================= -->
+
+  <exercises xml:id="exercises-visualising-multidimensional">
+    <title>Exercises</title>
+
+    <exercise xml:id="ex-viz-elephants-variables">
+      <statement>
+        <p>
+          <xref ref="sec-following-the-giants" /> pairs each elephant's GPS
+          location with several other variables: vegetation cover, distance
+          to water, human infrastructure, sex, season, and time of day.
+          <xref ref="ss-mara-findings" /> describes findings that came from
+          examining location jointly with land cover, protection status,
+          sex and season. Pick one variable not explicitly named in that
+          combination <mdash /> time of day, or distance to water <mdash />
+          and describe, in a sentence or two, what mapping it onto colour,
+          size, or facet might reveal that the described analysis would not.
+        </p>
+      </statement>
+    </exercise>
+
+    <exercise xml:id="ex-viz-gapminder-1952">
+      <statement>
+        <p>
+          Adapt the code in <xref ref="ss-gapminder-4d" /> to show 1952
+          instead of 2007. Compare the two charts. Which continents have
+          moved the most in the fifty-five years between them, and along
+          which axis?
+        </p>
+      </statement>
+    </exercise>
+
+    <exercise xml:id="ex-viz-flamingo-dimensions">
+      <statement>
+        <p>
+          Return to <c>kenya_flamingos.csv</c> from
+          <xref ref="ch-exploring-data" />. Build a single plot that encodes
+          at least four variables at once (for example: bill length and body
+          mass on the axes, species on colour, lake on facet). What does the
+          combined view show that a single-variable summary of each column,
+          taken separately, would not?
+        </p>
+      </statement>
+    </exercise>
+
+    <exercise xml:id="ex-viz-too-many-dimensions">
+      <statement>
+        <p>
+          <xref ref="ss-gapminder-5d" /> uses position, colour, size, and
+          facet together, four aesthetics beyond the two axes. Is there a
+          point at which adding another variable to the same chart would
+          make it harder to read rather than easier? Argue for a specific
+          upper limit, and say what you would do with a fifth or sixth
+          variable instead of cramming it into the same plot.
+        </p>
+      </statement>
+    </exercise>
+  </exercises>
+
+</chapter>

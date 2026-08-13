@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ================================================================= -->
+<!--  Chapter 2: Multilevel Data                                       -->
+<!--                                                                    -->
+<!--  Conceptual chapter, no computation. The Berkeley admissions case  -->
+<!--  is real and properly citable (Bickel, Hammel & O'Connell 1975),   -->
+<!--  as is the kidney stone case (Bonovas & Piovani 2023). The Kenya   -->
+<!--  tie-in (ss-kenya-relevance) is also a real, sourced fact - KUCCPS' -->
+<!--  own affirmative action criteria - not an invented case study.    -->
+<!--  Deliberately not tied to MICS or the flamingo dataset as the     -->
+<!--  running example.                                                 -->
+<!-- ================================================================= -->
+<chapter xml:id="ch-multilevel-data" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>Multilevel Data</title>
+
+  <introduction xml:id="intro-multilevel-data">
+    <p>
+      TODO
+    </p>
+  </introduction>
+  <!-- ================================================================= -->
+  <!--  SECTION 1: Berkeley                                               -->
+  <!-- ================================================================= -->
+  <section xml:id="sec-berkeley-admissions">
+    <title>A Question About Fairness</title>
+
+    <introduction>
+      <p>
+        In the early 1970s, concern was growing about gender equality in higher
+        education in the United States.
+        Against this backdrop, an analysis of admissions data from the
+        University of California, Berkeley caught public attention.
+      </p>
+    </introduction>
+
+    <subsection xml:id="ss-berkeley-the-numbers">
+      <title>The numbers seemed clear</title>
+
+      <p>
+        In 1973, UC Berkeley faced a lawsuit over sex bias when overall graduate
+        admissions showed 44.3% of men but only 34.6% of women were accepted
+        across the whole university, This was in the same institution, and in
+        the same year.
+        Newspapers reported the figures, and public concern followed.
+        It appeared that women were being treated unfairly.
+      </p>
+
+      <figure xml:id="fig-berkeley-overall-admissions">
+        <caption>
+          University-wide graduate admission rates at UC Berkeley in 1973, by
+          sex: 44.3% of male applicants were admitted, compared with 34.6% of
+          female applicants.
+        </caption>
+
+        <description>
+          A bar chart with two bars comparing overall graduate admission rates
+          at UC Berkeley in 1973.
+          The bar for male applicants reaches 44.3%, noticeably taller than the
+          bar for female applicants, which reaches 34.6%.
+        </description>
+
+        <image source="images/berkeley_img_1.png" width="60%"/>
+      </figure>
+
+      <p>
+        Before any action was taken, the researchers dug deeper into the
+        numbers.
+        Rather than asking simply <em>what</em> the numbers showed, they asked
+        <em>how</em> those decisions were actually made.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-berkeley-how-decisions-are-made">
+      <title>One university, many decisions</title>
+
+      <p>
+        Admissions at Berkeley were not decided by a single central committee.
+        Instead, each academic department made their own decisions, with their
+        own standards, number of places, and level of competition.
+      </p>
+
+      <p>
+        While correct, the university-wide figures only told part of the story.
+        Instead, we can look at the exact same data and information, but just
+        look at it by department, instead of at the whole university level.
+        Now were women less likely to be admitted than men?
+      </p>
+
+      <figure xml:id="fig-berkeley-admissions-by-dept">
+        <caption>
+          Graduate admission rates at UC Berkeley in 1973, by department and
+          sex.
+          The rates for male and female applicants vary by department.
+        </caption>
+
+        <description>
+          A bar chart with two bars for each department comparing graduate
+          admission rates at UC Berkeley in 1973.
+          The bar for male applicants reaches a certain percentage, noticeably
+          taller or shorter than the bar for female applicants, depending on the
+          department.
+        </description>
+
+        <image source="images/berkeley_img_by_dept.png" width="60%"/>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="ss-berkeley-what-they-found">
+      <title>What they found</title>
+
+      <p>
+        In most departments, women were admitted around the same rate as men.
+        In fact, in several departments women were admitted at a <em>higher</em>
+        rate!
+        The apparent discrimination had all but vanished.
+      </p>
+
+      <p>
+        So how could women have a lower acceptance rate overall, if they were
+        not being disadvantaged within any individual department?
+      </p>
+
+      <figure xml:id="fig-berkeley-admissions-total-applicants-by-dept">
+        <caption>
+          Number of graduate applicants at UC Berkeley in 1973, by department
+          and sex.
+          The numbers for male and female applicants vary by department.
+        </caption>
+
+        <description>
+          A bar chart with two bars for each department comparing the number of
+          graduate applicants at UC Berkeley in 1973.
+          The bar for male applicants reaches a certain number, noticeably
+          taller or shorter than the bar for female applicants, depending on the
+          department.
+        </description>
+
+        <image source="images/berkeley_img_total_applicants.png" width="60%"/>
+      </figure>
+
+      <p>
+        The answer lay in where people applied.
+        On average, women tended to apply to departments that were more
+        competitive <mdash/> departments with fewer places and lower acceptance
+        rates for everyone, regardless of sex.
+        Men, on average, applied to departments with higher acceptance rates.
+        Once every department was blended into one set of university- wide
+        numbers, that difference in <em>where people applied</em> disappeared
+        from view, and only a difference in <em>who got in</em> was left
+        visible.
+      </p>
+
+      <insight xml:id="insight-berkeley-lesson">
+        <title>
+          The university was not discriminating.
+          The way the numbers were combined was.
+        </title>
+
+        <p>
+          By looking at applications across the entire university, unlike
+          situations were treated as if they were the same.
+          It blurred two distinct questions: how applicants were treated
+          <em>within</em> a department, and how departments differed
+          <em>from one another</em>.
+        </p>
+
+        <p>
+          What is important is that this was not a mistake in arithmetic.
+          But, instead, the mistake was in how the situation was understood.
+          The data reflected a layered reality <mdash/> applicants belonged to
+          departments, and departments belonged to a university <mdash/> and
+          flattening that layered structure into one set of averages erased
+          exactly the context needed to read it correctly.
+        </p>
+      </insight>
+    </subsection>
+
+    <subsection xml:id="ss-berkeley-name-and-stakes">
+      <title>Simpson's paradox</title>
+
+      <p>
+        This pattern <mdash/> a trend that appears in combined data but reverses
+        or vanishes once the data is broken into its natural groups <mdash/> is
+        now known as <term>Simpson's paradox</term>
+        <idx><h>Simpson's paradox</h></idx>.
+        It is one of the most famous cautionary tales in applied statistics, and
+        for good reason: the consequences at Berkeley were not trivial.
+        A university's reputation was at stake, a serious accusation had been
+        made in public, and it took careful, patient re-analysis to show that
+        the accusation, though built from real numbers, did not hold up.
+      </p>
+
+      <figure xml:id="fig-simpsons-paradox">
+        <caption>A GIF Illustrating Simpson's Paradox</caption>
+        <description/>
+        <image source="images/simpsons_paradox.gif" width="60%"/>
+      </figure>
+
+      <p>
+        The deeper lesson is simpler than the paradox's reputation suggests.
+        Multilevel data is not about advanced models or complicated equations.
+        It is about recognising how the world is actually organised, and
+        refusing to erase that organisation just because a single table of
+        averages is easier to report.
+      </p>
+
+      <p>
+        <term>Source:</term> Bickel, P.J., Hammel, E.A.
+        and O'Connell, J.W.
+        (1975).
+        <q>Sex Bias in Graduate Admissions: Data from Berkeley.</q>
+        <em>Science</em>, 187(4175), pp.398 <ndash/> 404.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-kenya-relevance">
+      <title>Why this matters here</title>
+
+      <p>
+        This is a story from 1970s America.
+        Why is this important here?
+        Kenya's own university placement body, the Kenya Universities and
+        Colleges Central Placement Service (KUCCPS), applies an approved
+        <term>Affirmative Action Criteria</term> covering gender, persons with
+        disabilities and marginalised regions when placing students into higher
+        education programmes.
+        The aim is to enhance access to higher education for groups that may
+        otherwise be disadvantaged.
+        (KUCCPS, n.d.)
+      </p>
+
+      <p>
+        The principle is familiar: a single overall number can hide important
+        differences between groups.
+        A national placement rate, or a single measure of performance, may tell
+        you something useful about the system as a whole while telling you very
+        little about how that system is working for particular groups.
+        The Berkeley example shows why this matters.
+        The overall numbers looked very different from the numbers within
+        individual departments.
+        The lesson is not that every difference between groups is evidence of
+        unfairness, nor that every difference is an aggregation effect.
+        It is that a pooled statistic is a starting point, not necessarily the
+        end of the analysis.
+      </p>
+
+      <p>
+        So, when you encounter a national placement rate, an examination result,
+        or any other pooled statistic, ask yourself:
+        <em>what groups have been
+  combined to produce this number?</em> Break
+        the data down, look again, and only then start drawing conclusions.
+      </p>
+
+      <p>
+        <term>Source:</term> Kenya Universities and Colleges Central Placement
+        Service (KUCCPS).
+        <q>Frequently Asked Questions.</q>
+        <url href="https://kuccps.net/frequently-asked-questions" visual="kuccps.net/frequently-asked-questions"/>.
+      </p>
+    </subsection>
+  </section>
+  <!-- ================================================================= -->
+  <!--  SECTION 2: it happened again, elsewhere                          -->
+  <!-- ================================================================= -->
+  <section xml:id="sec-kidney-stones">
+    <title>Aside: This Wasn't a One-Off</title>
+
+    <introduction>
+      <p>
+        TODO: Does this example link to Multilevel data?
+        Or instead, is this more like factors/grouping.
+      </p>
+
+      <p>
+        If Berkeley sounds like a coincidence of the numbers, here is a second,
+        unrelated case where exactly the same thing happened, a decade later, in
+        a completely different field.
+      </p>
+    </introduction>
+
+    <subsection xml:id="ss-kidney-two-treatments">
+      <title>Two treatments for kidney stones</title>
+
+      <p>
+        In the early 1980s, surgeons were deciding how best to treat kidney
+        stones.
+        There were two options.
+        The first was open surgery: invasive, difficult, but familiar.
+        The other was newer and far less invasive, a procedure called
+        percutaneous nephrolithotomy, promising quicker recovery and, many
+        hoped, better results.
+      </p>
+
+      <p>
+        Looking at outcomes across all patients, the answer seemed clear: the
+        newer procedure appeared to work better overall.
+        More patients were successfully treated.
+        On the surface, it looked like the obvious choice.
+      </p>
+
+      <p>
+        TODO: Graph or numbers of the overall numbers
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-kidney-stone-size">
+      <title>Not all stones are equal</title>
+
+      <p>
+        But kidney stones are not all the same.
+        Some are small and relatively easy to remove; others are large,
+        multiple, or deeply embedded, and far harder to treat.
+        When researchers separated patients into two groups <mdash/> small
+        stones and large stones <mdash/> the story changed completely.
+      </p>
+
+      <p>
+        TODO: Graph or numbers of split by stone size
+      </p>
+
+      <p>
+        Within each group, open surgery had the <em>higher</em> success rate.
+        It worked better for patients with small stones, and it also worked
+        better for patients with large stones.
+        The treatment that looked worse overall was performing better in every
+        comparable situation.
+      </p>
+
+      <p>
+        The contradiction came from how the treatments were actually used in
+        practice.
+        Patients with small, easy stones were far more likely to receive the
+        newer, less invasive procedure.
+        Patients with large or complex stones were far more likely to be sent
+        for open surgery.
+        Lump all patients together, and the procedure that had been handed the
+        hardest cases ends up looking like the weaker one, even though, case for
+        comparable case, it was the more effective option.
+      </p>
+
+      <p>
+        Patients are grouped by stone size, and the conclusion reverses
+        depending on which level you look at: the whole patient group, or the
+        two size-based groups within it.
+        Ignoring that grouping doesn't simplify the analysis.
+        It distorts it.
+      </p>
+
+      <p>
+        <term>Source:</term> Bonovas, S.
+        and Piovani, D.
+        (2023).
+        <q>Simpson's
+        Paradox in Clinical Research: A Cautionary Tale.</q>
+        <em>Journal of
+        Clinical Medicine</em>, 12(4), 1633.
+      </p>
+    </subsection>
+  </section>
+  <!-- ================================================================= -->
+  <!--  SECTION 3: what makes data multilevel                            -->
+  <!-- ================================================================= -->
+  <section xml:id="sec-what-is-multilevel">
+    <title>What Makes Data Multilevel</title>
+
+    <introduction>
+      <p>
+        Both stories share the same shape, once you strip away the subject
+        matter.
+        In each, individuals (applicants, patients) belong to a group (a
+        department, a stone-size category), and it is the group that determines
+        both the individual's chances and how common that individual's situation
+        is in the data overall.
+        Ignore the grouping, and a comparison across individuals quietly turns
+        into a comparison across groups instead, without telling you it has done
+        so.
+      </p>
+    </introduction>
+
+    <subsection xml:id="ss-levels-everywhere">
+      <title>Levels are everywhere once you look for them</title>
+
+      <p>
+        Neither Berkeley nor the kidney stone study is an unusual dataset.
+        Once you start looking for this structure, it is the norm rather than
+        the exception:
+      </p>
+
+      <ul>
+        <li>
+          <p>
+            Pupils belong to schools, which belong to sub-counties, which belong
+            to counties.
+          </p>
+        </li>
+
+        <li>
+          <p>
+            Patients belong to clinics, which belong to a county health system.
+          </p>
+        </li>
+
+        <li>
+          <p>
+            Farmers manage plots, which belong to a cooperative or a region.
+          </p>
+        </li>
+
+        <li>
+          <p>
+            Survey respondents belong to households, which belong to a sampled
+            cluster.
+          </p>
+        </li>
+      </ul>
+
+      <p>
+        In every case there is more than one <term>level</term> at which the
+        data can honestly be described: the individual level (a pupil, a
+        patient, a plot, a person), and one or more group levels above it (a
+        school, a clinic, a cooperative, a cluster).
+        A number computed at the wrong level, or a group level collapsed away
+        entirely, is exactly the mistake both stories in this chapter made.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-multilevel-not-a-trick">
+      <title>This is not a trick to watch out for occasionally</title>
+
+      <p>
+        It is tempting to file Simpson's paradox away as something that springs
+        on you once in a career, if at all.
+        Both stories in this chapter argue the opposite.
+        Whenever your data has structure (and most real data does!) that
+        structure is either going to inform your analysis, or it is going to
+        quietly undermine it.
+        There is rarely a neutral option to simply ignore it.
+      </p>
+
+      <p>
+        The rest of this module works with data that has exactly this kind of
+        structure.
+        Learning to notice it, name it, and check whether it matters before
+        trusting a single overall number is the skill this chapter exists to
+        start building.
+      </p>
+    </subsection>
+  </section>
+  <!-- ================================================================= -->
+  <!--  TODO: Now to build the actual course content lol                 -->
+  <!-- ================================================================= -->
+  <objectives xml:id="objectives-multilevel-data">
+    <title>By the end of this topic you will be able to</title>
+
+    <ul>
+      <li>
+        <p>
+          Identify examples of datasets with multiple levels.
+        </p>
+      </li>
+
+      <li>
+        <p>
+          Describe the characteristics and structure of multilevel data.
+        </p>
+      </li>
+
+      <li>
+        <p>
+          Apply basic methods to explore and prepare multilevel data for
+          analysis.
+        </p>
+      </li>
+
+      <li>
+        <p>
+          Recognise when a single, pooled summary is hiding rather than
+          describing group-level structure.
+        </p>
+      </li>
+    </ul>
+  </objectives>
+  <!-- ================================================================= -->
+  <!--  EXERCISES                                                        -->
+  <!-- ================================================================= -->
+  <exercises xml:id="exercises-multilevel-data">
+    <title>Exercises</title>
+
+    <exercise xml:id="ex-multilevel-own-example">
+      <statement>
+        <p>
+          Think of a setting you know well <mdash/> a workplace, a school, a
+          sports league, a family business.
+          Describe its data in terms of at least two levels, the way pupils
+          belong to schools or patients belong to clinics.
+          What is the individual-level unit, and what is the group above it?
+        </p>
+      </statement>
+    </exercise>
+
+    <exercise xml:id="ex-multilevel-kuccps">
+      <statement>
+        <p>
+          <xref ref="ss-kenya-relevance"/> notes that KUCCPS applies an
+          Affirmative Action Criteria covering gender when placing students into
+          degree programmes.
+          Suppose a single national placement rate showed a gap between men and
+          women.
+          Reasoning the way the Berkeley statisticians did, what grouping
+          variable would you want that national rate broken down by before
+          deciding whether the gap reflected unfair treatment, rather than
+          differences in <em>where</em> applicants applied?
+          What pattern in that breakdown would tell you the gap was a
+          Simpson's-paradox-style artefact rather than a real one?
+        </p>
+      </statement>
+    </exercise>
+
+    <exercise xml:id="ex-multilevel-kidney-recap">
+      <statement>
+        <p>
+          In your own words, explain why the newer kidney stone procedure looked
+          better overall but worse within every group defined by stone size.
+          Your explanation should mention <em>which</em> patients were more
+          likely to receive which treatment, not just that the numbers
+          <q>reversed.</q>
+        </p>
+      </statement>
+    </exercise>
+  </exercises>
+</chapter>
