@@ -2,259 +2,479 @@
 
 <!-- ================================================================= -->
 <!--  Chapter 7: Handling Factors                                      -->
-<!--                                                                    -->
-<!--  STATUS: opening story only, per the user's explicit request       -->
-<!--  ("write this as a story for the start of the Handling Factors     -->
-<!--  chapter"). The "what is a factor / creating, inspecting,          -->
-<!--  reordering, combining, dropping levels" mechanics section has NOT -->
-<!--  been written yet - deliberately, so the sensitive story below     -->
-<!--  can be reviewed on its own before the rest of the chapter is      -->
-<!--  built on top of it.                                               -->
-<!--                                                                    -->
-<!--  This story concerns apartheid-era and post-apartheid South        -->
-<!--  African census race/population-group classification. Every       -->
-<!--  factual claim below was independently verified via web search    -->
-<!--  before writing, against multiple sources including primary       -->
-<!--  legislative text summaries, an official census microdata         -->
-<!--  codebook, Statistics South Africa's own published census          -->
-<!--  results, and a peer-reviewed academic source. Sources used:      -->
-<!--    - Union of South Africa. Population Registration Act, 1950      -->
-<!--      (Act No. 30 of 1950). Established legal racial               -->
-<!--      classification (White, Coloured, Native/Bantu, later Asian);  -->
-<!--      foundational apartheid legislation.                           -->
-<!--    - Coloured subdivision (Cape Coloured, Cape Malay, Griqua,      -->
-<!--      Chinese, Indian, Other Asiatic, Other Coloured) established   -->
-<!--      by Proclamation No. 46 of 1959.                                -->
-<!--    - The 1980 census category list (20 of up to 34 codes) was      -->
-<!--      pulled directly from the actual POPGRP variable codebook,     -->
-<!--      South Africa Population Census 1980, hosted by the World      -->
-<!--      Bank Microdata Library - a primary source, not a secondary    -->
-<!--      summary.                                                      -->
-<!--    - Population Registration Act Repeal Act, 1991 (Act No. 114 of  -->
-<!--      1991), assented 27 June 1991, commenced 28 June 1991 - ended  -->
-<!--      legal racial classification.                                  -->
-<!--    - Khalfani, A.A. and Zuberi, T. (2001). "Racial classification  -->
-<!--      and the modern census in South Africa, 1911-1996." Race and   -->
-<!--      Society, 4(2), 161-176. Peer-reviewed source for the shift to -->
-<!--      self-identification from the 1996 census onward, and the     -->
-<!--      1996 self-reported figures (Black/African 77%, Coloured 9%,   -->
-<!--      White 11%, Asian/Indian 2.6%, Other 0.9%).                    -->
-<!--    - Statistics South Africa (2023). Census 2022: Statistical      -->
-<!--      Release P0301.4. Pretoria: Stats SA. Real 2022 figures        -->
-<!--      (Black African 81.4% / 50,486,856; Coloured 8.2%; White 7.3%  -->
-<!--      / 4,504,252, down from 4,586,838 in 2011; Indian/Asian 2.7%). -->
-<!--  I could not verify one specific claim relayed to the user by      -->
-<!--  ChatGPT (a purported verbatim Stats SA statement that population- -->
-<!--  group classification "was used by the apartheid government to    -->
-<!--  divide the population into distinct groups on which apartheid     -->
-<!--  policies were based") as an exact quotable line from a specific   -->
-<!--  Stats SA document, so it is NOT quoted below. The underlying      -->
-<!--  substance is well supported by other means instead - multiple     -->
-<!--  independent sources confirm the Population Registration Act was  -->
-<!--  the legal foundation later apartheid segregation laws (Group      -->
-<!--  Areas Act 1950, Bantu Authorities Act 1951) were built on - and   -->
-<!--  that substance is what is stated below, without the disputed      -->
-<!--  quote attribution.                                                -->
-<!--                                                                    -->
-<!--  Handled deliberately with care given the subject matter: framed   -->
-<!--  throughout as a real historical and administrative fact, not a    -->
-<!--  neutral or purely technical curiosity, and not for shock value.   -->
+<!--    Checked over and happy with it (for now at least!)             -->
 <!-- ================================================================= -->
-
 <chapter xml:id="ch-handling-factors" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Handling Factors</title>
 
   <introduction xml:id="intro-handling-factors">
     <p>
-      <xref ref="ch-data-shapes" /> argued that shape is not only rows and
-      columns; it includes what an observation and a variable actually
-      represent. A <term>factor</term><idx><h>factor</h></idx> is R's way of
-      representing a categorical variable: a fixed, named set of
-      <term>levels</term> that a variable is allowed to take. It is easy to
-      treat a factor as a purely technical device <mdash /> a column of
-      labels, nothing more. The story below is about a case where the
-      labels were never neutral, where they were imposed by a state on an
-      entire population, where they changed meaning over time, and where
-      that change makes a seemingly simple comparison genuinely difficult
-      to do correctly.
-    </p>
-
-    <p>
-      This is real history, and it is treated as such here: not as a
-      convenient or dramatic data-wrangling puzzle, but as a case where a
-      system of classification materially shaped where people could live,
-      work, and belong, and whose consequences the country is still
-      accounting for in its own statistics today.
+      TODO: work on intro.
+      I don't want to introduce the term "factor" yet.
+      Just dig into the story.
     </p>
   </introduction>
-
-<!-- ================================================================= -->
-<!--  SECTION 1: When a category changes the data                      -->
-<!-- ================================================================= -->
-
+  <!-- ================================================================= -->
+  <!--  SECTION 1: When a category changes the data                      -->
+  <!-- ================================================================= -->
   <section xml:id="sec-population-group-factors">
     <title>When a Category Changes the Data</title>
 
     <introduction>
       <p>
-        Imagine two datasets describing the population of South Africa.
-        One was collected in 1980, under apartheid. The other was collected
-        in 2022, nearly three decades after apartheid ended. Both contain a
-        variable called <c>population_group</c>. You might reasonably think
-        you could compare them directly. You cannot, and the reason why is
-        the subject of this chapter.
+        The story of "population group" is a story about how a single variable
+        can shape an entire system of laws, and how that system can change over
+        time.
       </p>
     </introduction>
 
     <subsection xml:id="ss-factors-legal-classification">
+      <!-- checked and happy. -->
       <title>A classification imposed by law</title>
 
       <p>
-        From 1950, every person in South Africa was legally required to be
-        classified into a racial category under the Population Registration
-        Act (Act No. 30 of 1950). The Act established four main categories
-        <mdash /> White, Coloured, Native (later <q>Bantu</q>), and, once
-        added, Asian <mdash /> and this classification became the
-        administrative foundation that later apartheid laws were built on
-        and enforced through, including the Group Areas Act, which
-        determined where a person of each classification was permitted to
-        live, and the Bantu Authorities Act, which restructured governance
-        for the population classified as Native. By 1959, under Proclamation
-        No. 46, the Coloured category itself had been subdivided further
-        still: Cape Coloured, Cape Malay, Griqua, Chinese, Indian, Other
-        Asiatic, and Other Coloured, distinguished using criteria that
-        included physical appearance and the area a person lived in.
+        In 1950, the South African government passed the Population Registration
+        Act, which required every person living in South Africa to be officially
+        classified into a racial category.
+        At its simplest, the Act established three categories: White, Coloured,
+        and Native (also referred to as <q>Bantu</q> ).
+        Indians - descendants of South Asians who had come to South Africa under
+        British rule - were later added as a fourth category, on the stated
+        grounds that they had <q>no historical right to the country</q>.
       </p>
 
       <p>
-        This was not a system for describing a population as researchers
-        might observe it. It was a system for sorting people into groups
-        that the state then treated differently under the law, and the
-        people being classified generally had no say in which category they
-        were assigned to.
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-factors-1980-census">
-      <title>What the 1980 census actually recorded</title>
-
-      <p>
-        The categories used in practice were far more detailed than <q>four
-        main groups</q> suggests. The population-group variable in South
-        Africa's 1980 census codebook lists, among its coded values: White;
-        Cape Coloured, Cape Malay, Griqua, and Other Coloured; Chinese,
-        Indian, and Other Asian; and, for the population classified as
-        Black, separate codes for Xhosa, Zulu, Swazi, South Ndebele, North
-        Ndebele, North Sotho, South Sotho, Tswana, Shangaan/Tsonga, Venda,
-        Lemba, and Other Blacks.
+        But the classification system did not stop there.
+        Within each of these top-level categories, the law permitted and
+        eventually required further subdivisions.
+        By 1959, the Coloured category alone had been broken into seven
+        subgroups: Cape Coloured, Cape Malay, Griqua, Chinese, Indian, Other
+        Asiatic, and Other Coloured.
+        The criteria used to assign people to these groups included physical
+        appearance, how a person was generally regarded within their community,
+        and their descent.
+        In other words, the same person could in principle be classified
+        differently depending on who was doing the classifying.
       </p>
 
       <p>
-        Read as a factor, <c>population_group</c> in 1980 did not have four
-        levels. It had at least twenty, encoding not just <q>race</q> as
-        the Act defined it, but ethnic and linguistic subdivisions within
-        the category the state classified as Black, subdivisions that
-        served the administrative logic of apartheid <mdash /> including,
-        eventually, the assignment of people to <q>homelands</q> along
-        ethnic lines.
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-factors-self-classification">
-      <title>The law was repealed. The variable didn't disappear.</title>
-
-      <p>
-        The Population Registration Act was repealed by the Population
-        Registration Act Repeal Act (Act No. 114 of 1991), which ended
-        legal racial classification in South Africa from June 1991.
-        Statistics South Africa did not stop collecting population-group
-        data after apartheid ended. What changed was the basis on which it
-        was collected: from the 1996 census onward, population group has
-        been <term>self-identified</term> <mdash /> a respondent's own
-        answer <mdash /> rather than a classification imposed under law.
-        The 1996 census recorded self-reported population groups of
-        Black/African (77%), White (11%), Coloured (9%), Asian/Indian
-        (2.6%), and Other (0.9%).
+        This racial classification becamethe foundation on which a whole system
+        of laws was built.
+        The Group Areas Act determined where a person of each category was
+        permitted to live.
+        The Bantu Authorities Act restructured governance for those classified
+        as Native, placing authority in the hands of traditional tribal leaders
+        within designated homelands.
+        The Prohibition of Mixed Marriages Act made it illegal for a White
+        person to marry someone of another classification.
+        The Immorality Amendment Act went further, criminalising sexual
+        relations between a white person and any individual of another
+        classification.
+        A person's most basic rights and opportunities, such as where they
+        lived, who they could marry, what schools their children attended, and
+        what work they could do, came from a single categorical variable
+        assigned at birth.
       </p>
 
       <p>
-        By Census 2022, Statistics South Africa's published results used
-        five categories: Black African (81.4% of the population, some
-        50.5 million people), Coloured (8.2%), White (7.3%, roughly 4.5
-        million people, down from 4.59 million in 2011), Indian/Asian
-        (2.7%), and Other.
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-factors-the-problem">
-      <title>Which old category maps to which new one?</title>
-
-      <p>
-        Now suppose you actually want to compare 1980 and 2022: how has the
-        population in each group changed over four decades? You cannot
-        write <c>population ~ population_group + year</c> and treat
-        <c>population_group</c> as if it means the same thing in both
-        years, because it does not.
+        We begin the chapter on factors here because this is one of the starkest
+        examples in history of what it means to reduce a human being to a
+        category, and of the real consequences that categorical variables can
+        carry.
       </p>
 
       <p>
-        Some of the mapping is reasonably direct: the categories legally
-        defined as White in 1980 and self-identified as White in 2022 refer
-        to broadly the same group, collected in a different way. But <q>Cape
-        Malay</q> and <q>Griqua</q>, coded separately in 1980 as
-        subdivisions of Coloured, do not appear at all in the 2022
-        categories; they are presumably folded into <q>Coloured</q>, but
-        the 2022 data alone cannot tell you that, and no amount of
-        relabelling factor levels in R can recover a distinction the newer
-        collection method never asked about. In the other direction, the
-        nine or more separate ethnic codes recorded within the 1980
-        <q>Black</q> classification <mdash /> Xhosa, Zulu, Tswana, Venda,
-        and the rest <mdash /> collapse into a single <q>Black African</q>
-        category in 2022. Going from 1980 to 2022, you can aggregate levels
-        together with reasonable confidence. Going from 2022 back to 1980,
-        the information needed to disaggregate simply is not there.
-      </p>
-
-      <insight xml:id="insight-factors-not-neutral">
-        <title>A factor level is not a neutral label</title>
-        <p>
-          The levels of <c>population_group</c> in 1980 were not a smaller,
-          less accurate version of the levels used in 2022. They were
-          produced by an entirely different process, with a different
-          purpose, under a different legal and political system, asking a
-          different question of the people being counted <mdash /> a
-          question, in 1980, that people did not get to answer for
-          themselves. Fixing a comparison like this is not a matter of
-          renaming <c>Bantu</c> to <c>Black African</c> and moving on. It
-          requires knowing what each classification system was built to do,
-          who defined its categories, and what changed between one system
-          and the next <mdash /> and even then, some of what changed cannot
-          be recovered from the data alone.
-        </p>
-      </insight>
-
-      <p>
-        A factor, in other words, is not just R syntax for a column of
-        text. It represents a classification system that someone, at some
-        point, chose to impose on the world. Sometimes, as here, that
-        choice was made under a legal system built specifically to divide
-        people unequally. Understanding a factor's levels means
-        understanding that choice, not just typing <c>levels()</c> and
-        reading off whatever comes back.
+        In statistics, we call this kind of variable a <term>factor</term> — a
+        variable that takes one of a fixed set of values, each called a
+        <term>level</term>.
+        The Population Registration Act created a factor with a small number of
+        levels, defined by law, and then built an entire system on top of it.
+        In data analysis, the stakes are rarely so high — but the principle is
+        the same.
+        The levels you define, and how you define them, shape every summary,
+        every comparison, and every model that follows.
       </p>
 
       <p>
-        <term>Sources:</term> Population Registration Act, 1950 (Act No. 30
-        of 1950), and Population Registration Act Repeal Act, 1991 (Act No.
-        114 of 1991), Parliament of South Africa. South Africa Population
-        Census 1980, population-group variable codebook, World Bank
-        Microdata Library. Khalfani, A.A. and Zuberi, T. (2001). <q>Racial
+        <term>Sources:</term> Population Registration Act, 1950 (Act No.
+        30 of 1950), and Population Registration Act Repeal Act, 1991 (Act No.
+        114 of 1991), Parliament of South Africa.
+        South Africa Population Census 1980, population-group variable codebook,
+        World Bank Microdata Library.
+        Khalfani, A.A.
+        and Zuberi, T.
+        (2001).
+        <q>Racial
         classification and the modern census in South Africa,
-        1911<ndash />1996.</q> <em>Race and Society</em>, 4(2), 161<ndash />176.
-        Statistics South Africa (2023). <em>Census 2022: Statistical
-        Release P0301.4.</em> Pretoria: Stats SA.
+        1911<ndash/>1996.</q>
+        <em>Race and Society</em>, 4(2), 161 <ndash/> 176.
+        Statistics South Africa (2023).
+        <em>Census 2022: Statistical
+        Release P0301.4.</em> Pretoria:
+        Stats SA.
+      </p>
+    </subsection>
+  </section>
+  <!-- ================================================================= -->
+  <!--  SECTION 2: ordered vs. unordered, and when to factor at all       -->
+  <!-- ================================================================= -->
+  <section xml:id="sec-factors-ordered-vs-unordered">
+    <title>Not Every Factor Is the Same Kind of Factor</title>
+
+    <introduction>
+      <p>
+        Factors come in two kinds.
+        The first are <term>unordered factors</term>, where the levels are
+        simply distinct categories with no natural ranking between them.
+        The racial classifications of the Population Registration Act are one
+        example: there is no sense in which "White" comes before or after
+        "Coloured" in any meaningful order.
+        Continent is another: "Africa", "Asia", "Europe", and "the Americas" are
+        different, but not greater or lesser than one another.
+        In data analysis, most categorical variables are unordered factors of
+        this kind.
+      </p>
+
+      <p>
+        The second kind are <term>ordered factors</term>, where the levels have
+        a natural sequence that carries real meaning.
+        The recent Competency Based Curriculum (CBC) in Kenya has very clear
+        ordered levels: "Pre-Primary", "Lower Primary", "Upper Primary", "Junior
+        Secondary", "Senior Secondary", "University".
+        When researchers and policymakers analyse educational outcomes, the
+        ordering matters!
+        A student at Upper Primary is not just different from one at Junior
+        Secondary, they are at a lower stage in a meaningful progression.
+        Ordering within a factor can and should inform how we summarise and
+        analyse the data.
+      </p>
+
+      <p>
+        A starker example comes from humanitarian data.
+        The Integrated Phase Classification (IPC) system, used across Kenya and
+        the wider East Africa region, categorises food security into five
+        ordered levels: "Minimal", "Stressed", "Crisis", "Emergency", and
+        "Famine".
+        This classification is used to help governments and international
+        agencies track food shortages, malnutrition, and death rates to direct
+        emergency aid.
+        The ordering is not incidental: Crisis is meaningfully worse than
+        Stressed, and Emergency is meaningfully worse than Crisis.
+        If an analyst were to treat these five levels as an unordered factor,
+        any summary or comparison they produced would be misleading at best, and
+        at worst could inform decisions that cost lives.
+      </p>
+
+      <p>
+        <term>Sources:</term> World Hunger Education Service.
+        (2024, December).
+        Famine fact sheet.
+        https://www.worldhunger.org/wp-content/uploads/2024/12/Famine-Fact-Sheet-Dec-2024.pdf
+      </p>
+    </introduction>
+
+    <subsection xml:id="ss-factors-numeric-or-factor">
+      <title>Numeric, unordered, or ordered: it is a judgement call</title>
+
+      <p>
+        As well as ordered or unordered, there is sometimes a decision to make
+        on whether a factor should be stored as a number or as text.
+        Take Kenya's county codes as an example.
+        Each of the 47 counties has an official numeric identifier — Mombasa is
+        001, Kwale is 002, Nairobi is 047.
+        Stored as a plain number, software will happily compute the mean county
+        code, or tell you that Nairobi is 46 units greater than Mombasa —
+        calculations that are arithmetically valid but completely meaningless.
+        Stored as an unordered factor, software will let you group by county and
+        compare them side by side, but it will refuse to average them, because
+        you have told it there is no numeric relationship between one county and
+        the next, only distinct labels.
+        Neither choice is <q>more correct</q> in general.
+        The question is what you are claiming is true about the variable, and
+        whether that claim actually holds.
+      </p>
+
+      <p>
+        Not every variable announces what it is.
+        A column of numbers might represent a quantity you can meaningfully add
+        and average - or it might be a label that happens to have been written
+        as a number.
+        A column of text might be a free-form description, or it might be one of
+        a fixed set of categories.
+        The data itself does not always tell you which; that is a judgement you
+        have to make, and it has consequences for every analysis that follows.
+      </p>
+
+      <p>
+        The decision comes down to what you are claiming is true about the
+        variable.
+        Is the difference between one value and the next a meaningful quantity -
+        something you could add, subtract, or average?
+        Then store it as a number.
+        Are the values simply distinct labels, with no numeric relationship
+        between them?
+        Then store it as an unordered factor.
+        Do the values have a natural order that carries real information, but
+        where the gaps between levels are not meaningful quantities?
+        Then store it as an ordered factor.
+        Getting this wrong can produce results that are arithmetically valid but
+        analytically invalid.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-factors-recoding">
+      <title>When the categories change: Recoding factor levels</title>
+
+      <p>
+        Defining the levels of a factor is rarely a one-time decision.
+        In practice, the categories you start with are often not quite the
+        categories you need for your analysis.
+        Some levels may be too fine-grained, with so few observations in each
+        that no meaningful comparison is possible.
+        Others may reflect distinctions that matter administratively but not
+        analytically.
+        And sometimes a classification scheme has simply changed over time, and
+        you need to align old labels with new ones.
+      </p>
+
+      <p>
+        This last problem is one that analysts working with South African census
+        data face directly.
+        Under apartheid, the Population Registration Act imposed the racial
+        classifications we described at the start of this chapter.
+        After the transition to democracy, South Africa continued to collect
+        data on race - not to enforce segregation, but to measure the legacy of
+        it and track progress towards equity.
+        The 1996 census, the first held after apartheid, asked respondents to
+        classify themselves using four categories: Black African, Coloured,
+        Indian or Asian, and White.
+        Subsequent censuses in 2001 and 2011 used the same four categories, but
+        with slightly different wording and ordering across datasets and survey
+        instruments.
+      </p>
+
+      <p>
+        An analyst wanting to compare racial inequality across the 1996, 2001,
+        and 2011 censuses cannot simply join the three datasets and treat the
+        race variable as if it were identical across all three.
+        The labels need to be checked, aligned, and in some cases collapsed or
+        recoded before any comparison is meaningful.
+        This is the work of recoding: adjusting the levels of a factor to better
+        match the question you are actually trying to answer.
+        It is about being deliberate and transparent about what distinctions you
+        are treating as meaningful, and ensuring that the same word means the
+        same thing across every dataset you are combining.
+      </p>
+
+      <p>
+        The IPC food security classification we saw earlier illustrates a
+        different kind of recoding decision — not aligning labels across time,
+        but collapsing levels to match the question being asked.
+        A researcher studying the difference between households in Crisis versus
+        Emergency needs those levels kept separate.
+        One asking simply <q>how many 
+    households are food insecure?</q>
+        might reasonably collapse Crisis, Emergency, and Famine into a single
+        level.
+        Neither choice is wrong — but both need to be made consciously and
+        reported clearly.
       </p>
     </subsection>
   </section>
 
+  <section xml:id="sec-splitting-by-factors">
+    <title>What a factor actually buys you: Splitting data by group</title>
+
+    <p>
+      So far we have talked about what factors are and how to define them
+      carefully.
+      But why does it matter?
+      What does treating a variable as a factor actually allow you to do?
+    </p>
+
+    <p>
+      The answer is grouping.
+      Once a variable is recognised as a factor, you can split your data on it -
+      computing a separate summary for each level, drawing a separate plot panel
+      for each group, fitting a separate model within each category.
+      Every comparison you make between groups, every chart that shows one line
+      per region or one bar per classification, every table that breaks results
+      down by county or by IPC phase - all of it rests on treating the grouping
+      variable as a factor and respecting its levels.
+    </p>
+
+    <p>
+      This is also, looked at again, what actually happened in
+      <xref ref="ch-multilevel-data"/>.
+      Berkeley's <c>department</c> was a factor in exactly this sense.
+      The university-wide admission rate that looked like discrimination was
+      computed by ignoring that factor, pooling every department into one group.
+      Splitting by department <mdash/> grouping by the factor, instead of
+      collapsing past it <mdash/> was the single step that made the real pattern
+      visible and reversed the conclusion.
+      This is seen by "facetting" the plot in
+      <xref ref="fig-berkeley-admissions-by-dept"/>.
+    </p>
+
+    <insight xml:id="insight-factors-grouping-payoff">
+      <title>Grouping is what a factor is for</title>
+
+      <p>
+        A factor is not just a column that happens to hold category labels.
+        It is the thing you can treat as a boundary <mdash/> the variable you
+        split the data <em>on</em>.
+        Get a factor's levels wrong, as this chapter's opening story shows, and
+        every group you compute is quietly the wrong group.
+        Skip grouping by a factor that actually matters, as
+        <xref ref="ch-multilevel-data"/> showed, and you get one number that
+        describes no part of your data honestly.
+        Treating a variable as a factor is not a formatting choice.
+        It is a decision about which comparisons you are about to be allowed to
+        make.
+      </p>
+    </insight>
+  </section>
+
+  <section xml:id="sec-handling-factors-in-r">
+    <title>Handling Factors in R</title>
+
+    <introduction>
+      <p>
+        The ideas in this chapter are:
+        <ul>
+          <li>
+            <p>
+              Factors have a fixed set of levels.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Factor levels can be ordered or unordered.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Getting these levels right matters for every analysis that
+              follows.
+            </p>
+          </li>
+        </ul>
+        These ideas need to translate into something concrete when you sit down
+        with data.
+        In R, factors are a first-class data type, and the language is
+        deliberately opinionated about what you are and are not allowed to do
+        with them.
+        That opinionatedness is a feature: R will refuse operations that do not
+        make sense for a given kind of factor, and will only grant capabilities
+        (like ranking or comparison) when you have explicitly told it they
+        apply.
+      </p>
+
+      <p>
+        In this section we work through what that looks like in practice, using
+        the same variables we have been thinking about throughout the chapter.
+      </p>
+    </introduction>
+
+    <subsection xml:id="ss-factors-unordered-recap">
+      <title>No defensible ranking: <c>population_group</c> again</title>
+
+      <p>
+        Try to rank the levels of <c>population_group</c> and the attempt itself
+        is the tell that this factor is unordered <mdash/> any ranking you
+        proposed would be an opinion, not a fact about the data.
+        R enforces this directly: comparing two levels of an unordered factor
+        with <c>&lt;</c> does not return <c>TRUE</c> or <c>FALSE</c>.
+        It refuses.
+      </p>
+
+      <program language="r">
+        population_group &lt;- factor(c("White", "Coloured", "Black African"))
+
+        population_group[1] &lt; population_group[2]
+        #&gt; [1] NA
+        #&gt; Warning message:
+        #&gt; In Ops.factor(population_group[1], population_group[2]) :
+        #&gt;   '&lt;' not meaningful for factors
+      </program>
+      <p>
+        That warning is not a bug to work around.
+        It is R correctly reflecting that no ordering was ever supplied, because
+        none exists to supply.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-factors-ordered-intro">
+      <title>When the levels genuinely do have an order</title>
+
+      <p>
+        Contrast that with a variable like education level:
+        <term>Pre-Primary</term>, <term>Lower Primary</term>,
+        <term>Upper Primary</term>, <term>Junior
+        Secondary</term>,
+        <term>Senior Secondary</term>, <term>Tertiary</term>.
+        Unlike population group, there is a defined order to these levels, and
+        it is meaningful to compare them.
+        Coding this as an <term>ordered</term> factor tells R that ranking
+        directly, and comparisons start working exactly the way you would
+        expect.
+      </p>
+
+      <program language="r">
+        education &lt;- factor(
+          c("Junior Secondary", "Tertiary", "Lower Primary", "Upper Primary", "Pre-Primary",
+          "Senior Secondary"),
+          levels = c("Pre-Primary", "Lower Primary", "Upper Primary",
+          "Junior Secondary", "Senior Secondary", "Tertiary"),
+          ordered = TRUE
+        )
+
+        education
+        #&gt; [1] Junior Secondary Tertiary         Lower Primary    Upper Primary    Pre-Primary     
+        #&gt; [6] Senior Secondary
+        #&gt; 6 Levels: Pre-Primary &lt; Lower Primary &lt; Upper Primary &lt; ... &lt; Tertiary
+        education[1] &gt; education[4]
+        #&gt; [1] TRUE
+      </program>
+      <p>
+        Same mechanism, <c>factor()</c>, and the same underlying idea, a fixed
+        set of named levels <mdash/> but the single argument
+        <c>ordered = TRUE</c> changes what the factor is allowed to claim about
+        its own levels, and R only grants that claim when you assert it
+        explicitly.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-factors-grouping-payoff-r">
+      <title>What this unlocks in practice</title>
+
+      <p>
+        The distinction between ordered and unordered factors matters for
+        comparisons.
+        But neither kind of factor would be worth much if that were all it did.
+        The real payoff is that once R knows a variable is a factor, an entire
+        family of functions can split a dataset by its levels and compute
+        something separately for each one — without you writing a loop by hand.
+        This is exactly what <xref ref="ss-splitting-by-species"/> in
+        <xref ref="ch-exploring-data"/> relied on.
+      </p>
+
+      <program language="r">
+        flamingos %&gt;%
+           group_by(species) %&gt;%
+           summarise(mean_mass = mean(mass, na.rm = TRUE))
+
+        #&gt; Greater Flamingo  Lesser Flamingo
+        #&gt;         3120.190         1689.070
+      </program>
+      <p>
+        <c>summarise()</c> did not compute one mean.
+        It computed one mean <em>per level</em> of <c>species</c>, because
+        <c>species</c> is a factor and factors are exactly what R's grouping
+        machinery keys on.
+      </p>
+    </subsection>
+  </section>
 </chapter>
