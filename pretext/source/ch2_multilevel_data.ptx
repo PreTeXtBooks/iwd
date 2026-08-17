@@ -14,9 +14,34 @@
 <chapter xml:id="ch-multilevel-data" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Multilevel Data</title>
 
-  <introduction xml:id="intro-multilevel-data">
+  <introduction xml:id="intro-multidimensional-data">
     <p>
-      TODO
+      Most datasets contain more than one kind of thing.
+    </p>
+
+    <p>
+      A hospital records patients — but also the wards those patients are
+      admitted to, and the hospitals those wards belong to.
+      A school survey collects responses from students — but those students sit
+      in classrooms, and those classrooms are in schools, and those schools are
+      in districts.
+      A flamingo study measures individual birds — but those birds belong to
+      flocks, and those flocks live in different lakes.
+    </p>
+
+    <p>
+      When data has this kind of layered structure, the structure is not just
+      background detail.
+      It changes what questions you can ask, what comparisons are valid, and
+      what conclusions you are entitled to draw.
+      Ignore it, and you can produce results that are arithmetically correct but
+      analytically wrong — as one of this chapter's examples will show rather
+      dramatically.
+    </p>
+
+    <p>
+      This chapter is about learning to see that structure before you start
+      analysing.
     </p>
   </introduction>
   <!-- ================================================================= -->
@@ -193,7 +218,6 @@
 
       <figure xml:id="fig-simpsons-paradox">
         <caption>A GIF Illustrating Simpson's Paradox</caption>
-        <description/>
         <image source="images/simpsons_paradox.gif" width="60%"/>
       </figure>
 
@@ -386,35 +410,35 @@
         Neither Berkeley nor the kidney stone study is an unusual dataset.
         Once you start looking for this structure, it is the norm rather than
         the exception:
+        <ul>
+          <li>
+            <p>
+              Pupils belong to schools, which belong to sub-counties, which
+              belong to counties.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Patients belong to clinics, which belong to a county health
+              system.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Farmers manage plots, which belong to a cooperative or a region.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Survey respondents belong to households, which belong to a sampled
+              cluster.
+            </p>
+          </li>
+        </ul>
       </p>
-
-      <ul>
-        <li>
-          <p>
-            Pupils belong to schools, which belong to sub-counties, which belong
-            to counties.
-          </p>
-        </li>
-
-        <li>
-          <p>
-            Patients belong to clinics, which belong to a county health system.
-          </p>
-        </li>
-
-        <li>
-          <p>
-            Farmers manage plots, which belong to a cooperative or a region.
-          </p>
-        </li>
-
-        <li>
-          <p>
-            Survey respondents belong to households, which belong to a sampled
-            cluster.
-          </p>
-        </li>
-      </ul>
 
       <p>
         In every case there is more than one <term>level</term> at which the
@@ -488,15 +512,137 @@
   <exercises xml:id="exercises-multilevel-data">
     <title>Exercises</title>
 
-    <exercise xml:id="ex-multilevel-own-example">
+    <exercise xml:id="ex-identify-observational-unit">
+      <title>What is being measured?</title>
+
       <statement>
         <p>
-          Think of a setting you know well <mdash/> a workplace, a school, a
-          sports league, a family business.
-          Describe its data in terms of at least two levels, the way pupils
-          belong to schools or patients belong to clinics.
-          What is the individual-level unit, and what is the group above it?
+          For each of the following datasets, identify the observational unit:
+          that is, what each row of the data represents, and say whether the
+          data has a multilevel structure.
+          If it does, describe the levels.
         </p>
+
+        <ol>
+          <li>
+            <p>
+              A dataset from the Kenya Demographic and Health Survey, where each
+              row records the age, education level, and county of residence of
+              one woman interviewed in the survey.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              A dataset of exam results, where each row records the score of one
+              student, along with the name of the school the student attends and
+              the county the school is in.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              A dataset of daily rainfall measurements, where each row records
+              the amount of rainfall at one weather station on one day, along
+              with the station's location and elevation.
+            </p>
+          </li>
+        </ol>
+      </statement>
+    </exercise>
+
+    <exercise xml:id="ex-aggregation-consequences">
+      <title>What gets lost when you aggregate?</title>
+
+      <statement>
+        <p>
+          A researcher has data on student exam scores from 20 schools across 3
+          counties in Kenya.
+          She computes the average score across all students in the dataset and
+          reports it as the county average.
+        </p>
+
+        <ol>
+          <li>
+            <p>
+              What has she implicitly assumed by computing a single average
+              across all students?
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Give one example of a situation where this assumption would lead
+              her to the wrong conclusion.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              What would she need to do differently to produce a valid
+              county-level average?
+            </p>
+          </li>
+        </ol>
+      </statement>
+    </exercise>
+
+    <exercise xml:id="ex-simpsons-paradox-spot">
+      <title>Spotting the hidden variable</title>
+
+      <statement>
+        <p>
+          A hospital reports that its overall patient survival rate improved
+          from 72% in 2020 to 78% in 2022.
+          A journalist writes a story praising the hospital's improved care.
+        </p>
+
+        <p>
+          A data analyst then breaks the survival rate down by ward and finds
+          the following:
+        </p>
+
+        <tabular>
+          <row header="yes">
+            <cell>Ward</cell>
+            <cell>2020 survival rate</cell>
+            <cell>2022 survival rate</cell>
+          </row>
+
+          <row>
+            <cell>General</cell>
+            <cell>90%</cell>
+            <cell>88%</cell>
+          </row>
+
+          <row>
+            <cell>Intensive Care</cell>
+            <cell>50%</cell>
+            <cell>48%</cell>
+          </row>
+        </tabular>
+
+        <ol>
+          <li>
+            <p>
+              Survival rates went down in both wards between 2020 and 2022.
+              How is it possible that the overall survival rate went up?
+            </p>
+          </li>
+
+          <li>
+            <p>
+              What is the hidden variable that the journalist's story ignored?
+            </p>
+          </li>
+
+          <li>
+            <p>
+              What does this example have in common with the Berkeley admissions
+              case discussed earlier in this chapter?
+            </p>
+          </li>
+        </ol>
       </statement>
     </exercise>
 

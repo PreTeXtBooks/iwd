@@ -8,28 +8,60 @@
 <!--  ch4 (sec-shapes-ebola-callback - not retold in full, just         -->
 <!--  revisited through the "shape" lens), paired with a fresh,         -->
 <!--  independently verified real story: the Johns Hopkins CSSE         -->
-<!--  COVID-19 dashboard's wide-to-long format change, March 2020.      -->
-<!--  Verified via two independent fetches before writing:              -->
+<!--  COVID-19 time-series data, March 2020.                            -->
+<!--                                                                    -->
+<!--  CORRECTED after fact-check (previous version wrongly claimed JHU  -->
+<!--  itself switched the dataset from wide to long in March 2020).     -->
+<!--  Verified directly against live files in the                       -->
+<!--  CSSEGISandData/COVID-19 GitHub repo before rewriting: the wide    -->
+<!--  time_series_covid19_*.csv files (dates-as-columns) were NEVER     -->
+<!--  converted to long format - they stayed wide for the entire life  -->
+<!--  of the dataset, through JHU's last daily update in 2023. The     -->
+<!--  separate csse_covid_19_daily_reports files (one row per region,   -->
+<!--  already long) existed from the first day of the dataset,          -->
+<!--  22 January 2020, not as a result of any March 2020 change.        -->
+<!--  The real, verifiable story is that JHU's wide file was reshaped   -->
+<!--  to long format by downstream analysts, not by JHU itself:         -->
 <!--    - Dong, E., Du, H. and Gardner, L. (2020). "An interactive      -->
 <!--      web-based dashboard to track COVID-19 in real time." The     -->
 <!--      Lancet Infectious Diseases, 20(5), 533-534.                  -->
-<!--      DOI 10.1016/S1473-3099(20)30120-1. This is the dashboard's   -->
-<!--      own peer-reviewed methods paper - real, extremely widely     -->
-<!--      cited.                                                       -->
+<!--      DOI 10.1016/S1473-3099(20)30120-1. Dashboard's own            -->
+<!--      peer-reviewed methods paper; used only for the dashboard's    -->
+<!--      launch (22 Jan 2020) - confirmed it says nothing about wide/  -->
+<!--      long format or any March 2020 change.                        -->
+<!--    - Gassen, J. (23 March 2020). "Tidying the John Hopkins         -->
+<!--      Covid-19 data." Blog post. The ORIGINAL post: JHU's data is   -->
+<!--      wide; Gassen writes clean_jhd_to_long() himself to reshape    -->
+<!--      it, specifically to attach standardised ISO3c country codes  -->
+<!--      so it can be merged with external data (e.g. population).    -->
+<!--      Confirmed via direct fetch.                                   -->
 <!--    - Gassen, J. (24 March 2020). "Tidying the new Johns Hopkins    -->
-<!--      Covid-19 time-series datasets." Blog post, cross-posted to   -->
-<!--      R-bloggers same day. Contemporaneous account of the wide     -->
-<!--      (dates-as-columns) to long format change and its rationale   -->
-<!--      (the wide format grew a new column every single day and had  -->
-<!--      to be manually reshaped before use; the new format used      -->
-<!--      standardised ISO3c country codes specifically to make        -->
-<!--      merging with external datasets, e.g. population, possible).  -->
-<!--    - CSSEGISandData/COVID-19 GitHub repository (JHU CSSE) - the    -->
-<!--      primary dataset itself, still public.                        -->
-<!--  This is a secondary source (a data-science blog) for the change's -->
-<!--  rationale, not JHU's own official announcement of it - the        -->
-<!--  current repo README does not retain a changelog explaining the   -->
-<!--  historical switch, only the blog documents it in real time.      -->
+<!--      Covid-19 time-series datasets." Follow-up blog post, one day  -->
+<!--      later: "Just hours after my old blog post ... the team has    -->
+<!--      changed their time-series table data structure" - JHU         -->
+<!--      restructured the WIDE file's own columns (added lat/long,     -->
+<!--      reorganised US state breakdown), breaking Gassen's reshaping  -->
+<!--      code and forcing a same-week rewrite. Confirmed via direct    -->
+<!--      fetch. This is still a secondary source for JHU's own change  -->
+<!--      - the repo itself carries no changelog for it.                -->
+<!--    - CSSEGISandData/COVID-19 GitHub repository (JHU CSSE) - fetched -->
+<!--      directly: time_series_covid19_confirmed_global.csv header      -->
+<!--      confirms the file is still wide today (dates as columns,       -->
+<!--      starting 1/22/20). csse_covid_19_daily_reports/01-22-2020.csv -->
+<!--      confirms the long daily-report format existed from day one,   -->
+<!--      with columns Province/State, Country/Region, Last Update,      -->
+<!--      Confirmed, Deaths, Recovered (no FIPS/Admin2 yet). The         -->
+<!--      03-22-2020.csv and 03-23-2020.csv daily reports confirm FIPS, -->
+<!--      Admin2 (county), standardised Lat/Long and Combined_Key were  -->
+<!--      added to the (already-long) daily reports around that date -  -->
+<!--      a real change, but to a file that was long from day one, not  -->
+<!--      a wide-to-long conversion. This chapter does not build a      -->
+<!--      narrative beat around that daily-reports change, to avoid     -->
+<!--      re-conflating two separate JHU products the way the previous  -->
+<!--      version did.                                                  -->
+<!--  Neither of the two figures below (fig-covid-wide-format,           -->
+<!--  fig-covid-long-format) has an actual image file in images/ yet -   -->
+<!--  same pre-existing gap as fig-berkeley-overall-admissions in ch2.   -->
 <!-- ================================================================= -->
 <chapter xml:id="ch-data-shapes" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Data Shapes</title>
@@ -84,9 +116,11 @@
     <introduction>
       <p>
         TODO: Verify this.
-        In 2014, Kenya was strengthening its Maternal Death Surveillance and
-        Response (MDSR) system, an effort to identify every maternal death,
-        investigate its causes, and act on what was found.
+        (done some verification via robots) In 2014, Kenya was strengthening its
+        Maternal Death Surveillance and Response (MDSR) system at the national
+        level, building on earlier facility-based maternal death reviews.
+        This was in an effort to identify every maternal death, investigate its
+        causes, and act on what was found.
         The question the system needed to answer sounds simple:
         <em>how many
         women died because of pregnancy and childbirth that year?</em>
@@ -109,17 +143,17 @@
       <title>Two numbers, both defensible, both far apart</title>
 
       <p>
-        The national estimate for 2014 put the number of maternal deaths in
-        Kenya at around 8,000, based on an estimated maternal mortality ratio of
-        510 per 100,000 live births.
-        The DHIS, drawing on reports from health facilities, recorded 945
-        maternal deaths that year.
+        At the time, the estimated number of maternal deaths in Kenya was around
+        8,000, based on an estimated maternal mortality ratio of 510 per 100,000
+        live births.
+        The DHIS, meanwhile, recorded 945 maternal deaths in health facilities
+        in 2014.
       </p>
 
       <p>
-        Neither number was wrong.
-        The DHIS was capturing deaths that occurred in, or were reported
-        through, health facilities.
+        The difference did not simply mean that one number was wrong.
+        The two figures came from systems measuring maternal mortality in very
+        different ways.
         The national estimate was attempting to capture maternal deaths across
         the whole population, including deaths that never touched a health
         facility at all.
@@ -140,7 +174,7 @@
 
       <table xml:id="table-mmr-sources">
         <title>
-          What each Kenyan maternal mortality data source actually observes
+          What different sources and estimates tell us about maternal mortality
         </title>
 
         <tabular halign="left">
@@ -173,8 +207,10 @@
           </row>
 
           <row>
-            <cell>National estimate</cell>
-            <cell>A modelled estimate incorporating available sources</cell>
+            <cell>National / UN estimate</cell>
+            <cell>
+              A statistically modelled estimate based on multiple data sources
+            </cell>
           </row>
         </tabular>
       </table>
@@ -215,7 +251,7 @@
         In the third, it means a survey respondent recalled, possibly years
         later, that a sister had died around the time of a pregnancy.
         The join succeeds mechanically.
-        It does not make the three <c>TRUE</c>s the same claim.
+        It does not make the three <c>TRUE</c> s the same claim.
       </p>
 
       <insight xml:id="insight-mmr-variable-name">
@@ -251,10 +287,9 @@
         deaths were notified through the DHIS2 system at all.
         Of the 945 deaths that DHIS did record that year, only 484 (51.2%) were
         ever formally assessed.
-        Of those 484, 447 (92.4%) were found to have involved suboptimal care
-        <mdash/> but that finding applies only to the roughly one in twenty
-        maternal deaths that were estimated to have occurred <em>and</em> were
-        captured by a facility <em>and</em> were subsequently reviewed.
+        Of those 484 deaths, 447 (92.4%) were assessed as having received
+        suboptimal care; in 394 cases (81.4%), the assessors judged that
+        different management could have made a difference to the outcome.
       </p>
 
       <p>
@@ -267,9 +302,10 @@
         <q>the system has gaps, and
         the DHIS and Civil Registration and Vital Statistics system do not
         yet adequately capture all maternal deaths in Kenya.</q>
-        Integrating the forms fixed a technical merging problem.
-        It did not fix the underlying definitional and coverage gaps between
-        what each system was built to see.
+        While integrating the forms into DHIS improved the technical integration
+        of the reporting process, it did not solve the underlying differences in
+        coverage and definition between the systems, nor did it ensure that all
+        maternal deaths were captured.
       </p>
     </subsection>
 
@@ -297,14 +333,12 @@
       <p>
         A 2023 systematic review and meta-analysis by Ahmed, Cresswell, and Say
         puts a number on how large that gap typically is.
-        Across the studies they reviewed, maternal death recording was
-        incomplete by an estimated 34% on average, with substantial variation
-        between settings, and maternal mortality overall was underestimated by
-        an estimated 39% once incompleteness and misclassification were both
-        accounted for.
-        The Kenyan case is not an outlier.
-        It is a particularly well-documented instance of a gap that shows up
-        almost everywhere maternal deaths are counted.
+        Across the studies included in their meta-analysis, maternal death
+        recording was estimated to be 34% incomplete, with substantial variation
+        between settings.
+        After excluding two studies judged to have a high risk of bias, the
+        authors estimated that maternal mortality was underestimated by 39%
+        overall because of incompleteness and/or misclassification.
       </p>
 
       <p>
@@ -404,64 +438,75 @@
     </subsection>
 
     <subsection xml:id="ss-jhu-switch">
-      <title>The switch, and what it fixed</title>
+      <title>Reshaping it themselves, and having the ground move</title>
 
       <p>
-        In March 2020, JHU CSSE changed the structure of the time-series data.
-        The new version moved away from one-column-per-date toward a structure
-        built around standardised identifiers <mdash/> ISO 3166-1 alpha-3
-        country codes <mdash/> specifically so that the COVID-19 figures could
-        be merged automatically with other datasets, such as national population
-        figures, rather than requiring a country-name lookup and a manual
-        reshape first.
-        Practitioners documented the change within hours of it happening: a blog
-        post already partway through explaining how to tidy the old wide format
-        had to be revised the same day the new format shipped.
+        JHU CSSE never turned this file long. Check the same repository today
+        and the time-series files are exactly the shape they always were: one
+        row per region, one column per date, still growing for as long as JHU
+        kept updating it. Nobody at JHU fixed the wide-table problem, because
+        for a dashboard glanced at once a day, wide was never actually broken.
+        What changed was that the people who needed to do more than glance
+        stopped waiting and reshaped it themselves.
+      </p>
+
+      <p>
+        On 23 March 2020, the researcher Joachim Gassen published R code that
+        pulled JHU's wide file and reshaped it to long <mdash/> one row per
+        country per date <mdash/> specifically so it could be merged with
+        other data. A wide table with a different date in every column has no
+        single column two datasets can agree to join on; a long table does.
+        Gassen's code went further, attaching standardised <term>ISO3c</term>
+        country codes to every row, because without a shared identifier,
+        nobody could reliably bring in a country's population to convert raw
+        case counts into a per-capita rate.
       </p>
 
       <figure xml:id="fig-covid-long-format">
         <caption>
-          COVID-19 cases reported by country or region, 21 January 2020.
-          Each row represents a country or region, with different measures of
-          the outbreak stored in separate columns, including confirmed cases,
-          deaths, recovered cases and suspected cases.
-          Unlike the previous dataset, the information is arranged in a longer,
-          narrower format, with the different measures represented by columns
-          rather than creating a new column for every date.
+          The same confirmed-case numbers as <xref ref="fig-covid-wide-format"/>,
+          reshaped to long format: one row per country per date, with a
+          standardised country code attached for merging.
         </caption>
 
         <description>
-          A screenshot of a COVID-19 dataset in a longer, narrower format.
-          The columns contain province/state, country/region, last update,
-          confirmed cases, deaths, recovered cases and suspected cases.
-          Each row represents a geographical area, such as a province in China,
-          with the number of cases recorded for each measure.
-          The dataset has relatively few columns compared with the previous wide
-          dataset.
+          A long-format COVID-19 dataset with one row per country per date.
+          Columns include a standardised ISO3c country code, country name,
+          date, and confirmed case count, instead of one column per date.
         </description>
 
         <image source="images/covid_long_format.png" width="60%"/>
       </figure>
 
+      <p>
+        The reshaping held up for about a day. On 24 March 2020, Gassen
+        published a follow-up post: <q>Just hours after my old blog post
+        about tidying Johns Hopkins CSSE Covid-19 data the team has changed
+        their time-series table data structure.</q> JHU had restructured the
+        wide file's own columns <mdash/> adding latitude and longitude, and
+        reorganising how US states were broken out <mdash/> a genuine
+        improvement, but one that broke every piece of code written against
+        the old column layout, Gassen's included. He rewrote and republished
+        the same day.
+      </p>
+
       <insight xml:id="insight-jhu-shapes-lesson">
         <title>
-          The numbers didn't change.
-          What you could do with them did.
+          Reshaping isn't a one-time fix. It's a job that keeps coming back.
         </title>
 
         <p>
-          Nothing about the underlying case counts was different before and
-          after this change.
-          What changed was which operations were easy.
-          In wide format, a human reader could scan across one country's row and
-          watch the trend by eye <mdash/> genuinely useful for a dashboard
-          glanced at once a day.
-          But merging, filtering, grouping, and plotting all became easier once
-          the same numbers were rearranged so that each row was a single
-          observation: one country, one date, one case count.
-          This new shape changed what was <em>practical</em>, and at the scale this dataset
-          reached, that difference determined whether the data could be used at
-          all.
+          JHU never made its published file long, and it didn't need to
+          <mdash/> wide genuinely was the right shape for a dashboard scanned
+          once a day. The people who needed it long, to merge, to compute
+          rates, to plot trends across countries, had to reshape it
+          themselves. And because they did not control the source format, a
+          change nobody warned them about broke that reshaping within a day
+          of them publishing it. Wide and long are not a wrong version and a
+          right version of the same table. They serve different readers, and
+          whoever needs the other shape is the one who ends up doing the
+          reshaping <mdash/> repeatedly, for as long as the source keeps
+          changing underneath them.
         </p>
       </insight>
 
@@ -473,10 +518,14 @@
         time.</q>
         <em>The Lancet Infectious Diseases</em>, 20(5), 533 <ndash/> 534.
         Gassen, J.
-        (2020).
+        (23 March 2020).
+        <q>Tidying the John Hopkins Covid-19 data.</q>
+        Blog post.
+        Gassen, J.
+        (24 March 2020).
         <q>Tidying the new Johns Hopkins Covid-19
         time-series datasets.</q>
-        Blog post, 24 March 2020.
+        Blog post.
         Data repository:
         <url href="https://github.com/CSSEGISandData/COVID-19" visual="github.com/CSSEGISandData/COVID-19"/>.
       </p>
@@ -618,8 +667,9 @@
         Wide format serves a person scanning a table by eye, or a spreadsheet
         cell reference that assumes species live in fixed columns.
         Knowing which one a task actually needs, before writing any code, saves
-        exactly the repeated reshaping that cost the JHU CSSE team, and exactly
-        the merging failure that cost Sierra Leone's Ebola response.
+        exactly the repeated reshaping that cost Gassen a day's work when JHU's
+        columns shifted under him, and exactly the merging failure that cost
+        Sierra Leone's Ebola response.
       </p>
     </subsection>
   </section>

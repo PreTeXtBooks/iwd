@@ -1,579 +1,1487 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- ================================================================= -->
-<!--  Chapter 3: Exploring Data                                        -->
+<!-- ================================================================== -->
+<!--  Chapter 3: Exploring Data                                         -->
 <!--                                                                    -->
 <!--  Data-first chapter. Deliberately light: notice patterns, ask      -->
 <!--  questions, read a pivot table. No formal definitions of mean,     -->
 <!--  variance, missingness taxonomy, etc. - those are introduced only  -->
-<!--  when they are needed, in later chapters:                         -->
-<!--    - the "why is this blank" discussion    -> Cleaning Data        -->
-<!--    - coloured / faceted / relational plots -> Visualising          -->
-<!--      Multidimensional Data                                        -->
-<!--    - factors, grouping mechanics           -> Handling Factors     -->
-<!--    - MCAR/MAR/MNAR, deletion vs imputation -> Handling Missing     -->
-<!--      Values                                                       -->
-<!--    - formal mean/median/variance/SD/IQR    -> Measuring and        -->
-<!--      Observing Variability                                        -->
+<!--  when they are needed, in later chapters:                          -->
 <!--  This chapter's job is only to make the reader curious enough to   -->
-<!--  want those later chapters.                                       -->
-<!-- ================================================================= -->
-
+<!--  want those later chapters.                                        -->
+<!-- ================================================================== -->
 <chapter xml:id="ch-exploring-data" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Exploring Data</title>
 
   <introduction xml:id="intro-exploring-data">
     <p>
-      <xref ref="ch-intro" /> got you comfortable clicking around in R and
-      RStudio, and the module's earlier look at this dataset introduced the
-      idea that it has a structure to it: individual birds, grouped within
-      lakes. Neither of those chapters asked you to draw a conclusion from the
-      data. This one does.
-    </p>
-
-    <p>
       There is no formula to learn in this chapter, and nothing here is the
-      <q>correct</q> way to analyse anything. The goal is smaller and more
-      important than that: open the data, look at it, and let it surprise you.
-      Every method introduced later in this module <mdash /> cleaning,
+      <q>correct</q> way to analyse anything.
+      The goal is smaller and more important than that: open the data, look at
+      it, and let it surprise you.
+      Every method introduced later in this module <mdash/> cleaning,
       multidimensional graphics, factors, formal treatment of missing values,
-      measures of variability <mdash /> exists to answer a question that this
+      measures of variability <mdash/> exists to answer a question that this
       chapter is going to raise and deliberately leave open.
     </p>
-
-    <note xml:id="note-flamingo-dataset">
-      <title>The dataset used throughout this module</title>
-      <p>
-        Most examples in this module use <c>kenya_flamingos.csv</c>, which
-        records measurements on 344 flamingos caught, measured and released
-        across three Rift Valley soda lakes.
-      </p>
-      <p>
-        This dataset is <em>synthetic</em>. The differences between the two
-        species in size and bill shape are grounded in real flamingo biology,
-        and the lake compositions reflect documented patterns, but the
-        individual measurements were generated rather than observed. It exists
-        for teaching. It should not be cited as evidence about real flamingo
-        populations.
-      </p>
-    </note>
   </introduction>
-
-<!-- ================================================================= -->
-<!--  SECTION 1: the data-first hook                                   -->
-<!-- ================================================================= -->
-
-  <section xml:id="sec-flamingo-hook">
-    <title>A Question About Flamingos</title>
-
-    <subsection xml:id="ss-three-lakes-two-species">
-      <title>Three lakes, two species, 344 birds</title>
-
-      <p>TODO: Need to do a new example here. Something better! With multiple levels!</p>
-      <p>TODO: Flamingoes can be another example in here, like a STACK type question </p>
-
-      <p>
-        Kenya's Rift Valley holds a chain of shallow, strongly alkaline soda
-        lakes. The alkalinity is hostile to most life but ideal for the
-        cyanobacteria and diatoms that flamingos filter-feed on, which is why
-        these lakes support some of the largest flamingo congregations
-        anywhere.
-      </p>
-
-      <p>
-        Two species share them. The <term>lesser flamingo</term> is the
-        smaller of the two, with a deep, sharply decurved bill adapted to
-        filtering cyanobacteria from the water column. The <term>greater
-        flamingo</term> is considerably larger, with a longer and shallower
-        bill, and feeds more on invertebrates in the sediment.
-      </p>
-
-      <p>
-        A field team has measured 344 birds across Lakes Nakuru, Bogoria and
-        Elementaita. Each row of the dataset describes one bird.
-      </p>
-
-      <table xml:id="table-flamingo-variables">
-        <title>Variables recorded for each bird in <c>kenya_flamingos.csv</c></title>
-        <tabular halign="left">
-          <row header="yes" bottom="minor">
-            <cell>Variable</cell>
-            <cell>Type</cell>
-            <cell>Description</cell>
-          </row>
-          <row><cell><c>lake</c></cell><cell>categorical</cell><cell>Nakuru, Bogoria or Elementaita</cell></row>
-          <row><cell><c>species</c></cell><cell>categorical</cell><cell>Greater Flamingo or Lesser Flamingo</cell></row>
-          <row><cell><c>bill_length_mm</c></cell><cell>numeric</cell><cell>Bill length in millimetres</cell></row>
-          <row><cell><c>bill_depth_mm</c></cell><cell>numeric</cell><cell>Bill depth at the base, in millimetres</cell></row>
-          <row><cell><c>leg_length_mm</c></cell><cell>numeric</cell><cell>Tarsus length in millimetres</cell></row>
-          <row><cell><c>body_mass_g</c></cell><cell>numeric</cell><cell>Body mass in grams</cell></row>
-          <row><cell><c>sex</c></cell><cell>categorical</cell><cell>male or female</cell></row>
-          <row><cell><c>year</c></cell><cell>numeric</cell><cell>Year of measurement (2021<ndash />2023)</cell></row>
-        </tabular>
-      </table>
-
-      <p>
-        Load the file and look at the first few rows. Do this yourself before
-        reading on <mdash /> what do you notice, just from six rows?
-      </p>
-
-      <program language="r">
-        flamingos &lt;- read.csv("kenya_flamingos.csv", stringsAsFactors = TRUE)
-        head(flamingos)
-
-        #&gt;          lake          species bill_length_mm bill_depth_mm leg_length_mm
-        #&gt; 1     Bogoria  Lesser Flamingo          101.2          25.9         265.1
-        #&gt; 2      Nakuru Greater Flamingo          135.8          22.5         371.8
-        #&gt; 3      Nakuru  Lesser Flamingo           96.1          26.9         278.0
-        #&gt; 4 Elementaita Greater Flamingo          131.1          25.7         360.4
-        #&gt; 5      Nakuru  Lesser Flamingo           94.1          24.3         264.1
-        #&gt; 6      Nakuru  Lesser Flamingo           98.4          25.9         272.3
-        #&gt;   body_mass_g    sex year
-        #&gt; 1        1330 female 2022
-        #&gt; 2        2841 female 2023
-        #&gt; 3        1646   male 2022
-        #&gt; 4        3476   male 2022
-        #&gt; 5        1620 female 2021
-        #&gt; 6        1963   male 2022
-      </program>
-
-      <p>
-        Even in six rows, the greater flamingos already look heavier and
-        longer-billed than the lesser flamingos. Six rows is manageable to
-        scan by eye. All 344 is not <mdash /> which is exactly the problem
-        this chapter is about: how do you get a feel for a dataset you cannot
-        just read?
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-first-obvious-question">
-      <title>A first, obvious question</title>
-
-      <p>
-        <em>How big is a flamingo in the Rift Valley?</em>
-      </p>
-
-      <p>
-        This is the sort of question a conservation officer or a field
-        ecologist might genuinely ask. The instinctive move is to add up the
-        masses of every bird and divide by how many birds there are <mdash />
-        the <term>average</term>.
-      </p>
-
-      <program language="r">
-        mean(flamingos$body_mass_g)
-        #&gt; [1] NA
-      </program>
-
-      <p>
-        Not what we expected. R has returned <c>NA</c>, <q>not available,</q>
-        because some birds in the dataset have no recorded mass and R refuses
-        to quietly pretend otherwise. Why some birds are missing a mass, and
-        what we are allowed to do about it, is a real question <mdash /> and
-        it is the subject of a later chapter, <term>Cleaning Data</term>, in
-        full. For now we just want an answer, so we tell R to set the missing
-        values aside.
-      </p>
-
-      <program language="r">
-        mean(flamingos$body_mass_g, na.rm = TRUE)
-        #&gt; [1] 1957.405
-      </program>
-
-      <p>
-        So the average Rift Valley flamingo weighs about 1957 g, just under
-        two kilograms. That is our answer, and the arithmetic behind it is
-        correct.
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-something-is-wrong">
-      <title>Something is wrong</title>
-
-      <p>
-        Before moving on, sanity-check the answer. How many of the birds
-        actually weigh close to 1957 g? Let's ask something more specific:
-        how many weigh <em>less</em> than that.
-      </p>
-
-      <program language="r">
-        mass &lt;- flamingos$body_mass_g
-
-        sum(mass &lt; 1957.405, na.rm = TRUE)
-        #&gt; [1] 253
-
-        sum(!is.na(mass))    # birds that actually have a recorded mass
-        #&gt; [1] 336
-      </program>
-
-      <observation xml:id="obs-three-quarters">
-        <title>The problem</title>
-        <p>
-          253 of the 336 measured birds, <em>75.3%</em>, weigh less than the
-          average bird. Three quarters of the flamingos are lighter than the
-          average flamingo.
-        </p>
-      </observation>
-
-      <p>
-        Pause on that before reading on. Nothing has gone wrong with the
-        arithmetic <mdash /> <c>mean()</c> computed exactly what it is defined
-        to compute. So what has gone wrong?
-      </p>
-
-      <p>
-        The instinct at this point is to reach for a different summary,
-        perhaps the <term>median</term> (sort the values and take the middle
-        one) is <q>more correct.</q> Let's try it.
-      </p>
-
-      <program language="r">
-        median(mass, na.rm = TRUE)
-        #&gt; [1] 1758.5
-      </program>
-
-      <p>
-        1758.5 g, which is 199 g lower than the mean <mdash /> about 11%
-        below it. That is a substantial disagreement between two numbers that
-        both claim to describe the same thing. Swapping one summary for
-        another hasn't resolved anything; it has produced a second answer with
-        no obvious reason to prefer it over the first.
-      </p>
-
-      <p>
-        The problem is not which summary we picked. <em>The problem is the
-        question.</em>
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-shape-of-the-data">
-      <title>Looking at the shape of the data</title>
-
-      <p>
-        Rather than computing yet another single number, let's look at how
-        the masses are actually distributed. Group them into 500 g bands,
-        labelled in kilograms, and count how many birds fall in each.
-      </p>
-
-      <program language="r">
-        # Group into 500 g bands, labelled in kilograms
-        bands &lt;- cut(mass, breaks = seq(1000, 4000, by = 500),
-                     labels = c("1.0-1.5", "1.5-2.0", "2.0-2.5",
-                                "2.5-3.0", "3.0-3.5", "3.5-4.0"))
-        table(bands)
-
-        #&gt; bands
-        #&gt; 1.0-1.5 1.5-2.0 2.0-2.5 2.5-3.0 3.0-3.5 3.5-4.0
-        #&gt;      50     209      15      20      34       8
-      </program>
-
-      <p>
-        Read the counts across: 50, then 209, then a collapse to
-        <term>15</term>, then back up to 20, 34 and 8. The same picture is
-        easier to take in as a histogram.
-      </p>
-
-      <figure xml:id="fig-mass-histogram">
-        <caption>
-          Body mass (g) of 336 captured flamingos, showing two separate
-          concentrations of mass rather than one.
-        </caption>
-        <image source="images/flamingo-mass-histogram.png" width="60%"/>
-        <description>
-          A histogram of body mass with two separated peaks: a tall one
-          around 1.5-2.0 kg and a shorter one around 3.0-3.5 kg, with very
-          few birds in between.
-        </description>
-      </figure>
-
-      <p>
-        That dip in the middle is not noise. The data has two separate
-        concentrations of mass <mdash /> a large one below 2000 g and a
-        smaller one above 2500 g <mdash /> with a near-empty valley between
-        them. A distribution with two peaks like this is called
-        <term>bimodal</term><idx><h>bimodal</h></idx>, and it is precisely
-        where our average landed: 1957 g sits on the shoulder of the lower
-        group, pointing into the gap.
-      </p>
-
-      <p>
-        The mean is the balance point of the data. When the data has two
-        clusters, the balance point falls between them, describing neither.
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-splitting-by-species">
-      <title>The resolution</title>
-
-      <p>
-        We already know something that might explain this: there are two
-        species in the dataset. Split the masses by species and look at each
-        group on its own.
-      </p>
-
-      <program language="r">
-        table(flamingos$species)
-
-        #&gt; Greater Flamingo  Lesser Flamingo
-        #&gt;               66              278
-
-        tapply(mass, flamingos$species, mean, na.rm = TRUE)
-
-        #&gt; Greater Flamingo  Lesser Flamingo
-        #&gt;         3120.190         1689.070
-      </program>
-
-      <p>
-        There is the answer. Greater flamingos average about 3120 g; lesser
-        flamingos about 1689 g. These are not slightly different populations
-        <mdash /> the greater flamingo is nearly twice the mass of the lesser.
-        Because lesser flamingos outnumber greaters roughly four to one, the
-        pooled average is dragged toward the lesser group but not all the way,
-        landing at 1957 g <mdash /> a value that describes no bird in this
-        dataset in any useful sense.
-      </p>
-
-      <ul>
-        <li>
-          <p>It is heavier than 91% of the lesser flamingos.</p>
-        </li>
-        <li>
-          <p>
-            It is lighter than <em>every single</em> greater flamingo. The
-            lightest greater in the dataset is 2347 g.
-          </p>
-        </li>
-      </ul>
-
-      <insight xml:id="insight-what-went-wrong">
-        <title>What actually went wrong</title>
-        <p>
-          The question <q>how big is a flamingo?</q> presupposes that there is
-          one kind of flamingo. The dataset contains two.
-        </p>
-        <p>
-          No choice of summary function could have fixed this on its own,
-          because the error was not in the arithmetic. It lay in applying a
-          single-population summary to a two-population dataset. The mean
-          answered faithfully; we asked badly. Noticing that <mdash /> before
-          trusting a single number <mdash /> is what this chapter is about.
-        </p>
-      </insight>
-    </subsection>
-
-    <subsection xml:id="ss-what-next">
-      <title>What this chapter has, and hasn't, done</title>
-
-      <p>
-        Nothing in this section required a formula. Loading the data, asking
-        a plain-language question, computing an obvious average, and noticing
-        that it didn't add up <mdash /> that was enough to uncover real
-        structure in the data. That is the whole method of this chapter: look
-        first, and let what you see tell you what to ask next.
-      </p>
-
-      <p>
-        It has also deliberately left several things unresolved. We waved a
-        hand at the missing masses. We used <q>mean</q> and <q>median</q>
-        without defining them carefully, or asking how much a group's spread
-        matters, or what happens when we compare groups of very different
-        sizes. We looked at one histogram and one table, not the many other
-        ways this data could be pictured. Each of those loose ends is picked
-        up properly later in the module.
-      </p>
-
-      <table xml:id="table-roadmap-exploring">
-        <title>Loose ends from this chapter, and where they get resolved</title>
-        <tabular halign="left">
-          <row header="yes" bottom="minor">
-            <cell>What we glossed over here</cell>
-            <cell>Picked up properly in</cell>
-          </row>
-          <row>
-            <cell>Why some birds have no recorded mass, and whether it's safe to ignore them</cell>
-            <cell><term>Cleaning Data</term></cell>
-          </row>
-          <row>
-            <cell>Colouring, faceting, and otherwise plotting more than one variable at once</cell>
-            <cell><term>Visualising Multidimensional Data</term></cell>
-          </row>
-          <row>
-            <cell>What <c>species</c>, <c>lake</c> and <c>sex</c> actually are to R, and how grouping works mechanically</cell>
-            <cell><term>Handling Factors</term></cell>
-          </row>
-          <row>
-            <cell>Formal rules for when dropping missing values is, and isn't, safe</cell>
-            <cell><term>Handling Missing Values</term></cell>
-          </row>
-          <row>
-            <cell>What the mean and median actually are, and how to measure spread rather than eyeballing it</cell>
-            <cell><term>Measuring and Observing Variability</term></cell>
-          </row>
-        </tabular>
-      </table>
-    </subsection>
-  </section>
-
-<!-- ================================================================= -->
-<!--  SECTION 2: pivot tables                                          -->
-<!-- ================================================================= -->
-
-  <section xml:id="sec-pivot-tables">
-    <title>Pivot Tables: Where Do the Birds Live?</title>
+  <!-- ================================================================= -->
+  <!--  SECTION 0, DRAFT A (ACTIVE): why explore at all - kenya crash data -->
+  <!-- ================================================================= -->
+  <section xml:id="sec-malaria-map-hook">
+    <title>Why Explore At All?</title>
 
     <introduction>
       <p>
-        Body mass is only one variable. The dataset also records which lake
-        each bird was caught at. Do the two species mix freely across all
-        three lakes, or does each lake favour one species over the other? A
-        <term>pivot table</term><idx><h>pivot table</h></idx> <mdash />
-        counting how often combinations of two categorical variables occur
-        together <mdash /> is the natural first tool for this, whether you
-        build it in R, in a spreadsheet, or by hand from a small enough
-        dataset.
+        TODO
       </p>
     </introduction>
 
-    <subsection xml:id="ss-a-simple-pivot-table">
-      <title>Counting lake against species</title>
+    <subsection xml:id="ss-ntsa-crashes">
+      <title>Who is dying on Kenya's roads, and where?</title>
 
       <p>
-        In R, the same function that gave us a one-way count of species gives
-        a two-way count when handed two variables.
+        Since 2012, the National Transport and Safety Authority (NTSA) has
+        recorded road crash data across Kenya, including information on county,
+        road, time, vehicle type, road user category.
+        This is published in summaries annually on their website.
       </p>
 
-      <program language="r">
-        table(flamingos$lake, flamingos$species)
+      <p>
+        The NTSA publishes two kinds of records.
+        The first are daily comparative reports, which summarise fatalities and
+        injuries across six road user categories - pedestrians, passengers,
+        drivers, pillion passengers, pedal cyclists, and motorcyclists - for the
+        year to date.
+        A snippet of this data is given in
+        <xref ref="table-ntsa-daily-report"/>.
+      </p>
 
-        #&gt;               Greater Flamingo  Lesser Flamingo
-        #&gt;   Bogoria                   10              114
-        #&gt;   Elementaita               30               38
-        #&gt;   Nakuru                    26              126
-      </program>
+      <table xml:id="table-ntsa-daily-report" landscape="yes">
+        <title>
+          Sample daily comparative report from NTSA, as at 30 December 2019
+          (data snippet).
+          Source: Muguro et al.
+          (2020)
+        </title>
 
-      <table xml:id="table-lake-species-crosstab">
-        <title>Flamingo captures by lake and species</title>
-        <tabular halign="left">
-          <row header="yes" bottom="minor">
-            <cell>Lake</cell>
-            <cell>Greater Flamingo</cell>
-            <cell>Lesser Flamingo</cell>
+        <tabular halign="right">
+          <col halign="left"/>
+          <col halign="right"/>
+          <col halign="right"/>
+          <col halign="right"/>
+          <col halign="right"/>
+          <col halign="right"/>
+          <col halign="right"/>
+          <col halign="right"/>
+          <col halign="right"/>
+          <col halign="right"/>
+          <col halign="right"/>
+          <col halign="right"/>
+          <col halign="right"/>
+          <col halign="right"/>
+          <col halign="right"/>
+          <col halign="right"/>
+          <col halign="right"/>
+          <col halign="right"/>
+          <col halign="right"/>
+          <col halign="right"/>
+          <row header="yes">
+            <cell>Period</cell>
+            <cell colspan="3">Pedestrians</cell>
+            <cell colspan="3">Drivers</cell>
+            <cell colspan="3">Passengers</cell>
+            <cell colspan="3">Pillion Passenger</cell>
+            <cell colspan="3">Pedal Cyclist</cell>
+            <cell colspan="3">Motorcyclists</cell>
             <cell>Total</cell>
           </row>
-          <row><cell>Bogoria</cell><cell>10</cell><cell>114</cell><cell>124</cell></row>
-          <row><cell>Elementaita</cell><cell>30</cell><cell>38</cell><cell>68</cell></row>
-          <row><cell>Nakuru</cell><cell>26</cell><cell>126</cell><cell>152</cell></row>
-          <row><cell>Total</cell><cell>66</cell><cell>278</cell><cell>344</cell></row>
+
+          <row>
+            <cell/>
+            <cell>Dead</cell>
+            <cell>Serious</cell>
+            <cell>Slight</cell>
+            <cell>Dead</cell>
+            <cell>Serious</cell>
+            <cell>Slight</cell>
+            <cell>Dead</cell>
+            <cell>Serious</cell>
+            <cell>Slight</cell>
+            <cell>Dead</cell>
+            <cell>Serious</cell>
+            <cell>Slight</cell>
+            <cell>Dead</cell>
+            <cell>Serious</cell>
+            <cell>Slight</cell>
+            <cell>Dead</cell>
+            <cell>Serious</cell>
+            <cell>Slight</cell>
+            <cell/>
+          </row>
+
+          <row>
+            <cell>1 Jan <ndash/> 30 Dec 2018</cell>
+            <cell>1202</cell>
+            <cell>851</cell>
+            <cell>256</cell>
+            <cell>306</cell>
+            <cell>495</cell>
+            <cell>305</cell>
+            <cell>745</cell>
+            <cell>2082</cell>
+            <cell>4073</cell>
+            <cell>246</cell>
+            <cell>498</cell>
+            <cell>205</cell>
+            <cell>63</cell>
+            <cell>36</cell>
+            <cell>6</cell>
+            <cell>589</cell>
+            <cell>698</cell>
+            <cell>183</cell>
+            <cell>12839</cell>
+          </row>
+
+          <row>
+            <cell>1 Jan <ndash/> 30 Dec 2019</cell>
+            <cell>1382</cell>
+            <cell>1275</cell>
+            <cell>282</cell>
+            <cell>344</cell>
+            <cell>648</cell>
+            <cell>464</cell>
+            <cell>704</cell>
+            <cell>2770</cell>
+            <cell>3691</cell>
+            <cell>345</cell>
+            <cell>832</cell>
+            <cell>386</cell>
+            <cell>73</cell>
+            <cell>76</cell>
+            <cell>22</cell>
+            <cell>724</cell>
+            <cell>1337</cell>
+            <cell>341</cell>
+            <cell>15696</cell>
+          </row>
         </tabular>
       </table>
 
       <p>
-        Before reading on: which lake has caught the most lesser flamingos, in
-        raw numbers? Now ask a different question <mdash /> at which lake do
-        lesser flamingos make up the <em>largest share</em> of the birds
-        caught there? Look at the table again. Are those the same lake?
+        The second kind of record is the fatal accident report.
+        There are two records.
+        One at the crash-level which records one row per incident, giving the
+        road, the place, the vehicles involved, and free-text on the accident
+        (See <xref ref="table-ntsa-fatal-report"/> ).
+        The other is at the victim-level which records one row per person.
+        This has details on their name, gender, age, a code on the cause, and
+        their status (driver, pedestrian, etc).
+      </p>
+
+      <p>
+        Notice that the NTSA data is already multilevel in structure, even in
+        this small snippet.
+        The yearly data gives a summary of deaths, and so forth, for different
+        victims (passengers, motorcyclists, etc).
+        The crash-level table records one row per incident - the road, the
+        place, the vehicles involved.
+        The victim-level table records one row per person - their age, gender,
+        and category.
+        Different data can show different things.
+        This is exactly the kind of structural decision discussed in
+        <xref ref="ch-visualising-multidimensional-data"/>.
+      </p>
+
+      <p>
+        Notice that the NTSA data is already multilevel in structure, even in
+        this small snippet.
+        <ul>
+          <li>
+            <p>
+              The yearly data gives a summary of deaths over the year for
+              different victims (passengers, motorcyclists, etc).
+            </p>
+          </li>
+
+          <li>
+            <p>
+              The crash-level table records one row per incident.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              The victim-level table records one row per person.
+            </p>
+          </li>
+        </ul>
+        A single crash can involve multiple victims, meaning the tables are
+        linked but not interchangeable: summarising at the crash level and
+        summarising at the victim level will give you different counts and
+        answer different questions.
+        This is exactly the kind of structural decision we discussed in
+        <xref ref="ch-visualising-multidimensional-data"/>.
+      </p>
+
+      <table xml:id="table-ntsa-fatal-report">
+        <title>
+          Sample fatal accident report from NTSA, as at 14 February 2016 (data
+          snippet).
+          Source: Muguro et al.
+          (2020)
+        </title>
+
+        <tabular halign="left">
+          <col halign="right"/>
+          <col halign="right"/>
+          <col halign="left"/>
+          <col halign="left"/>
+          <col halign="left"/>
+          <col halign="left"/>
+          <col halign="left"/>
+          <col halign="left"/>
+          <row header="yes">
+            <cell>S/N</cell>
+            <cell>Time (24hr)</cell>
+            <cell>Base</cell>
+            <cell>County</cell>
+            <cell>Road</cell>
+            <cell>Place</cell>
+            <cell>MV Involved</cell>
+            <cell>Brief Accident Details</cell>
+          </row>
+
+          <row>
+            <cell>1</cell>
+            <cell>0545</cell>
+            <cell>Mtwapa</cell>
+            <cell>Kilifi</cell>
+            <cell>Mombasa <ndash/> Kilifi</cell>
+            <cell>Msambarauni</cell>
+            <cell>KBZ 884F Isuzu Lorry, KTWA 833W Tuk Tuk</cell>
+            <cell>Head on collision</cell>
+          </row>
+
+          <row>
+            <cell>2</cell>
+            <cell>0300</cell>
+            <cell>Indo Area</cell>
+            <cell>Nairobi</cell>
+            <cell>Mombasa</cell>
+            <cell>Capital Centre</cell>
+            <cell>KYQ 080 Van</cell>
+            <cell>
+              The vehicle knocked down the victim while crossing the road
+            </cell>
+          </row>
+
+          <row>
+            <cell>3</cell>
+            <cell>0300</cell>
+            <cell>Karen</cell>
+            <cell>Nairobi</cell>
+            <cell>Ngong Road</cell>
+            <cell>Miotoni</cell>
+            <cell>KBS 001C M/Benz, KMDD 597S Yamaha</cell>
+            <cell>The vehicle hit the motor cyclist</cell>
+          </row>
+
+          <row>
+            <cell>4</cell>
+            <cell>0620</cell>
+            <cell>Diani</cell>
+            <cell>Kwale</cell>
+            <cell>Beach Road</cell>
+            <cell>Asilia Complex</cell>
+            <cell>KBT 998R T/Bus</cell>
+            <cell>
+              The vehicle knocked down the victim while crossing the road
+            </cell>
+          </row>
+
+          <row>
+            <cell>5</cell>
+            <cell>Unknown</cell>
+            <cell>Changamwe</cell>
+            <cell>Mombasa</cell>
+            <cell>Miritini</cell>
+            <cell>Maganda</cell>
+            <cell>KBK 897Q</cell>
+            <cell>
+              The vehicle knocked down the victim while crossing the road
+            </cell>
+          </row>
+        </tabular>
+      </table>
+
+      <table xml:id="table-ntsa-fatal-report-victims">
+        <title>
+          Victim details from the same fatal accident report, 14 February 2016.
+          Source: Muguro et al.
+          (2020)
+        </title>
+
+        <tabular halign="left">
+          <col halign="right"/>
+          <col halign="left"/>
+          <col halign="left"/>
+          <col halign="right"/>
+          <col halign="right"/>
+          <col halign="left"/>
+          <col halign="right"/>
+          <row header="yes">
+            <cell>S/N</cell>
+            <cell>Name of Victim</cell>
+            <cell>Gender</cell>
+            <cell>Age</cell>
+            <cell>Cause Code</cell>
+            <cell>Victim Category</cell>
+            <cell>No.</cell>
+          </row>
+
+          <row>
+            <cell>1</cell>
+            <cell>Unknown</cell>
+            <cell>M</cell>
+            <cell>32</cell>
+            <cell>26</cell>
+            <cell>Driver</cell>
+            <cell>1</cell>
+          </row>
+
+          <row>
+            <cell>2</cell>
+            <cell>Unknown</cell>
+            <cell>M</cell>
+            <cell>43</cell>
+            <cell>63</cell>
+            <cell>Pedestrian</cell>
+            <cell>1</cell>
+          </row>
+
+          <row>
+            <cell>3</cell>
+            <cell>G** Walumbo</cell>
+            <cell>M</cell>
+            <cell>46</cell>
+            <cell>7</cell>
+            <cell>Motor Cyclist</cell>
+            <cell>1</cell>
+          </row>
+
+          <row>
+            <cell>4</cell>
+            <cell>M** Atieno</cell>
+            <cell>F</cell>
+            <cell>26</cell>
+            <cell>63</cell>
+            <cell>Pedestrian</cell>
+            <cell>1</cell>
+          </row>
+
+          <row>
+            <cell>5</cell>
+            <cell>Unknown</cell>
+            <cell>F</cell>
+            <cell>6</cell>
+            <cell>68</cell>
+            <cell>Pedestrian</cell>
+            <cell>1</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>
+        It was this data that Muguro et al.
+        (2020), a team of researchers based at Gifu University in Japan and
+        Dedan Kimathi University of Technology in Kenya, set out to analyse
+        systematically for the first time.
+      </p>
+
+      <p>
+        Muguro et al.
+        (2020) found that there was relatively little systematic research on
+        Kenya's road crashes despite the scale of the problem, and set out to
+        analyse five years of NTSA data from 2015-2020.
+        Their aim was to explore the occurrence of incidents on the roads,
+        identify the leading causes, and identify where in Kenya the burden was
+        greatest.
+        Before any of that analysis could happen, they needed to understand the
+        data itself: what it contained, how it was structured, and what
+        variables it could answer questions about.
+      </p>
+
+      <p>
+        A good place to start is Table 1 of their paper (reproduced in
+        <xref ref="table-ntsa-crash-causes"/> ).
+        It is a frequency table, showing how many incidents were recorded for
+        each reported cause of crash, sorted from most to least common.
+      </p>
+
+      <table xml:id="table-ntsa-crash-causes">
+        <title>
+          Leading causes of traffic crashes in Kenya, from January to October
+          2019.
+          Source: Muguro et al.
+          (2020), reproducing NTSA data.
+        </title>
+
+        <tabular halign="right">
+          <col halign="right"/>
+          <col halign="left"/>
+          <col halign="right"/>
+          <row header="yes">
+            <cell>No.</cell>
+            <cell>Cause</cell>
+            <cell>Incidence count</cell>
+          </row>
+
+          <row>
+            <cell>1</cell>
+            <cell>Hit and run</cell>
+            <cell>925</cell>
+          </row>
+
+          <row>
+            <cell>2</cell>
+            <cell>Losing control</cell>
+            <cell>451</cell>
+          </row>
+
+          <row>
+            <cell>3</cell>
+            <cell>Failing to keep left</cell>
+            <cell>235</cell>
+          </row>
+
+          <row>
+            <cell>4</cell>
+            <cell>Overtaking improperly</cell>
+            <cell>225</cell>
+          </row>
+
+          <row>
+            <cell>5</cell>
+            <cell>Misjudging clearance</cell>
+            <cell>140</cell>
+          </row>
+
+          <row>
+            <cell>6</cell>
+            <cell>Error of judgement</cell>
+            <cell>129</cell>
+          </row>
+
+          <row>
+            <cell>7</cell>
+            <cell>Excessive speeding</cell>
+            <cell>120</cell>
+          </row>
+
+          <row>
+            <cell>8</cell>
+            <cell>Stepping/walking/running off vehicle</cell>
+            <cell>63</cell>
+          </row>
+
+          <row>
+            <cell>9</cell>
+            <cell>Crossing road in non-designated area</cell>
+            <cell>44</cell>
+          </row>
+
+          <row>
+            <cell>10</cell>
+            <cell>Walking/standing in road</cell>
+            <cell>40</cell>
+          </row>
+
+          <row>
+            <cell>11</cell>
+            <cell>Vehicle turning without due care</cell>
+            <cell>31</cell>
+          </row>
+
+          <row>
+            <cell>12</cell>
+            <cell>Swerving</cell>
+            <cell>27</cell>
+          </row>
+
+          <row>
+            <cell>13</cell>
+            <cell>Brake failure</cell>
+            <cell>22</cell>
+          </row>
+
+          <row>
+            <cell>14</cell>
+            <cell>Drunk driving</cell>
+            <cell>19</cell>
+          </row>
+
+          <row>
+            <cell>15</cell>
+            <cell>Stationary vehicle / dangerous parking</cell>
+            <cell>19</cell>
+          </row>
+
+          <row>
+            <cell>16</cell>
+            <cell>Falling from moving vehicle</cell>
+            <cell>17</cell>
+          </row>
+
+          <row>
+            <cell>17</cell>
+            <cell>Boarding or alighting from PSV</cell>
+            <cell>16</cell>
+          </row>
+
+          <row>
+            <cell>18</cell>
+            <cell>Failure of tyres/wheels</cell>
+            <cell>14</cell>
+          </row>
+
+          <row>
+            <cell>19</cell>
+            <cell>Slipping or falling</cell>
+            <cell>14</cell>
+          </row>
+
+          <row>
+            <cell>20</cell>
+            <cell>Lane changing</cell>
+            <cell>14</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>
+        Immediately we can see that hit-and-runs were the most common cause of a
+        crash in 2015-2020, by a wide margin, with 925 incidents.
+        This is more than double the next cause!
+        Excessive speeding, which arguably dominates public and media discussion
+        of road danger in Kenya, appears seventh on the list with 120 incidents.
+        This is over seven times fewer than hit-and-runs.
+        We can see here that summarising this data has challenged a widely held
+        assumption.
+        That is what exploratory analysis does.
+      </p>
+
+      <p>
+        Exploring the same data by time of day and by county produces
+        <xref ref="fig-frequency-by-county-time"/> of Muguro et al.
+        (2020), copied here.
+        Two things stand out immediately.
+        In the hourly distribution, the spike at 00:00 reflects crashes recorded
+        with an unknown time rather than a genuine midnight peak; setting that
+        aside, accidents concentrate between 16:00 and 21:00, consistent with
+        evening rush hour.
+        In the county distribution, Nairobi leads by a substantial margin,
+        followed by Nakuru and Kiambu.
+        This is partly a population effect since Nairobi is Kenya's most
+        populous county so has the most cars, but the gap is wide enough to
+        suggest that density and road conditions in the capital contribute
+        something beyond population size alone.
+      </p>
+
+      <figure xml:id="fig-frequency-by-county-time">
+        <caption>
+          Hourly distribution of accidents with peak hours highlighted (top),
+          and county distribution of accidents ranked by prevalence (bottom),
+          Kenya 2015-2020.
+          Note that the 00:00 spike reflects crashes with unknown recorded time.
+          Reproduced from Muguro et al.
+          (2020).
+        </caption>
+
+        <image source="images/ch3_incidents.png" width="90%">
+          <description>
+            <p>
+              Two bar charts.
+              The top chart shows the hourly distribution of road accidents
+              across 24 hours, with a dashed box highlighting peak hours between
+              approximately 16:00 and 21:00, and a spike at 00:00 representing
+              crashes with unknown recorded time.
+              The bottom chart shows accident counts by Kenyan county, ranked
+              from highest to lowest prevalence, with Nairobi leading
+              substantially, followed by Nakuru and Kiambu.
+            </p>
+          </description>
+        </image>
+      </figure>
+
+      <p>
+        Beyond the structured fields in the NTSA records, each crash report
+        contains a short free-text description of what happened.
+        Muguro et al.
+        (2020) explored this text too, using a technique called topic modelling
+        to identify the recurring patterns of language across thousands of
+        accident briefs.
+        We do not go into "topic modelling" in detail here, but the basic idea
+        is simple.
+        Given a collection of short text descriptions, a topic model tries to
+        find groups of words that tend to appear together, and treats each group
+        as a theme or pattern (or "topic") that recurs across the documents.
+        The analyst chooses how many topics to look for, and then inspects the
+        results to see whether the groupings make sense.
+      </p>
+
+      <p>
+        The results from the paper are shown in the word clouds in
+        <xref ref="fig-word-clouds-lda"/> for models with three, four, five, and
+        six topics.
+        In a three-topic model, the algorithm is asked to sort all the accident
+        descriptions into three groups; in a four-topic model, four groups; and
+        so on.
+        Even without knowing anything about the method, the clusters are
+        readable: one topic is dominated by <q>hit</q>, <q>run</q>, and
+        <q>collision</q>; another by <q>knocked</q>, <q>victim</q>, and
+        <q>down</q>; a third by <q>lost</q>, <q>control</q>, and <q>road</q>.
+        The four-topic model captures these categories most cleanly with hit and
+        run, head-on collision, loss of control, and pedestrian knockdown.
+        Meanwhile, the six-topic model begins to fragment into overlapping
+        categories.
+        Choosing how many topics to extract is itself an exploratory decision,
+        guided by whether the resulting clusters are interpretable and distinct.
+      </p>
+
+      <figure xml:id="fig-word-clouds-lda">
+        <caption>
+          Word clouds from topic modelling of NTSA accident brief descriptions,
+          for three-, four-, five-, and six-topic models.
+          Word size reflects frequency within each topic.
+          Reproduced from Muguro et al.
+          (2020), <em>Cogent Engineering</em>, 7(1), 1797981, under CC BY 4.0.
+        </caption>
+
+        <image source="images/ch3_wordclouds.png" width="90%">
+          <description>
+            <p>
+              Four panels showing word clouds from topic models fitted to NTSA
+              accident brief text.
+              Panel (a) shows a three-topic model with clusters around
+              collision/hit/run, vehicle/knocked/victim/down, and
+              road/vehicle/control/lost.
+              Panel (b) shows a four-topic model separating these into hit/run,
+              knocked/victim/down, road/vehicle/control/lost, and
+              head/collision.
+              Panels (c) and (d) show five- and six-topic models where
+              categories begin to fragment and overlap.
+            </p>
+          </description>
+        </image>
+      </figure>
+
+      <p>
+        Another exploratory approach, applied to victims rather than causes,
+        produced a Table replicated in <xref ref="table-ntsa-monthly-stats"/>.
+        Muguro et al.
+        (2020) grouped the monthly records by road user category and computed
+        summaries for each - average monthly fatalities and injuries, standard
+        deviation, minimum, and maximum.
+        The numbers make the burden on vulnerable road users concrete.
+      </p>
+
+      <table xml:id="table-ntsa-monthly-stats">
+        <title>
+          Monthly fatality and injury statistics by road user category, Kenya
+          2015–2020.
+          Source: Muguro et al.
+          (2020), under CC BY 4.0.
+        </title>
+
+        <tabular halign="right">
+          <col halign="left"/>
+          <col halign="left"/>
+          <col halign="right"/>
+          <col halign="right"/>
+          <col halign="right"/>
+          <col halign="right"/>
+          <row header="yes">
+            <cell>Category</cell>
+            <cell>Type</cell>
+            <cell>Average</cell>
+            <cell>Std dev.</cell>
+            <cell>Min</cell>
+            <cell>Max</cell>
+          </row>
+
+          <row>
+            <cell>Pedestrian</cell>
+            <cell>Dead</cell>
+            <cell>100.15</cell>
+            <cell>16.60</cell>
+            <cell>66.0</cell>
+            <cell>148.2</cell>
+          </row>
+
+          <row>
+            <cell/>
+            <cell>Injured</cell>
+            <cell>103.29</cell>
+            <cell>26.34</cell>
+            <cell>41.6</cell>
+            <cell>156.3</cell>
+          </row>
+
+          <row>
+            <cell>Passenger</cell>
+            <cell>Dead</cell>
+            <cell>57.30</cell>
+            <cell>12.47</cell>
+            <cell>31.1</cell>
+            <cell>127.5</cell>
+          </row>
+
+          <row>
+            <cell/>
+            <cell>Injured</cell>
+            <cell>490.27</cell>
+            <cell>129.83</cell>
+            <cell>222.3</cell>
+            <cell>836.0</cell>
+          </row>
+
+          <row>
+            <cell>Driver</cell>
+            <cell>Dead</cell>
+            <cell>27.36</cell>
+            <cell>4.84</cell>
+            <cell>13.6</cell>
+            <cell>36.8</cell>
+          </row>
+
+          <row>
+            <cell/>
+            <cell>Injured</cell>
+            <cell>72.46</cell>
+            <cell>14.61</cell>
+            <cell>45.9</cell>
+            <cell>114.8</cell>
+          </row>
+
+          <row>
+            <cell>Pillion Passenger</cell>
+            <cell>Dead</cell>
+            <cell>20.23</cell>
+            <cell>6.84</cell>
+            <cell>5.3</cell>
+            <cell>42.3</cell>
+          </row>
+
+          <row>
+            <cell/>
+            <cell>Injured</cell>
+            <cell>56.74</cell>
+            <cell>25.22</cell>
+            <cell>18.0</cell>
+            <cell>144.1</cell>
+          </row>
+
+          <row>
+            <cell>Pedal Cyclist</cell>
+            <cell>Dead</cell>
+            <cell>5.56</cell>
+            <cell>2.55</cell>
+            <cell>1.0</cell>
+            <cell>12.0</cell>
+          </row>
+
+          <row>
+            <cell/>
+            <cell>Injured</cell>
+            <cell>5.77</cell>
+            <cell>3.17</cell>
+            <cell>1.0</cell>
+            <cell>13.3</cell>
+          </row>
+
+          <row>
+            <cell>Motor Cyclist</cell>
+            <cell>Dead</cell>
+            <cell>45.13</cell>
+            <cell>10.90</cell>
+            <cell>26.0</cell>
+            <cell>76.2</cell>
+          </row>
+
+          <row>
+            <cell/>
+            <cell>Injured</cell>
+            <cell>77.10</cell>
+            <cell>33.10</cell>
+            <cell>39.0</cell>
+            <cell>217.0</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>
+        The passenger injury average of 490 per month is nearly ten times the
+        pedestrian injury average of 103, and exceeds any other category.
+        This summary led the authors to scale that column into a boxplot in
+        <xref ref="fig-muguro-boxplot"/> to make the other categories visible.
+        The motorcyclist category shows the widest range in injuries of any
+        group (39 to 217 per month), consistent with the rapid growth of
+        boda-boda transport over the period and the high variability in
+        enforcement and road conditions across counties.
+        Both patterns are visible in the exploratory table before any deeper
+        descriptive analysis or single model is fitted.
+      </p>
+
+      <p>
+        Muguro et al (2020) makes those same patterns visible in a boxplot of
+        monthly fatalities and injuries (See <xref ref="fig-muguro-boxplot"/> ),
+        one box per road user category, show not just the averages but the
+        spread and the outliers.
+        Pedestrians dominate fatalities.
+        The passenger injury box is so large it had to be scaled down by a
+        factor of four.
+        Motorcyclists show wide variation in both panels.
+        These are not sophisticated visualisations.
+        They are the kinds of plots you produce in the first hour of exploring a
+        new dataset.
+      </p>
+
+      <figure xml:id="fig-muguro-boxplot">
+        <caption>
+          Monthly fatalities and injuries by road user category in Kenya,
+          2015-2020.
+          Passenger injuries (marked with asterisk) have been scaled by 0.25 to
+          fit within the range of other categories.
+          From Muguro et al.
+          (2020)
+        </caption>
+
+        <image source="images/ch3_boxplots.png" width="90%">
+          <description>
+            <p>
+              Two boxplots showing monthly fatalities (top) and injuries
+              (bottom) for six road user categories: Pedestrians, Passengers,
+              Drivers, Pillion Passengers, Cyclists, and Motor-Cyclists.
+              Pedestrians and Passengers dominate fatalities.
+              Passenger injuries are scaled by 0.25.
+              Motorcyclists and Pillion Passengers show wide variation in both
+              panels.
+            </p>
+          </description>
+        </image>
+      </figure>
+
+      <p>
+        What Muguro et al.
+        (2020) found was clear.
+        Nairobi, Nakuru, Kiambu, Machakos, and Kakamega accounted for the
+        largest share of fatal crashes, consistent with high population density
+        and increased motorisation.
+        Pedestrians, pillion passengers, and motorcyclists were dying at
+        dramatically increasing rates: injuries to this group of vulnerable road
+        users had increased by more than 250 percent over the five-year period.
+        Overall, fatalities on Kenyan roads increased by 26 percent and injuries
+        by 46.5 percent between January 2015 and January 2020.
+      </p>
+
+      <p>
+        What we have looked at from their research is just their exploratory
+        phase.
+        The patterns that emerged included rising fatalities, a disproportionate
+        burden on boda-boda riders and pedestrians, and hit-and-run as the
+        leading recorded cause.
+        These patterns directly informed the paper's recommendations: targeted
+        enforcement against hit-and-run behaviour, infrastructure and policy
+        attention to the counties where deaths concentrate, and urgent action to
+        protect vulnerable road users whose injury rates had tripled over five
+        years.
+        The authors also flagged that road crashes were estimated to cost Kenya
+        between 3 and 5 percent of GDP annually — a figure that turns a table of
+        counts into an argument for investment.
+        The NTSA had been collecting the raw material for years.
+        Here is just an example of how exploring it systematically can make
+        those arguments possible.
+      </p>
+
+      <insight xml:id="insight-ntsa-exploration">
+        <title>Exploration is not preliminary. It is often the work.</title>
+
+        <p>
+          The NTSA data existed before Muguro et al.
+          (2020) asked these questions.
+          The concentration of deaths in five counties, the vulnerability of
+          boda-boda riders, the sharp upward trend in fatalities, and so forth
+          was sitting in the records, waiting to be explored.
+          This chapter is about the tools and habits of mind that let you do
+          that: to take a dataset you have never seen before, and find out what
+          it is actually telling you.
+        </p>
+      </insight>
+
+      <p>
+        The dataset underlying this kind of analysis is also publicly available.
+        The Humanitarian Data Exchange (HDX) hosts a Kenya Road Accidents
+        database - a real extract of NTSA crash records, covering April to June
+        2016, with fields including county, road, time of crash, vehicle type,
+        and road user category.
+        This is available
+        <url href="https://data.humdata.org/dataset/kenya-road-accidents-database">here</url>.
+        It is the same kind of data Muguro et al.
+        worked with, and it is the dataset we will use for some of the exercises
+        in this chapter.
+      </p>
+
+      <p>
+        <term>Source:</term> Muguro, J.K., Sasaki, M., Matsushita, K.
+        and Njeri, W.
+        (2020).
+        <q>Trend analysis and fatality causes in Kenyan 
+    roads: A review of road traffic accident data between 2015 and 
+    2020.</q>
+        <em>Cogent Engineering</em>, 7(1), 1797981.
+        <url href="https://doi.org/10.1080/23311916.2020.1797981">doi.org/10.1080/23311916.2020.1797981</url>.
+        Licensed under CC BY 4.0.
+      </p>
+
+      <p>
+        Dataset: Kenya Road Accidents database, openAFRICA / Humanitarian Data
+        Exchange.
+        Available at:
+        <url href="https://data.humdata.org/dataset/kenya-road-accidents-database">data.humdata.org/dataset/kenya-road-accidents-database</url>.
       </p>
     </subsection>
+  </section>
+  <!-- ================================================================= -->
+  <!--  SECTION 1: the data-first hook                                   -->
+  <!-- ================================================================= -->
+  <section xml:id="sec-flamingo-hook">
+    <title>A Question About Flamingos</title>
 
-    <subsection xml:id="ss-row-column-proportions">
-      <title>Two different questions, two different proportions</title>
+    <introduction>
+      <p>
+        The Kenya crash data came from exploring five years of incident report
+        data.
+        The rest of this chapter ...
+        <alert>Perhaps we can have a STACK question here using our
+          Flamingos data for the students to try out exploring for
+          themselves.</alert>
+      </p>
+    </introduction>
+
+    <subsection xml:id="subsec-ch3-TODO">
+      <title>TODO</title>
 
       <p>
-        Nakuru has the most lesser flamingos in absolute terms, 126, simply
-        because Nakuru is the biggest sample of the three lakes. But relative
-        to each lake's own total, Bogoria is where lesser flamingos dominate
-        most heavily:
+        TODO
       </p>
-
-      <me>\frac{114}{124} \approx 0.919, \quad \text{compared with} \quad \frac{126}{152} \approx 0.829 \text{ at Nakuru}</me>
-
-      <p>
-        These are two genuinely different questions, and mixing them up is
-        one of the easiest mistakes to make when reading a pivot table.
-      </p>
-
-      <ul>
-        <li>
-          <p>
-            <q>Of the birds at Bogoria, what fraction are lesser flamingos?</q>
-            divides each row by its own row total.
-          </p>
-        </li>
-        <li>
-          <p>
-            <q>Of all lesser flamingos, what fraction were caught at
-            Bogoria?</q> divides down each column instead.
-          </p>
-        </li>
-      </ul>
-
-      <program language="r">
-        # row proportions: within each lake, split by species
-        prop.table(table(flamingos$lake, flamingos$species), margin = 1)
-
-        #&gt;               Greater Flamingo  Lesser Flamingo
-        #&gt;   Bogoria                0.081            0.919
-        #&gt;   Elementaita            0.441            0.559
-        #&gt;   Nakuru                 0.171            0.829
-      </program>
-
-      <p>
-        Read this way, Bogoria is overwhelmingly lesser flamingo (92%), while
-        Elementaita is close to an even split (44% greater, 56% lesser).
-        Species composition clearly varies by lake. Neither the raw counts
-        nor the row proportions are <q>more correct</q> than the other <mdash
-        /> they answer different questions, and it is worth deciding which
-        question you actually mean before you compute either one.
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-lake-ecology">
-      <title>Why might this be?</title>
-
-      <p>
-        Before reading the explanation, discuss with a neighbour: what could
-        explain why lesser flamingos so heavily dominate Bogoria specifically,
-        while Elementaita is close to an even split? Think about what each
-        species eats.
-      </p>
-
-      <remark xml:id="remark-lake-ecology">
-        <title>A possible ecological explanation</title>
-        <p>
-          Lake Bogoria's extreme alkalinity supports massive blooms of the
-          microscopic cyanobacteria that lesser flamingos are specially
-          adapted to filter-feed on. Greater flamingos rely more on
-          invertebrates in the sediment, food that is less concentrated at
-          Bogoria's most alkaline waters, which is consistent with their
-          stronger presence at Elementaita.
-        </p>
-        <p>
-          Notice what kind of claim this is: a plausible story that fits the
-          pattern, not something the pivot table itself proves. The table
-          tells you <em>that</em> composition differs by lake; it takes
-          outside knowledge of flamingo biology to say <em>why</em>.
-        </p>
-      </remark>
     </subsection>
   </section>
 
-<!-- ================================================================= -->
-<!--  EXERCISES                                                        -->
-<!-- ================================================================= -->
+  <section xml:id="sec-ch3-data-concepts">
+    <title>Core Concepts in Data Exploration</title>
+
+    <introduction>
+      <p>
+        Different approaches to explore data are outlined in this section.
+        In this section, we look at:
+        <ul>
+          <li>
+            <p>
+              Understand how a pivot table summarises raw data.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Identify appropriate visualisations for categorical data.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Select effective visualisations for numerical data.
+            </p>
+          </li>
+        </ul>
+      </p>
+
+      <p>
+        Before writing code to explore a dataset, you must understand the nature
+        of the data you are examining.
+        Data generally falls into two broad buckets:
+        <term>categorical data</term> (labels, names, or groups) and
+        <term>numerical data</term> (counts, measurements, or continuous
+        numbers).
+        We go into categorical data in more detail in
+        <xref ref="ch-handling-factors"/>.
+        This section introduces the foundational tools used to summarise and
+        view these data types.
+      </p>
+    </introduction>
+
+    <subsection xml:id="subsec-pivot-tables">
+      <title>Summarising Data with Pivot Tables</title>
+
+      <p>
+        When dealing with thousands of rows of raw information, it is impossible
+        to spot trends by eye.
+        A <term>pivot table</term> is a structural tool used to aggregate and
+        rearrange data dynamically.
+      </p>
+
+      <p>
+        A pivot table performs three core actions:
+        <ul>
+          <li>
+            <p>
+              <term>Splitting:</term> It groups your raw data rows by a specific
+              categorical variable.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              <term>Applying:</term> It runs a calculation on those groups, such
+              as a count, a sum, or an average.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              <term>Combining:</term> It displays the final results in a
+              compact, easy-to-read summary matrix.
+            </p>
+          </li>
+        </ul>
+      </p>
+    </subsection>
+
+    <subsection xml:id="subsec-categorical-visualisation">
+      <title>Visualising Categorical Data</title>
+
+      <p>
+        Categorical data tells you "which group" an observation belongs to.
+        Visualising this data requires showing how frequently each group
+        appears.
+      </p>
+
+      <p>
+        The primary visual tools for categorical data is a bar chart, as
+        illustrated in <xref ref="fig-frequency-by-county-time"/>.
+        In a bar chart, the length or height of each bar represents the count or
+        percentage belonging to that category, allowing quick visual comparison
+        between groups.
+      </p>
+    </subsection>
+
+    <subsection xml:id="subsec-numerical-visualisation">
+      <title>Visualising Numerical Data</title>
+
+      <p>
+        Numerical data represents quantifiable measurements.
+        When visualising numbers, the goal shifts to understanding the spread,
+        distribution, and relationship between values.
+      </p>
+
+      <p>
+        The primary visual tools for numerical data include:
+        <dl>
+          <li>
+            <title>Histograms</title>
+
+            <p>
+              Used to show the overall distribution of a single numerical
+              variable.
+              It groups continuous numbers into equal intervals (bins) and uses
+              vertical bars to show how many data points fall into each
+              interval.
+            </p>
+          </li>
+
+          <li>
+            <title>Boxplots</title>
+
+            <p>
+              Excellent for displaying the spread, central tendency, and
+              unexpected outliers of a numerical dataset.
+              They are highly efficient for comparing distributions side-by-side
+              across different categories.
+              An example of this is given in <xref ref="fig-muguro-boxplot"/>.
+            </p>
+          </li>
+
+          <li>
+            <title>Scatter Plots</title>
+
+            <p>
+              The standard visual tool for examining the relationship between
+              two distinct numerical variables.
+              Each point represents an observation, allowing you to check if the
+              variables move together or in opposite directions.
+            </p>
+          </li>
+        </dl>
+      </p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-ntsa-r-exploration">
+    <title>Exploring the Kenya Road Accidents Data in R</title>
+
+    <introduction>
+      <p>
+        The Kenya Road Accidents database used by Muguro et al.
+        is publicly available from the Humanitarian Data Exchange.
+        You can download it directly from
+        <url href="https://data.humdata.org/dataset/kenya-road-accidents-database">data.humdata.org/dataset/kenya-road-accidents-database</url>.
+        The dataset covers fatal accident reports from April to June 2016, with
+        378 rows and 13 columns.
+        Save the file somewhere you can find it, then load it into R.
+      </p>
+
+      <p>
+        If you have not already installed the packages we will use in this
+        section, run the following once:
+      </p>
+
+      <program language="r">
+        <code>
+      install.packages("rpivotTable")
+      install.packages("readxl")
+      install.packages("dplyr")
+      install.packages("ggplot2")
+        </code>
+      </program>
+
+      <p>
+        Then load the packages and read in the data.
+        You can either specify the file path directly, or use the
+        <em>Import Dataset</em> button in the Environment panel in RStudio
+        (click <em>From Excel...</em> ) to navigate to the file.
+        TODO: insert image
+      </p>
+
+      <program language="r">
+        <code>
+      library(rpivotTable)
+      library(readxl)
+      library(dplyr)
+      library(ggplot2)
+
+      kenya_accidents &lt;- read_excel("kenya-accidents-database.xlsx")
+        </code>
+      </program>
+    </introduction>
+
+    <subsection xml:id="ss-ntsa-first-look">
+      <title>A first look at the data</title>
+
+      <p>
+        Before doing anything else, it is worth getting a feel for the data: how
+        many rows and columns, what the columns are called, and what a few rows
+        look like.
+      </p>
+
+      <program language="r">
+        <code>
+        # first few rows
+        head(kenya_accidents)
+
+        # dimensions: rows and columns
+        dim(kenya_accidents)
+        #&gt; [1] 378  13
+
+        # column names and types
+        glimpse(kenya_accidents)
+        #&gt; Rows: 378
+        #&gt; Columns: 13
+        #&gt; $ `TIME 24 HOURS`          &lt;chr&gt; "630", "830", "1330", ...
+        #&gt; $ `BASE/SUB BASE`          &lt;chr&gt; "KITUI", "VOI", ...
+        #&gt; $ COUNTY                   &lt;chr&gt; "MAKUENI", "TAITA TAVETA", ...
+        #&gt; $ ROAD                     &lt;chr&gt; "KITUI-ITHOKWE", ...
+        #&gt; $ PLACE                    &lt;chr&gt; "KITUI SCHOOL", "IKANGA", ...
+        #&gt; $ `BRIEF ACCIDENT DETAILS` &lt;chr&gt; "HEAD ON COLLISION", ...
+        #&gt; $ GENDER                   &lt;chr&gt; "M", "M", "M", ...
+        #&gt; $ AGE                      &lt;chr&gt; "26", "28", "A &amp; J", ...
+        #&gt; $ `CAUSE CODE`             &lt;dbl&gt; 7, 25, 98, 29, ...
+        #&gt; $ VICTIM                   &lt;chr&gt; "M/CYCLIST", "M/CYCLIST", ...
+        #&gt; $ NO.                      &lt;dbl&gt; 1, 1, 1, 1, ...
+        #&gt; $ `Date DD/MM/YYYY`        &lt;dttm&gt; 2016-06-25, 2016-06-25, ...
+        </code>
+      </program>
+
+      <p>
+        A few things are immediately apparent.
+        The <c>AGE</c> column is stored as text rather than a number - you can
+        see values like <c>"A &amp; J"</c> (presumably Adult and Juvenile) mixed
+        in with numeric ages.
+        The <c>TIME 24 HOURS</c> column is also text, and as we will see
+        shortly, contains some ambiguous values.
+        And there is a mysterious 13th column with a note in it.
+        All of this is normal when working with real data - and spotting these
+        issues early is exactly what exploratory analysis is for.
+        We will come back to data cleaning in the next chapter; for now, we work
+        with what we have.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-ntsa-pivot">
+      <title>Exploring with a pivot table</title>
+
+      <p>
+        A pivot table lets you drag variables into rows and columns and
+        instantly see counts and summaries.
+        The <c>rpivotTable</c> package brings this directly into R.
+      </p>
+
+      <program language="r">
+        <code>
+        rpivotTable(kenya_accidents)
+        </code>
+      </program>
+
+      <p>
+        TODO: multiple images here: County in (and the arrow pressed), and COUNTY by DATE with HEATMAP
+
+        This opens an interactive table in your viewer.
+        Try dragging <c>COUNTY</c> into the row area - you will immediately see
+        that Nairobi has 72 incidents in the dataset, that seems like it could be
+        one for every day of the three-month period covered. We can check this using
+        the <c>Date</c> variable.
+        Move <c>COUNTY</c> to the top and <c>Date</c> to the left, and you get a
+        breakdown of accidents by county by date: Kiambu, Nakuru, and Nairobi
+        show incidents on almost every day.
+        Change the display from counts to a heatmap and the concentration in
+        those counties becomes even more visible.
+      </p>
+
+      <p>
+        Now try adding <c>VICTIM</c> alongside <c>COUNTY</c>.
+        In Nairobi, most victims are pedestrians.
+        In Makueni, the picture is different - only 2 pedestrians, but 8
+        motorcyclists, 6 passengers, and 7 drivers.
+        The county-level pattern from Muguro et al. (2020)
+        starts to emerge even in this small three-month slice of data.
+      </p>
+
+      <p>
+        Pivot tables are also useful for spotting data quality issues.
+        If you put <c>COUNTY</c> in rows and <c>VICTIM</c> in columns, you will
+        see both <c>M/CYCLIST</c> and <c>MOTOR CYCLIST</c> appearing as separate
+        categories — almost certainly the same category, entered inconsistently.
+        Similarly, <c>P/PASSENGER</c> and <c>P/PASENGER</c> both appear, the
+        latter with a typo.
+        These are the kinds of problems that only become visible when you look
+        at the data carefully - and a pivot table is one of the quickest ways to
+        find them.
+        We return to data cleaning in the next chapter.
+      </p>
+
+      <p>
+        Similarly, put <c>TIME 24 HOURS</c> into the rows.
+        The most common accident times are between 19:00 and 21:00 — consistent
+        with the evening rush hour peak Muguro et al. (2020)
+        found in the five-year dataset.
+        But you will also notice some unusual values: <c>45</c>, <c>10</c>,
+        <c>140</c>.
+        Does <c>140</c> mean 01:40, or 14:00, or something else entirely?
+        This is another data quality issue that exploration reveals before any
+        formal analysis begins.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-ntsa-summaries">
+      <title>Summaries and plots</title>
+
+      <p>
+        Beyond the pivot table, we can use R's standard summary tools.
+        The <c>AGE</c> column needs to be converted to numeric first - the
+        non-numeric entries like <c>"A &amp; J"</c> will become <c>NA</c>, which
+        is fine for now.
+      </p>
+
+      <program language="r">
+        <code>
+        kenya_accidents$AGE &lt;- as.numeric(kenya_accidents$AGE)
+        summary(kenya_accidents$AGE)
+
+        #&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+        #&gt;    1.50   23.00   30.00   31.53   40.00   90.00     193
+        </code>
+      </program>
+
+      <p>
+        Ages range from 1.5 to 90 years, with a median of 30 - consistent with
+        the finding across the five-year dataset that working-age adults bear
+        the greatest burden of road fatalities.
+        Note that 193 of the 378 rows have no usable age recorded, which is
+        worth keeping in mind when interpreting any age-based analysis.
+      </p>
+      <p>
+        We can see the spread of this data clearer by looking at a boxplot.
+        TODO: give image of boxplot. 
+        In the boxplot, we can see that the 90 year old is just a one-off, and that
+        the next oldest person is under 80 years old.
+        We can also see more clearly that the highest concentration of incidents
+        occur for approximately 20 to 40 year olds.
+      </p>
+
+      <program language="r">
+        <code>
+        boxplot(kenya_accidents$AGE)
+        </code>
+      </program>
+
+      <p>
+        For the categorical columns, converting them to factors before calling
+        <c>summary()</c> gives us counts for each level rather than just a
+        description of the column type.
+      </p>
+
+      <program language="r">
+        <code>
+        kenya_accidents$COUNTY &lt;- as.factor(kenya_accidents$COUNTY)
+        kenya_accidents$GENDER &lt;- as.factor(kenya_accidents$GENDER)
+        kenya_accidents$ROAD &lt;- as.factor(kenya_accidents$ROAD)
+
+        summary(kenya_accidents$COUNTY)
+        #&gt;           BARINGO           BOMET         BUNGOMA           BUSIA ELGEYO MARAKWET 
+        #&gt;                 6               4              10               3               2 
+        #&gt;              EMBU         GARISSA        HOMA BAY         KAJIADO        KAKAMEGA 
+        #&gt;                10               3              14              12              10 
+        #&gt;            KERCHO         KERICHO          KIAMBU          KILIFI       KIRINYAGA 
+        #&gt;                 1               5              31              18               3 
+        #&gt;             KISII          KISUMU           KITUI           KWALE        LAIKIPIA 
+        #&gt;                12               7               2               4               2 
+        #&gt;          MACHAKOS         MAKUENI          MAKURU        MARAKWET            MERU 
+        #&gt;                 9              26               1               1               5 
+        #&gt;            MIGORI         MOMBASA        MURANG'A         MURANGA          MWINGI 
+        #&gt;                 5              13               3               3               3 
+        #&gt;           NAIROBI          NAKURU           NANDI           NAROK       NYAHURURU 
+        #&gt;                71              32               1               9               1 
+        #&gt;           NYAMIRA       NYANDARUA           NYERI           SIAYA    TAITA TAVETA 
+        #&gt;                 1               1               8               4               4 
+        #&gt;       TRANS NZOIA     UASIN GISHU          VIHIGA            NA's 
+        #&gt;                 5               7               4               2 
+
+        summary(kenya_accidents_database$ROAD)
+        #&gt;         NAIROBI MOMBASA          MOMBASA NAIROBI       THIKA SUPERHIGHWAY 
+        #&gt;                      14                       10                        8 
+        #&gt;         MOMBASA-NAIROBI                  MOMBASA                 KANGUNDO 
+        #&gt;                       7                        6                        5 
+        #&gt;          NAKURU ELDORET           NAKURU NAIROBI           ELDORET NAKURU 
+        #&gt;                       5                        5                        4
+        #&gt;           ... and so forth!
+
+        summary(kenya_accidents$GENDER)
+        #&gt;   2F &amp; M  2M &amp; 2F  2M &amp; 3F    2M, F 4F &amp; INF        F        M    M &amp; F 
+        #&gt;        1        1        1        1        1       51      321        1 
+        </code>
+      </program>
+
+      <p>
+        Nairobi leads by a substantial margin, followed by Nakuru and Kiambu -
+        matching the county concentration Muguro et al. (2020)
+        found across the full five years.
+        When looking at roads, the Nairobi-Mombasa route comes up the most frequently
+        as the road with the most incidents.
+        Male victims outnumber female victims by more than six to one.
+        The <c>(Other)</c> category in gender includes entries like
+        <c>"M &amp; F"</c> and <c>"2M &amp; 2F"</c>. These are crashes with multiple
+        victims of different genders recorded in a single row, another data
+        quality issue that exploration surfaces.
+      </p>
+
+      <p>
+        Summaries tell us the counts, and plots can make the distribution visible.
+        A bar chart of county gives an immediate sense of where incidents
+        concentrate, and rotating the axis labels makes the county names
+        readable.
+        Barcharts can be done by using <c>barchart</c> function, or by
+        <c>ggplot2</c> which is discussed in more detail in the Visualising
+        Multidimensionality chapter.
+        TODO: put in plots.
+      </p>
+
+      <program language="r">
+        <code>
+        # one approach
+        barchart(kenya_accidents$COUNTY)
+
+        # or another option
+        ggplot(kenya_accidents, aes(x = COUNTY)) +
+          geom_bar() +
+          coord_flip() +
+          labs(
+            title = "Fatal road accidents by county, Kenya 2016",
+            x = "County",
+            y = "Number of incidents"
+          )
+        </code>
+      </program>
+
+      <program language="r">
+        <code>
+        ggplot(kenya_accidents, aes(x = COUNTY)) +
+          geom_bar() +
+          coord_flip() +
+          labs(
+            title = "Fatal road accidents by county, Kenya 2016",
+            x = "County",
+            y = "Number of incidents"
+          )
+        </code>
+      </program>
+
+      <p>
+        Similarly for victim category:
+      </p>
+
+      <program language="r">
+        <code>
+        ggplot(kenya_accidents, aes(x = VICTIM)) +
+          geom_bar() +
+          coord_flip() +
+          labs(
+            title = "Fatal road accidents by victim category, Kenya 2016",
+            x = "Victim category",
+            y = "Number of incidents"
+          )
+        </code>
+      </program>
+
+      <p>
+        These are not polished publication-ready figures.
+        They are exploratory plots — the kind you produce quickly to get a feel
+        for what the data contains before deciding what to look at more
+        carefully.
+        We go into more powerful and refined visualisation in
+        <xref ref="ch-visualising-multidimensional-data"/>.
+      </p>
+    </subsection>
+  </section>
 
   <exercises xml:id="exercises-exploring-data">
     <title>Exercises</title>
+
+    <introduction>
+      <p>
+        TODO: Explain the Flamingos data, and introduce it here.
+        Then, these exercises make sense
+      </p>
+    </introduction>
 
     <exercise xml:id="ex-explore-bill-length">
       <statement>
         <p>
           Before computing anything, predict: do you expect
           <c>bill_length_mm</c> to look like a single hump, or two, once
-          plotted? Now load the data, plot a histogram of
-          <c>bill_length_mm</c>, and check. If you see more than one hump,
-          try colouring or splitting by <c>species</c> and see whether that
-          explains it, the way splitting by species explained the body mass
-          pattern in <xref ref="ss-splitting-by-species" />.
+          plotted?
+          Now load the data, plot a histogram of <c>bill_length_mm</c>, and
+          check.
+          If you see more than one hump, try colouring or splitting by
+          <c>species</c> and see whether that explains it.
         </p>
       </statement>
     </exercise>
@@ -581,12 +1489,11 @@
     <exercise xml:id="ex-explore-lake-sex">
       <statement>
         <p>
-          Build a pivot table of <c>lake</c> against <c>sex</c>, the same way
-          <xref ref="ss-a-simple-pivot-table" /> built one for <c>lake</c>
-          against <c>species</c>. Does the balance of males and females look
-          different from lake to lake? Say which comparison <mdash /> row
-          proportions or column proportions <mdash /> you used to answer that,
-          and why you chose it.
+          Build a pivot table of <c>lake</c> against <c>sex</c>.
+          Does the balance of males and females look different from lake to
+          lake?
+          Say which comparison (row proportions or column proportions)
+          you used to answer that, and why you chose it.
         </p>
       </statement>
     </exercise>
@@ -595,15 +1502,15 @@
       <statement>
         <p>
           Pick any one numeric variable in the dataset other than
-          <c>body_mass_g</c> or <c>bill_length_mm</c>. Look at it <mdash />
-          however you like: a histogram, a table of rounded values, sorting
-          it and scanning by eye. Write two or three sentences describing
-          what you notice and one question it raises that you cannot yet
-          answer. There is no single correct answer here; the point is
-          practising the habit of looking before summarising.
+          <c>body_mass_g</c> or <c>bill_length_mm</c>.
+          Look at it, however you like: a histogram, a table of rounded
+          values, sorting it and scanning by eye.
+          Write two or three sentences describing what you notice and one
+          question it raises that you cannot yet answer.
+          There is no single correct answer here; the point is practising the
+          habit of looking before summarising.
         </p>
       </statement>
     </exercise>
   </exercises>
-
 </chapter>

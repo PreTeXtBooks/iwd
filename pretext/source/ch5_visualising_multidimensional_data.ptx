@@ -4,10 +4,7 @@
 <!--  Chapter 5: Visualising Multidimensional Data                     -->
 <!--                                                                    -->
 <!--  Two-part structure, as specified by the user:                    -->
-<!--    1. "Following the Giants" - originally an illustrative,        -->
-<!--       user-authored elephant scenario. Replaced with a REAL, cited-->
-<!--       study after the user asked whether a real one existed:      -->
-<!--       Wall, J., Hahn, N., Carroll, S., Mwiu, S., Goss, M.,         -->
+<!--    1. Wall, J., Hahn, N., Carroll, S., Mwiu, S., Goss, M.,         -->
 <!--       Sairowua, W., Tiedeman, K., Kiambi, S., Omondi, P.,          -->
 <!--       Douglas-Hamilton, I. and Wittemyer, G. (2024). "Land use     -->
 <!--       drives differential resource selection by African elephants -->
@@ -40,7 +37,7 @@
 <!--       fetch. All confirmed exact.                                 -->
 <!--    2. The Gapminder activity - REAL, well-documented dataset (the  -->
 <!--       gapminder R package / Gapminder Foundation). Numbers (1,704  -->
-<!--       obs, 142 countries, 1952-2007) as supplied by the user match -->
+<!--       obs, 142 countries, 1952-2007) match -->
 <!--       the package's actual, extremely well-known contents.        -->
 <!--    3. sec-viz-gallery - four more real, cited cases added on the   -->
 <!--       user's request (Minard 1869, Nightingale 1858, Snow 1854,    -->

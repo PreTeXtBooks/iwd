@@ -7,13 +7,19 @@
 <chapter xml:id="ch-handling-factors" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Handling Factors</title>
 
-  <introduction xml:id="intro-handling-factors">
-    <p>
-      TODO: work on intro.
-      I don't want to introduce the term "factor" yet.
-      Just dig into the story.
-    </p>
-  </introduction>
+<introduction xml:id="intro-handling-factors">
+  <p>
+    In 1950, the South African government made a decision that would shape 
+    the lives of millions of people for decades: it decided to write down, 
+    officially and legally, what race everyone was.
+  </p>
+  <p>
+    In this chapter, we are going to look carefully at variables like this 
+    one: variables that take a fixed set of named values, where the choice 
+    of what those values are, and how they are defined, has consequences 
+    for every analysis that follows.
+  </p>
+</introduction>
   <!-- ================================================================= -->
   <!--  SECTION 1: When a category changes the data                      -->
   <!-- ================================================================= -->
@@ -29,7 +35,6 @@
     </introduction>
 
     <subsection xml:id="ss-factors-legal-classification">
-      <!-- checked and happy. -->
       <title>A classification imposed by law</title>
 
       <p>
