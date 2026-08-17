@@ -78,14 +78,16 @@
           female applicants.
         </caption>
 
-        <description>
-          A bar chart with two bars comparing overall graduate admission rates
-          at UC Berkeley in 1973.
-          The bar for male applicants reaches 44.3%, noticeably taller than the
-          bar for female applicants, which reaches 34.6%.
-        </description>
-
-        <image source="images/berkeley_img_1.png" width="60%"/>
+        <image source="images/berkeley_img_1.png" width="100%">
+          <description>
+            <p>
+              A bar chart with two bars comparing overall graduate admission
+              rates at UC Berkeley in 1973.
+              The bar for male applicants reaches 44.3%, noticeably taller than
+              the bar for female applicants, which reaches 34.6%.
+            </p>
+          </description>
+        </image>
       </figure>
 
       <p>
@@ -119,15 +121,17 @@
           The rates for male and female applicants vary by department.
         </caption>
 
-        <description>
-          A bar chart with two bars for each department comparing graduate
-          admission rates at UC Berkeley in 1973.
-          The bar for male applicants reaches a certain percentage, noticeably
-          taller or shorter than the bar for female applicants, depending on the
-          department.
-        </description>
-
-        <image source="images/berkeley_img_by_dept.png" width="60%"/>
+        <image source="images/berkeley_img_by_dept.png" width="100%">
+          <description>
+            <p>
+              A bar chart with two bars for each department comparing graduate
+              admission rates at UC Berkeley in 1973.
+              The bar for male applicants reaches a certain percentage,
+              noticeably taller or shorter than the bar for female applicants,
+              depending on the department.
+            </p>
+          </description>
+        </image>
       </figure>
     </subsection>
 
@@ -153,15 +157,17 @@
           The numbers for male and female applicants vary by department.
         </caption>
 
-        <description>
-          A bar chart with two bars for each department comparing the number of
-          graduate applicants at UC Berkeley in 1973.
-          The bar for male applicants reaches a certain number, noticeably
-          taller or shorter than the bar for female applicants, depending on the
-          department.
-        </description>
-
-        <image source="images/berkeley_img_total_applicants.png" width="60%"/>
+        <image source="images/berkeley_img_total_applicants.png" width="100%">
+          <description>
+            <p>
+              A bar chart with two bars for each department comparing the number
+              of graduate applicants at UC Berkeley in 1973.
+              The bar for male applicants reaches a certain number, noticeably
+              taller or shorter than the bar for female applicants, depending on
+              the department.
+            </p>
+          </description>
+        </image>
       </figure>
 
       <p>
@@ -218,7 +224,7 @@
 
       <figure xml:id="fig-simpsons-paradox">
         <caption>A GIF Illustrating Simpson's Paradox</caption>
-        <image source="images/simpsons_paradox.gif" width="60%"/>
+        <image source="images/simpsons_paradox.gif" width="100%"/>
       </figure>
 
       <p>
