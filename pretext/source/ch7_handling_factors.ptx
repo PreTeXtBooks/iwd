@@ -462,7 +462,7 @@
         The real payoff is that once R knows a variable is a factor, an entire
         family of functions can split a dataset by its levels and compute
         something separately for each one — without you writing a loop by hand.
-        This is exactly what <xref ref="ss-splitting-by-species"/> in
+        This is exactly what "ss-splitting-by-species" in
         <xref ref="ch-exploring-data"/> relied on.
       </p>
 

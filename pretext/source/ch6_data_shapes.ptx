@@ -631,7 +631,7 @@
       </program>
       <p>
         Same numbers, same information, a different shape <mdash/> and this is
-        <xref ref="table-lake-species-crosstab"/> from
+        "table-lake-species-crosstab" from
         <xref ref="ch-exploring-data"/>, arrived at mechanically rather than
         typed by hand.
       </p>
@@ -750,7 +750,7 @@
           Using <xref ref="ss-shapes-long-to-wide"/> as a model, build a wide
           table of mean <c>body_mass_g</c> by <c>lake</c> (rows) and
           <c>species</c> (columns), instead of counts.
-          Which version, this one or <xref ref="table-lake-species-crosstab"/>,
+          Which version, this one or "table-lake-species-crosstab",
           would you send to someone who wanted to read it in an email, and which
           would you hand to someone who wanted to plot it in <c>ggplot2</c>?
         </p>
