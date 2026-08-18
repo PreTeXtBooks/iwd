@@ -634,6 +634,8 @@
 
     <introduction>
       <p>
+        TODO: go from here :) 
+
         Now on Cleaning and Recoding -- and we can use that same data as the
         previous chapter for this perhaps!
         Discover the issues while doing this in R.
@@ -713,7 +715,7 @@
     <exercise xml:id="ex-clean-phe-check">
       <statement>
         <p>
-          <xref ref="ss-phe-cost"/> notes that the PHE failure was dangerous
+          "ss-phe-cost" notes that the PHE failure was dangerous
           specifically because it was silent: the file that lost data looked
           exactly like a file that hadn't.
           Suggest one concrete check that, if run automatically every time a
