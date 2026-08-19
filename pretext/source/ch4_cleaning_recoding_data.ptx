@@ -23,33 +23,12 @@
 
   <introduction xml:id="intro-cleaning-recoding">
     <p>
-      TODO1: say in this chapter somewhere how it is not just exploring then
-      cleaning.
-      But after cleaning, you can explore agian.
-    </p>
-
-    <p>
-      TODO2: Link into Ch3 where we pointed out issues with unclean data that
-      can be sorted.
-    </p>
-
-    <p>
-      TODO3: Need to make the point in here somewhere that you may need to go to
-      the expert to ask.
-    </p>
-
-    <p>
-      <term>Cleaning</term> is the work of finding what is wrong, missing or
-      inconsistent in a dataset before you trust it.
-      <term>Recoding</term> is the work of transforming variables, categories,
-      and codes into a form that actually answers your question.
-      Both sound like housekeeping <mdash/> something to clear out of the way
-      before the real analysis starts.
-      They are not.
-      The decisions you make while cleaning and recoding decide what a missing
-      value is allowed to mean, which records count, and which get quietly set
-      aside <mdash/> which makes them part of the analysis, not preparation for
-      it.
+      We saw in the previous chapter when exploring data that there can be
+      issues in data to clean/tidy/wrangle.
+      this chapter looks at data cleaning: introduces story on ebola crisis
+      first.
+      The decisions you make while cleaning and recoding decide XYZ <mdash/>
+      which makes them part of the analysis, not preparation for it.
       Skip them, rush them, or hand them to software without supervision, and
       you can get a confident, precisely wrong answer out the other end.
       That happened, at the largest possible scale, during the deadliest
@@ -551,7 +530,6 @@
       <title>Gene names: recoding you didn't ask for</title>
 
       <p>
-        TODO: need to do a final fact-check on this.
         The previous example is about data silently disappearing.
         This one is about data quietly turning into something else.
         And this happened, unnoticed, across an entire scientific field, for
@@ -559,45 +537,93 @@
       </p>
 
       <p>
-        Human genes have short alphanumeric names: <c>SEPT2</c>, <c>MARCH1</c>,
-        <c>DEC1</c>.
-        Genomics researchers routinely list hundreds of them in spreadsheets as
-        part of their published research.
+        We have around 20,000 human genes.
+        To ensure clear scientific communication and consistent database
+        tracking, each gene is given a short alphanumeric symbol; for example:
+        <ul>
+          <li>
+            <p>
+              <q>Metastasis Associated Lung Adenocarcinoma Transcript 1</q> is
+              given the symbol <c>MALAT1</c>
+            </p>
+          </li>
+
+          <li>
+            <p>
+              <q>Septin 2</q> is given the symbol <c>SEPT2</c>
+            </p>
+          </li>
+
+          <li>
+            <p>
+              <q>Membrane Associated Ring-CH-Type Finger 1</q> is given the
+              symbol <c>MARCH1</c>
+            </p>
+          </li>
+        </ul>
+        Genomics researchers routinely list hundreds of these symbols in
+        spreadsheets as part of their published research.
         Microsoft Excel, with its default settings, tries to be helpful.
-        If a cell's contents look like a date — and <c>SEPT2</c> looks enough
-        like <q>2 September</q> to qualify — Excel silently converts it, storing
-        <c>2-Sep</c> in the cell instead of the gene name that was typed.
-        <c>MARCH1</c> becomes <c>1-Mar</c>.
-        No warning is shown.
-        The gene name is simply gone, replaced by a date that has nothing to do
-        with the data.
+        If a cell's contents look like a date, then Excel silently converts it,
+        storing it in a new date format instead of how it was initially
+        inserted.
+        For example, <c>SEPT2</c> looks enough like <q>2 September</q> for Excel
+        to interpret it as a date and silently convert it to <c>2-Sep</c>.
+        Similarly, <c>MARCH1</c> becomes <c>1-Mar</c>.
+        In total, there are 27 different genes that Excel has been found to
+        mistake for dates.
+        The issue is that with Excel, it does not give a warning.
+        Instead, it silently replaces the gene with a date, thinking it is being
+        helpful, even though this has nothing to do with the biology.
       </p>
 
       <p>
         In 2016, researchers Mark Ziemann, Yotam Eren and Assam El-Osta screened
-        the supplementary data files of 3,597 papers published in 18 leading
-        genomics journals between 2005 and 2015.
+        3,597 papers published between 2005 and 2015 in 18 leading genomics
+        journals.
+        These papers were all published, peer-reviewed research in leading
+        journals, hence the kind of work other researchers assume as a reliable
+        foundation.
         Roughly <term>one in five</term> of the papers that included a
         supplementary Excel gene list had at least one gene name silently
-        corrupted into a date or a number this way.
-        These were not obscure, unread papers.
-        They were published, peer-reviewed research, and the corrupted
-        supplementary files were exactly the files other researchers would
-        download and build on.
-        Nobody had decided to recode <c>SEPT2</c> into a date.
-        The software had done it for them, and it had gone unnoticed for years
-        at a time, across an entire discipline.
+        corrupted into a date or a number.
       </p>
 
       <p>
-        By 2020 the problem was serious enough that the body responsible for
-        official human gene names, the HUGO Gene Nomenclature Committee (HGNC),
-        renamed twenty-seven genes specifically to stop this from happening.
-        <c>MARCH1</c> became <c>MARCHF1</c>.
-        <c>SEPT1</c> became <c>SEPTIN1</c>.
-        The genes themselves had not changed.
-        Their names were changed because it was easier to rename twenty-seven
-        genes than to get every spreadsheet in the world to stop guessing.
+        So, why does this matter?
+        A gene symbol is more than a label: it is the key that links a finding
+        in one paper to the same gene in every other paper, database, and
+        analysis tool that uses it.
+        When a researcher downloads a supplementary file to build on someone
+        else's work, they might search for <c>SEPT2</c> and find nothing,
+        because the file contains <c>2-Sep</c> instead.
+        Or worse, they might not notice the corruption at all, carry the wrong
+        value forward into their own analysis, and publish results that are
+        built on a gene list that was silently wrong from the start.
+      </p>
+
+      <p>
+        Two things are worth noting.
+        First, nobody had decided to recode <c>SEPT2</c> into a date — the
+        software had done it for them, and it had gone unnoticed for years at a
+        time, across an entire discipline.
+        Second, this was not a new problem.
+        The error had been documented with workarounds suggested as early as
+        2004 — over a decade before Ziemann et al.'s investigation.
+        The knowledge of the problem existed, and a fix had been outlined.
+        However, the corruption continued regardless.
+      </p>
+
+      <p>
+        By 2020 the problem was serious enough that the HUGO Gene Nomenclature
+        Committee (HGNC), the international body responsible for approving and
+        standardising human gene names, renamed twenty-seven genes specifically
+        to stop this from happening.
+        For example, <c>MARCH1</c> became <c>MARCHF1</c>; <c>SEPT1</c> became
+        <c>SEPTIN1</c>.
+        The genes themselves had not changed, but their names were changed
+        because it was easier to rename twenty-seven genes than to get Excel to
+        stop guessing.
       </p>
 
       <insight xml:id="insight-genes-lesson">
@@ -610,7 +636,7 @@
           looked at any of it yourself.
           Cleaning data is not just fixing values that are obviously wrong.
           It includes checking that nothing was silently <q>fixed</q> for you,
-          incorrectly, before you ever opened the file.
+          incorrectly.
         </p>
       </insight>
 
@@ -629,53 +655,1302 @@
   <!-- ================================================================= -->
   <!--  SECTION 5: applied to the flamingo data                          -->
   <!-- ================================================================= -->
-  <section xml:id="sec-cleaning-applied">
-    <title>Cleaning and Recoding, Applied</title>
+  <section xml:id="sec-kenya-accidents-r-cleaning">
+    <title>Cleaning the Kenya Road Accidents Data in R</title>
 
     <introduction>
       <p>
-        TODO: go from here :) 
-
-        Now on Cleaning and Recoding -- and we can use that same data as the
-        previous chapter for this perhaps!
-        Discover the issues while doing this in R.
-        So, do a pivot table / look at unique values / filter etc to show the errors
-        
-        IMPLAUSIBLE VALUES: look at min/max's - good age is in a reasonable range. (of course, age could still be an error! But, this is something to check with the original folks. Is "90" an indicator for NA for example? Probably not, as there is NA.)
-        
-        RECODING: P/PASSENGERS -- is that the same as PASSENGERS? look into the metadata file if it explains. Or, contact the OGs.
-        
-        IMPLAUSIBLE VALUES?: times -- we saw 140. is this 1400 or 0140? we need to check that with orgiinals.
-        INCONSISTENT VALUES?: But are there others we can do. E.g., 1810, we can round to 1800?
-        what else? How do we handle the duplicates ones? 
-
-        So this is a teaching tutorial -- learning the problems from the data.
-        So go through the data, and then explain how to fix it. 
+        In <xref ref="ch-exploring-data"/>, we loaded the Kenya Road Accidents
+        database and began exploring it using pivot tables, summaries, and
+        simple plots.
+        In doing so, we noticed several problems: inconsistent county names,
+        ambiguous time values, mixed gender entries, and free-text accident
+        descriptions that needed grouping before they could be analysed.
+        This section works through those problems one by one, showing how data
+        cleaning and exploration feed into each other — each round of cleaning
+        revealing something new worth looking at, and each new look revealing
+        something else that needs fixing.
       </p>
 
       <p>
-        inconsistent values, duplicate records, implausible values
+        We use the same dataset and the same packages as before.
+        If you have not already loaded them:
+      </p>
+
+      <program language="r">
+        <code>
+      library(rpivotTable)
+      library(readxl)
+      library(dplyr)
+      library(stringr)
+      library(lubridate)
+      library(ggplot2)
+      library(purrr)
+      library(tidyr)
+
+      kenya_accidents_database &lt;- read_excel("kenya-accidents-database.xlsx")
+        </code>
+      </program>
+
+      <p>
+        One small confession before we start: it was not until I opened this
+        dataset in Excel that I realised the 13th column was simply a note
+        someone had typed into the spreadsheet, not data at all.
+        I had a suspicion from <c>View()</c> in R, but I did not fully recognise
+        it until I could see the whole sheet laid out visually.
+        This is worth saying: R is powerful, but it does not show you your data
+        the way a spreadsheet does.
+        Using different tools together (e.g., R for analysis, Excel or a
+        spreadsheet viewer for a visual sanity check) is a good habit to have.
+        Different software have different strengths.
       </p>
 
       <p>
-        Two more categories that get lumped in under <q>bad data</q> are
-        deliberately not covered here.
-        <term>Missing values</term> get a chapter of their own,
-        <term>Handling Missing Values</term>, because the interesting question
-        there is not how to spot a gap but what to do about it once you have.
-        <term>Outliers</term> <mdash/> genuine, correctly recorded extreme
-        values <mdash/> are a different problem again, and are covered properly
-        once you have the statistical tools to say <em>how</em> extreme is
-        extreme, in <term>Measuring and Observing Variability</term>.
-        Confusing an outlier with an implausible value is itself a mistake worth
-        avoiding: one is real and needs to be understood, the other is wrong and
-        needs to be fixed.
+        With that established, the first thing to do is remove that 13th column:
       </p>
+
+      <program language="r">
+        <code>
+      names(kenya_accidents_database)
+      kenya_accidents_database$`...13` &lt;- NULL
+        </code>
+      </program>
     </introduction>
-    <subsection xml:id="subsec-todo-1">
-      <title>todo-1</title>
+
+    <subsection xml:id="ss-cleaning-time">
+      <title>Making sense of <c>TIME 24 HOURS</c></title>
+
       <p>
-        todo
+        Let's start with the <c>TIME 24 HOURS</c> column.
+        This is worth looking at carefully before doing anything with it.
+        There are several ways to inspect it.
+        Three such suggestions are:
+      </p>
+
+      <program language="r">
+        <code>
+      # Option 1: pivot table
+      rpivotTable(kenya_accidents_database, rows = "TIME 24 HOURS")
+
+      # Option 2: unique values
+      unique(kenya_accidents_database$`TIME 24 HOURS`)
+
+      # Option 3: counts of each value
+      kenya_accidents_database %&gt;%
+        group_by(`TIME 24 HOURS`) %&gt;%
+        count() %&gt;%
+        View()
+        </code>
+      </program>
+
+      <p>
+        Whichever method you use, a few things stand out immediately.
+      </p>
+
+      <p>
+        First, there are missing values.
+        In the pivot table these appear as a column labelled <c>NULL</c>- that
+        is how <c>rpivotTable</c> displays <c>NA</c> 's.
+        But in the <c>unique</c> option or the count table they appear as
+        <c>NA</c> directly.
+        Either way, we can see that we are missing some values for the time of
+        the crash.
+      </p>
+
+      <p>
+        Second, there is an entry <c>UNKNOWN TIME</c>.
+        This is not a missing value in the technical sense since it is text that
+        someone typed into the cell, but, it is clearly meant to convey the same
+        thing: the time was not known.
+        We can confidently treat it as missing.
+      </p>
+
+      <p>
+        Third, and most interestingly, there are times that look wrong.
+        Most entries are four digits ( <c>1030</c>, <c>1130</c>, <c>1915</c> )
+        which is what you would expect for 24-hour time.
+        But some entries have only three digits ( <c>140</c>, <c>630</c> ), two
+        digits ( <c>10</c>, <c>45</c> ), or even one digit ( <c>1</c> ).
+        What do these mean?
+        Could these be typos where <c>140</c> means <c>1400</c> or <c>0140</c>?
+      </p>
+
+      <p>
+        The most likely explanation is Excel.
+        When you type a number beginning with <c>0</c> into an Excel cell
+        formatted as a number, Excel silently removes the leading zero.
+        So <c>0140</c> becomes <c>140</c>, <c>0010</c> becomes <c>10</c>, and
+        <c>0001</c> becomes <c>1</c>.
+        Under this interpretation, any entry with fewer than four digits has
+        simply had its leading zeros stripped, and we can restore them by
+        padding to four digits with leading zeros.
+        The <c>NA</c> entries might then represent <c>0000</c> (midnight)
+        similarly stripped to nothing.
+      </p>
+
+      <p>
+        This is an educated guess, not a certainty.
+        In a real investigation, you would contact the data custodian to
+        confirm.
+        But, for the purposes of this example, we will assume we did exactly
+        that, and received confirmation that yes, the leading zeros were
+        stripped by Excel, exactly as in the gene names story from earlier in
+        this chapter.
+        With that confirmed, we can fix the column:
+      </p>
+
+      <program language="r">
+        <code>
+      kenya_accidents_database &lt;- kenya_accidents_database %&gt;%
+        mutate(
+          # Treat "UNKNOWN TIME" as NA
+          `TIME 24 HOURS` = na_if(`TIME 24 HOURS`, "UNKNOWN TIME"),
+
+          # Pad to 4 digits with leading zeros
+          # e.g. "140" -&gt; "0140", "10" -&gt; "0010", NA -&gt; "0000"
+          `TIME 24 HOURS` = case_when(
+            is.na(`TIME 24 HOURS`) ~ "0000",
+            TRUE ~ str_pad(`TIME 24 HOURS`, width = 4, 
+                           side = "left", pad = "0")
+          ),
+
+          # Convert to a proper time type (hhmm format)
+          TIME_PARSED = hm(paste0(
+            str_sub(`TIME 24 HOURS`, 1, 2), ":",
+            str_sub(`TIME 24 HOURS`, 3, 4)
+          ))
+        )
+        </code>
+      </program>
+
+      <p>
+        Before moving on, it is worth checking that the conversion worked as
+        expected.
+        We want to confirm that each value of <c>TIME 24 HOURS</c> maps to
+        exactly one <c>TIME_PARSED</c> value with no surprises:
+      </p>
+
+      <program language="r">
+        <code>
+    kenya_accidents_database %&gt;%
+      group_by(`TIME 24 HOURS`, TIME_PARSED) %&gt;%
+      count() %&gt;%
+      View()
+        </code>
+      </program>
+
+      <p>
+        Each value of <c>TIME 24 HOURS</c> should have exactly one corresponding
+        <c>TIME_PARSED</c> entry.
+        If any had two or more, that would mean the padding or parsing had done
+        something unexpected and we would need to investigate.
+        Assuming everything looks correct, we can move on.
+      </p>
+
+      <p>
+        We can now verify the result by checking the unique values of
+        <c>TIME_PARSED</c>, and plot the distribution of crashes by hour to see
+        whether it looks sensible:
+      </p>
+
+      <program language="r">
+        <code>
+      kenya_accidents_database &lt;- kenya_accidents_database %&gt;%
+        mutate(HOUR = hour(TIME_PARSED))
+
+      ggplot(kenya_accidents_database, aes(x = HOUR)) +
+        geom_bar() +
+        labs(title = "Crashes by hour of day",
+             x = "Hour (24-hour clock)",
+             y = "Number of incidents")
+        </code>
+      </program>
+
+      <p>
+        The distribution should show a peak in the evening hours, consistent
+        with what Muguro et al (2020) found in the five-year dataset, and with
+        what we saw in the hourly chart from their paper earlier in this
+        chapter.
+        If the pattern looks broadly right, that is a reasonable sanity check
+        that the padding assumption was correct.
+        If it looked wildly wrong (for example, a spike at 3am with nothing
+        during the day) that would be a signal to go back and question the
+        assumption.
+        TODO: ch4_img1_crashes.png
+      </p>
+
+      <p>
+        Note that the <c>NA</c> s we assigned to <c>0000</c> will now appear as
+        midnight crashes.
+        If you are doing any analysis of time-of-day patterns, it is worth
+        either excluding them or flagging them separately, since they are
+        imputed values rather than confirmed times.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-cleaning-county">
+      <title>Fixing county names</title>
+
+      <p>
+        The time column had implausible values - entries that needed
+        interpretation before they could be used.
+        A different kind of problem appears in <c>COUNTY</c>: not values that
+        are wrong, but values that are inconsistent.
+        The same county, spelled two different ways, will be treated as two
+        different counties by any analysis you run.
+        Opening a pivot table on <c>COUNTY</c> makes these easy to spot, since
+        the names are listed alphabetically and duplicates appear next to each
+        other:
+      </p>
+
+      <program language="r">
+        <code>
+        rpivotTable(kenya_accidents_database, rows = "COUNTY")
+        </code>
+      </program>
+
+      <p>
+        Two problems are visible straight away: <c>KERCHO</c> and <c>KERICHO</c>
+        appear as separate entries, as do <c>MURANGA</c> and <c>MURANG'A</c>.
+        These are clearly the same counties entered inconsistently.
+        See FIGURE TODO (ch4_img2_counties_1.png) We fix them with
+        <c>case_when()</c>:
+      </p>
+
+      <program language="r">
+        <code>
+        kenya_accidents_database &lt;- kenya_accidents_database %&gt;%
+          mutate(COUNTY = case_when(
+            COUNTY == "KERCHO"  ~ "KERICHO",
+            COUNTY == "MURANGA" ~ "MURANG'A",
+            TRUE ~ COUNTY
+          ))
+        </code>
+      </program>
+
+      <p>
+        Verify by pulling up the pivot table again: the duplicates should now be
+        gone.
+        It is worth doing this check explicitly rather than assuming the fix
+        worked.
+        See FIGURE TODO (ch4_img2_counties_1.png)
+      </p>
+
+      <program language="r">
+        <code>
+        rpivotTable(kenya_accidents_database, rows = "COUNTY")
+        </code>
+      </program>
+    </subsection>
+
+    <subsection xml:id="ss-cleaning-base">
+      <title>Fixing base/sub-base names</title>
+
+      <p>
+        The same problem appears in the <c>BASE/SUB BASE</c> column — spelling
+        variants for the same location, and some entries prefixed with
+        <c>DTEO</c> (TODO: figure ch4_img2_base.png).
+        We believe this refers to the District Traffic Enforcement Officer
+        responsible for that area, making <c>DTEO DAGORETTI</c> equivalent to
+        <c>DAGORETTI</c> — but in practice, you would want to verify this with
+        someone familiar with the data before stripping it, in case the prefix
+        carries meaning that matters for your analysis.
+        For the purposes of this example, we proceed on the assumption that it
+        does not:
+      </p>
+
+      <program language="r">
+        <code>
+        kenya_accidents_database &lt;- kenya_accidents_database %&gt;%
+          mutate(
+            `BASE/SUB BASE` = str_trim(`BASE/SUB BASE`),
+            `BASE/SUB BASE` = str_remove(`BASE/SUB BASE`, 
+                                          regex("^DTEO\\s+", ignore_case = TRUE)),
+            `BASE/SUB BASE` = case_when(
+              `BASE/SUB BASE` == "DAGORETTI"   ~ "DAGORETI",
+              `BASE/SUB BASE` == "MOI'S BRIDGE" ~ "MOIS BRIDGE",
+              `BASE/SUB BASE` == "MAKINGENI"   ~ "MAKONGENI",
+              `BASE/SUB BASE` == "MURANGA"     ~ "MURANG'A",
+              `BASE/SUB BASE` == "SALGAA"      ~ "SALGA",
+              TRUE ~ `BASE/SUB BASE`
+            )
+          )
+        </code>
+      </program>
+
+      <p>
+        We can now use the relationship between <c>BASE/SUB BASE</c> and
+        <c>COUNTY</c> as a further quality check.
+        A county can have multiple sub-bases, but, we may expect a sub-base to
+        belong to one county only, so any sub-base that appears in two different
+        counties may signal that something is wrong.
+        ** TODO: Figure ch4_img2_counties_2.png Note that we have trimmed it to
+        contain only certain columns to make our point (otherwise too much
+        info); NAKURU base has 12 total instances.
+        11 in NAKURU county; 1 in MAKURU county.
+        can confirm this is a typo and MAKURU should say NAKURU; NAIROBI base
+        has 12 total instances, all 12 in NAIROBI county.
+        HOMA BAY / KISUMU thing too in here in a row.
+        NYANDO has 4 in HOMA BAY and 4 in KISUMU.
+        Is this due to 2 NYANDOs?
+        From a quick look up NYANDO is meant to be in Kisumu county.
+        But could it be that a place similar to NYANDO is in HOMA BAY, and
+        NYANDO is a typo**
+      </p>
+
+      <program language="r">
+        <code>
+        rpivotTable(kenya_accidents_database,
+                    rows = "BASE/SUB BASE",
+                    cols = "COUNTY")
+        </code>
+      </program>
+
+      <p>
+        Sorting by count, we can see that <c>NAKURU</c> has 12 cases: 11 in
+        Nakuru county and 1 in <c>MAKURU</c>.
+        This is almost certainly a typo, and we fix it the same way as before.
+        This is a good example of how cleaning one variable reveals a problem in
+        another.
+        We were not looking at <c>COUNTY</c> at this point — we were looking at
+        <c>BASE/SUB BASE</c> — but the cross-tabulation surfaced it.
+      </p>
+
+      <program language="r">
+        <code>
+        kenya_accidents_database &lt;- kenya_accidents_database %&gt;%
+          mutate(COUNTY = case_when(
+            COUNTY == "MAKURU" ~ "NAKURU",
+            TRUE ~ COUNTY
+          ))
+        </code>
+      </program>
+
+      <p>
+        We also notice that <c>NYANDO</c> appears in both Homa Bay and Kisumu
+        counties.
+        A quick check confirms that Nyando is in Kisumu county, so the Homa Bay
+        entries are likely errors — but it is worth going back to the original
+        source before correcting.
+        Could it instead be that <c>NYANDO</c> is the error, and Homa Bay is the
+        correct county?
+        The data alone cannot tell us.
+        This is exactly the kind of question that needs a domain expert, or
+        access to the original records, rather than a statistical fix.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-cleaning-dates">
+      <title>Dates: converting and checking</title>
+
+      <p>
+        We next look to the <c>Date DD/MM/YYYY</c> column.
+        In R, this needs to be converted from text to a proper date type before
+        we can do anything useful with it.
+      </p>
+
+      <program language="r">
+        <code>
+        kenya_accidents_database &lt;- kenya_accidents_database %&gt;%
+          mutate(`Date DD/MM/YYYY` = as.Date(`Date DD/MM/YYYY`))
+        </code>
+      </program>
+
+      <p>
+        Once converted, a simple bar chart reveals something unexpected (TODO:
+        Figure ch4_dates.png)
+      </p>
+
+      <program language="r">
+        <code>
+        ggplot(kenya_accidents_database,
+               aes(x = `Date DD/MM/YYYY`)) +
+          geom_bar()
+        </code>
+      </program>
+
+      <p>
+        There are no crashes in May — the data jumps from April directly to
+        June.
+        This is almost certainly not because no crashes occurred in May, but
+        because May data was simply not included in this extract.
+        This is not something we can fix, but it is important to know: any
+        analysis of monthly patterns from this dataset will be misleading,
+        because the dataset is not a complete three-month record.
+      </p>
+
+      <p>
+        We can check this Date column by also looking at patterns by day of the
+        week.
+        First we extract the weekday from the date:
+      </p>
+
+      <program language="r">
+        <code>
+        kenya_accidents_database &lt;- kenya_accidents_database %&gt;%
+          mutate(weekday = lubridate::wday(`Date DD/MM/YYYY`, label = TRUE))
+
+        ggplot(kenya_accidents_database,
+               aes(x = weekday)) +
+          geom_bar()
+        </code>
+      </program>
+
+      <p>
+        Fridays and Saturdays have the most crashes, and Mondays the fewest.
+        This is broadly consistent with what Kenya's National Road Safety Action
+        Plan reports — nearly half of all fatal crashes occur between Friday and
+        Sunday.
+        But it is worth noting that reporting delays could also play a role:
+        crashes that happen late on a given day might be logged the following
+        day, which could shift some of the apparent Friday peak into Saturday.
+        We also notice gaps on the 27th and 28th of both April and June — two
+        consecutive days with no crashes recorded in both months, which seems
+        unlikely and warrants checking against the original data source.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-cleaning-individual">
+      <title>Moving to the individual level (Advanced)</title>
+
+      <p>
+        Some variables in the dataset belong at the level of the incident; for
+        example, the road, the time, the county, the cause.
+        However, other variables in this data set belong at the level of the
+        individual victim: their age, gender, and category.
+        But the data as downloaded is at the incident level, with multiple
+        victims sometimes encoded in a single row (See
+        <xref ref="table-kenya-accidents-snippet"/> which shows a snippet of the
+        data.).
+        As we discussed in <xref ref="ch-multilevel-data"/>, mixing levels makes
+        analysis harder and can introduce errors.
+      </p>
+
+      <table xml:id="table-kenya-accidents-snippet">
+        <title>
+          A snippet of rows from the Kenya Road Accidents database after initial
+          cleaning (Note that `NO.` is the number of individuals involved in the
+          crash)
+        </title>
+
+        <tabular halign="left">
+          <col halign="right"/>
+          <col halign="right"/>
+          <col halign="left"/>
+          <col halign="left"/>
+          <col halign="left"/>
+          <col halign="left"/>
+          <col halign="left"/>
+          <col halign="left"/>
+          <col halign="left"/>
+          <col halign="right"/>
+          <col halign="left"/>
+          <col halign="right"/>
+          <col halign="left"/>
+          <row header="yes">
+            <cell/>
+            <cell>TIME 24 HOURS</cell>
+            <cell>BASE/SUB BASE</cell>
+            <cell>COUNTY</cell>
+            <cell>ROAD</cell>
+            <cell>PLACE</cell>
+            <cell>BRIEF ACCIDENT DETAILS</cell>
+            <cell>GENDER</cell>
+            <cell>AGE</cell>
+            <cell>CAUSE CODE</cell>
+            <cell>VICTIM</cell>
+            <cell>NO.</cell>
+            <cell>Date DD/MM/YYYY</cell>
+          </row>
+
+          <row>
+            <cell>66</cell>
+            <cell>2015</cell>
+            <cell>Bureti</cell>
+            <cell>Kericho</cell>
+            <cell>Buret Ngoina</cell>
+            <cell>Ngoina Junction</cell>
+            <cell>
+              The Probox was overtaking unknown M/V hence collided head on with
+              the petrol tanker
+            </cell>
+            <cell>M</cell>
+            <cell>A</cell>
+            <cell>10</cell>
+            <cell>7 Passengers 1 Driver</cell>
+            <cell>8</cell>
+            <cell>2016-06-16</cell>
+          </row>
+
+          <row>
+            <cell>224</cell>
+            <cell>2020</cell>
+            <cell>Vihiga</cell>
+            <cell>Vihiga</cell>
+            <cell>Chavakali Kapsabet</cell>
+            <cell>Musasa Area</cell>
+            <cell>Head on collision</cell>
+            <cell>M</cell>
+            <cell>A</cell>
+            <cell>8</cell>
+            <cell>Passenger</cell>
+            <cell>6</cell>
+            <cell>2016-04-21</cell>
+          </row>
+
+          <row>
+            <cell>327</cell>
+            <cell>2205</cell>
+            <cell>Nanyuki</cell>
+            <cell>NA</cell>
+            <cell>Kinamba</cell>
+            <cell>Ngarua</cell>
+            <cell>The vehicle overturned killing 6 victims</cell>
+            <cell>4F &amp; INF</cell>
+            <cell>A</cell>
+            <cell>26</cell>
+            <cell>Passenger</cell>
+            <cell>6</cell>
+            <cell>2016-04-08</cell>
+          </row>
+
+          <row>
+            <cell>86</cell>
+            <cell>1920</cell>
+            <cell>Kangundo</cell>
+            <cell>Makueni</cell>
+            <cell>Kangundo Nairobi</cell>
+            <cell>Kalaah Kware Bridge</cell>
+            <cell>The vehicle lost control and veered off the road</cell>
+            <cell>2M &amp; 2F</cell>
+            <cell>A</cell>
+            <cell>26</cell>
+            <cell>4 Passengers 1 Driver</cell>
+            <cell>5</cell>
+            <cell>2016-06-12</cell>
+          </row>
+
+          <row>
+            <cell>117</cell>
+            <cell>1800</cell>
+            <cell>Makueni</cell>
+            <cell>Makueni</cell>
+            <cell>Wote Makindu</cell>
+            <cell>Kisene Bridge</cell>
+            <cell>
+              The vehicle lost control and plunged into the Miseke Bridge
+            </cell>
+            <cell>M</cell>
+            <cell>A</cell>
+            <cell>26</cell>
+            <cell>Passenger</cell>
+            <cell>5</cell>
+            <cell>2016-06-08</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>
+        The cleaner approach is to create two linked data frames: one at the
+        incident level, and one at the individual level.
+        The reason this matters comes down to what each variable actually
+        describes.
+        Some variables belong to the crash itself (the road, the time, the
+        county, the cause code, the date), but these are the same for every
+        person involved in a given incident.
+        Other variables belong to the individual victim (their age, gender, and
+        category), and these differ from person to person within the same crash.
+      </p>
+
+      <p>
+        Keeping everything in one data frame creates problems in both
+        directions.
+        If we want to convert <c>AGE</c> to a numeric variable, R will turn
+        entries like <c>"2M &amp; 2F"</c> in <c>GENDER</c> into <c>NA</c>, but
+        those are not missing values, they are multiple people.
+        On the other hand, if we expand each row so that every person gets their
+        own row, then crash-level variables like <c>ROAD</c> and
+        <c>TIME 24 HOURS</c> get duplicated across every victim of the same
+        crash, which makes counting crashes correctly much harder.
+        The solution is to separate the two levels, link them with a shared ID,
+        and work with each at the right level of analysis — exactly as we
+        discussed in <xref ref="ch-multilevel-data"/>.
+        We start by adding an incident ID so that once the levels are separated,
+        we can link them back together:
+      </p>
+
+      <program language="r">
+        <code>
+        kenya_accidents_database &lt;- kenya_accidents_database %&gt;%
+          mutate(incident_id = 1:nrow(kenya_accidents_database))
+
+        kenya_individual_level &lt;- kenya_accidents_database %&gt;%
+          dplyr::select(incident_id, AGE, GENDER, `NO.`, VICTIM)
+        </code>
+      </program>
+
+      <p>
+        The <c>GENDER</c> column contains entries like <c>"2M &amp; 2F"</c> or
+        <c>"4F &amp; INF"</c> — multiple people encoded in a single cell.
+        To get one row per person, we need to expand these.
+        This kind of string parsing is fiddly enough that using a helper
+        function (or asking an AI tool to draft one and then checking it
+        carefully) is a reasonable approach:
+      </p>
+
+      <program language="r">
+        <code>
+        # Helper to split entries separated by commas, "&amp;", or "and"
+        split_flexible &lt;- function(x) {
+          str_split(x, "\\s*(?:[,&amp;]|and)\\s*")
+        }
+
+        kenya_individual_level &lt;- kenya_individual_level %&gt;%
+          mutate(
+            AGE    = split_flexible(AGE),
+            GENDER = split_flexible(GENDER),
+            VICTIM = split_flexible(VICTIM)
+          ) %&gt;%
+          mutate(
+            AGE    = map2(AGE,    `NO.`, rep_len),
+            GENDER = map2(GENDER, `NO.`, rep_len),
+            VICTIM = map2(VICTIM, `NO.`, rep_len)
+          ) %&gt;%
+          unnest(cols = c(AGE, GENDER, VICTIM))
+        </code>
+      </program>
+
+      <p>
+        Note that this expansion cannot tell us which gender matches which age
+        when both are mixed in the same incident — we only know that a given
+        incident involved, say, two men and two women, not which of the four
+        victims was which.
+        This is a limitation of the original data, not of the cleaning.
+        For incidents where <c>NO.</c> (the number of victims) is greater than
+        one and the victim types are mixed, the safest approach is to handle
+        them manually — there are only a handful of such cases in this dataset,
+        so it is feasible.
+        The key constraint throughout is not to inadvertently link an age or
+        gender to the wrong victim type in the process.
+      </p>
+
+      <p>
+        The <c>AGE</c> column contains a mix of numeric ages, the letter
+        <c>A</c> (adult), the letter <c>J</c> (junior), and entries like
+        <c>"5 MONTHS"</c>.
+        We clean these in two steps: first converting month-based ages to
+        decimal years, then creating a categorical <c>AGE_GROUP</c> variable
+        that preserves the <c>A</c> and <c>J</c> classifications:
+      </p>
+
+      <program language="r">
+        <code>
+        # Convert "5 MONTHS" to 0.42, etc.
+        clean_months &lt;- function(df, column_name, format = "decimal") {
+          col &lt;- sym(column_name)
+          pattern &lt;- "(?i)(\\d+(?:\\.\\d+)?)\\s*(?:months?|mth|mths)"
+          df %&gt;%
+            mutate(
+              .months = as.numeric(str_match(!!col, pattern)[, 2]),
+              !!col := case_when(
+                !is.na(.months) &amp; format == "decimal" ~
+                  as.character(round(.months / 12, 2)),
+                TRUE ~ as.character(!!col)
+              )
+            ) %&gt;%
+            select(-.months)
+        }
+
+        kenya_individual_level &lt;- clean_months(kenya_individual_level, 
+                                               "AGE", format = "decimal")
+
+        # Create AGE_GROUP from A/J codes and numeric ages
+        kenya_individual_level &lt;- kenya_individual_level %&gt;%
+          mutate(
+            .age_num = suppressWarnings(as.numeric(AGE)),
+            AGE_GROUP = case_when(
+              AGE %in% c("A", "ADULT")    ~ "ADULT",
+              AGE %in% c("J", "JUNIOR")   ~ "JUNIOR",
+              !is.na(.age_num) &amp; .age_num &gt;= 18 ~ "ADULT",
+              !is.na(.age_num) &amp; .age_num &lt;  18 ~ "JUNIOR",
+              TRUE ~ NA_character_
+            )
+          ) %&gt;%
+          select(-.age_num)
+
+        # Now convert AGE to numeric (A, J become NA - that is expected)
+        kenya_individual_level$AGE &lt;- as.numeric(kenya_individual_level$AGE)
+        </code>
+      </program>
+
+      <p>
+        We can check that <c>AGE_GROUP</c> was created correctly by
+        cross-tabulating it against <c>AGE</c> in a pivot table:
+      </p>
+
+      <program language="r">
+        <code>
+    rpivotTable(kenya_individual_level, rows = "AGE_GROUP", cols = "AGE")
+        </code>
+      </program>
+
+      <p>
+        The result, shown in TODO figure ch4_agegroup_by_age.png, confirms that
+        the grouping has worked as expected.
+        All numeric ages below 18 appear in the <c>JUNIOR</c> row, and all ages
+        18 and above appear in the <c>ADULT</c> row.
+        The <c>null</c> row (where neither group was assigned) corresponds to
+        the rows where <c>AGE</c> was recorded only as <c>A</c> or <c>J</c> and
+        could not be converted to a number, which is exactly what we would
+        expect.
+        Nothing has been lost and nothing has been misclassified.
+      </p>
+
+      <p>
+        We can also check the numeric age conversion by plotting a barplot of
+        the numeric ages variable:
+      </p>
+
+      <program language="r">
+        <code>
+    ggplot(kenya_individual_level, aes(x = AGE)) +
+      geom_bar()
+        </code>
+      </program>
+
+      <p>
+        The plot in <xref ref="fig-ch4-age-bar"/> shows a striking pattern:
+        there are large spikes at ages 30, 35, and 40.
+        There are also spikes at 50, 60, and 70 relative to the ages around it.
+        At first glance it might look like road crash victims in Kenya are
+        unusually likely to be exactly 30 or exactly 35 years old.
+        The more plausible explanation is simpler: people recording the data
+        were rounding ages to the nearest 5 or 10, rather than recording exact
+        ages.
+        This is a common pattern in self-reported or administratively recorded
+        age data, and it is a good example of data that is not wrong exactly,
+        but is not as precise as it appears.
+      </p>
+
+      <figure xml:id="fig-ch4-age-bar">
+        <caption>
+          Distribution of victim ages in the Kenya Road Accidents database,
+          April <ndash/> June 2016.
+        </caption>
+
+        <image source="images/ch4_age_bar.png" width="80%">
+          <description>
+            <p>
+              A bar chart showing the count of road accident victims by age.
+              Pronounced spikes are visible at ages 30, 35, 40, 50, 60, and 70,
+              consistent with age rounding in the original data.
+            </p>
+          </description>
+        </image>
+      </figure>
+
+      <p>
+        This is one reason why <c>AGE_GROUP</c>, which only distinguishes adult
+        from junior, may actually be more honest for this dataset than treating
+        <c>AGE</c> as a precise numeric variable.
+        That said, collapsing everyone over 18 into a single <q>adult</q>
+        category also loses real information — a 19-year-old and a 70-year-old
+        are very different road users.
+        A reasonable middle ground would be broader age bands such as 18
+        <ndash/> 30, 31 <ndash/> 40, and so on, which preserve meaningful
+        variation without implying a precision that was never there.
+        The right choice depends on what question you are trying to answer.
+      </p>
+
+      <p>
+        We can also look at the age variable with a quick summary and boxplot:
+      </p>
+
+      <program language="r">
+        <code>
+        summary(kenya_individual_level$AGE)
+        boxplot(kenya_individual_level$AGE)
+        
+        #&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+        #&gt;    0.25   22.00   30.00   31.41   40.00   90.00     229
+        </code>
+      </program>
+
+      <p>
+        Ages range from 0.25 (3 months) to 90 years, with a median of 30 years.
+        The minimum and maximum look plausible.
+        The 229 missing values are expected — they are the rows where age was
+        recorded only as <c>A</c> or <c>J</c>, which cannot be converted to a
+        number without making assumptions we are not entitled to make.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-cleaning-accident-category">
+      <title>Recoding accident descriptions</title>
+
+      <p>
+        The <c>BRIEF ACCIDENT DETAILS</c> column contains 148 distinct free-text
+        descriptions.
+        Many of them describe the same type of event (e.g., head-on collision,
+        hit and run, lost control) written differently each time.
+        To make this column useful for analysis, we need to recode it into a
+        smaller set of categories.
+      </p>
+
+      <p>
+        This is the kind of task where Generative AI tools can genuinely help —
+        not to make the decisions for you, but to draft the initial
+        categorisation which you then check and correct.
+        The code below was produced that way: AI suggested the initial
+        groupings, and then they were reviewed manually against the actual
+        entries.
+      </p>
+
+      <program language="r">
+        <code>
+        kenya_accidents_database &lt;- kenya_accidents_database %&gt;%
+          mutate(ACCIDENT_CATEGORY = case_when(
+
+            str_detect(`BRIEF ACCIDENT DETAILS`,
+                       regex("HEAD ON|HEAD-ON", ignore_case = TRUE)) ~ 
+              "Head on collision",
+
+            str_detect(`BRIEF ACCIDENT DETAILS`,
+                       regex("HIT.*R(A|U)N|HIT &amp; R(A|U)N", ignore_case = TRUE)) ~ 
+              "Hit and run",
+
+            str_detect(`BRIEF ACCIDENT DETAILS`,
+                       regex("LOST CONTROL|LOSE CONTROL|TYRE BURST|STEERING ROD|POWER FAIL",
+                             ignore_case = TRUE)) ~ 
+              "Lost control",
+
+            str_detect(`BRIEF ACCIDENT DETAILS`,
+                       regex("KNOCKED DOWN|KNOCK DOWN|RAN OVER|RUN OVER|KNOCKED PEDESTRIAN",
+                             ignore_case = TRUE)) ~ 
+              "Knocked down",
+
+            str_detect(`BRIEF ACCIDENT DETAILS`,
+                       regex("REAR|FROM BEHIND|FAILED TO KEEP DISTANCE",
+                             ignore_case = TRUE)) ~ 
+              "Rear collision",
+
+            str_detect(`BRIEF ACCIDENT DETAILS`,
+                       regex("HIT.*M/CYCLE|HIT.*MOTOR CYCLE|HIT.*CYCLIST|HIT.*CYCLE",
+                             ignore_case = TRUE)) ~ 
+              "Vehicle hit motorcycle/cyclist",
+
+            str_detect(`BRIEF ACCIDENT DETAILS`,
+                       regex("OVERTOOK|OVERTAKING|OVERTAK",
+                             ignore_case = TRUE)) ~ 
+              "Overtaking incident",
+
+            str_detect(`BRIEF ACCIDENT DETAILS`,
+                       regex("ROLL|OVERTURN", ignore_case = TRUE)) ~ 
+              "Rolled/overturned",
+
+            str_detect(`BRIEF ACCIDENT DETAILS`,
+                       regex("VEERED OFF|VEER OFF|LANDED INTO A DITCH|LANDED IN A DITCH|PLUNGED|PLUGGED INTO",
+                             ignore_case = TRUE)) ~ 
+              "Veered off road",
+
+            str_detect(`BRIEF ACCIDENT DETAILS`,
+                       regex("ALIGHT|ALIGHTED|JUMPED OFF|FELL DOWN AND WAS",
+                             ignore_case = TRUE)) ~ 
+              "Alighting/boarding incident",
+
+            str_detect(`BRIEF ACCIDENT DETAILS`,
+                       regex("RAMMED INTO|RAMMED", ignore_case = TRUE)) ~ 
+              "Vehicle rammed into another",
+
+            TRUE ~ "Other/unknown"
+          ))
+        </code>
+      </program>
+
+      <p>
+        Reviewing the result with a pivot table — with both
+        <c>ACCIDENT_CATEGORY</c> and <c>BRIEF ACCIDENT DETAILS</c> in the rows —
+        shows a handful of miscategorisations that need correcting.
+        For example,
+        <c>"THE VEHICLE OVERTOOK A M/CYCLE AND LOST CONTROL 
+      VEERING OFF THE ROAD &amp; ROLLED"</c>
+        was assigned to Lost control, but is better described as an overtaking
+        incident.
+        And <c>"THE MOTOR CYCLE HIT THE UNKNOWN M/V LOOSING CONTROL"</c> (note
+        the typo) was not caught by the lost control pattern.
+        We fix these in a second pass, using <c>TRUE ~ ACCIDENT_CATEGORY</c> at
+        the end to preserve all previous assignments and only override the
+        specific cases we want to change:
+      </p>
+
+      <program language="r">
+        <code>
+        kenya_accidents_database &lt;- kenya_accidents_database %&gt;%
+          mutate(ACCIDENT_CATEGORY = case_when(
+
+            # Overtaking takes priority over lost control
+            str_detect(`BRIEF ACCIDENT DETAILS`,
+                       regex("OVERTOOK|OVERTAKING|OVERTAK", 
+                             ignore_case = TRUE)) ~ 
+              "Overtaking incident",
+
+            # Veered off road + knocked down stays in veered off road
+            str_detect(`BRIEF ACCIDENT DETAILS`,
+                       regex("VEERED OFF|VEER OFF", ignore_case = TRUE)) &amp;
+              str_detect(`BRIEF ACCIDENT DETAILS`,
+                         regex("KNOCKED DOWN|KNOCK DOWN", 
+                               ignore_case = TRUE)) ~ 
+              "Veered off road",
+
+            # Catches "LOOSING CONTROL" typo
+            str_detect(`BRIEF ACCIDENT DETAILS`,
+                       regex("LOST CONTROL|LOSE CONTROL|LOOSING CONTROL|LOSING CONTROL|
+                              TYRE BURST|STEERING ROD|POWER FAIL",
+                             ignore_case = TRUE)) ~ 
+              "Lost control",
+
+            # Collided with goes to head on collision
+            str_detect(`BRIEF ACCIDENT DETAILS`,
+                       regex("COLLIDED WITH", ignore_case = TRUE)) ~ 
+              "Head on collision",
+
+            # Knocked down, excluding cycle knocking down a vehicle
+            str_detect(`BRIEF ACCIDENT DETAILS`,
+                       regex("KNOCKED DOWN|KNOCK DOWN|RAN OVER|RUN OVER",
+                             ignore_case = TRUE)) &amp;
+              !str_detect(`BRIEF ACCIDENT DETAILS`,
+                          regex("CYCLE KNOCKED DOWN THE VEHICLE", 
+                                ignore_case = TRUE)) ~ 
+              "Knocked down",
+
+            # Rammed, including cycle knocking down a vehicle
+            str_detect(`BRIEF ACCIDENT DETAILS`,
+                       regex("RAMMED|CYCLE KNOCKED DOWN THE VEHICLE",
+                             ignore_case = TRUE)) ~ 
+              "Vehicle rammed into another",
+
+            # Fell and was run over goes to other
+            str_detect(`BRIEF ACCIDENT DETAILS`,
+                       regex("FELL DOWN AND WAS OVER RAN", 
+                             ignore_case = TRUE)) ~ 
+              "Other/unknown",
+
+            # Hit a pedestrian goes to knocked down
+            str_detect(`BRIEF ACCIDENT DETAILS`,
+                       regex("HIT.*PEDESTRIAN|HIT A PEDESTRIAN", 
+                             ignore_case = TRUE)) ~ 
+              "Knocked down",
+
+            # Keep everything else as previously assigned
+            TRUE ~ ACCIDENT_CATEGORY
+          ))
+        </code>
+      </program>
+
+      <p>
+        The order of conditions matters here, just as it did in the first pass.
+        <c>case_when()</c> applies the first matching rule and stops, so putting
+        overtaking before lost control means that a crash involving both words
+        gets assigned to overtaking, which is the more specific and informative
+        category.
+      </p>
+
+      <p>
+        We can check the result by pulling up the pivot table again, with both
+        <c>ACCIDENT_CATEGORY</c> and <c>BRIEF ACCIDENT DETAILS</c> in the rows:
+      </p>
+
+      <program language="r">
+        <code>
+    rpivotTable(kenya_accidents_database, 
+                rows = c("ACCIDENT_CATEGORY", "BRIEF ACCIDENT DETAILS"))
+        </code>
+      </program>
+
+      <figure xml:id="fig-ch4-accidents-check">
+        <caption>
+          Pivot table showing accident categories alongside the original brief
+          accident descriptions, allowing manual verification of the
+          categorisation.
+        </caption>
+
+        <image source="images/ch4_accidents_check.png" width="90%">
+          <description>
+            <p>
+              A pivot table showing accident categories in the left column
+              alongside the original brief accident descriptions in the middle
+              column, with total counts on the right.
+              Categories shown include: Alighting/boarding incident (4 entries,
+              e.g.
+              "The victim alighted while the vehicle was in motion"); Head on
+              collision (63 entries across 10 descriptions, dominated by "HEAD
+              ON COLLISION" with 51 incidents); Hit and run (54 entries across 4
+              descriptions, dominated by "HIT AND RUN" with 46 incidents); and
+              Knocked down (partial, showing 16 descriptions including
+              pedestrians, cyclists, and motorcyclists being knocked down by
+              various vehicles).
+              The table illustrates how the free-text descriptions have been
+              grouped into consistent categories, while also revealing remaining
+              spelling variants within categories such as "HIT AND RAN" and "HIT
+              &amp; RAN" alongside "HIT AND RUN".
+            </p>
+          </description>
+        </image>
+      </figure>
+
+      <p>
+        Reviewing the result, you may find entries you would have categorised
+        differently — and someone else might then disagree with <em>your</em>
+        choice.
+        Recoding free text into categories is inherently a judgement call: there
+        is rarely one objectively correct answer, only choices that are more or
+        less defensible and more or less useful for the analysis at hand.
+        What matters is that the choices are made deliberately and
+        transparently, and that the original <c>BRIEF ACCIDENT DETAILS</c>
+        column has not been overwritten — so if you or a collaborator disagrees
+        with a categorisation, the original text is still there to go back to.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-cleaning-payoff">
+      <title>What the cleaning unlocks</title>
+
+      <p>
+        With <c>ACCIDENT_CATEGORY</c> and <c>weekday</c> now available, both
+        variables we created through data cleaning, we can start asking
+        questions that would have not been possible with the raw data.
+        For example, is one type of accident more likely on a certain day of the
+        week?
+        This kind of question does two things at once: it is genuinely
+        interesting analytically, and it also serves as a check on the date data
+        itself.
+        If weekday patterns look completely random — no difference at all
+        between a Monday and a Saturday — that might be a signal that something
+        went wrong in how dates were recorded or converted.
+        A plausible pattern, on the other hand, gives us some confidence that
+        the dates are broadly correct.
+      </p>
+
+      <program language="r">
+        <code>
+        ggplot(kenya_accidents_database,
+               aes(x = weekday, fill = ACCIDENT_CATEGORY)) +
+          geom_bar(position = "fill") +
+          labs(y = "Proportion", x = "Day of week",
+               fill = "Accident category")
+        </code>
+      </program>
+
+      <figure xml:id="fig-ch4-bar-accident-weekday">
+        <caption>
+          Proportion of each accident category by day of week, Kenya Road
+          Accidents database, April <ndash/> June 2016.
+        </caption>
+
+        <image source="images/ch4_bar_accident_weekday.png" width="90%">
+          <description>
+            <p>
+              A stacked proportional bar chart with day of week on the x-axis
+              and proportion on the y-axis.
+              Each bar is divided into twelve accident categories shown in
+              different colours.
+              Hit and run (olive green) and knocked down (bright green) dominate
+              most days.
+              Vehicle rammed into another (pink) appears as a notably larger
+              proportion on Saturdays compared to weekdays.
+              Head on collision (orange) is consistently present across all
+              days.
+            </p>
+          </description>
+        </image>
+      </figure>
+
+      <p>
+        The figure shows the proportion of each accident category by day of
+        week.
+        Hit and run and knocked down dominate across all days, but there are
+        some differences worth noting.
+        Vehicle rammed into another appears as a larger proportion of Saturday
+        crashes than weekday crashes — which might be consistent with drink
+        driving, though the dataset is too small to draw firm conclusions.
+        We can also look at it the other way around, with accident category on
+        the x-axis and day of week as the fill:
+      </p>
+
+      <program language="r">
+        <code>
+    ggplot(kenya_accidents_database,
+           aes(x = ACCIDENT_CATEGORY, fill = weekday)) +
+      geom_bar(position = "fill") +
+      coord_flip() +
+      labs(y = "Proportion", x = "Accident category",
+           fill = "Day of week")
+        </code>
+      </program>
+
+      <figure xml:id="fig-ch4-bar-accident-weekday-2">
+        <caption>
+          Proportion of each day of week within each accident category, Kenya
+          Road Accidents database, April <ndash/> June 2016.
+        </caption>
+
+        <image source="images/ch4_bar_accident_weekday_2.png" width="90%">
+          <description>
+            <p>
+              A stacked proportional bar chart with accident category on the
+              x-axis and proportion on the y-axis.
+              Each bar is divided into seven days of the week shown in a colour
+              scale from dark purple (Sunday) to yellow (Saturday).
+              Saturday (yellow) makes up a notably large proportion of the
+              Vehicle rammed into another and Lost control categories.
+              Overtaking incidents appear relatively more common on Thursdays
+              and Fridays.
+              Most categories show a broadly even spread across weekdays.
+            </p>
+          </description>
+        </image>
+      </figure>
+
+      <p>
+        This view makes it easier to see which categories are disproportionately
+        weekend or weekday events.
+        Overtaking incidents, for example, appear more concentrated on Thursdays
+        and Fridays — possibly reflecting higher traffic volumes at the end of
+        the working week.
+        Again, at this stage, these patterns should be treated as exploratory
+        observations rather than firm conclusions.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-cleaning-conclusion">
+      <title>Summary</title>
+
+      <p>
+        Notice that both <c>ACCIDENT_CATEGORY</c> and <c>weekday</c> were
+        created during cleaning.
+        The exploration we can now do is only possible because of the cleaning
+        that preceded it.
+        And it goes the other way too — the exploration motivated the cleaning.
+        It was only by plotting the date distribution that we noticed May was
+        missing.
+        It was only by looking at the accident descriptions in a pivot table
+        that we saw how many variants needed collapsing.
+        Cleaning and exploration are not two separate stages with a clear
+        boundary between them.
+        They are a cycle, and you move back and forth between them throughout an
+        analysis.
+      </p>
+
+      <p>
+        You can keep going with this data.
+        For example, looking at <c>NO.</c>, the number of victims per incident,
+        against <c>ACCIDENT_CATEGORY</c> reveals some useful flags: An
+        alighting/boarding incident with only one victim makes sense.
+        A hit and run with two victims is plausible.
+        These checks do not necessarily reveal errors, but they surface cases
+        worth a second look — and that is exactly what validation is for.
+      </p>
+
+      <p>
+        To close, it is worth summarising the different kinds of cleaning we did
+        in this chapter, because they represent distinct problems that come up
+        repeatedly in real data:
+      </p>
+
+      <table xml:id="table-cleaning-approaches">
+        <title>Types of data cleaning and examples from this chapter</title>
+
+        <tabular halign="left">
+          <col halign="left"/>
+          <col halign="left"/>
+          <col halign="left"/>
+          <row header="yes">
+            <cell>Type of problem</cell>
+            <cell>What to look for</cell>
+            <cell>Example from this chapter</cell>
+          </row>
+
+          <row>
+            <cell>Implausible values</cell>
+            <cell>
+              Values that cannot be correct given what the variable represents
+            </cell>
+            <cell>
+              <c>TIME 24 HOURS</c> entries with 1, 2, or 3 digits instead of 4;
+              leading zeros stripped by Excel
+            </cell>
+          </row>
+
+          <row>
+            <cell>Inconsistent values</cell>
+            <cell>The same thing recorded in different ways</cell>
+            <cell>
+              <c>KERCHO</c> vs <c>KERICHO</c>; <c>HIT AND RAN</c> vs
+              <c>HIT AND RUN</c>
+            </cell>
+          </row>
+
+          <row>
+            <cell>Missing values</cell>
+            <cell>Values that are absent or encoded as text placeholders</cell>
+            <cell>
+              <c>UNKNOWN TIME</c> in <c>TIME 24 HOURS</c>; <c>NA</c> s in county
+            </cell>
+          </row>
+
+          <row>
+            <cell>Wrong level of analysis</cell>
+            <cell>Multiple observations encoded in a single row</cell>
+            <cell>
+              <c>"2M &amp; 2F"</c> in <c>GENDER</c>;
+              <c>"7 PASSENGERS 1 DRIVER"</c> in <c>VICTIM</c>
+            </cell>
+          </row>
+
+          <row>
+            <cell>Recoding free text</cell>
+            <cell>
+              Unstructured descriptions that need grouping before analysis
+            </cell>
+            <cell>
+              <c>BRIEF ACCIDENT DETAILS</c> collapsed into
+              <c>ACCIDENT_CATEGORY</c>
+            </cell>
+          </row>
+
+          <row>
+            <cell>Wrong data type</cell>
+            <cell>
+              Variables stored as the wrong type for what they represent
+            </cell>
+            <cell>
+              Dates stored as text; ages stored as characters including codes
+              like <c>A</c> and <c>J</c>
+            </cell>
+          </row>
+
+          <row>
+            <cell>Silent transformation</cell>
+            <cell>Values changed by software without warning</cell>
+            <cell>
+              Leading zeros stripped from time values by Excel; gene names
+              converted to dates
+            </cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>
+        One final point: several of the decisions in this chapter required going
+        beyond the data itself to validate a choice.
+        We looked up whether Nyando is in Kisumu or Homa Bay county.
+        We assumed the leading-zero explanation for the time values and noted
+        that in a real investigation we would confirm this with the data
+        custodian.
+        This kind of external validation (checking against a map, a published
+        source, a domain expert, or the original data collector) is a normal and
+        necessary part of data cleaning.
+        Sometimes you have to go beyond the data to find out if a value is wrong.
       </p>
     </subsection>
   </section>
@@ -715,9 +1990,9 @@
     <exercise xml:id="ex-clean-phe-check">
       <statement>
         <p>
-          "ss-phe-cost" notes that the PHE failure was dangerous
-          specifically because it was silent: the file that lost data looked
-          exactly like a file that hadn't.
+          "ss-phe-cost" notes that the PHE failure was dangerous specifically
+          because it was silent: the file that lost data looked exactly like a
+          file that hadn't.
           Suggest one concrete check that, if run automatically every time a
           file was produced, would have caught this problem within a day rather
           than a week.
