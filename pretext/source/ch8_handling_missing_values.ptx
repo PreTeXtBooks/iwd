@@ -491,6 +491,19 @@
       </statement>
     </exercise>
 
+        <exercise xml:id="ex-clean-crop-recap">
+      <statement>
+        <p>
+          In your own words, explain why filtering the crop data to
+          <c>sold == "yes"</c> before averaging ( ) produced a wrong answer even
+          though the averaging itself was done correctly.
+          Then describe one other variable, in any dataset you have worked with,
+          where <q>missing</q> and <q>zero</q> would mean genuinely different
+          things, and explain what filtering it out would silently assume.
+        </p>
+      </statement>
+    </exercise>
+
     <exercise xml:id="ex-missing-sex-mechanism">
       <statement>
         <p>

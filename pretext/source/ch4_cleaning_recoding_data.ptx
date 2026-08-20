@@ -9,30 +9,38 @@
 <!--      (Sierra Leone national surveillance data problems)            -->
 <!--    - Roshania et al. (2016), Global Health: Science and Practice   -->
 <!--      4(3), 394-409 (IMC's multicountry clinical data collection)   -->
-<!--  Then a real worked example from this course's own STACK question  -->
-<!--  bank (tracker ID 76, "missing values 1" - crop grown/sold/profit  -->
-<!--  data, Moodle entryid=108891), narrated from the tracker's review  -->
-<!--  comments rather than invented numbers, since the live STACK XML   -->
-<!--  has not been exported into assets/stack/ yet - see the comment    -->
-<!--  below sec-stack-crop-example for what to do once it is.           -->
-<!--  The PHE and gene-name stories from the previous draft are kept,   -->
-<!--  demoted to supporting asides after the two lead stories.          -->
 <!-- ================================================================= -->
 <chapter xml:id="ch-cleaning-recoding" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Cleaning and Recoding Data</title>
 
   <introduction xml:id="intro-cleaning-recoding">
     <p>
-      We saw in the previous chapter when exploring data that there can be
-      issues in data to clean/tidy/wrangle.
-      this chapter looks at data cleaning: introduces story on ebola crisis
-      first.
-      The decisions you make while cleaning and recoding decide XYZ <mdash/>
-      which makes them part of the analysis, not preparation for it.
+      In the previous chapter, we explored the Kenya Road Accidents database and
+      noticed problems along the way: county names spelled two different ways,
+      times recorded as two digits instead of four, victim categories that meant
+      the same thing written differently.
+      We noted them and moved on.
+      This chapter is about what to do with them.
+    </p>
+
+    <p>
+      Data cleaning is the work of making a dataset ready for analysis.
+      This can be by fixing inconsistencies, handling missing values, recoding
+      variables into more useful forms, and checking that what the data says it
+      contains is actually what it contains.
+      It is unglamorous work, and it is easy to underestimate how much it
+      matters.
+      Decisions you make while cleaning include what counts as a duplicate, what
+      an absent value means, and how to group a free-text description.
+      These decisions shape every result that follows.
       Skip them, rush them, or hand them to software without supervision, and
-      you can get a confident, precisely wrong answer out the other end.
+      you can produce a confident, precisely wrong answer.
+    </p>
+
+    <p>
       That happened, at the largest possible scale, during the deadliest
-      outbreak of Ebola virus disease in history.
+      outbreak of Ebola virus disease ever recorded.
+      We begin there.
     </p>
   </introduction>
   <!-- ================================================================= -->
@@ -876,8 +884,30 @@
         If it looked wildly wrong (for example, a spike at 3am with nothing
         during the day) that would be a signal to go back and question the
         assumption.
-        TODO: ch4_img1_crashes.png
       </p>
+
+      <figure xml:id="fig-ch4_img1_crashes">
+        <caption>
+          Crashes by hour of day, Kenya Road Accidents database, April <ndash/>
+          June 2016.
+          Crashes peak between 19:00 and 21:00, consistent with evening rush
+          hour.
+        </caption>
+
+        <image source="images/ch4_img1_crashes.png" width="90%">
+          <description>
+            <p>
+              A bar chart showing the number of fatal road accidents by hour of
+              the day on the 24-hour clock.
+              Counts are generally low between 2-5am, then rise gradually
+              through the morning and afternoon.
+              Counts rise sharply from hour 18 onwards, peaking at around 46 at
+              hour 20, then declining through hours 21 and 22 before rising
+              slightly again at hour 23.
+            </p>
+          </description>
+        </image>
+      </figure>
 
       <p>
         Note that the <c>NA</c> s we assigned to <c>0000</c> will now appear as
@@ -912,10 +942,37 @@
       <p>
         Two problems are visible straight away: <c>KERCHO</c> and <c>KERICHO</c>
         appear as separate entries, as do <c>MURANGA</c> and <c>MURANG'A</c>.
-        These are clearly the same counties entered inconsistently.
-        See FIGURE TODO (ch4_img2_counties_1.png) We fix them with
-        <c>case_when()</c>:
+        These are clearly the same counties entered inconsistently (see left
+        image in <xref ref="fig-ch4-counties-1"/> ).
+        We fix them with <c>case_when()</c>:
       </p>
+
+      <figure xml:id="fig-ch4-counties-1">
+        <caption>
+          Pivot table of <c>COUNTY</c> counts before (left) and after (right)
+          cleaning.
+          The left panel shows <c>KERCHO</c> and <c>KERICHO</c> as separate
+          entries (highlighted in orange), and <c>MURANG'A</c> and
+          <c>MURANGA</c> as separate entries (also highlighted).
+          The right panel shows these have been merged into single entries after
+          cleaning.
+        </caption>
+
+        <image source="images/ch4_img2_counties_1.png" width="100%">
+          <description>
+            <p>
+              Two side-by-side pivot tables showing county counts.
+              The left table, representing the data before cleaning, has orange
+              highlighting around two pairs of duplicate entries: KERCHO with 1
+              incident and KERICHO with 5 incidents; and MURANG'A with 3
+              incidents and MURANGA with 3 incidents.
+              The right table, representing the data after cleaning, shows
+              KERCHO merged into KERICHO with 6 total incidents, and MURANGA
+              merged into MURANG'A with 6 total incidents.
+            </p>
+          </description>
+        </image>
+      </figure>
 
       <program language="r">
         <code>
@@ -933,7 +990,7 @@
         gone.
         It is worth doing this check explicitly rather than assuming the fix
         worked.
-        See FIGURE TODO (ch4_img2_counties_1.png)
+        (See right image in <xref ref="fig-ch4_img2_counties_1"/> ).
       </p>
 
       <program language="r">
@@ -949,7 +1006,7 @@
       <p>
         The same problem appears in the <c>BASE/SUB BASE</c> column — spelling
         variants for the same location, and some entries prefixed with
-        <c>DTEO</c> (TODO: figure ch4_img2_base.png).
+        <c>DTEO</c>, as shown in <xref ref="fig-ch4_img2_base"/>.
         We believe this refers to the District Traffic Enforcement Officer
         responsible for that area, making <c>DTEO DAGORETTI</c> equivalent to
         <c>DAGORETTI</c> — but in practice, you would want to verify this with
@@ -958,6 +1015,30 @@
         For the purposes of this example, we proceed on the assumption that it
         does not:
       </p>
+
+      <figure xml:id="fig-ch4_img2_base">
+        <caption>
+          Frequency of Base/Sub-base values in the data (shown via pivot table).
+          Several entries refer to the same location under different spellings —
+          for example, <c>DAGORETTI</c>, <c>DAGORETI</c>, and
+          <c>DTEO DAGORETTI</c> all appear as separate entries and need to be
+          standardised before analysis.
+        </caption>
+
+        <image source="images/ch4_img2_base.png" width="80%">
+          <description>
+            <p>
+              A pivot table listing Base/Sub-base values alphabetically with
+              their counts.
+              Several spelling variants of the same location are visible as
+              separate entries, including DAGORETI, DAGORETTI, and DTEO
+              DAGORETTI.
+              Other variants visible include MOIS BRIDGE and MOI'S BRIDGE, and
+              SALGA and SALGAA.
+            </p>
+          </description>
+        </image>
+      </figure>
 
       <program language="r">
         <code>
@@ -984,18 +1065,6 @@
         A county can have multiple sub-bases, but, we may expect a sub-base to
         belong to one county only, so any sub-base that appears in two different
         counties may signal that something is wrong.
-        ** TODO: Figure ch4_img2_counties_2.png Note that we have trimmed it to
-        contain only certain columns to make our point (otherwise too much
-        info); NAKURU base has 12 total instances.
-        11 in NAKURU county; 1 in MAKURU county.
-        can confirm this is a typo and MAKURU should say NAKURU; NAIROBI base
-        has 12 total instances, all 12 in NAIROBI county.
-        HOMA BAY / KISUMU thing too in here in a row.
-        NYANDO has 4 in HOMA BAY and 4 in KISUMU.
-        Is this due to 2 NYANDOs?
-        From a quick look up NYANDO is meant to be in Kisumu county.
-        But could it be that a place similar to NYANDO is in HOMA BAY, and
-        NYANDO is a typo**
       </p>
 
       <program language="r">
@@ -1005,6 +1074,38 @@
                     cols = "COUNTY")
         </code>
       </program>
+
+      <figure xml:id="fig-ch4-counties-2">
+        <caption>
+          Cross-tabulation of Base/Sub-base against County (selected columns
+          shown).
+          This view reveals two problems.
+          First, NAKURU base has 12 total incidents: 11 in Nakuru county and 1
+          in <c>MAKURU</c> — almost certainly a typo.
+          Second, NYANDO base has 4 incidents recorded in Homa Bay and 4 in
+          Kisumu.
+          A quick lookup confirms that Nyando is in Kisumu county — but it is
+          worth asking whether the Homa Bay entries are a typo, or whether there
+          is a separate place with a similar name in Homa Bay that was also
+          recorded as NYANDO.
+        </caption>
+
+        <image source="images/ch4_img2_counties_2.png" width="90%">
+          <description>
+            <p>
+              A pivot table cross-tabulating Base/Sub-base values in rows
+              against County in columns, with counts in each cell.
+              Only selected county columns are shown.
+              Key observations visible in the table: NAKURU base has 11
+              incidents in Nakuru county and 1 in Makuru county, totalling 12;
+              Embakasi base has 11 incidents all in Nairobi county; Nyando base
+              has 4 incidents in Homa Bay and 4 in Kisumu, totalling 8; Makindu
+              base has 8 incidents all in Makueni county; Starehe base has 8
+              incidents all in Nairobi county.
+            </p>
+          </description>
+        </image>
+      </figure>
 
       <p>
         Sorting by count, we can see that <c>NAKURU</c> has 12 cases: 11 in
@@ -1057,8 +1158,7 @@
       </program>
 
       <p>
-        Once converted, a simple bar chart reveals something unexpected (TODO:
-        Figure ch4_dates.png)
+        Once converted, a simple bar chart reveals something unexpected:
       </p>
 
       <program language="r">
@@ -1068,6 +1168,36 @@
           geom_bar()
         </code>
       </program>
+
+      <figure xml:id="fig-ch4-dates">
+        <caption>
+          Number of fatal road accidents per day, Kenya Road Accidents database,
+          April <ndash/> June 2016.
+          Note the complete absence of data in May, suggesting this month was
+          not included in the extract rather than that no crashes occurred.
+        </caption>
+
+        <image source="images/ch4_dates.png" width="90%">
+          <description>
+            <p>
+              A bar chart showing the count of fatal road accidents for each
+              date in the dataset.
+              Data is present for April and June but entirely absent for May,
+              leaving a clear gap in the middle of the plot.
+              Within April, there is a notable spike of 19 incidents on one day
+              in mid-April, with most other days recording between 3 and 12
+              incidents.
+              The data in April appears to end around late April with two bars
+              close together near the end of the month before the May gap.
+              June data begins in early June and runs to approximately the 26th,
+              with counts generally between 3 and 12 per day and a spike of
+              around 12 in mid-June.
+              Both April and June show gaps of zero incidents on certain dates,
+              most notably towards the end of each month.
+            </p>
+          </description>
+        </image>
+      </figure>
 
       <p>
         There are no crashes in May — the data jumps from April directly to
@@ -1082,7 +1212,7 @@
       <p>
         We can check this Date column by also looking at patterns by day of the
         week.
-        First we extract the weekday from the date:
+        To do this, we extract the weekday from the date:
       </p>
 
       <program language="r">
@@ -1095,6 +1225,31 @@
           geom_bar()
         </code>
       </program>
+
+      <figure xml:id="fig-ch4-weekday">
+        <caption>
+          Number of fatal road accidents by day of week, Kenya Road Accidents
+          database, April <ndash/> June 2016.
+          Saturday has by far the highest count, followed by Friday, while
+          Monday has the fewest.
+        </caption>
+
+        <image source="images/ch4_weekday.png" width="90%">
+          <description>
+            <p>
+              A bar chart showing the total count of fatal road accidents for
+              each day of the week.
+              Saturday has the highest count at just over 100, followed by
+              Friday at around 70.
+              Sunday and Wednesday are roughly equal at around 48 each.
+              Tuesday and Thursday are similar at around 42 and 38 respectively.
+              Monday has the lowest count at approximately 28.
+              The pattern shows a clear increase towards the end of the week,
+              peaking on Saturday.
+            </p>
+          </description>
+        </image>
+      </figure>
 
       <p>
         Fridays and Saturdays have the most crashes, and Mondays the fewest.
@@ -1395,8 +1550,8 @@
       </program>
 
       <p>
-        The result, shown in TODO figure ch4_agegroup_by_age.png, confirms that
-        the grouping has worked as expected.
+        The result, shown in <xref ref="fig-ch4-agegroup-by-age"/>, confirms
+        that the grouping has worked as expected.
         All numeric ages below 18 appear in the <c>JUNIOR</c> row, and all ages
         18 and above appear in the <c>ADULT</c> row.
         The <c>null</c> row (where neither group was assigned) corresponds to
@@ -1405,6 +1560,34 @@
         expect.
         Nothing has been lost and nothing has been misclassified.
       </p>
+
+      <figure xml:id="fig-ch4-agegroup-by-age">
+        <caption>
+          Cross-tabulation of <c>AGE_GROUP</c> against numeric <c>AGE</c>,
+          confirming that the grouping was applied correctly.
+          All ages below 18 fall in the <c>JUNIOR</c> row and all ages 18 and
+          above fall in the <c>ADULT</c> row.
+          The <c>null</c> row is empty, indicating no cases were left ungrouped
+          among those with a numeric age.
+        </caption>
+
+        <image source="images/ch4_agegroup_by_age.png" width="100%">
+          <description>
+            <p>
+              A pivot table with AGE_GROUP in rows and numeric AGE values as
+              column headers.
+              The ADULT row contains counts only for ages 18 and above, with
+              values such as 3 at age 18, 5 at age 19, and increasing counts at
+              ages 25, 30, and 35.
+              The JUNIOR row contains counts only for ages below 18, including
+              ages 0.25, 0.42, 0.75, 1.5, and whole numbers from 3 to 17.
+              The null row is empty throughout.
+              The Totals row matches the sum of ADULT and JUNIOR for each age,
+              confirming no observations were missed or miscategorised.
+            </p>
+          </description>
+        </image>
+      </figure>
 
       <p>
         We can also check the numeric age conversion by plotting a barplot of
@@ -1950,7 +2133,8 @@
         This kind of external validation (checking against a map, a published
         source, a domain expert, or the original data collector) is a normal and
         necessary part of data cleaning.
-        Sometimes you have to go beyond the data to find out if a value is wrong.
+        Sometimes you have to go beyond the data to find out if a value is
+        wrong.
       </p>
     </subsection>
   </section>
@@ -1960,98 +2144,267 @@
   <exercises xml:id="exercises-cleaning-recoding">
     <title>Exercises</title>
 
-    <exercise xml:id="ex-clean-crop-recap">
-      <statement>
-        <p>
-          TODO: change this now that the STACK q has changed.
-          In your own words, explain why filtering the crop data to
-          <c>sold == "yes"</c> before averaging ( ) produced a wrong answer even
-          though the averaging itself was done correctly.
-          Then describe one other variable, in any dataset you have worked with,
-          where <q>missing</q> and <q>zero</q> would mean genuinely different
-          things, and explain what filtering it out would silently assume.
-        </p>
-      </statement>
-    </exercise>
-
+    <!-- Conceptual: Ebola -->
     <exercise xml:id="ex-clean-ebola-check">
       <statement>
         <p>
           <xref ref="ss-ebola-two-systems"/> describes case data being entered
-          independently in two places, laboratory records and case investigation
-          forms, with no process forcing the two back together.
+          independently in two places (laboratory records and case investigation
+          forms), with no process forcing the two together.
           Suggest one concrete check, applied at the point of data entry rather
           than afterwards, that could have caught a duplicate case before it
           reached a national situation report.
         </p>
       </statement>
     </exercise>
-
+    <!-- Conceptual: PHE -->
     <exercise xml:id="ex-clean-phe-check">
       <statement>
         <p>
-          "ss-phe-cost" notes that the PHE failure was dangerous specifically
-          because it was silent: the file that lost data looked exactly like a
-          file that hadn't.
+          The PHE failure described in <xref ref="ss-phe-pipeline"/> was
+          dangerous specifically because it was silent: the file that lost data
+          looked exactly like a file that had not.
           Suggest one concrete check that, if run automatically every time a
           file was produced, would have caught this problem within a day rather
           than a week.
         </p>
       </statement>
     </exercise>
-
-    <exercise xml:id="ex-clean-lake-labels">
+    <!-- Conceptual: gene names -->
+    <exercise xml:id="ex-clean-gene-names">
       <statement>
         <p>
-          TODO: amend this Using the <c>raw_lake</c> vector from
-          "ss-clean-inconsistent-labels" as a starting point, write R code that
-          produces a clean factor with exactly three levels, without using
-          <c>tools::toTitleCase()</c>.
-          There is more than one correct approach.
+          The gene name corruption described in <xref ref="sec-gene-names"/> was
+          documented with workarounds suggested as early as 2004, yet continued
+          undetected across thousands of papers for over a decade.
+          Suggest two things that could have been done differently — one at the
+          level of individual researchers, and one at the level of journal
+          editors or peer reviewers — that might have caught or prevented the
+          problem earlier.
         </p>
       </statement>
     </exercise>
-
-    <exercise xml:id="ex-clean-duplicate-ids">
+    <!-- R: inconsistent values -->
+    <exercise xml:id="ex-clean-county-names">
       <statement>
         <p>
-          TODO: amend this Using the <c>bird_id</c> vector from
-          "ss-clean-duplicates", write R code that returns the actual duplicated
-          <em>values</em> (not just <c>TRUE</c> / <c>FALSE</c> flags).
-          Then explain, in your own words, why a low count from
-          <c>sum(duplicated(x))</c> is reassuring but not sufficient on its own
-          <mdash/> what would you still need to check before trusting that the
-          data has no duplicate-record problem?
+          The following exercises use the Kenya Road Accidents database
+          introduced in this chapter.
+          Download it from
+          <url href="https://data.humdata.org/dataset/kenya-road-accidents-database">data.humdata.org/dataset/kenya-road-accidents-database</url>
+          and load it into R before starting.
         </p>
+
+        <p>
+          Load the Kenya Road Accidents database and inspect the <c>COUNTY</c>
+          column.
+        </p>
+
+        <ol>
+          <li>
+            <p>
+              Use <c>sort(unique(kenya_accidents_database$COUNTY))</c> to list
+              all unique county values.
+              How many distinct values are there?
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Identify at least two pairs of values that appear to refer to the
+              same county but are recorded inconsistently.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Write R code using <c>case_when()</c> to standardise those values,
+              and verify the result by running <c>sort(unique(...))</c> again.
+            </p>
+          </li>
+        </ol>
       </statement>
     </exercise>
-
-    <exercise xml:id="ex-clean-implausible-check">
+    <!-- R: implausible values -->
+    <exercise xml:id="ex-clean-time-values">
       <statement>
         <p>
-          TODO: amend this "ss-clean-implausible" catches an implausible bill
-          length using a hard-coded range, <c>bill &lt; 50 | bill &gt; 200</c>.
-          Suggest a plausible range check for <c>leg_length_mm</c> and for
-          <c>body_mass_g</c>, using whatever you can infer from the numbers
-          already given elsewhere in this module.
-          What is the risk of setting a range check too narrow, as opposed to
-          too wide?
+          Inspect the <c>TIME 24 HOURS</c> column in the Kenya Road Accidents
+          database.
         </p>
+
+        <ol>
+          <li>
+            <p>
+              How many distinct values does the column contain?
+              Use <c>group_by()</c> and <c>count()</c> to list them with their
+              frequencies.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Identify at least three values that appear implausible or
+              ambiguous, and explain what you think each one might actually
+              represent.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Apply the leading-zero padding fix described in this chapter and
+              convert the result to an hour variable using <c>lubridate</c>.
+              Plot the distribution of crashes by hour and describe what you
+              see.
+            </p>
+          </li>
+        </ol>
       </statement>
     </exercise>
-
-    <exercise xml:id="ex-recode-mass-class">
+    <!-- R: missing values -->
+    <exercise xml:id="ex-clean-missing-values">
       <statement>
         <p>
-          TODO: amend this Recode <c>body_mass_g</c> into a new categorical
-          variable <c>size_class</c> with two levels, <q>light</q> and
-          <q>heavy</q>, split at 2500 g.
-          Then cross-tabulate <c>size_class</c> against <c>species</c>.
-          Does the split you chose separate the two species cleanly, or does it
-          cut through one of them?
-          What does that tell you about choosing a threshold for a recode versus
-          choosing one for a plot?
+          The Kenya Road Accidents database contains missing values in several
+          columns.
         </p>
+
+        <ol>
+          <li>
+            <p>
+              Write R code to count the number of missing values in each column.
+              Which column has the most missing values?
+            </p>
+          </li>
+
+          <li>
+            <p>
+              The <c>AGE</c> column has both true missing values and coded
+              values like <c>A</c> and <c>J</c>.
+              After converting <c>AGE</c> to numeric, how many <c>NA</c> s
+              result?
+              Are all of these genuinely unknown ages, or are some of them
+              something else?
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Explain in your own words the difference between a value that is
+              missing and a value that is unknown.
+              Does that distinction matter for this dataset?
+            </p>
+          </li>
+        </ol>
+      </statement>
+    </exercise>
+    <!-- R: recoding -->
+    <exercise xml:id="ex-clean-victim-recode">
+      <statement>
+        <p>
+          The <c>VICTIM</c> column in the Kenya Road Accidents database contains
+          inconsistent entries — for example, <c>M/CYCLIST</c>,
+          <c>MOTOR CYCLIST</c>, and <c>MOTORCYCLIST</c> all appear as separate
+          categories.
+        </p>
+
+        <ol>
+          <li>
+            <p>
+              Use <c>sort(unique(kenya_accidents_database$VICTIM))</c> to list
+              all distinct victim categories.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Write R code using <c>case_when()</c> and <c>str_detect()</c> to
+              recode the <c>VICTIM</c> column into a smaller set of clean
+              categories.
+              State clearly what categories you chose and why.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              After recoding, use <c>count()</c> to summarise the distribution
+              of victim categories.
+              Does the pattern match what Muguro et al.
+              found in the five-year dataset?
+            </p>
+          </li>
+        </ol>
+      </statement>
+    </exercise>
+    <!-- R: levels of analysis -->
+    <exercise xml:id="ex-clean-individual-level">
+      <statement>
+        <p>
+          This chapter created a separate individual-level data frame from the
+          incident-level Kenya Road Accidents database.
+        </p>
+
+        <ol>
+          <li>
+            <p>
+              In your own words, explain why keeping age and gender in the
+              incident-level data frame creates problems for analysis.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              After expanding the data to the individual level using the code
+              from this chapter, how many rows does
+              <c>kenya_individual_level</c> have?
+              Why is this different from the number of rows in
+              <c>kenya_accidents_database</c>?
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Using the individual-level data frame, produce a bar chart of
+              <c>GENDER</c> and describe what you see.
+              Are there any categories that suggest further cleaning is needed?
+            </p>
+          </li>
+        </ol>
+      </statement>
+    </exercise>
+    <!-- Conceptual: cleaning and exploration cycle -->
+    <exercise xml:id="ex-clean-cycle">
+      <statement>
+        <p>
+          This chapter argues that data cleaning and data exploration are not
+          two separate stages but a cycle — each informing the other.
+        </p>
+
+        <ol>
+          <li>
+            <p>
+              Give one example from this chapter where exploration revealed
+              something that needed cleaning.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Give one example where cleaning made a new kind of exploration
+              possible that was not possible before.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              In the Kenya Road Accidents data, the <c>CAUSE CODE</c> column
+              contains numeric codes whose meaning is only partially documented.
+              Describe one way you might use exploration to try to work out what
+              the undocumented codes mean, without access to the original
+              codebook.
+            </p>
+          </li>
+        </ol>
       </statement>
     </exercise>
   </exercises>
