@@ -990,7 +990,7 @@
         gone.
         It is worth doing this check explicitly rather than assuming the fix
         worked.
-        (See right image in <xref ref="fig-ch4_img2_counties_1"/> ).
+        (See right image in <xref ref="fig-ch4-counties-1"/> ).
       </p>
 
       <program language="r">
