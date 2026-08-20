@@ -371,6 +371,339 @@
     </subsection>
   </section>
   <!-- ================================================================= -->
+  <!--  SECTION 3: a short gallery                                       -->
+  <!-- ================================================================= -->
+  <section xml:id="sec-viz-gallery">
+    <title>Seeing More: Four Charts That Changed Minds</title>
+
+    <introduction>
+      <p>
+        The elephant data in the previous section required a computer, GPS
+        satellites, and twenty years of fieldwork.
+        But the idea that some questions can only be answered by showing several
+        things at once is much older.
+        Long before computers of any kind, people kept running into the same
+        problem: a table of numbers that contained the answer but could not show
+        it, and a simple chart that showed something but not enough.
+      </p>
+
+      <p>
+        The four examples below span more than 150 years.
+        Each one was made by hand, with ink on paper.
+        Each one changed how people thought about something important: a
+        military disaster, a public health crisis, a disease outbreak, an
+        engineering failure.
+        And each one worked for exactly the same reason: it showed something
+        that the underlying data had always contained, but was unable to show
+        until someone found the right way to draw it.
+      </p>
+    </introduction>
+
+    <subsection xml:id="ss-viz-minard">
+      <title>Minard's map of Napoleon's Russian campaign (1869)</title>
+
+      <p>
+        Charles Joseph Minard was a retired French civil engineer at 80 years
+        old when he published a single lithograph that Edward Tufte later called
+        <q>possibly the best statistical graphic ever drawn.</q> It depicts
+        Napoleon's catastrophic 1812 invasion of Russia and the retreat that
+        followed.
+      </p>
+
+      <figure xml:id="fig-minard">
+        <caption>
+          Charles Joseph Minard,
+          <em>Carte figurative des pertes successives 
+      en hommes de l'Armée Française dans la campagne de Russie 
+      1812<ndash/>1813</em>
+          (1869).
+          The width of each band represents troop numbers at one millimetre per
+          ten thousand men; the lower strip shows temperature along the retreat
+          route.
+          Public domain.
+          Image via
+          <url href="https://flowingdata.com/2008/07/17/is-minards-map-of-napoleons-march-the-greatest-statistical-graphic-ever/">FlowingData</url>.
+        </caption>
+
+        <image source="images/ch5_minard_map.png" width="100%">
+          <description>
+            <p>
+              A large horizontal graphic in two parts.
+              The upper part shows a map of the route from the Polish border to
+              Moscow and back, with a wide tan band tracing the army's advance
+              eastward and a thinner black band tracing the retreat westward.
+              Numbers printed along the bands show troop counts at key points:
+              the tan band begins at 422,000 near the Polish border and narrows
+              steadily; the black retreat band thins dramatically, reaching
+              around 10,000 survivors by the time it crosses back into Poland.
+              Town names mark the route.
+              The lower part of the graphic shows a temperature chart aligned
+              with the retreat route, with temperatures falling as low as minus
+              30 degrees at the worst points of the retreat.
+              Dates are marked along the bottom.
+            </p>
+          </description>
+        </image>
+      </figure>
+
+      <p>
+        A bar chart of monthly troop losses would need several separate charts
+        to show army size, geographic position, direction of travel, and the
+        temperature that killed so many soldiers on the retreat.
+        Minard fit all of it into one image.
+        A tan band, its width scaled at precisely one millimetre per ten
+        thousand men, traces the army's advance eastward toward Moscow, drawn
+        directly onto a map so that position and army size are shown together.
+        A black band, same scale, traces the retreat back.
+        Beneath the map, a separate strip plots temperature against date along
+        the retreat route, so the collapse in troop numbers can be read directly
+        against the cold that caused so much of it.
+      </p>
+
+      <p>
+        Six variables, one image: geography, direction of travel, troop numbers,
+        the route itself, temperature, and time.
+        The tan band starts near the Polish border at 422,000 men and narrows
+        steadily marching into Russia, losing soldiers to disease and combat
+        even before Moscow.
+        The retreat band is where the graphic becomes devastating: it thins
+        almost to nothing by the time it reaches the same border, months later,
+        at around 10,000 survivors, while the temperature strip beneath falls
+        below <m>-30^\circ\text{C}</m> at the worst of it.
+      </p>
+
+      <p>
+        A table of monthly casualty figures contained the same information, and
+        had existed for decades.
+        But, Minard made it visible to anyone who looked at it.
+      </p>
+
+      <p>
+        <term>Source:</term> Minard, C.J.
+        (1869).
+        <em>Carte figurative des pertes successives en hommes de l'Armée 
+    Française dans la campagne de Russie 1812<ndash/>1813.</em>
+        Described in Tufte, E.R.
+        (1983).
+        <em>The Visual Display of Quantitative Information.</em> Cheshire, CT:
+        Graphics Press.
+        Public domain.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-viz-nightingale">
+      <title>Nightingale's Coxcomb (1858)</title>
+
+      <p>
+        In 1858, Florence Nightingale published a report built almost entirely
+        around one number she needed British officials to stop ignoring: of the
+        soldiers who died during the Crimean War, the overwhelming majority died
+        not in battle but of preventable disease in military hospitals.
+      </p>
+
+      <figure xml:id="fig-nightingale">
+        <caption>
+          Florence Nightingale,
+          <em>Diagram of the Causes of Mortality in the 
+      Army in the East</em>,
+          1858.
+          Two polar area diagrams showing monthly deaths from preventable
+          disease (blue-grey), wounds in battle (pink/red), and other causes
+          (black), for April 1854 to March 1855 (right) and April 1855 to March
+          1856 (left).
+          Wedge area is proportional to deaths.
+          Public domain.
+          Image via
+          <url href="https://www.historyofinformation.com/image.php?id=851">History of Information</url>.
+        </caption>
+
+        <image source="images/ch5_nightingale.png" width="100%">
+          <description>
+            <p>
+              Two circular polar area diagrams side by side, titled
+              <q>Diagram of the Causes of Mortality in the Army in the East.</q>
+              The right diagram covers April 1854 to March 1855, with twelve
+              wedges arranged clockwise from April 1854.
+              The wedges for the winter months (particularly January and
+              February 1855) are dramatically large, dominated by the blue-grey
+              sections representing deaths from preventable disease.
+              The pink/red sections representing deaths from wounds in battle
+              are small by comparison throughout.
+              The left diagram covers April 1855 to March 1856, after sanitary
+              reforms were introduced.
+              The wedges are initially large, but over time the blue-grey
+              disease sections have shrunk to a fraction of their earlier size.
+              A dashed line connects the two diagrams at the point of transition
+              between the two periods to illustrate the scale, so you can see
+              directly how much the wedges have shrunk.
+              A legend in italic script at the lower left explains that blue
+              wedges represent preventable or mitigable zymotic diseases, red
+              wedges represent deaths from wounds, and black wedges represent
+              all other causes.
+            </p>
+          </description>
+        </image>
+      </figure>
+
+      <p>
+        Nightingale could have reported a single national mortality rate, but
+        instead built what became known as the <term>coxcomb</term>, or rose
+        diagram: two circular charts, one per year of the war, each divided into
+        twelve monthly wedges.
+        Each wedge's area was scaled to that month's deaths, and each wedge was
+        divided by colour into three causes — preventable disease, wounds from
+        battle, and all other causes.
+        As with Minard's map, the point is not one summary number but a pattern
+        developing over time, visible only because time, cause, and magnitude
+        are encoded in the same image.
+      </p>
+
+      <p>
+        The pattern is stark.
+        Look at the right diagram first which shows the winter of 1854 to 1855,
+        before the Sanitary Commission arrived to investigate conditions at the
+        military hospitals.
+        The wedges for January and February balloon outward, dominated by
+        blue-grey disease deaths.
+        The hospital, it later emerged, had been built on a sewer; patients were
+        drinking contaminated water.
+        Now look at the left diagram illustrating the following year, after the
+        Commission flushed out the hospitals and improved ventilation.
+        The dashed line connecting the two diagrams shows the same scale, so you
+        can see directly how much the wedges have shrunk.
+        Disease deaths fell by 99% in a single year.
+      </p>
+
+      <p>
+        Nightingale was a trained statistician petitioning a government that had
+        shown little appetite for reading tables of army mortality statistics.
+        The diagram is credited as a direct influence on the sanitary reforms,
+        in the military and more broadly, that followed.
+      </p>
+
+      <p>
+        <term>Source:</term> Nightingale, F.
+        (1858).
+        <em>Notes on Matters Affecting the Health, Efficiency, and Hospital 
+    Administration of the British Army, Founded Chiefly on the Experience 
+    of the Late War.</em>
+        London: Harrison and Sons.
+        Public domain.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-viz-snow">
+      <title>John Snow's cholera map (1854)</title>
+
+      <p>
+        In late August 1854, cholera broke out in Soho, London, killing over 600
+        people within a few weeks, concentrated overwhelmingly around Broad
+        Street.
+        Cholera was widely believed at the time to spread through <q>miasma,</q>
+        bad air, rather than water; there was no accepted mechanism connecting
+        the disease to anything as specific as a single pump.
+      </p>
+
+      <p>
+        The physician John Snow suspected otherwise, and tested it by mapping
+        rather than tabulating.
+        On a street plan of the neighbourhood, he marked a dash for every
+        recorded death at the address where it occurred, and marked every local
+        water pump.
+        The map made a pattern visible that a table of addresses and death
+        counts could not: deaths clustered tightly around a single pump on Broad
+        Street and thinned with distance from it, while households with their
+        own water supply, or a nearby brewery whose workers drank almost none of
+        the local water, had almost no cases at all.
+      </p>
+
+      <p>
+        Location and death count, combined in a single image, did what neither
+        could do alone.
+        Snow presented the map to the local parish and persuaded them to remove
+        the handle from the Broad Street pump.
+        The outbreak was already declining by that point, so the act did not
+        single-handedly end it <mdash/> that specific detail is often overstated
+        <mdash/> but the map itself provided the first strong evidence that
+        cholera spread through contaminated water rather than air, and a later
+        well inspection found the pump's water supply sat near a leaking
+        cesspit, connecting the map's pattern to an actual physical cause.
+      </p>
+
+      <p>
+        <term>Source:</term> Snow, J.
+        (1855).
+        <em>On the Mode of
+        Communication of Cholera</em> (2nd ed.).
+        London: John Churchill.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-viz-challenger">
+      <title>The Challenger disaster (1986)</title>
+
+      <p>
+        On 28 January 1986, the Space Shuttle Challenger broke apart 73 seconds
+        after launch, killing all seven crew members.
+        The immediate cause was the failure of an O-ring seal on a solid rocket
+        booster, a component engineers at Morton Thiokol, the manufacturer, had
+        already flagged as a concern in cold weather.
+      </p>
+
+      <p>
+        The night before launch, those engineers argued against flying, worried
+        specifically about the forecast temperature.
+        Ambient temperature at launch was later measured at 36°F, with the
+        temperature at the failed joint itself estimated at 28 <ndash/> 31°F
+        <mdash/> roughly 15 degrees colder than any previous launch.
+        Their argument did not persuade NASA management, and the launch went
+        ahead.
+      </p>
+
+      <p>
+        Edward Tufte's later analysis, in <em>Visual Explanations</em> (1997),
+        argues that part of why the engineers failed to persuade anyone was how
+        their evidence was presented.
+        Under time pressure, their chart plotted O-ring damage only for flights
+        that had already shown some, leaving out every fully successful flight.
+        Displayed that way, the relationship between cold and damage does not
+        obviously stand out.
+        Tufte reconstructed the same data as a single chart of temperature
+        against O-ring damage for <em>every</em> flight, successful or not.
+        Plotted that way, the relationship is difficult to miss, and the
+        forecast launch temperature sits clearly outside the range of every
+        previous flight.
+      </p>
+
+      <p>
+        This case is genuinely contested, and worth reading that way rather than
+        as a clean morality tale.
+        Some historians of the disaster argue Tufte's account overstates how
+        much a better chart alone would have changed the outcome, given the
+        institutional and schedule pressures NASA management was under
+        regardless of what any chart showed, and some note that even Tufte's
+        reconstructed chart is not fully faithful to the data available that
+        night.
+        What is not contested is the underlying point: a chart showing only part
+        of the relevant data <mdash/> here, only the flights with problems
+        <mdash/> can hide exactly the pattern a reader most needs to see.
+        Showing all of it is what makes a relationship visible or invisible.
+      </p>
+
+      <p>
+        <term>Sources:</term> Presidential Commission on the Space Shuttle
+        Challenger Accident (1986).
+        <em>Report to the President.</em> Washington, DC: US Government Printing
+        Office.
+        Tufte, E.R.
+        (1997).
+        <em>Visual Explanations: Images and Quantities, Evidence and
+        Narrative.</em>
+        Cheshire, CT: Graphics Press.
+      </p>
+    </subsection>
+  </section>
+  <!-- ================================================================= -->
   <!--  SECTION 2: Gapminder                                             -->
   <!-- ================================================================= -->
   <section xml:id="sec-gapminder">
@@ -576,250 +909,9 @@
     </subsection>
   </section>
   <!-- ================================================================= -->
-  <!--  SECTION 3: a short gallery                                       -->
-  <!-- ================================================================= -->
-  <section xml:id="sec-viz-gallery">
-    <title>A Short Gallery: When Two Dimensions Weren't Enough</title>
-
-    <introduction>
-      <p>
-        The elephants and Gapminder are recent examples of a much older idea.
-        Long before <c>ggplot2</c>, before spreadsheets, before computers,
-        people were solving exactly this problem <mdash/> a table or a simple
-        chart that cannot show what actually matters <mdash/> by finding a way
-        to hold several variables in one image at once.
-        Four examples, spanning more than 150 years, make the case better than
-        any single modern one can on its own.
-      </p>
-    </introduction>
-
-    <subsection xml:id="ss-viz-minard">
-      <title>Minard's map of Napoleon's Russian campaign (1869)</title>
-
-      <p>
-        Charles Joseph Minard was a retired French civil engineer, 80 years old,
-        when he published a single lithograph that Edward Tufte later called
-        <q>possibly the best statistical graphic ever drawn.</q> It depicts
-        Napoleon's catastrophic 1812 invasion of Russia and the retreat that
-        followed.
-      </p>
-
-      <p>
-        A bar chart of monthly troop losses would need several separate charts
-        to show army size, geographic position, direction of travel, and the
-        temperature that killed so many soldiers on the retreat.
-        Minard fit all of it into one image.
-        A tan band, its width scaled at precisely one millimetre per ten
-        thousand men, traces the army's advance eastward toward Moscow, drawn
-        directly onto a map so that position and army size are shown together.
-        A black band, same scale, traces the retreat back.
-        Beneath the map, a separate strip plots temperature against date along
-        the retreat route, so the collapse in troop numbers can be read directly
-        against the cold that caused so much of it.
-      </p>
-
-      <p>
-        Six variables, one image: geography, direction of travel, troop numbers,
-        the route itself, temperature, and time.
-        The tan band starts near the Polish border at 422,000 men and narrows
-        steadily marching into Russia, losing soldiers to disease and combat
-        even before Moscow.
-        The retreat band is where the graphic becomes devastating: it thins
-        almost to nothing by the time it reaches the same border, months later,
-        at around 10,000 survivors, while the temperature strip beneath falls
-        below <m>-30^\circ\text{C}</m> at the worst of it.
-      </p>
-
-      <p>
-        A table of monthly casualty figures existed and always existed.
-        It could not make the collapse visible the way the combined graphic
-        does, because a table cannot show a retreating army's position, its
-        shrinking size, and the falling temperature all bearing on each other at
-        once, in a single glance.
-      </p>
-
-      <p>
-        <term>Source:</term> Minard, C.J.
-        (1869).
-        <em>Carte figurative des
-        pertes successives en hommes de l'Armée Française dans la campagne
-        de Russie 1812<ndash/>1813.</em>
-        Described in Tufte, E.R.
-        (1983).
-        <em>The Visual Display of Quantitative Information.</em> Cheshire, CT:
-        Graphics Press.
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-viz-nightingale">
-      <title>Nightingale's Coxcomb (1858)</title>
-
-      <p>
-        In 1858, Florence Nightingale published a report built almost entirely
-        around one number she needed British officials to stop ignoring: of the
-        soldiers who died during the Crimean War, the overwhelming majority died
-        not in battle but of preventable disease in military hospitals.
-      </p>
-
-      <p>
-        She could have reported a single national mortality rate.
-        Instead she built what became known as the <term>coxcomb</term>, or rose
-        diagram: a circular chart of twelve wedges, one per month, each wedge's
-        area scaled to that month's deaths, each wedge divided by colour into
-        three causes <mdash/> preventable disease, wounds from battle, and all
-        other causes.
-        As with Minard's map, the point is not one summary number but a pattern
-        developing over time, visible only because time, cause, and magnitude
-        are encoded in the same image.
-      </p>
-
-      <p>
-        The pattern is stark.
-        In the war's first winter, before a Sanitary Commission arrived in March
-        1855 to overhaul hygiene in the camps and hospitals, the wedges for
-        disease dwarf the wedges for wounds, month after month.
-        After the Commission's reforms, the wedges shrink sharply.
-        A table of the same monthly totals contains identical information; it
-        does not make the argument nearly as forcefully, because a table asks
-        the reader to do the comparing themselves, while the coxcomb does the
-        comparing for them, at a glance.
-      </p>
-
-      <p>
-        Nightingale was a trained statistician petitioning a government that had
-        shown little appetite for reading tables of army mortality statistics.
-        The diagram is credited as a direct influence on the sanitary reforms,
-        in the military and more broadly, that followed.
-      </p>
-
-      <p>
-        <term>Source:</term> Nightingale, F.
-        (1858).
-        <em>Notes on Matters
-        Affecting the Health, Efficiency, and Hospital Administration of
-        the British Army, Founded Chiefly on the Experience of the Late
-        War.</em>
-        London: Harrison and Sons.
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-viz-snow">
-      <title>John Snow's cholera map (1854)</title>
-
-      <p>
-        In late August 1854, cholera broke out in Soho, London, killing over 600
-        people within a few weeks, concentrated overwhelmingly around Broad
-        Street.
-        Cholera was widely believed at the time to spread through <q>miasma,</q>
-        bad air, rather than water; there was no accepted mechanism connecting
-        the disease to anything as specific as a single pump.
-      </p>
-
-      <p>
-        The physician John Snow suspected otherwise, and tested it by mapping
-        rather than tabulating.
-        On a street plan of the neighbourhood, he marked a dash for every
-        recorded death at the address where it occurred, and marked every local
-        water pump.
-        The map made a pattern visible that a table of addresses and death
-        counts could not: deaths clustered tightly around a single pump on Broad
-        Street and thinned with distance from it, while households with their
-        own water supply, or a nearby brewery whose workers drank almost none of
-        the local water, had almost no cases at all.
-      </p>
-
-      <p>
-        Location and death count, combined in a single image, did what neither
-        could do alone.
-        Snow presented the map to the local parish and persuaded them to remove
-        the handle from the Broad Street pump.
-        The outbreak was already declining by that point, so the act did not
-        single-handedly end it <mdash/> that specific detail is often overstated
-        <mdash/> but the map itself provided the first strong evidence that
-        cholera spread through contaminated water rather than air, and a later
-        well inspection found the pump's water supply sat near a leaking
-        cesspit, connecting the map's pattern to an actual physical cause.
-      </p>
-
-      <p>
-        <term>Source:</term> Snow, J.
-        (1855).
-        <em>On the Mode of
-        Communication of Cholera</em> (2nd ed.).
-        London: John Churchill.
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-viz-challenger">
-      <title>The Challenger disaster (1986)</title>
-
-      <p>
-        On 28 January 1986, the Space Shuttle Challenger broke apart 73 seconds
-        after launch, killing all seven crew members.
-        The immediate cause was the failure of an O-ring seal on a solid rocket
-        booster, a component engineers at Morton Thiokol, the manufacturer, had
-        already flagged as a concern in cold weather.
-      </p>
-
-      <p>
-        The night before launch, those engineers argued against flying, worried
-        specifically about the forecast temperature.
-        Ambient temperature at launch was later measured at 36°F, with the
-        temperature at the failed joint itself estimated at 28 <ndash/> 31°F
-        <mdash/> roughly 15 degrees colder than any previous launch.
-        Their argument did not persuade NASA management, and the launch went
-        ahead.
-      </p>
-
-      <p>
-        Edward Tufte's later analysis, in <em>Visual Explanations</em> (1997),
-        argues that part of why the engineers failed to persuade anyone was how
-        their evidence was presented.
-        Under time pressure, their chart plotted O-ring damage only for flights
-        that had already shown some, leaving out every fully successful flight.
-        Displayed that way, the relationship between cold and damage does not
-        obviously stand out.
-        Tufte reconstructed the same data as a single chart of temperature
-        against O-ring damage for <em>every</em> flight, successful or not.
-        Plotted that way, the relationship is difficult to miss, and the
-        forecast launch temperature sits clearly outside the range of every
-        previous flight.
-      </p>
-
-      <p>
-        This case is genuinely contested, and worth reading that way rather than
-        as a clean morality tale.
-        Some historians of the disaster argue Tufte's account overstates how
-        much a better chart alone would have changed the outcome, given the
-        institutional and schedule pressures NASA management was under
-        regardless of what any chart showed, and some note that even Tufte's
-        reconstructed chart is not fully faithful to the data available that
-        night.
-        What is not contested is the underlying point: a chart showing only part
-        of the relevant data <mdash/> here, only the flights with problems
-        <mdash/> can hide exactly the pattern a reader most needs to see.
-        Showing all of it is what makes a relationship visible or invisible.
-      </p>
-
-      <p>
-        <term>Sources:</term> Presidential Commission on the Space Shuttle
-        Challenger Accident (1986).
-        <em>Report to the President.</em> Washington, DC: US Government Printing
-        Office.
-        Tufte, E.R.
-        (1997).
-        <em>Visual Explanations: Images and Quantities, Evidence and
-        Narrative.</em>
-        Cheshire, CT: Graphics Press.
-      </p>
-    </subsection>
-  </section>
-  <!-- ================================================================= -->
   <!--  OBJECTIVES                                                       -->
   <!-- ================================================================= -->
-  Chapter - STACK question
-Chapter - Illustrative example in R (Gapminder bit?)
-Exercises
+
   <objectives xml:id="objectives-visualising-multidimensional">
     <title>By the end of this topic you will be able to</title>
 
