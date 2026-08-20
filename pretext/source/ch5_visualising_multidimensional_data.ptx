@@ -68,10 +68,10 @@
         Laikipia-Samburu ecosystem in northern Kenya.
         There are 3,850,840 of them in total, collected over twenty years
         between 2001 and 2021.
-        What the map shows, before any statistical analysis has been done, is
-        where the elephants went, collectively, across a landscape that includes
-        national parks, private ranches, community conservancies, and
-        agricultural settlements.
+        Before any statistical analysis has been done, this map shows where the
+        elephants went, collectively, across a landscape that includes national
+        parks, private ranches, community conservancies, and agricultural
+        settlements.
         The concentration of dots, the gaps, the corridors along rivers: all of
         it is visible at a glance, in a way that no table of GPS coordinates
         could show.
@@ -81,12 +81,12 @@
         This is the dataset at the heart of Gathuku and Wittemyer's (2025) study
         of what drives elephant home range size and movement in northern Kenya —
         and it is a good place to start thinking about why visualisation matters
-        when data has more than one or two dimensions ("variables").
+        when data has more than one or two variables ("dimensions").
       </p>
     </introduction>
 
-    <subsection xml:id="ss-mara-scale">
-      <title>Nearly four million rows is not something anyone reads</title>
+    <subsection xml:id="ss-elephants-dimensions">
+      <title>More than just location</title>
 
       <p>
         Nobody scrolls through 3,850,840 rows looking for a pattern.
@@ -94,75 +94,106 @@
         becomes just a way to store it.
         But the GPS coordinates alone are only one variable.
         Each location was also linked to information about the individual
-        elephant, such as their sex and identity, and to environmental
-        measurements extracted for the area around that location: vegetation
-        productivity (NDVI), rainfall, surface water availability, terrain
-        ruggedness, elevation, and the degree of human modification of the
-        landscape.
-        Understanding what these elephants were doing required examining
-        location jointly with all of those variables at once, across a landscape
-        where conditions vary enormously from one part to another.
-        That is exactly the kind of question a well-built visualisation can
-        answer.
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-mara-findings">
-      <title>What the combined view showed</title>
-
-      <p>
-        When home range sizes were examined alongside landscape variables, a
-        clearer picture emerged:
+        elephant, such as their sex and identity.
+        Location was also linked to environmental measurements around that
+        location; for example:
         <ul>
           <li>
             <p>
-              Water was the dominant factor: elephants ranged more widely in
-              areas where water was scarce or unpredictable, and stayed within
-              smaller areas when surface and permanent water were abundant.
+              how much vegetation was growing there (measured as NDVI, a
+              satellite-derived index of greenness)
             </p>
           </li>
 
           <li>
             <p>
-              Rainfall variability drove the same pattern: more unpredictable
-              rainfall meant larger annual ranges, as elephants moved further to
-              track resources that were distributed unevenly across the
-              landscape.
+              how much rainfall the area received and how variable that rainfall
+              was
+            </p>
+          </li>
+
+          <li>
+            <p>
+              how much surface water and permanent water was available nearby
+            </p>
+          </li>
+
+          <li>
+            <p>
+              how rugged the terrain was
+            </p>
+          </li>
+
+          <li>
+            <p>
+              how much human activity had modified the landscape (e.g.,
+              settlements, agriculture, and infrastructure).
             </p>
           </li>
         </ul>
       </p>
 
       <p>
-        Human modification of the landscape mattered too, but in a more complex
-        way.
-        Elephants in areas with greater human modification tended to have
-        smaller core areas but shifted their ranges more — moving around more
-        within a constrained space rather than ranging freely.
-        This is consistent with what ecologists call the
-        <term>landscape of fear</term>: animals alter their movement not just in
-        response to where food and water are, but in response to where human
-        activity makes them feel unsafe.
+        Researching what drives how much space an elephant uses, and whether it
+        returns to the same areas over time, requires examining all of these
+        variables (or "dimensions") together, not one at a time.
+        A table of 3,850,840 rows and a dozen columns does not answer that
+        question, but visualisation can be a good start.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-elephants-findings">
+      <title>What the data showed</title>
+
+      <p>
+        When Gathuku and Wittemyer (2025) examined home range size alongside
+        landscape variables, water emerged as the dominant factor.
+        Elephants ranged over larger areas where water was scarce or
+        unpredictable, and stayed within smaller areas where surface and
+        permanent water were abundant.
+        This makes ecological sense: when water is reliable, there is no need to
+        travel far; when it is not, animals must move to find it.
       </p>
 
       <p>
-        Sex differences emerged clearly from the data.
-        Contrary to what might be expected, females had larger seasonal ranges
-        than males, though both sexes showed high annual site fidelity —
-        returning to the same areas year after year.
-        Females showed stronger fidelity than males, likely reflecting the more
-        stable social structure of female-led family groups.
-        The figures below make these patterns visible in a way that a table of
-        summary statistics cannot.
+        Rainfall variability drove the same pattern: more unpredictable rainfall
+        meant larger annual ranges, as elephants moved further to track
+        resources that were distributed unevenly across the landscape.
+      </p>
+
+      <p>
+        Human modification of the landscape had a more complex effect.
+        Elephants in areas with greater human activity tended to shift their
+        ranges more from one period to the next, even while staying within a
+        constrained overall area — moving around within a smaller space rather
+        than ranging freely.
+        This is consistent with elephants responding to the risks that human
+        presence creates, adjusting their movements to avoid areas of danger
+        even when that means forgoing better resources.
+      </p>
+
+      <p>
+        Sex differences were also clear.
+        Females tended to show stronger fidelity to their ranges over time —
+        returning to the same areas year after year more consistently than
+        males.
+        This likely reflects the more stable social structure of female-led
+        family groups, which rely on accumulated knowledge of reliable water and
+        food sources within a familiar area.
+      </p>
+
+      <p>
+        Two of the paper's figures make these patterns visible in ways that
+        summary statistics alone cannot.
       </p>
 
       <figure xml:id="fig-gathuku-violin-annual">
         <caption>
           Annual home range estimates for female (red) and male (blue) elephants
           in the Laikipia-Samburu ecosystem, shown for two estimation methods
-          (AKDE and MCP) and two range sizes (50% and 95% isopleth).
-          Each violin shows the full distribution of individual estimates; the
-          box inside shows the median and interquartile range.
+          and two range definitions.
+          The wide, right-skewed distributions reveal enormous variability
+          between individuals.
           Reproduced unchanged from Gathuku and Wittemyer (2025),
           <em>Landscape Ecology</em>, 40, 212,
           <url href="https://doi.org/10.1007/s10980-025-02222-w"/>, under CC
@@ -172,43 +203,45 @@
         <image source="images/gathuku2025-fig8.png" width="90%">
           <description>
             <p>
-              Four violin plots arranged in a two-by-two grid showing home range
-              size in square kilometres on the y-axis.
-              The left column shows 50% isopleth estimates and the right column
-              shows 95% isopleth estimates.
+              Four violin plots arranged in a two-by-two grid.
+              The left column shows 50% isopleth home range estimates and the
+              right shows 95% isopleth estimates.
               Within each panel, female estimates are shown in red and male in
               blue, side by side, for both AKDE and MCP estimation methods.
               The distributions are wide and right-skewed for both sexes,
-              indicating high variability in individual home range sizes.
-              Female and male distributions overlap substantially, though
-              females tend to show slightly wider distributions particularly in
-              the 95% isopleth estimates.
+              indicating high individual variability.
+              Female and male distributions overlap substantially.
             </p>
           </description>
         </image>
       </figure>
 
       <p>
-        The violin plots above show three things at once: the estimation method
-        used (AKDE vs MCP), the size of the range being measured (50% core area
-        vs 95% full range), and the sex of the elephant.
-        Each of those is a separate variable, encoded in position, panel, and
-        colour respectively.
-        What the plot makes immediately visible is the enormous variability
-        between individuals: some elephants range over vast areas, others stay
-        remarkably localised.
+        The first such figure, <xref ref="fig-gathuku-violin-annual"/>, shows
+        home range sizes for female and male elephants.
+        You will notice it has two panels: these compare two different
+        mathematical methods for estimating home range size (50% and 95%
+        Isopleth), and two different definitions of what counts as the home
+        range.
+        The details of those methods are not important here.
+        What matters is the visual figure.
+        It is showing three variables at once: home range size on the vertical
+        axis, estimation approach in the columns, and sex in the colour.
+        Each shape, called a violin plot, shows not just an average but the full
+        spread of individual estimates.
+        You can see at a glance that some elephants range over vast areas while
+        others stay remarkably localised.
         Furthermore, the plot makes visible the way that pattern holds across
         both sexes and both methods.
-        A table of means and standard deviations would give you the averages; it
-        would not show you the shape of the distribution or the degree of
-        overlap between sexes.
+        Compare this with a table of means and standard deviations.
+        Such a table would give you the averages; it would not show you the
+        shape of the distribution or the degree of overlap between sexes.
       </p>
 
       <figure xml:id="fig-gathuku-violin-overlap">
         <caption>
-          Utilisation distribution overlap index (UDOI) showing home range
-          fidelity across annual and seasonal scales (left panel) and by sex at
-          both scales (right panel).
+          Home range fidelity (overlap index) across annual and seasonal scales
+          (left panel) and by sex at both scales (right panel).
           Higher values indicate greater overlap between successive home ranges
           — that is, stronger site fidelity.
           Reproduced unchanged from Gathuku and Wittemyer (2025),
@@ -237,42 +270,44 @@
       </figure>
 
       <p>
-        The overlap index plot adds another dimension again: time.
+        The second figure adds a different dimension: consistency over time.
         Rather than asking where an elephant went, it asks how consistent that
-        was — how much did the same elephant's range in one year or season
-        overlap with its range in the next?
-        Values close to 1 mean "high fidelity"; values close to 0 mean "the animal
-        shifted substantially".
-        Encoding scale (annual vs seasonal), sex, and the overlap value itself
-        in one figure — using position, colour, and the shape of the violin —
-        reveals that elephants in this ecosystem are generally faithful to their
-        ranges year to year, and that females are somewhat more faithful than
-        males.
-        That conclusion required holding three variables in view at once.
+        was: "how much did the same elephant's range in one period overlap with
+        its range in the next?"" An index close to 1 means the elephant used
+        almost exactly the same area; close to 0 means it shifted substantially.
+        Again, the technical details of how this index is calculated are not the
+        point.
+        The point is that the figure encodes three things at once: the scale of
+        comparison (annual vs seasonal) on the horizontal axis, the degree of
+        overlap on the vertical axis, and sex in the colour.
+        This makes it immediately visible that elephants are generally faithful
+        to their ranges year to year, and that females tend to be slightly more
+        faithful than males, at both annual and seasonal scales.
       </p>
 
       <insight xml:id="insight-elephants-lesson">
         <title>Not more data. The same data, seen jointly.</title>
 
         <p>
-          None of these findings — water driving range size, human modification
-          constraining movement, females showing stronger fidelity than males —
-          is visible from any single column of the dataset, or even from GPS
-          locations on their own.
+          The data finds that water drives range size, human activity constrains
+          movement, and females showing stronger fidelity than males.
+          However, none of these findings are visible from any single column of
+          the dataset, or even from GPS locations on their own.
           Each pattern only becomes visible once location is examined
-          <em>jointly</em> with landscape variables, sex, season, and year,
-          together, in the same analysis and the same visualisation.
-          The collars did not need to collect more data to reveal this.
-          The data needed to be looked at with enough variables in view at once.
+          <em>jointly</em> with landscape variables, sex, season, and time,
+          together, in the same visualisation.
         </p>
       </insight>
 
-      <table xml:id="table-mara-dimensions">
+      <table xml:id="table-elephant-dimensions">
         <title>
           What had to be held in view at once to find these patterns
         </title>
 
         <tabular halign="left">
+          <col halign="left"/>
+          <col halign="left"/>
+          <col halign="left"/>
           <row header="yes" bottom="minor">
             <cell>Held in view</cell>
             <cell>Variable(s)</cell>
@@ -281,39 +316,40 @@
 
           <row>
             <cell>Position</cell>
-            <cell>latitude, longitude</cell>
-            <cell>where each elephant actually was</cell>
+            <cell>Latitude, longitude</cell>
+            <cell>Where each elephant actually was</cell>
           </row>
 
           <row>
             <cell>Water</cell>
-            <cell>surface water, permanent water, rainfall variability</cell>
-            <cell>the dominant driver of range size</cell>
+            <cell>Surface water, permanent water, rainfall variability</cell>
+            <cell>The dominant driver of range size</cell>
           </row>
 
           <row>
             <cell>Human pressure</cell>
-            <cell>global human modification index</cell>
-            <cell>why elephants shift more but range less freely</cell>
+            <cell>Human modification index</cell>
+            <cell>Why elephants shift more but range less freely</cell>
           </row>
 
           <row>
             <cell>Individual</cell>
-            <cell>sex</cell>
-            <cell>where the sharpest differences in fidelity appeared</cell>
+            <cell>Sex</cell>
+            <cell>Where the sharpest differences in fidelity appeared</cell>
           </row>
 
           <row>
             <cell>Time</cell>
-            <cell>year, season</cell>
-            <cell>how consistent ranging behaviour was across time</cell>
+            <cell>Year, season</cell>
+            <cell>How consistent ranging behaviour was over time</cell>
           </row>
         </tabular>
       </table>
 
       <p>
         Five things, held in view together, none of them new data collection —
-        the same shape as every dimension added in <xref ref="sec-gapminder"/>.
+        the same idea as every dimension added in <xref ref="sec-gapminder"/>
+        later.
       </p>
 
       <p>
