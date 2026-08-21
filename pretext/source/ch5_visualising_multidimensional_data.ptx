@@ -374,7 +374,7 @@
   <!--  SECTION 3: a short gallery                                       -->
   <!-- ================================================================= -->
   <section xml:id="sec-viz-gallery">
-    <title>Seeing More: Four Charts That Changed Minds</title>
+    <title>Seeing More: Three Charts That Changed Minds</title>
 
     <introduction>
       <p>
@@ -388,11 +388,10 @@
       </p>
 
       <p>
-        The four examples below span more than 150 years.
+        The three examples below span more than 150 years.
         Each one was made by hand, with ink on paper.
         Each one changed how people thought about something important: a
-        military disaster, a public health crisis, a disease outbreak, an
-        engineering failure.
+        military disaster, a public health crisis, a disease outbreak.
         And each one worked for exactly the same reason: it showed something
         that the underlying data had always contained, but was unable to show
         until someone found the right way to draw it.
@@ -597,114 +596,106 @@
 
       <p>
         In late August 1854, cholera broke out in Soho, London, killing over 600
-        people within a few weeks, concentrated overwhelmingly around Broad
-        Street.
-        Cholera was widely believed at the time to spread through <q>miasma,</q>
-        bad air, rather than water; there was no accepted mechanism connecting
-        the disease to anything as specific as a single pump.
+        people within a few weeks.
+        Cholera was widely believed at the time to spread through bad air (
+        <q>miasma</q> ) rather than water.
+      </p>
+
+      <figure xml:id="fig-snow">
+        <caption>
+          John Snow's map of cholera deaths in the Soho district of London,
+          1854.
+          Each dot marks a cholera death at the address where it occurred.
+          P marks local water pumps; the filled circle marks the contaminated
+          Broad Street pump.
+          The clustering of deaths around a single pump, and their thinning with
+          distance from it, made visible a pattern that a table of addresses and
+          death counts could not.
+          Public domain.
+          Image via
+          <url href="https://www.york.ac.uk/depts/maths/histstat/snow_map.htm">University of York</url>.
+        </caption>
+
+        <image source="images/ch4_snow.png" width="80%">
+          <description>
+            <p>
+              A black and white street map of the Soho district of London,
+              oriented with north to the upper right.
+              Streets are labelled, including Oxford Street at the top, Broad
+              Street in the centre, and Piccadilly at the bottom.
+              Small dots are scattered across the map, each representing a
+              cholera death at a specific address.
+              The dots cluster densely around the intersection of Broad Street
+              and Cambridge Street in the centre of the map, with density
+              falling off with distance in all directions.
+              Several pump locations are marked with the letter P around the
+              neighbourhood.
+              A larger filled circle marks the contaminated Broad Street pump,
+              sitting at the centre of the densest cluster of deaths.
+              Areas further from the Broad Street pump, including the southern
+              portion of the map toward Piccadilly, have very few or no dots at
+              all.
+            </p>
+          </description>
+        </image>
+      </figure>
+
+      <p>
+        The physician John Snow suspected otherwise, and tested it by taking a
+        street plan of the neighbourhood and marking a dot for every recorded
+        death at the address where it occurred, and marking every local water
+        pump.
+        The map made a visible pattern that deaths tended to cluster around a
+        single pump on Broad Street and thinned with distance from it.
+        Meanwhile, households with their own water supply, or a nearby brewery
+        whose workers drank almost none of the local water, had almost no cases
+        at all.
       </p>
 
       <p>
-        The physician John Snow suspected otherwise, and tested it by mapping
-        rather than tabulating.
-        On a street plan of the neighbourhood, he marked a dash for every
-        recorded death at the address where it occurred, and marked every local
-        water pump.
-        The map made a pattern visible that a table of addresses and death
-        counts could not: deaths clustered tightly around a single pump on Broad
-        Street and thinned with distance from it, while households with their
-        own water supply, or a nearby brewery whose workers drank almost none of
-        the local water, had almost no cases at all.
-      </p>
-
-      <p>
-        Location and death count, combined in a single image, did what neither
-        could do alone.
-        Snow presented the map to the local parish and persuaded them to remove
-        the handle from the Broad Street pump.
-        The outbreak was already declining by that point, so the act did not
-        single-handedly end it <mdash/> that specific detail is often overstated
-        <mdash/> but the map itself provided the first strong evidence that
-        cholera spread through contaminated water rather than air, and a later
-        well inspection found the pump's water supply sat near a leaking
-        cesspit, connecting the map's pattern to an actual physical cause.
+        The same information in this visualisation could also be seen on a table
+        of addresses and death counts.
+        But, this map shows proximity.
+        Snow presented it to the local parish council, and the handle was
+        removed from the Broad Street pump.
+        The outbreak was already declining by then, so the act alone did not end
+        it, but the map provided the first clear evidence that cholera spread
+        through contaminated water rather than air, a finding later confirmed
+        when inspection revealed the pump's water supply sat adjacent to a
+        leaking cesspit.
       </p>
 
       <p>
         <term>Source:</term> Snow, J.
         (1855).
-        <em>On the Mode of
-        Communication of Cholera</em> (2nd ed.).
+        <em>On the Mode of Communication of Cholera</em> (2nd ed.).
         London: John Churchill.
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-viz-challenger">
-      <title>The Challenger disaster (1986)</title>
-
-      <p>
-        On 28 January 1986, the Space Shuttle Challenger broke apart 73 seconds
-        after launch, killing all seven crew members.
-        The immediate cause was the failure of an O-ring seal on a solid rocket
-        booster, a component engineers at Morton Thiokol, the manufacturer, had
-        already flagged as a concern in cold weather.
-      </p>
-
-      <p>
-        The night before launch, those engineers argued against flying, worried
-        specifically about the forecast temperature.
-        Ambient temperature at launch was later measured at 36°F, with the
-        temperature at the failed joint itself estimated at 28 <ndash/> 31°F
-        <mdash/> roughly 15 degrees colder than any previous launch.
-        Their argument did not persuade NASA management, and the launch went
-        ahead.
-      </p>
-
-      <p>
-        Edward Tufte's later analysis, in <em>Visual Explanations</em> (1997),
-        argues that part of why the engineers failed to persuade anyone was how
-        their evidence was presented.
-        Under time pressure, their chart plotted O-ring damage only for flights
-        that had already shown some, leaving out every fully successful flight.
-        Displayed that way, the relationship between cold and damage does not
-        obviously stand out.
-        Tufte reconstructed the same data as a single chart of temperature
-        against O-ring damage for <em>every</em> flight, successful or not.
-        Plotted that way, the relationship is difficult to miss, and the
-        forecast launch temperature sits clearly outside the range of every
-        previous flight.
-      </p>
-
-      <p>
-        This case is genuinely contested, and worth reading that way rather than
-        as a clean morality tale.
-        Some historians of the disaster argue Tufte's account overstates how
-        much a better chart alone would have changed the outcome, given the
-        institutional and schedule pressures NASA management was under
-        regardless of what any chart showed, and some note that even Tufte's
-        reconstructed chart is not fully faithful to the data available that
-        night.
-        What is not contested is the underlying point: a chart showing only part
-        of the relevant data <mdash/> here, only the flights with problems
-        <mdash/> can hide exactly the pattern a reader most needs to see.
-        Showing all of it is what makes a relationship visible or invisible.
-      </p>
-
-      <p>
-        <term>Sources:</term> Presidential Commission on the Space Shuttle
-        Challenger Accident (1986).
-        <em>Report to the President.</em> Washington, DC: US Government Printing
-        Office.
-        Tufte, E.R.
-        (1997).
-        <em>Visual Explanations: Images and Quantities, Evidence and
-        Narrative.</em>
-        Cheshire, CT: Graphics Press.
+        Public domain.
       </p>
     </subsection>
   </section>
   <!-- ================================================================= -->
-  <!--  SECTION 2: Gapminder                                             -->
+  <!--  SECTION 3: the STACK question that exemplifies this              -->
+  <!-- ================================================================= -->
+  <section xml:id="sec-ch5-stack">
+    <title>Your turn: ...</title>
+
+    <introduction>
+      <p>
+        TODO
+      </p>
+    </introduction>
+
+    <subsection xml:id="subsec-ch5-stack">
+      <title>TODO</title>
+
+      <p>
+        TODO: insert STACK question
+      </p>
+    </subsection>
+  </section>
+  <!-- ================================================================= -->
+  <!--  SECTION 4: Gapminder                                             -->
   <!-- ================================================================= -->
   <section xml:id="sec-gapminder">
     <title>Building Up Dimensions: The Gapminder Activity</title>
@@ -717,16 +708,108 @@
         into R as the <c>gapminder</c> package: 1,704 observations covering 142
         countries from 1952 to 2007, with one row per country per year and
         columns for <c>country</c>, <c>continent</c>, <c>year</c>,
-        <c>lifeExp</c> (life expectancy), <c>pop</c> (population), and
-        <c>gdpPercap</c> (GDP per person).
+        <c>lifeExp</c> (life expectancy at birth, in years), <c>pop</c>
+        (population), and <c>gdpPercap</c> (GDP per capita, in
+        inflation-adjusted US dollars).
       </p>
 
       <p>
         A single row tells you almost nothing interesting.
-        What made Rosling's presentation of this data famous was building it up,
-        one variable at a time, into a single animated chart <mdash/> the exact
-        idea behind <xref ref="sec-following-the-giants"/>, with a dataset small
-        enough to work through by hand.
+        But, you can build up this data nicely, one variable ("dimension") at a
+        time, into a single animated chart.
+        We will do the same thing here — starting from a blank canvas and adding
+        one dimension at a time.
+      </p>
+
+      <p>
+        First, install and load the packages:
+      </p>
+
+      <program language="r">
+        <code>
+        # Note that you may not need to run these install.packages lines if you already have them installed.
+        install.packages("gapminder")
+        install.packages("ggplot2")
+        install.packages("dplyr")
+
+        library(gapminder)
+        library(ggplot2)
+        library(dplyr)
+        </code>
+      </program>
+
+      <p>
+        Before plotting, it is worth taking a moment to understand what the
+        dataset actually contains.
+        In R, <c>?gapminder</c> opens the documentation for the package:
+      </p>
+
+      <program language="r">
+        <code>
+    ?gapminder
+        </code>
+      </program>
+      <pre>
+    Excerpt of the Gapminder data on life expectancy, GDP per capita,
+    and population by country.
+
+    Format
+    The main data frame gapminder has 1704 rows and 6 variables:
+
+    country     factor with 142 levels
+    continent   factor with 5 levels
+    year        ranges from 1952 to 2007 in increments of 5 years
+    lifeExp     life expectancy at birth, in years
+    pop         population
+    gdpPercap   GDP per capita (US$, inflation-adjusted)
+      </pre>
+      <p>
+        A few things worth noting before we start.
+        <c>country</c> and <c>continent</c> are both factors.
+        These are categorical variables with a fixed set of levels, discussed
+        further in <xref ref="ch-handling-factors"/>.
+        <c>year</c> is not continuous: it jumps in five-year steps, so there is
+        1952, 1957, 1962, and so on.
+        <c>gdpPercap</c> is inflation-adjusted, meaning values across different
+        years have been made comparable in real terms.
+        And <c>pop</c> is a raw count, which, as we will see, varies so
+        enormously between countries that it needs careful handling to show
+        clearly in a plot.
+      </p>
+
+      <p>
+        We will start by working with just the year as 2007.
+        To do this, we simply filter our data set
+      </p>
+
+      <program language="r">
+        <code>
+        gapminder_2007 &lt;- gapminder_2007 %&gt;%
+              dplyr::filter(year == 2007)
+
+        dim(gapminder_2007)
+        #&gt; [1] 142   6
+
+        head(gapminder_2007)
+        #&gt; # A tibble: 6 x 6
+        #&gt;   country     continent  year lifeExp      pop gdpPercap
+        #&gt;   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+        #&gt; 1 Afghanistan Asia       2007    43.8 31889923      975.
+        #&gt; 2 Albania     Europe     2007    76.4  3600523     5937.
+        #&gt; 3 Algeria     Africa     2007    72.3 33333216     6223.
+        #&gt; 4 Angola      Africa     2007    42.7 12420476     4797.
+        #&gt; 5 Argentina   Americas   2007    75.3 40301927    12779.
+        #&gt; 6 Australia   Oceania    2007    81.2 20434176    34435.
+        </code>
+      </program>
+
+      <p>
+        We can see there are six variables, and there is one country per row.
+        The first row shows Afghanistan in 2007 had a life expectancy of 43.8
+        years, population 31 million, and GDP per capita $975.
+        This tells us something, but not much.
+        We could instead look at how all 142 countries (rows) compare to one
+        another.
       </p>
     </introduction>
 
@@ -736,27 +819,131 @@
       <p>
         Start with the most basic possible question: is a country's income
         related to how long its people live?
-        Two variables, two axes.
+        <c>ggplot2</c> uses a system called the "Grammar of Graphics", where the
+        plot happens in layers.
+        The first layer is always the same: you tell R which dataset to use, and
+        which variables to map onto which visual properties (the "
+        <term>aesthetic mappings</term> ").
+        Here, we map <c>gdpPercap</c> onto the x-axis and <c>lifeExp</c> onto
+        the y-axis.
       </p>
 
       <program language="r">
-        library(gapminder)
-        library(ggplot2)
+        <code>
+        ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp))
+        </code>
+      </program>
 
-        gapminder_2007 &lt;- subset(gapminder, year == 2007)
+      <figure xml:id="fig-gapminder-2d-empty">
+        <caption>
+          A blank plot, with <c>gdpPercap</c> on the x axis and <c>lifeExp</c>
+          on the y axis.
+        </caption>
 
+        <image source="images/ch5_gapminder_2d_empty.png" width="80%">
+          <description>
+            <p>
+              A blank rectangle, with <c>gdpPercap</c> on the x axis and
+              <c>lifeExp</c> on the y axis.
+            </p>
+          </description>
+        </image>
+      </figure>
+
+      <p>
+        This gives you a blank canvas with the axes set up but nothing drawn on
+        it yet.
+        To actually draw something, you add a <term>geom</term>.
+        This is short for geometric object, which is the shape used to represent
+        each observation.
+        <c>geom_point()</c> draws one point per row, giving us a scatterplot.
+      </p>
+
+      <program language="r">
+        <code>
+        ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp)) +
+          geom_point()
+        </code>
+      </program>
+
+      <figure xml:id="fig-gapminder-2d">
+        <caption>
+          GDP per capita against life expectancy for 142 countries in 2007.
+          The relationship is positive but curved — richer countries tend to
+          have longer life expectancies, but with diminishing returns at higher
+          incomes.
+        </caption>
+
+        <image source="images/ch5_gapminder_2d.png" width="80%">
+          <description>
+            <p>
+              A scatterplot with GDP per capita on the x-axis and life
+              expectancy in years on the y-axis.
+              Points are clustered toward the lower left for poorer countries
+              with lower life expectancies, and spread toward the upper right
+              for wealthier countries.
+              The relationship is curved rather than linear, with a steep rise
+              at low income levels that flattens out at higher incomes.
+            </p>
+          </description>
+        </image>
+      </figure>
+
+      <p>
+        There is a clear positive relationship, but the x-axis is awkward.
+        A handful of very wealthy countries are spread far to the right,
+        compressing the rest of the points into a dense cluster on the left.
+        This is a right-skewed distribution: most countries are bunched at lower
+        incomes, with a long tail of a few rich ones.
+        A log scale fixes this by spreading out the lower end and compressing
+        the upper end, making the pattern across the full range much easier to
+        read.
+      </p>
+
+      <p>
+        We can also add in a further layer <c>labs</c> which relabels our axes
+        to something more intuitive than the default variable names.
+      </p>
+
+      <program language="r">
+        <code>
         ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp)) +
           geom_point() +
           scale_x_log10() +
           labs(x = "GDP per capita (log scale)", y = "Life expectancy")
+        </code>
       </program>
+
+      <figure xml:id="fig-gapminder-2d-log">
+        <caption>
+          GDP per capita (log scale) against life expectancy for 142 countries
+          in 2007.
+          The log scale spreads the x-axis more evenly, making the positive
+          relationship across all income levels clearer.
+        </caption>
+
+        <image source="images/ch5_gapminder_2d_log.png" width="80%">
+          <description>
+            <p>
+              A scatterplot with GDP per capita on a log scale on the x-axis and
+              life expectancy in years on the y-axis.
+              The points now spread more evenly across the x-axis, and a roughly
+              linear positive relationship is visible across the full range.
+              Axis labels read GDP per capita (log scale) and Life expectancy.
+            </p>
+          </description>
+        </image>
+      </figure>
+
       <p>
-        Even this bare scatterplot shows a clear upward trend, though income is
-        logged on the x-axis because a handful of very rich countries would
-        otherwise crush the rest of the points into one corner.
-        But every point is currently the same colour and the same size <mdash/>
-        a Norwegian point and a Nigerian point are visually identical except for
-        position.
+        There are two dimensions because we have two variables, and one clear
+        trend.
+        But every point is currently the same colour and the same size — a
+        Norwegian point and a Kenyan point are visually identical except for
+        their position.
+        We have used the x-axis and y-axis, and that is all.
+        There is more in the data for us to use to make this plot clearer, and
+        to explore the relationships further.
       </p>
     </subsection>
 
@@ -764,23 +951,103 @@
       <title>Three dimensions: adding continent</title>
 
       <p>
-        Map <c>continent</c> onto colour, and a third variable appears in the
-        same chart without adding a single new axis.
+        We can add a third variable without adding a new axis.
+        Instead of position, we use colour.
+        Mapping <c>continent</c> onto <c>colour</c> assigns a different colour
+        to each continent's points.
+        This is added into <c>aes</c> as it is a new dimension.
       </p>
 
       <program language="r">
-        ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp, colour = continent)) +
+        <code>
+        ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp, 
+                                   colour = continent)) +
           geom_point() +
           scale_x_log10() +
           labs(x = "GDP per capita (log scale)", y = "Life expectancy")
+        </code>
       </program>
+
+      <figure xml:id="fig-gapminder-3d">
+        <caption>
+          GDP per capita (log scale) against life expectancy for 142 countries
+          in 2007, coloured by continent.
+          African countries cluster toward the lower left; European and Oceanian
+          countries toward the upper right.
+        </caption>
+
+        <image source="images/ch5_gapminder_3d.png" width="80%">
+          <description>
+            <p>
+              A scatterplot with the same axes as before.
+              Points are now coloured by continent — African points (red)
+              cluster toward the lower left of the chart, European and Oceanian
+              points cluster toward the upper right, and American and Asian
+              points are spread across the middle.
+              A colour legend identifies each continent.
+            </p>
+          </description>
+        </image>
+      </figure>
+
       <p>
-        The trend from <xref ref="ss-gapminder-2d"/> is still there, but now it
-        has structure: African countries cluster toward the lower left, European
-        countries toward the upper right, and the spread within each continent
-        becomes visible for the first time.
+        The overall trend from before is still there, but now it has structure.
+        African countries cluster toward the lower left, European countries
+        toward the upper right, and the spread within each continent becomes
+        visible for the first time.
         Nothing about the underlying data changed.
         One aesthetic mapping did.
+      </p>
+
+      <p>
+        It is also worth considering accessibility.
+        Colour alone can be difficult to distinguish for readers who are
+        colourblind.
+        Adding <c>shape = continent</c> alongside <c>colour = continent</c>
+        means each continent is distinguished by both colour and point shape,
+        making the chart readable even when printed in black and white or viewed
+        by someone with colour blindness.
+      </p>
+
+      <program language="r">
+        <code>
+        ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp, 
+                                   colour = continent,
+                                   shape = continent)) +
+          geom_point() +
+          scale_x_log10() +
+          labs(x = "GDP per capita (log scale)", y = "Life expectancy")
+        </code>
+      </program>
+
+      <figure xml:id="fig-gapminder-3d-2">
+        <caption>
+          GDP per capita (log scale) against life expectancy for 142 countries
+          in 2007.
+          Each point has it's own colour and shape per continent.
+          African countries cluster toward the lower left; European and Oceanian
+          countries toward the upper right.
+        </caption>
+
+        <image source="images/ch5_gapminder_3d_2.png" width="80%">
+          <description>
+            <p>
+              A scatterplot with the same axes as before.
+              Points are now coloured by continent — African points (red,
+              circle) cluster toward the lower left of the chart, European and
+              Oceanian points cluster toward the upper right, and American and
+              Asian points are spread across the middle.
+              A colour and shape legend identifies each continent.
+            </p>
+          </description>
+        </image>
+      </figure>
+
+      <p>
+        Note that <c>colour</c> and <c>shape</c> are both mapped to the same
+        variable, <c>continent</c>, so they are not adding a new dimension, just
+        making the third dimension more robust.
+        We will keep both from here on.
       </p>
     </subsection>
 
@@ -788,71 +1055,329 @@
       <title>Four dimensions: adding population</title>
 
       <p>
-        Map <c>pop</c> onto point size, and the chart gains a fourth variable,
-        turning a scatterplot into a bubble chart.
+        A fourth variable can be added using point size.
+        Mapping <c>pop</c> onto <c>size</c> makes each point's area proportional
+        to the country's population, turning the scatterplot into a bubble
+        chart.
+        We also add <c>alpha = 0.7</c> inside <c>geom_point()</c>.
+        <c>alpha</c> controls the transparency of the points, where 1 is fully
+        opaque and 0 is invisible.
+        At 0.7, overlapping points remain visible through each other, which
+        helps when large bubbles sit in front of smaller ones.
       </p>
 
       <program language="r">
+        <code>
         ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp,
-                                   colour = continent, size = pop)) +
+                                   colour = continent, shape = continent,
+                                   size = pop)) +
           geom_point(alpha = 0.7) +
           scale_x_log10() +
           scale_size_continuous(range = c(1, 15)) +
           labs(x = "GDP per capita (log scale)", y = "Life expectancy",
                size = "Population")
+        </code>
       </program>
+
+      <figure xml:id="fig-gapminder-4d">
+        <caption>
+          GDP per capita (log scale) against life expectancy for 142 countries
+          in 2007, with point size proportional to population and colour and
+          shape indicating continent.
+          China and India dominate by size; Kenya sits in the African cluster
+          toward the lower left.
+        </caption>
+
+        <image source="images/ch5_gapminder_4d.png" width="80%">
+          <description>
+            <p>
+              A bubble chart with the same axes and colour/shape encoding as
+              before.
+              Point sizes now vary substantially — two very large points (China
+              and India) are visible in the Asian cluster in the middle of the
+              chart.
+              Most other points are considerably smaller.
+              A size legend shows population scale.
+              African points remain clustered toward the lower left.
+            </p>
+          </description>
+        </image>
+      </figure>
+
       <p>
         China and India, similar in income and life expectancy to several
-        smaller countries, now visibly dominate the chart by sheer size.
-        That is real information <mdash/> population <mdash/> that a plain
-        scatterplot could not have shown without a second, separate chart.
+        smaller countries, now visibly dominate by sheer size.
+        But where is Kenya?
+        The African cluster is dense and it is hard to identify individual
+        countries.
+        We can add labels for specific countries of interest, and a good general
+        technique for drawing attention to particular observations without
+        labelling everything.
       </p>
+
+      <program language="r">
+        <code>
+        library(dplyr)
+
+        # Countries to label
+        label_countries &lt;- c("Kenya", "Nigeria", "South Africa", 
+                              "Ethiopia", "China", "India")
+
+        gapminder_labels &lt;- gapminder_2007 %&gt;%
+          filter(country %in% label_countries)
+
+        ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp,
+                                   colour = continent, shape = continent,
+                                   size = pop)) +
+          geom_point(alpha = 0.7) +
+          geom_text(data = gapminder_labels, 
+                    aes(label = country), 
+                    size = 3, nudge_y = 1, show.legend = FALSE) +
+          scale_x_log10() +
+          scale_size_continuous(range = c(1, 10)) +
+          labs(x = "GDP per capita (log scale)", y = "Life expectancy",
+               size = "Population")
+        </code>
+      </program>
+
+      <figure xml:id="fig-gapminder-4d-labels">
+        <caption>
+          The same chart as above with selected countries labelled, including
+          Kenya, Nigeria, South Africa, Ethiopia, China, and India.
+        </caption>
+
+        <image source="images/ch5_gapminder_4d_labels.png" width="80%">
+          <description>
+            <p>
+              A bubble chart as before, with text labels added for Kenya,
+              Nigeria, South Africa, Ethiopia, China, and India.
+              Kenya appears in the African cluster toward the lower left of the
+              chart.
+              China and India are labelled near the large bubbles in the Asian
+              cluster.
+            </p>
+          </description>
+        </image>
+      </figure>
     </subsection>
 
     <subsection xml:id="ss-gapminder-5d">
       <title>Five dimensions: adding time</title>
 
       <p>
-        The chart so far is a single snapshot, 2007 only.
+        The chart so far is a single snapshot displaying 2007.
         Rosling's original animated the chart across every year in the data,
         letting countries move as their income and life expectancy changed.
-        Without animation software, the same fifth dimension <mdash/> time
-        <mdash/> can be shown as small multiples, one panel per year.
+        We can show the same fifth dimension, time, as small multiples using
+        <c>facet_wrap()</c>, which produces one panel per year and lays them out
+        in a grid.
       </p>
 
       <program language="r">
+        <code>
         ggplot(gapminder, aes(x = gdpPercap, y = lifeExp,
-                              colour = continent, size = pop)) +
+                              colour = continent, shape = continent,
+                              size = pop)) +
           geom_point(alpha = 0.7) +
           scale_x_log10() +
           scale_size_continuous(range = c(1, 10)) +
           facet_wrap(~ year) +
           labs(x = "GDP per capita (log scale)", y = "Life expectancy",
                size = "Population")
+        </code>
       </program>
+
+      <figure xml:id="fig-gapminder-5d">
+        <caption>
+          GDP per capita (log scale) against life expectancy for 142 countries,
+          faceted by year from 1952 to 2007.
+          Read left to right, top to bottom: life expectancy climbs steadily in
+          almost every country, even where income barely moves.
+        </caption>
+
+        <image source="images/ch5_gapminder_5d.png" width="100%">
+          <description>
+            <p>
+              A grid of 12 small scatterplots, one every 5 years from 1952 to
+              2007, each with the same axes, colour, shape, and size encoding as
+              the 2007 chart.
+              Across the panels, the overall cloud of points shifts upward and
+              to the right, showing rising life expectancy and income across
+              most countries over time.
+              A few panels show individual bubbles that drop backward, visible
+              as anomalies against the general upward trend.
+            </p>
+          </description>
+        </image>
+      </figure>
+
       <p>
         Read left to right, top to bottom, and entire countries visibly migrate
-        across the panel: life expectancy climbing steadily almost everywhere,
-        even where income barely moves; the occasional sharp reversal, a bubble
-        dropping backward in a single panel, worth investigating rather than
-        dismissing as noise.
-        (If you have the <c>gganimate</c> package installed, the same five
-        variables can be drawn as a single moving chart,
-        <c>transition_time(year)</c>, closer to Rosling's original.)
+        across the panels: life expectancy climbing steadily almost everywhere,
+        even where income barely moves.
+        There is the occasional bubble dropping backward in a single panel,
+        indicating a sharp reversal.
+        This is worth investigating rather than dismissing as noise.
       </p>
+
+      <p>
+        You can also adjust the visual style of the whole chart using a
+        <term>theme</term>.
+        Themes control the background, gridlines, fonts, and other non-data
+        elements.
+        <c>theme_bw()</c> gives a clean white background with grey gridlines,
+        which many people find easier to read than the default grey background.
+      </p>
+
+      <program language="r">
+        <code>
+        ggplot(gapminder, aes(x = gdpPercap, y = lifeExp,
+                              colour = continent, shape = continent,
+                              size = pop)) +
+          geom_point(alpha = 0.7) +
+          scale_x_log10() +
+          scale_size_continuous(range = c(1, 10)) +
+          facet_wrap(~ year) +
+          labs(x = "GDP per capita (log scale)", y = "Life expectancy",
+               size = "Population") +
+          theme_bw()
+        </code>
+      </program>
+
+      <p>
+        If you want a true animation, you can get countries moving smoothly
+        rather than jumping between panels using the <c>gganimate</c> package.
+        This adds that with one extra line.
+        We also add in <c>labs(title = "Year: {frame_time}")</c> which just
+        simply means that the year that is being shown in the animation is
+        visible.
+      </p>
+
+      <program language="r">
+        <code>
+        # install.packages("gganimate")
+        library(gganimate)
+        library(dplyr)
+ggplot(gapminder, aes(x = gdpPercap, 
+                      y = lifeExp,
+                      colour = continent, 
+                      shape = continent,
+                      size = pop,
+                      group = country)) +
+  geom_point(alpha = 0.7) +
+  scale_x_log10() +
+  scale_size_continuous(range = c(1, 10)) +
+  labs(x = "GDP per capita (log scale)", 
+       y = "Life expectancy",
+       size = "Population") + 
+      transition_time(year) +
+    labs(title = "Year: {frame_time}")
+        </code>
+      </program>
+
+      <figure xml:id="fig-gapminder-5d-animate">
+        <caption>
+          GDP per capita (log scale) against life expectancy for 142 countries,
+          animated by year from 1952 to 2007.
+        </caption>
+
+        <image source="images/ch5_gapminder_animate.gif" width="100%">
+          <description>
+            <p>
+              A gif animating the 12 small scatterplots from the previous plot
+              so that the previous plot transitions from one time point to the
+              next seamlessly.
+            </p>
+          </description>
+        </image>
+      </figure>
+
+      <insight>
+        <p>
+          Watch the animation carefully.
+          In 1977, one country's bubble drops sharply downward — a sudden fall
+          in life expectancy that stands out against the general upward trend.
+          And in 1992, it happens again, even more dramatically.
+          Before assuming these are errors in the data, it is worth remembering
+          what we discussed in <xref ref="ch-cleaning-recoding"/>: a sudden
+          implausible-looking value is not always wrong.
+          Sometimes it is the data telling you something real.
+        </p>
+
+        <p>
+          We can find out which countries these are by filtering the data to
+          look for unusually low life expectancies in those years:
+        </p>
+
+        <program language="r">
+          <code>
+    library(dplyr)
+
+    # Which country had the lowest life expectancy in 1977?
+    gapminder %&gt;%
+      filter(year == 1977) %&gt;%
+      arrange(lifeExp) %&gt;%
+      head(5)
+    #&gt; # A tibble: 5 x 6
+    #&gt;   country      continent  year lifeExp      pop gdpPercap
+    #&gt;   &lt;fct&gt;        &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+    #&gt; 1 Cambodia      Asia       1977    31.2  6978607      525.
+    #&gt; 2 Sierra Leone  Africa     1977    36.8  3140897     1348.
+    #&gt; 3 Guinea-Bissau Africa     1977    37.5   745228      765.
+    #&gt; 4 Afghanistan   Asia       1977    38.4 14880372      786.
+    #&gt; 5 Angola        Africa     1977    39.5  6162675     3009.
+
+    # Which country had the lowest life expectancy in 1992?
+    gapminder %&gt;%
+      filter(year == 1992) %&gt;%
+      arrange(lifeExp) %&gt;%
+      head(5)
+    #&gt; # A tibble: 5 x 6
+    #&gt;   country      continent  year lifeExp      pop gdpPercap
+    #&gt;   &lt;fct&gt;        &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+    #&gt; 1 Rwanda       Africa     1992    23.6  7290203      737.
+    #&gt; 2 Sierra Leone Africa     1992    38.3  4260884     1069.
+    #&gt; 3 Somalia      Africa     1992    39.7  6099799      927.
+    #&gt; 4 Angola       Africa     1992    40.6  8735988     2628.
+    #&gt; 5 Liberia      Africa     1992    40.8  1912974      637.
+          </code>
+        </program>
+
+        <p>
+          The 1977 drop is Cambodia, during the Khmer Rouge genocide which ran
+          from 1975 to 1979.
+          The 1992 drop is Rwanda, in the years surrounding the Rwandan genocide
+          of 1994.
+          Neither is a data error.
+          Both are real events, visible in the data as a sudden reversal against
+          a trend that was moving the other way everywhere else.
+          This is one of the things that multidimensional visualisation makes
+          possible: an anomaly that might be buried in a table of 1,704 rows
+          becomes immediately visible when you can see all countries moving
+          together over time.
+          The next question of if this anomoly is a mistake or something real is
+          exactly the right question to ask.
+          Here, the answer is history, and a quick search can explain it.
+        </p>
+      </insight>
     </subsection>
 
     <subsection xml:id="ss-gapminder-summary">
       <title>What just happened</title>
 
       <p>
-        Five variables, five aesthetics, and not one extra table.
+        Five variables, five aesthetic mappings, all in one graphic.
+        Each variable was added to the <em>same</em> visualisation, using a
+        different visual property to encode it.
       </p>
 
       <table xml:id="table-gapminder-dimensions">
         <title>Dimensions added to the Gapminder chart, one at a time</title>
 
         <tabular halign="left">
+          <col halign="left"/>
+          <col halign="left"/>
+          <col halign="left"/>
           <row header="yes" bottom="minor">
             <cell>Dimension</cell>
             <cell>Aesthetic</cell>
@@ -867,7 +1392,7 @@
 
           <row>
             <cell>3rd</cell>
-            <cell>colour</cell>
+            <cell>colour &amp; shape</cell>
             <cell><c>continent</c></cell>
           </row>
 
@@ -886,18 +1411,12 @@
       </table>
 
       <p>
-        Each new variable was added as a new <term>aesthetic mapping</term>, not
-        a new chart, a new axis, or a new table.
-        That is the whole technique this chapter is teaching, and
-        <xref ref="sec-following-the-giants"/> was the same idea before it had a
-        name: GPS location, land cover, protection status, sex and season, held
-        together in one analysis rather than one table per variable, is what
-        turned 834,138 rows of coordinates into a finding about forest
-        preference, sex differences and a corridor gone quiet.
-        Five variables again, in substance if not in a single ggplot call
-        <mdash/> the same move as <xref ref="ss-gapminder-4d"/>, just with a
-        resource-selection model standing in for <c>colour =</c> and
-        <c>size =</c>.
+        Each new variable was added as a new <term>aesthetic mapping</term>.
+        Position, colour, shape, size, and facet are all different ways of
+        encoding information in the same image.
+        The elephant data earlier in the chapter was the same idea: GPS
+        location, water availability, human modification, sex, and time, held
+        together in one analysis rather than one table per variable.
       </p>
 
       <p>
@@ -908,45 +1427,6 @@
       </p>
     </subsection>
   </section>
-  <!-- ================================================================= -->
-  <!--  OBJECTIVES                                                       -->
-  <!-- ================================================================= -->
-
-  <objectives xml:id="objectives-visualising-multidimensional">
-    <title>By the end of this topic you will be able to</title>
-
-    <ul>
-      <li>
-        <p>
-          Explain why a large, clean dataset can still be unreadable without
-          visualisation.
-        </p>
-      </li>
-
-      <li>
-        <p>
-          Add variables to a plot using aesthetic mappings (colour, size, facet)
-          rather than separate tables or charts.
-        </p>
-      </li>
-
-      <li>
-        <p>
-          Build up a multidimensional visualisation incrementally, one variable
-          at a time, and describe what each addition reveals.
-        </p>
-      </li>
-
-      <li>
-        <p>
-          Choose an appropriate encoding (colour vs.
-          size vs.
-          facet vs.
-          animation) for a given variable and dataset.
-        </p>
-      </li>
-    </ul>
-  </objectives>
   <!-- ================================================================= -->
   <!--  EXERCISES                                                        -->
   <!-- ================================================================= -->
@@ -959,25 +1439,12 @@
           <xref ref="sec-following-the-giants"/> pairs each elephant's GPS
           location with several other variables: vegetation cover, distance to
           water, human infrastructure, sex, season, and time of day.
-          <xref ref="ss-mara-findings"/> describes findings that came from
-          examining location jointly with land cover, protection status, sex and
-          season.
+          It describes findings that came from examining location jointly with
+          land cover, protection status, sex and season.
           Pick one variable not explicitly named in that combination <mdash/>
           time of day, or distance to water <mdash/> and describe, in a sentence
           or two, what mapping it onto colour, size, or facet might reveal that
           the described analysis would not.
-        </p>
-      </statement>
-    </exercise>
-
-    <exercise xml:id="ex-viz-gapminder-1952">
-      <statement>
-        <p>
-          Adapt the code in <xref ref="ss-gapminder-4d"/> to show 1952 instead
-          of 2007.
-          Compare the two charts.
-          Which continents have moved the most in the fifty-five years between
-          them, and along which axis?
         </p>
       </statement>
     </exercise>
@@ -992,6 +1459,28 @@
           lake on facet).
           What does the combined view show that a single-variable summary of
           each column, taken separately, would not?
+        </p>
+      </statement>
+    </exercise>
+
+    <exercise xml:id="ex-viz-gapminder-label">
+      <statement>
+        <p>
+          Adapt the code in <xref ref="ss-gapminder-5d"/> to add a label for a
+          country of your choice into the animation.
+          How does it change over the course of the fifty-five years?
+        </p>
+      </statement>
+    </exercise>
+
+    <exercise xml:id="ex-viz-gapminder-1952">
+      <statement>
+        <p>
+          Adapt the code in <xref ref="ss-gapminder-4d"/> to show 1952 instead
+          of 2007.
+          Compare the two charts.
+          Which continents have moved the most in the fifty-five years between
+          them, and along which axis?
         </p>
       </statement>
     </exercise>

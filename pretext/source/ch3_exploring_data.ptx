@@ -1467,8 +1467,9 @@
 
     <introduction>
       <p>
-        TODO: Explain the Flamingos data, and introduce it here.
-        Then, these exercises make sense
+        This chapter uses the Flamingos data introduced in <xref ref = "ch-intro"/>.
+        TODO: Have this as an uncleaned version here, so that then some ideas can come out later in the cleaning section that help show how cleaning the data changes conclusions?
+        Then does Ch5 use this cleaned version, or another version? Idk. 
       </p>
     </introduction>
 

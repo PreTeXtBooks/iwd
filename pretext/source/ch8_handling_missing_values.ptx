@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+
+
+
+
+
+
 <!-- ================================================================= -->
 <!--  Chapter 8: Handling Missing Values                               -->
 <!--                                                                    -->
@@ -65,7 +71,29 @@
 <!--  SECTION 1: Wald and the bombers                                  -->
 <!-- ================================================================= -->
 
-  <section xml:id="sec-wald-survivorship">
+  <section xml:id="sec-intro-story">
+    <title>Motivating introduction story</title>
+
+    todo Example in Kenya
+
+
+  </section>
+
+  <section xml:id="ss-ch8-stories">
+    <title>todo</title>
+    <introduction>
+      <p>
+        missing data stories: One MCAR, one MAR, and one MNAR.
+
+        MNAR: The Bombers That Didn't Come Back
+
+        Need a MCAR and MAR story. A famous good one.
+
+        (Remove the challenger one. Unless that is MAR)
+      </p>
+    </introduction>
+
+      <subsection xml:id="sec-wald-survivorship">
     <title>The Bombers That Didn't Come Back</title>
 
     <introduction>
@@ -76,10 +104,12 @@
         heavily on the wings and fuselage, far more than on the engines.
         The obvious recommendation followed immediately: reinforce the
         wings and fuselage, since that is clearly where the bullets go.
+
+        TODO: Get image of the affected points on the planes.
       </p>
     </introduction>
 
-    <subsection xml:id="ss-wald-the-catch">
+    <subsubsection xml:id="ss-wald-the-catch">
       <title>The data was correct. The dataset was incomplete.</title>
 
       <p>
@@ -105,9 +135,9 @@
         were rarely hit. It meant a hit there was rarely survived, which is
         why those planes were missing from the dataset entirely.
       </p>
-    </subsection>
+    </subsubsection>
 
-    <subsection xml:id="ss-wald-the-method">
+    <subsubsection xml:id="ss-wald-the-method">
       <title>What Wald actually did about it</title>
 
       <p>
@@ -156,110 +186,209 @@
         on Aircraft Survivability.</q> <em>Journal of the American
         Statistical Association</em>, 79(386), 259<ndash />267.
       </p>
-    </subsection>
-  </section>
+    </subsubsection>
+  </subsection>
 
-<!-- ================================================================= -->
-<!--  SECTION 2: naming the pattern                                    -->
-<!-- ================================================================= -->
 
-  <section xml:id="sec-missing-taxonomy">
-    <title>Naming Why Data Is Missing</title>
 
-    <introduction>
-      <p>
-        Wald's case is the extreme, high-stakes version of a question every
-        missing value forces you to ask: <em>does the fact that this value
-        is missing depend on the value itself?</em> Statistics has three
-        formal answers, and which one applies changes what you are allowed
-        to do next.
-      </p>
-    </introduction>
-
-    <subsection xml:id="ss-mcar-mar-mnar">
-      <title>MCAR, MAR, and MNAR</title>
+    <subsubsection xml:id="ss-viz-challenger">
+      <title>The Challenger disaster (1986)</title>
 
       <p>
-        Let <m>R_i</m> be an indicator: <m>R_i = 1</m> if observation
-        <m>x_i</m> was recorded, <m>R_i = 0</m> if it is missing.
+        This final story is much more recent.
+        And is not so much on multidimensionality.
+        But hopefully shows the importance of showing information in graphics.
       </p>
-
-      <definition>
-        <term>Missing Completely at Random (MCAR)</term>
-        <statement>
-          <p>
-            The probability of a value being missing is unrelated to
-            anything, observed or not: <m>P(R_i = 0 \mid x_i) = P(R_i = 0)</m>.
-            A clipboard dropped in the mud, destroying a random page of
-            field notes, is close to MCAR.
-          </p>
-        </statement>
-      </definition>
-
-      <definition>
-        <term>Missing at Random (MAR)</term>
-        <statement>
-          <p>
-            The probability of a value being missing may depend on other,
-            <em>observed</em> variables, but not on the missing value itself
-            once those are accounted for. If bill depth is more likely to be
-            missing for one species, but entirely because that species'
-            measurement protocol changed partway through the season
-            <mdash /> a fact recorded elsewhere in the data <mdash /> that
-            is MAR.
-          </p>
-        </statement>
-      </definition>
-
-      <definition>
-        <term>Missing Not at Random (MNAR)</term>
-        <statement>
-          <p>
-            The probability of a value being missing depends on the
-            <em>unobserved value itself</em>, even after accounting for
-            everything else you observed. Wald's bombers are the canonical
-            case: whether a damage report exists for a given engine hit
-            depends entirely on how severe that hit was <mdash /> the exact
-            quantity being studied.
-          </p>
-        </statement>
-      </definition>
-
-      <table xml:id="table-missingness-implications">
-        <title>What each pattern implies for a fix</title>
-        <tabular halign="left">
-          <row header="yes" bottom="minor">
-            <cell>Pattern</cell>
-            <cell>Deleting incomplete rows</cell>
-            <cell>What's needed instead</cell>
-          </row>
-          <row>
-            <cell>MCAR</cell>
-            <cell>Safe: costs statistical power, introduces no bias</cell>
-            <cell>Usually nothing beyond reporting the reduced <m>n</m></cell>
-          </row>
-          <row>
-            <cell>MAR</cell>
-            <cell>Biased if it ignores the related observed variable</cell>
-            <cell>Model or impute using the variables missingness depends on</cell>
-          </row>
-          <row>
-            <cell>MNAR</cell>
-            <cell>Biased, potentially severely, in a direction you can't measure from the remaining data alone</cell>
-            <cell>External information, a model of the missingness process itself, or explicit sensitivity analysis</cell>
-          </row>
-        </tabular>
-      </table>
 
       <p>
-        Note the asymmetry: MCAR and MAR can, in principle, be fixed using
-        only the data you have. MNAR cannot. If the reason a value is
-        missing is the value itself, nothing in the observed data can fully
-        recover what was lost <mdash /> which is exactly why Wald needed an
-        external assumption (roughly uniform exposure across the airframe)
-        rather than a formula applied to the survivors' data alone.
+        On the morning of 28 January 1986, the Space Shuttle <em>Challenger</em>
+        stood on the launch pad at Kennedy Space Center in Florida.
+        Mission STS-51-L was supposed to be a particularly important flight.
+        Among the seven crew members was Christa McAuliffe, a 37-year-old
+        teacher from New Hampshire, USA, who had been selected from more than
+        11,000 applicants to become the first private citizen to travel into
+        space.
+        She was going to conduct lessons from orbit as part of NASA's "Teacher
+        in Space" programme.
       </p>
-    </subsection>
+
+      <p>
+        The mission had attracted enormous public attention.
+        Millions of schoolchildren were expected to watch the launch, and the
+        shuttle programme was being presented as proof that space travel was
+        becoming something ordinary people could participate in.
+      </p>
+
+      <p>
+        The night before the launch, engineers at Morton Thiokol, the company
+        that manufactured the shuttle's solid rocket boosters, were increasingly
+        worried about the forecast temperature.
+        Their concern centred on small rubber seals called <em>O-rings</em>.
+        These seals were designed to prevent hot gases from escaping from the
+        joints between sections of the solid rocket boosters.
+      </p>
+
+      <p>
+        Engineers already knew that the O-rings had experienced damage on
+        previous flights.
+        They were particularly concerned that cold temperatures would make the
+        rubber less flexible, slowing the O-rings' ability to seal the joint
+        when the booster was ignited.
+      </p>
+
+      <p>
+        On the coldest previous shuttle launch, STS-51-C in January 1985, the
+        O-ring temperature had been about 53°F (12°C), and significant O-ring
+        damage had been observed.
+        The engineers therefore argued that they did not have evidence that the
+        shuttle could safely launch at temperatures below this.
+        They prepared charts and tables to explain their concerns during a
+        telephone conference with NASA and Morton Thiokol managers.
+      </p>
+
+      <figure xml:id="fig-challenger-original-chart">
+        <caption>
+          One of the charts presented by Morton Thiokol engineers during the
+          discussions about whether to launch Challenger.
+        </caption>
+
+        <image source="images/challenger-original-chart" width="80%"/>
+      </figure>
+
+      <p>
+        <xref ref="fig-challenger-original-chart"/> contains information about
+        previous O-ring problems, but the evidence is difficult to interpret.
+        Rather than putting every previous shuttle flight into one simple
+        comparison of temperature and O-ring damage, the information is split
+        across tables and categories.
+        Some of the most important comparisons are therefore difficult to see.
+      </p>
+
+      <p>
+        The engineers' concerns were not accepted by NASA management.
+        After a lengthy discussion, Morton Thiokol management eventually
+        reversed its original recommendation and agreed that the launch could
+        proceed.
+      </p>
+
+      <p>
+        The next morning, Challenger launched.
+      </p>
+
+      <p>
+        It was extremely cold.
+        The ambient air temperature at the launch site was 36°F (2°C), around
+        15°F colder than any previous shuttle launch.
+      </p>
+
+      <p>
+        Just 73 seconds after lift-off, Challenger broke apart.
+        All seven crew members were killed.
+      </p>
+
+      <p>
+        The immediate physical cause of the disaster was the failure of an
+        O-ring seal in one of the solid rocket boosters.
+        Hot gases escaped through the failed joint and ultimately caused the
+        catastrophic breakup of the shuttle.
+        The Presidential Commission investigating the disaster concluded that
+        the launch decision itself was seriously flawed, noting that the
+        decision-makers were unaware of important evidence and of the engineers'
+        continuing opposition to launching in the cold conditions.
+      </p>
+
+      <p>
+        But there is another question worth asking:
+        <em>what did the data look like when the decision was being made?</em>
+      </p>
+
+      <p>
+        Edward Tufte later examined the Challenger decision in
+        <em>Visual Explanations</em> (1997).
+        His argument was that the problem was not simply that there was too
+        little data.
+        The engineers had accumulated years of information about O-ring
+        performance.
+        The problem was that the information was not displayed in a way that
+        made the most important relationship obvious.
+      </p>
+
+      <p>
+        Tufte reconstructed the evidence as a simple scatter plot.
+        Each point represents a previous shuttle flight, with temperature on one
+        axis and the amount of O-ring damage on the other.
+      </p>
+
+        <figure xml:id="fig-challenger-tufte">
+          <caption>
+            O-ring damage plotted against temperature for previous shuttle
+            launches, with the forecast temperature for Challenger shown for
+            comparison.
+          </caption>
+
+          <image source="images/challenger-tufte" width="80%"/>
+        </figure>
+
+      <p>
+        Now the pattern is much easier to see.
+        The colder launches tended to have greater O-ring damage.
+        Indeed, every previous launch below 66°F had experienced some O-ring
+        damage, while the most serious damage occurred on relatively cold
+        flights.
+        The planned Challenger launch temperature was far outside the range of
+        previous shuttle experience.
+      </p>
+
+      <p>
+        The important lesson is not that "a better graph would definitely have
+        prevented the Challenger disaster." That would be too simple.
+        The decision involved engineering uncertainty, management pressure,
+        communication failures, organisational culture and a demanding launch
+        schedule.
+        Historians and researchers have also pointed out that Tufte's later
+        reconstruction is not identical to the information actually available to
+        engineers that night.
+      </p>
+
+      <p>
+        The more useful lesson is about how we visualise multidimensional data.
+        Data can be available without the pattern being visible.
+        A table can contain the information needed to answer a question while
+        simultaneously making that answer difficult to see.
+      </p>
+
+      <p>
+        In the Challenger case, temperature, flight, O-ring damage and type of
+        damage were all relevant.
+        The challenge was to bring those dimensions together in a form that
+        allowed the relationship between them to be seen.
+        When the data are displayed appropriately, the question changes from
+        <em>"Which flights had O-ring problems?"</em> to
+        <em>"What happens to O-ring performance as temperature falls?"</em>
+      </p>
+
+      <p>
+        That is the power of visualising multidimensional data: sometimes the
+        evidence is already there.
+        The visualisation determines whether we can see it.
+      </p>
+
+      <p>
+        <term>Sources:</term> Presidential Commission on the Space Shuttle
+        Challenger Accident (1986).
+        <em>Report to the President.</em> Washington, DC: US Government Printing
+        Office.
+      </p>
+
+      <p>
+        Tufte, E.R.
+        (1997).
+        <em>Visual Explanations: Images and Quantities, Evidence and Narrative.</em>
+        Cheshire, CT: Graphics Press.
+      </p>
+    </subsubsection>
+
+  </subsection>
   </section>
 
 <!-- ================================================================= -->

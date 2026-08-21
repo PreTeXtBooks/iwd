@@ -302,6 +302,12 @@ rpivotTable(kenya_individual_level, rows = "AGE", cols = "AGE_GROUP")
 # easy.
 # we can see it's correctly moved into the new categories so we have not lost those A and J's in the conversion process
 # but also, we have converted the ages to numeric correctly. 
+ggplot(kenya_individual_level, aes(x = AGE)) +
+  geom_bar()
+# ooh look a lot of people at age 30, then 35, hen 40, then 50, then 60, then 70, 
+# looks like youre most likely to get in a crash if your age is divisible by 5!
+# does that make sense?
+# probably not. logically, probably just rounded ages in the data base. Maybe then using this age group is more sensible!
 
 # we can look for extreme, implausible ages (e.g., negative values, or ages extremely high) by looking at
 summary(kenya_individual_level$AGE)
@@ -316,9 +322,6 @@ boxplot(kenya_individual_level$AGE)
 
 
 
-# note how it's doesn't go exploring then cleaning. But actually it is a cycle. The exploring can motivate hte cleaning, and vice versa.
-# e.g., given what we read there, how about we look at the cause of accidents, and look at it by weekend.
-# so, cause of accident:
 
 unique(kenya_accidents_database$`CAUSE CODE`)
 
@@ -490,6 +493,9 @@ kenya_accidents_database <- kenya_accidents_database %>%
 
 rpivotTable(kenya_accidents_database, rows = c("ACCIDENT_CATEGORY", "BRIEF ACCIDENT DETAILS"))
 
+
+#############################################
+
 # still some corrections we can make, possibly. but, regardless. Let's look now at our days a week crashes, by accident category.
 
 ggplot(kenya_accidents_database,
@@ -526,3 +532,11 @@ rpivotTable(kenya_accidents_database,
 # a Hit and Run has 2 people injured. Could be the case.
 # etc etc. good to find these flags. 
 
+
+
+
+
+
+# note how it's doesn't go exploring then cleaning. But actually it is a cycle. The exploring can motivate hte cleaning, and vice versa.
+# e.g., given what we read there, how about we look at the cause of accidents, and look at it by weekend.
+# so, cause of accident:
