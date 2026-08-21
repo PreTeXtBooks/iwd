@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!-- ================================================================= -->
 <!--  Chapter 6: Data Shapes                                           -->
 <!--                                                                    -->
@@ -9,60 +8,7 @@
 <!--  revisited through the "shape" lens), paired with a fresh,         -->
 <!--  independently verified real story: the Johns Hopkins CSSE         -->
 <!--  COVID-19 time-series data, March 2020.                            -->
-<!--                                                                    -->
-<!--  CORRECTED after fact-check (previous version wrongly claimed JHU  -->
-<!--  itself switched the dataset from wide to long in March 2020).     -->
-<!--  Verified directly against live files in the                       -->
-<!--  CSSEGISandData/COVID-19 GitHub repo before rewriting: the wide    -->
-<!--  time_series_covid19_*.csv files (dates-as-columns) were NEVER     -->
-<!--  converted to long format - they stayed wide for the entire life  -->
-<!--  of the dataset, through JHU's last daily update in 2023. The     -->
-<!--  separate csse_covid_19_daily_reports files (one row per region,   -->
-<!--  already long) existed from the first day of the dataset,          -->
-<!--  22 January 2020, not as a result of any March 2020 change.        -->
-<!--  The real, verifiable story is that JHU's wide file was reshaped   -->
-<!--  to long format by downstream analysts, not by JHU itself:         -->
-<!--    - Dong, E., Du, H. and Gardner, L. (2020). "An interactive      -->
-<!--      web-based dashboard to track COVID-19 in real time." The     -->
-<!--      Lancet Infectious Diseases, 20(5), 533-534.                  -->
-<!--      DOI 10.1016/S1473-3099(20)30120-1. Dashboard's own            -->
-<!--      peer-reviewed methods paper; used only for the dashboard's    -->
-<!--      launch (22 Jan 2020) - confirmed it says nothing about wide/  -->
-<!--      long format or any March 2020 change.                        -->
-<!--    - Gassen, J. (23 March 2020). "Tidying the John Hopkins         -->
-<!--      Covid-19 data." Blog post. The ORIGINAL post: JHU's data is   -->
-<!--      wide; Gassen writes clean_jhd_to_long() himself to reshape    -->
-<!--      it, specifically to attach standardised ISO3c country codes  -->
-<!--      so it can be merged with external data (e.g. population).    -->
-<!--      Confirmed via direct fetch.                                   -->
-<!--    - Gassen, J. (24 March 2020). "Tidying the new Johns Hopkins    -->
-<!--      Covid-19 time-series datasets." Follow-up blog post, one day  -->
-<!--      later: "Just hours after my old blog post ... the team has    -->
-<!--      changed their time-series table data structure" - JHU         -->
-<!--      restructured the WIDE file's own columns (added lat/long,     -->
-<!--      reorganised US state breakdown), breaking Gassen's reshaping  -->
-<!--      code and forcing a same-week rewrite. Confirmed via direct    -->
-<!--      fetch. This is still a secondary source for JHU's own change  -->
-<!--      - the repo itself carries no changelog for it.                -->
-<!--    - CSSEGISandData/COVID-19 GitHub repository (JHU CSSE) - fetched -->
-<!--      directly: time_series_covid19_confirmed_global.csv header      -->
-<!--      confirms the file is still wide today (dates as columns,       -->
-<!--      starting 1/22/20). csse_covid_19_daily_reports/01-22-2020.csv -->
-<!--      confirms the long daily-report format existed from day one,   -->
-<!--      with columns Province/State, Country/Region, Last Update,      -->
-<!--      Confirmed, Deaths, Recovered (no FIPS/Admin2 yet). The         -->
-<!--      03-22-2020.csv and 03-23-2020.csv daily reports confirm FIPS, -->
-<!--      Admin2 (county), standardised Lat/Long and Combined_Key were  -->
-<!--      added to the (already-long) daily reports around that date -  -->
-<!--      a real change, but to a file that was long from day one, not  -->
-<!--      a wide-to-long conversion. This chapter does not build a      -->
-<!--      narrative beat around that daily-reports change, to avoid     -->
-<!--      re-conflating two separate JHU products the way the previous  -->
-<!--      version did.                                                  -->
-<!--  Neither of the two figures below (fig-covid-wide-format,           -->
-<!--  fig-covid-long-format) has an actual image file in images/ yet -   -->
-<!--  same pre-existing gap as fig-berkeley-overall-admissions in ch2.   -->
-<!-- ================================================================= -->
+<!-- ================================================================== -->
 <chapter xml:id="ch-data-shapes" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Data Shapes</title>
 
@@ -80,493 +26,552 @@
       property of a dataset, not a formatting detail.
     </p>
   </introduction>
+
   <!-- ================================================================= -->
-  <!--  SECTION 0 (new lead story, added after sec-jhu-shapes /            -->
-  <!--  sec-shapes-ebola-callback / sec-shapes-applied were already        -->
-  <!--  written and reviewed - per the user, those three sections are      -->
-  <!--  UNCHANGED below, not moved, not reworded). Real Kenyan case study  -->
-  <!--  on maternal mortality data, verified against three real sources    -->
-  <!--  before writing:                                                    -->
-  <!--    - WHO (2022). Maternal mortality measurement: guidance to        -->
-  <!--      improve national reporting. Geneva: World Health Organization. -->
-  <!--      Verbatim quotes re-checked via a second, quote-specific fetch. -->
-  <!--    - Smith, H., Ameh, C., Godia, P., Maua, J., Bartilol, K.,        -->
-  <!--      Amoth, P., Mathai, M. and van den Broek, N. (2017).            -->
-  <!--      "Implementing Maternal Death Surveillance and Response in      -->
-  <!--      Kenya: Incremental Progress and Lessons Learned." Global       -->
-  <!--      Health: Science and Practice, 5(3), 345-354.                  -->
-  <!--      DOI 10.9745/GHSP-D-17-00130. Full text supplied directly by    -->
-  <!--      the user; journal/volume/pages confirmed via independent       -->
-  <!--      search since the user's excerpt didn't name the journal.       -->
-  <!--    - Ahmed, S.M.A., Cresswell, J.A. and Say, L. (2023).             -->
-  <!--      "Incompleteness and misclassification of maternal death        -->
-  <!--      recording: a systematic review and meta-analysis." BMC        -->
-  <!--      Pregnancy and Childbirth, 23, 794. DOI                        -->
-  <!--      10.1186/s12884-023-06077-4. Volume/article number confirmed   -->
-  <!--      via independent search.                                       -->
-  <!--  Framing device (the three "maternal_death = TRUE" datasets that    -->
-  <!--  look joinable) is this book's own pedagogical illustration, not    -->
-  <!--  something drawn from any of the three sources - kept distinct     -->
-  <!--  from the sourced facts around it, same practice as elsewhere in   -->
-  <!--  this book (e.g. the Berkeley/Ebola insight framings).             -->
+  <!--  SECTION 1: The opener, on its own, told in full                  -->
   <!-- ================================================================= -->
-  <section xml:id="sec-maternal-mortality-shapes">
-    <title>How Many Mothers Died?</title>
+  TODO: expand on this / explain better what we mean by "data shapes"
 
-    <introduction>
-      <p>
-        TODO: Verify this.
-        (done some verification via robots) In 2014, Kenya was strengthening its
-        Maternal Death Surveillance and Response (MDSR) system at the national
-        level, building on earlier facility-based maternal death reviews.
-        This was in an effort to identify every maternal death, investigate its
-        causes, and act on what was found.
-        The question the system needed to answer sounds simple:
-        <em>how many
-        women died because of pregnancy and childbirth that year?</em>
-      </p>
+   <section xml:id="sec-intro-data-shapes">
+    <title>TODO</title>
+  <p>
+    <xref ref="ss-ebola-transmission"/> described something that, looked 
+    at again, is a shape problem. Sierra Leone's Ebola response did not 
+    fail to merge its district data because anyone lost it or typed it 
+    wrong. It failed because <q>each district response centre had adopted 
+    its own method for recording cases,</q> and inconsistent Excel 
+    line-list formats across districts <q>caused ongoing problems merging 
+    and aggregating cases into national totals.</q> Different districts 
+    were not disagreeing about what happened. They were recording the 
+    same kind of information in incompatible shapes.
+  </p>
 
-      <p>
-        Kenya had several systems that could, in principle, answer it.
-        Health facilities reported deaths through the District Health
-        Information System (DHIS).
-        MDSR teams notified and investigated individual deaths.
-        Civil registration recorded and classified deaths.
-        Large household surveys estimated maternal mortality a different way
-        again.
-        Every one of these systems produced a number.
-        The numbers did not agree.
-      </p>
-    </introduction>
+  <p>
+    One district might have one row per patient. Another might have one 
+    row per day, with patient counts as columns. A third might have 
+    separate sheets for confirmed and suspected cases. Each format made 
+    sense locally — it matched the workflow of the people filling it in. 
+    But when the national team tried to stack them together into a single 
+    picture of the outbreak, the shapes did not fit. Cases could not be 
+    counted without first deciding what a row meant, and that decision 
+    was different in every district file.
+  </p>
 
-    <subsection xml:id="ss-mmr-numbers-disagree">
-      <title>Two numbers, both defensible, both far apart</title>
+  <p>
+    This chapter is about data shape: what it means, why it matters, and 
+    the operations that change it. The three core operations are 
+    <term>appending</term> — stacking datasets that have the same columns 
+    but different rows; <term>merging</term> — joining datasets that share 
+    a common identifier but carry different information; and 
+    <term>reshaping</term> — converting data between wide formats (one 
+    column per measurement type) and long formats (one row per 
+    measurement). Any one of these would have helped the Ebola response. 
+    In practice, real data problems usually require all three.
+  </p>
+</section>    
 
-      <p>
-        At the time, the estimated number of maternal deaths in Kenya was around
-        8,000, based on an estimated maternal mortality ratio of 510 per 100,000
-        live births.
-        The DHIS, meanwhile, recorded 945 maternal deaths in health facilities
-        in 2014.
-      </p>
+# Then a STACK question on appending
 
-      <p>
-        The difference did not simply mean that one number was wrong.
-        The two figures came from systems measuring maternal mortality in very
-        different ways.
-        The national estimate was attempting to capture maternal deaths across
-        the whole population, including deaths that never touched a health
-        facility at all.
-        Two systems, asked what sounds like the same question, were actually
-        measuring different things <mdash/> and the eight-fold gap between 945
-        and 8,000 is what that difference looks like once it reaches a
-        spreadsheet.
-      </p>
-    </subsection>
+# TODO: Illustrative example(s)
+# what I should do here is do a hands-on example in R, with data, and code, and graphs, and output to illustrate the issue and show what goes wrong
+# (for each of these five stories, but in our own data)
+# and then we say the story of "an example of this "in real life" and introduce these five stories. 
+# so this is in 5 different sections.
+# 1. Wide to Long (flamingo example below?) -- could go into rectangles, maybe.
+# 2. Binding by Rows (Appending) -- we downloaded that data for exploring, and for cleaning. But FYI there are two sheets! So, here, appending that. 
+# 3. Merging example - a. Data Definitions -- need a merging data example for this, and one for others to play with. Two real data sets to merge. But from different sources (maybe two hospitals. Or can I find maternity data bits?)
+# 4. Merging example - b. Introducing the Idea of a Key. -- use example above, or, a multilevel type data set that we can merge two data sets in on ("key" being the key bit here)
+# 5. Merging example - c. What happens in the merging if the Key is Wrong? -- demonstrate the consequences of incorrect keys
 
-    <subsection xml:id="ss-mmr-five-systems">
-      <title>Five systems, five different questions</title>
+# Then exercises.
 
-      <p>
-        Kenya's data landscape for maternal mortality was not two sources but at
-        least five, and each one was built to observe something distinct.
-      </p>
 
-      <table xml:id="table-mmr-sources">
-        <title>
-          What different sources and estimates tell us about maternal mortality
-        </title>
 
-        <tabular halign="left">
-          <row header="yes" bottom="minor">
-            <cell>Source</cell>
-            <cell>What is being observed</cell>
-          </row>
+#  "real cases" where it's gone wrong, and the consequences of that. These are all real stories, with references,
+# but we don't need to go into them in detail. Just a paragraph or two each, with a reference to the source,
+# after the illustrative example in R
 
-          <row>
-            <cell>DHIS</cell>
-            <cell>Maternal deaths reported through health facilities</cell>
-          </row>
+<section xml:id="sec-data-shapes">
+  <title>Data Shapes: Structuring, Binding, and Joining Tables</title>
 
-          <row>
-            <cell>MDSR</cell>
-            <cell>
-              Maternal deaths notified and investigated through the surveillance
-              system
-            </cell>
-          </row>
+  <introduction>
+    <p>
+      Real-world data rarely arrives in a single, clean table ready for analysis. 
+      Understanding data shapes means mastering how tables change layout,
+      how rows are stacked, how variables are defined, and
+      how primary keys connect separate datasets without corrupting information.
+    </p>
+  </introduction>
 
-          <row>
-            <cell>Civil registration</cell>
-            <cell>Registered deaths and their classified causes</cell>
-          </row>
-
-          <row>
-            <cell>DHS (household survey)</cell>
-            <cell>Deaths reported retrospectively by surviving sisters</cell>
-          </row>
-
-          <row>
-            <cell>National / UN estimate</cell>
-            <cell>
-              A statistically modelled estimate based on multiple data sources
-            </cell>
-          </row>
-        </tabular>
-      </table>
-
-      <p>
-        These are not five copies of one dataset with different error rates.
-        The household survey approach, for instance, asks a respondent whether
-        her sister died during pregnancy, delivery, or the postpartum period
-        <mdash/> an estimate that depends entirely on what that respondent
-        remembers and is willing to report, years later, about someone else's
-        death.
-        A facility system depends on a death being recorded at all, by a
-        facility, while it was happening.
-        Civil registration depends on a death certificate being completed and
-        correctly classified.
-        Each method has a different relationship to the truth it is trying to
-        capture, before any question of data quality even arises.
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-mmr-same-name">
-      <title>Same column name, different definition</title>
-
-      <p>
-        Imagine a statistician receives three datasets to combine: one from
-        DHIS, one from civil registration, one from a household survey.
-        Each has a column called <c>maternal_death</c>, and in each, some rows
-        are marked <c>TRUE</c>.
-        The datasets look wonderfully compatible.
-        Join them, and the merge runs without a single error.
-      </p>
-
-      <p>
-        But what does <c>TRUE</c> actually mean in each dataset?
-        In one, it means a facility recorded and reported the death.
-        In another, it means a death certificate was completed and classified as
-        maternal.
-        In the third, it means a survey respondent recalled, possibly years
-        later, that a sister had died around the time of a pregnancy.
-        The join succeeds mechanically.
-        It does not make the three <c>TRUE</c> s the same claim.
-      </p>
-
-      <insight xml:id="insight-mmr-variable-name">
-        <title>A variable name is not a definition</title>
-
-        <p>
-          Two datasets can both contain a column called <c>maternal_death</c>,
-          and the column can be produced by completely different processes, with
-          different coverage, different timing, and different failure modes.
-          Nothing about a successful join checks this.
-          The software does not know, and cannot know, whether two columns with
-          the same name mean the same thing; it only knows whether the rows line
-          up.
-          Before combining data from different sources, the question is not just
-          <q>do the rows
-          match?</q> It is
-          <q>are the things being combined actually
-          comparable?</q>
-          <mdash/> and that question has to be answered by understanding where
-          each dataset came from, not by inspecting the merged table afterward.
-        </p>
-      </insight>
-    </subsection>
-
-    <subsection xml:id="ss-mmr-kenya-findings">
-      <title>What Kenya's own implementation found</title>
-
-      <p>
-        Smith et al.
-        (2017), reporting directly on Kenya's MDSR implementation, describe
-        exactly this gap turning into an operational problem.
-        In 2014, only about 12% of the estimated annual number of maternal
-        deaths were notified through the DHIS2 system at all.
-        Of the 945 deaths that DHIS did record that year, only 484 (51.2%) were
-        ever formally assessed.
-        Of those 484 deaths, 447 (92.4%) were assessed as having received
-        suboptimal care; in 394 cases (81.4%), the assessors judged that
-        different management could have made a difference to the outcome.
-      </p>
-
-      <p>
-        The paper is explicit about why: under-reporting of maternal deaths;
-        difficulty reviewing the data that was reported; suboptimal aggregation
-        of cause-of-death information; and a persistent gap between DHIS and the
-        Civil Registration and Vital Statistics system.
-        Even after MDSR notification and review forms were integrated directly
-        into DHIS, the paper reports,
-        <q>the system has gaps, and
-        the DHIS and Civil Registration and Vital Statistics system do not
-        yet adequately capture all maternal deaths in Kenya.</q>
-        While integrating the forms into DHIS improved the technical integration
-        of the reporting process, it did not solve the underlying differences in
-        coverage and definition between the systems, nor did it ensure that all
-        maternal deaths were captured.
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-mmr-not-unique-to-kenya">
-      <title>Not unique to Kenya</title>
-
-      <p>
-        This is not a story about one country's data systems falling short.
-        WHO's own guidance on maternal mortality measurement calls specifically
-        for
-        <q>robust collection of valid, reliable and
-        standardized data,</q>
-        for
-        <q>improved quality and completeness of
-        various data sources and systems, and linkages between them,</q>
-        and for
-        <q>appropriate integration, interpretation and use of
-        data.</q>
-        Guidance like this exists precisely because the gap between what
-        different systems observe is a structural feature of maternal mortality
-        measurement everywhere, not a defect specific to any one country's
-        implementation.
-      </p>
-
-      <p>
-        A 2023 systematic review and meta-analysis by Ahmed, Cresswell, and Say
-        puts a number on how large that gap typically is.
-        Across the studies included in their meta-analysis, maternal death
-        recording was estimated to be 34% incomplete, with substantial variation
-        between settings.
-        After excluding two studies judged to have a high risk of bias, the
-        authors estimated that maternal mortality was underestimated by 39%
-        overall because of incompleteness and/or misclassification.
-      </p>
-
-      <p>
-        Read this way, <q>data shapes</q> is not only about rows and columns.
-        It is about what an observation and a variable actually represent
-        <mdash/> and two datasets that look identical in structure can still be
-        measuring entirely different things.
-      </p>
-
-      <p>
-        <term>Sources:</term> World Health Organization (2022).
-        <em>Maternal mortality measurement: guidance to improve national
-        reporting.</em>
-        Geneva: WHO.
-        Smith, H., Ameh, C., Godia, P., Maua, J., Bartilol, K., Amoth, P.,
-        Mathai, M.
-        and van den Broek, N.
-        (2017).
-        <q>Implementing Maternal Death Surveillance and Response in
-        Kenya: Incremental Progress and Lessons Learned.</q>
-        <em>Global
-        Health: Science and Practice</em>, 5(3), 345 <ndash/>
-        354.
-        Ahmed, S.M.A., Cresswell, J.A.
-        and Say, L.
-        (2023).
-        <q>Incompleteness and
-        misclassification of maternal death recording: a systematic review
-        and meta-analysis.</q>
-        <em>BMC Pregnancy and Childbirth</em>, 23, 794.
-      </p>
-    </subsection>
-  </section>
   <!-- ================================================================= -->
-  <!--  SECTION 1: JHU CSSE COVID-19 dashboard: Confirmed and verified.  -->
+  <!-- 1. WIDE TO LONG                                                   -->
   <!-- ================================================================= -->
-  <section xml:id="sec-jhu-shapes">
-    <title>A Format That Grew a New Column Every Day</title>
+  <subsection xml:id="ss-wide-to-long">
+    <title>Wide to Long: When a Table's Shape Can't Hold Still</title>
 
-    <introduction>
-      <p>
-        In January 2020, a small team at Johns Hopkins University's Center for
-        Systems Science and Engineering (CSSE) launched a public COVID-19
-        dashboard, described the following May in a peer-reviewed paper by Dong,
-        Du, and Gardner (2020).
-        It became, within weeks, one of the single most-used sources of COVID-19
-        data in the world <mdash/> the map that news outlets, governments, and
-        researchers everywhere pulled numbers from.
-        The underlying data was published openly, and it started out
-        <term>wide</term>: one row per country or region, and one column for
-        every date, holding that location's cumulative case count on that day.
-      </p>
-    </introduction>
+    Add in our original story again back here as it has images/etc. (maybe not needed actually if 1. is done well. Let's see.)
+    <p>
+      In January 2020, researchers at Johns Hopkins University (JHU) launched
+      a public COVID-19 dashboard to track global infections.
+      The underlying dataset was published openly and laid out in what is
+      called a <term>wide</term> shape: one row per country or region, and
+      one column for every single calendar date, holding that place's
+      running case count on that day.
+    </p>
 
-    <subsection xml:id="ss-jhu-wide-problem">
-      <title>A table with no final column</title>
+    <p>
+      Most wide tables have a fixed, known set of columns that doesn't
+      change.
+      This one did not.
+      Every single day the pandemic continued, the table needed one more
+      column than it had the day before.
+      Anyone who wanted to calculate a trend, work out a weekly rate, or
+      merge in population figures first had to reshape the table into a
+      different layout, called <term>long</term> shape: one row per country
+      per date, with the date itself moved into its own column instead of
+      being a column header.
+      A wide table where every date is a different column header has no
+      single, stable column that another dataset can be matched against; a
+      long table does <mdash/> a fixed set of columns
+      (<c>region</c>, <c>date</c>, <c>cases</c>) that behaves the same way
+      no matter how many days have passed.
+    </p>
 
-      <p>
-        Most wide tables have a fixed, known set of columns.
-        This one did not.
-        Every single day the pandemic continued, the dataset needed one more
-        column than it had the day before, for as long as anyone was tracking
-        the outbreak.
-        Anyone who wanted to do more than eyeball the day's totals <mdash/> plot
-        a trend, compute a weekly change, merge in a country's population to
-        calculate a rate <mdash/> first had to reshape the table from wide to
-        long, and had to do it again every time a new day's column was added.
-        Wide format was not <em>hard</em> to use.
-        It was hard to use
-        <em>repeatedly, at
-        growing scale, indefinitely.</em>
-      </p>
+    <p>
+      Every time analysts reshaped JHU's files into long format and matched
+      them up with country codes for merging, an upstream change by JHU
+      <mdash/> adding new columns, or reorganising how regions were labelled
+      <mdash/> would break their reshaping scripts all over again.
+      Wide and long are not a right shape and a wrong shape; wide is easy for
+      a person to scan by eye on a single day, long is what a computer needs
+      for tracking something over time or joining it to anything else.
+    </p>
 
-      <figure xml:id="fig-covid-wide-format">
-        <caption>
-          Confirmed COVID-19 cases worldwide, 22 January to 2 February 2020.
-          Each row represents a country or region, while each date is stored as
-          a separate column.
-          As more days are added, the dataset quickly becomes very wide.
-          This is one of three datasets in the original collection: Confirmed
-          Cases, Deaths, and Recovered.
-        </caption>
+    <p>
+      This is not a guess about how JHU's data behaved.
+      The team that built and ran the dashboard published their own account
+      of the difficulty, in a paper aptly titled <foreign>data collection
+      process, challenges faced, and lessons learned</foreign>.
+      Reporting standards changed as the pandemic went on, formats varied
+      from one source feeding the dashboard to another, and every one of
+      those changes rippled downstream into anyone else's code that had
+      been written to expect a particular shape.
+      The dashboard's own repository still carries a note for exactly this
+      reason: the table's structure was adjusted more than once over the
+      life of the project, and any script written against an earlier
+      structure would need to be updated to keep working.
+      A dataset that keeps changing shape underneath you is not a hypothetical
+      teaching example; it was daily reality for one of the most-used
+      datasets of the pandemic.
+    </p>
 
-        <description>
-          A screenshot of a wide COVID-19 dataset.
-          Rows represent countries and regions, with columns for location,
-          latitude and longitude followed by daily confirmed case counts from 22
-          January 2020 onwards.
-          The many date columns illustrate how the dataset becomes increasingly
-          wide as observations are recorded for each new day.
-          This is the "Confirmed Cases" dataset; equivalent datasets were
-          provided for deaths and recovered cases.
-        </description>
-
-        <image source="images/covid_wide_format.png" width="60%"/>
-      </figure>
-    </subsection>
-
-    <subsection xml:id="ss-jhu-switch">
-      <title>Reshaping it themselves, and having the ground move</title>
+    <insight xml:id="insight-wide-long-pivot">
+      <title>Pivoting Standardizes Keys for Downstream Joins</title>
 
       <p>
-        JHU CSSE never turned this file long. Check the same repository today
-        and the time-series files are exactly the shape they always were: one
-        row per region, one column per date, still growing for as long as JHU
-        kept updating it. Nobody at JHU fixed the wide-table problem, because
-        for a dashboard glanced at once a day, wide was never actually broken.
-        What changed was that the people who needed to do more than glance
-        stopped waiting and reshaped it themselves.
+        Wide tables store observation attributes across column headers; long
+        tables store observation attributes as row values under a unified key
+        column.
+        Transforming wide data to long format is often a mandatory precursor
+        to joining external demographic or temporal variables.
       </p>
+    </insight>
+  </subsection>
 
-      <p>
-        On 23 March 2020, the researcher Joachim Gassen published R code that
-        pulled JHU's wide file and reshaped it to long <mdash/> one row per
-        country per date <mdash/> specifically so it could be merged with
-        other data. A wide table with a different date in every column has no
-        single column two datasets can agree to join on; a long table does.
-        Gassen's code went further, attaching standardised <term>ISO3c</term>
-        country codes to every row, because without a shared identifier,
-        nobody could reliably bring in a country's population to convert raw
-        case counts into a per-capita rate.
-      </p>
-
-      <figure xml:id="fig-covid-long-format">
-        <caption>
-          The same confirmed-case numbers as <xref ref="fig-covid-wide-format"/>,
-          reshaped to long format: one row per country per date, with a
-          standardised country code attached for merging.
-        </caption>
-
-        <description>
-          A long-format COVID-19 dataset with one row per country per date.
-          Columns include a standardised ISO3c country code, country name,
-          date, and confirmed case count, instead of one column per date.
-        </description>
-
-        <image source="images/covid_long_format.png" width="60%"/>
-      </figure>
-
-      <p>
-        The reshaping held up for about a day. On 24 March 2020, Gassen
-        published a follow-up post: <q>Just hours after my old blog post
-        about tidying Johns Hopkins CSSE Covid-19 data the team has changed
-        their time-series table data structure.</q> JHU had restructured the
-        wide file's own columns <mdash/> adding latitude and longitude, and
-        reorganising how US states were broken out <mdash/> a genuine
-        improvement, but one that broke every piece of code written against
-        the old column layout, Gassen's included. He rewrote and republished
-        the same day.
-      </p>
-
-      <insight xml:id="insight-jhu-shapes-lesson">
-        <title>
-          Reshaping isn't a one-time fix. It's a job that keeps coming back.
-        </title>
-
-        <p>
-          JHU never made its published file long, and it didn't need to
-          <mdash/> wide genuinely was the right shape for a dashboard scanned
-          once a day. The people who needed it long, to merge, to compute
-          rates, to plot trends across countries, had to reshape it
-          themselves. And because they did not control the source format, a
-          change nobody warned them about broke that reshaping within a day
-          of them publishing it. Wide and long are not a wrong version and a
-          right version of the same table. They serve different readers, and
-          whoever needs the other shape is the one who ends up doing the
-          reshaping <mdash/> repeatedly, for as long as the source keeps
-          changing underneath them.
-        </p>
-      </insight>
-
-      <p>
-        <term>Sources:</term> Dong, E., Du, H.
-        and Gardner, L.
-        (2020).
-        <q>An interactive web-based dashboard to track COVID-19 in real
-        time.</q>
-        <em>The Lancet Infectious Diseases</em>, 20(5), 533 <ndash/> 534.
-        Gassen, J.
-        (23 March 2020).
-        <q>Tidying the John Hopkins Covid-19 data.</q>
-        Blog post.
-        Gassen, J.
-        (24 March 2020).
-        <q>Tidying the new Johns Hopkins Covid-19
-        time-series datasets.</q>
-        Blog post.
-        Data repository:
-        <url href="https://github.com/CSSEGISandData/COVID-19" visual="github.com/CSSEGISandData/COVID-19"/>.
-      </p>
-    </subsection>
-  </section>
   <!-- ================================================================= -->
-  <!--  SECTION 2: brief Ebola callback                                  -->
+  <!-- 2. DATA DEFINITIONS                                               -->
   <!-- ================================================================= -->
-  <section xml:id="sec-shapes-ebola-callback">
-    <title>A Shape Problem You've Already Met</title>
+  <subsection xml:id="ss-data-definitions">
+    <title>Same Column Name, Different Definition</title>
 
-    <introduction>
-      <p>
-        <xref ref="ss-ebola-transmission"/> described something that, looked at
-        again, is a shape problem.
-        Sierra Leone's Ebola response did not fail to merge its district data
-        because anyone lost it or typed it wrong.
-        It failed because
-        <q>each district response centre
-        had adopted its own method for recording cases,</q>
-        and inconsistent Excel line-list formats across districts
-        <q>caused ongoing problems
-        merging and aggregating cases into national totals.</q>
-        Different districts were not disagreeing about what happened.
-        They were recording the same kind of information in incompatible shapes,
-        the same failure mode as the JHU dataset above, just without a single
-        format anyone had agreed to reshape toward.
-      </p>
+    <p>
+      A statistician might receive three datasets to combine: one from health
+      facility logs, one from civil death registration, and one from a
+      household survey.
+      Each dataset contains a column named <c>maternal_death</c>, and in each,
+      some rows are marked <c>TRUE</c>.
+      The datasets look perfectly compatible.
+      A software join executes without a single error.
+      Yet a successful software merge does not make the three <c>TRUE</c>
+      values the exact same claim.
+    </p>
+
+    <p>
+      In 2014, Kenya worked to strengthen its Maternal Death Surveillance and
+      Response (MDSR) system, as reported by Smith et al. (2017).
+      At the time, official national estimates placed annual maternal deaths
+      at approximately 8,000, derived from a modeled maternal mortality ratio
+      of 510 deaths per 100,000 live births.
+      Concurrently, the District Health Information System (DHIS2) recorded
+      exactly 945 maternal deaths in health facilities.
+    </p>
+
+    <p>
+      The eight-fold difference between 945 and 8,000 was not a calculation
+      error, but a difference in operational definitions.
+      The national estimate attempted to capture maternal deaths across the
+      entire population (including deaths at home), while DHIS2 recorded only
+      deaths occurring inside health facilities that were formally entered
+      into logbooks.
+    </p>
+
+    <table xml:id="table-mmr-sources">
+      <title>Maternal Mortality Observation Systems in Kenya</title>
+
+      <tabular halign="left">
+        <row header="yes" bottom="minor">
+          <cell>Data Source</cell>
+          <cell>Observation Scope &amp; Mechanism</cell>
+        </row>
+
+        <row>
+          <cell>DHIS2 Facility Logs</cell>
+          <cell>
+            Maternal deaths recorded directly inside health facility registers
+          </cell>
+        </row>
+
+        <row>
+          <cell>MDSR Reviews</cell>
+          <cell>
+            Notified maternal deaths undergoing formal clinical audit reviews
+          </cell>
+        </row>
+
+        <row>
+          <cell>Civil Registration (CRVS)</cell>
+          <cell>
+            Officially issued death certificates with classified causes of death
+          </cell>
+        </row>
+
+        <row>
+          <cell>DHS Household Surveys</cell>
+          <cell>
+            Retrospective sibling mortality reported by survey respondents
+          </cell>
+        </row>
+
+        <row>
+          <cell>UN Model Estimates</cell>
+          <cell>
+            Statistical population modeling combining multiple administrative inputs
+          </cell>
+        </row>
+      </tabular>
+    </table>
+
+    <p>
+      Smith et al. (2017) found that of the 945 deaths recorded in DHIS2 in 2014, only 484
+      (51.2%) underwent formal audit reviews.
+      Of those audited, 447 (92.4%) were assessed as having received
+      suboptimal care, and in 394 cases (81.4%), assessors judged that
+      different management could have altered the outcome.
+      Even after notification forms were integrated directly into DHIS2,
+      structural gaps remained between DHIS2 and Civil Registration systems.
+    </p>
+
+    <p>
+      This operational challenge is universal.
+      A meta-analysis by Ahmed, Cresswell, and Say (2023) evaluated maternal
+      death reporting globally and estimated that maternal death recording was
+      34% incomplete, with overall maternal mortality underestimated by 39%
+      due to underreporting and misclassification.
+    </p>
+
+    <p>
+      <term>Data shapes</term> is not merely about managing rows and columns
+      in code.
+      It is about understanding what an observation and a variable actually
+      represent in the physical world.
+      Two tables that look identical in software schema can still measure
+      fundamentally different realities.
+    </p>
+
+    <insight xml:id="insight-variable-definitions">
+      <title>A Variable Name Is Not a Definition</title>
+
+      Work on this one!
 
       <p>
-        The two cases make the same point from opposite directions.
-        JHU CSSE controlled one format and changed it once, deliberately, and
-        every user benefited immediately.
-        Sierra Leone's districts each controlled their own format independently,
-        with no shared standard to converge on, and the cost was paid every time
-        anyone tried to combine them.
-        Agreeing on a shape in advance is far cheaper than reconciling
-        incompatible shapes after the fact.
+        Software checks whether column names and data types match during a
+        join; it cannot verify whether the underlying data-generation
+        processes are comparable.
+        Before combining data from different sources, ask not just
+        <q>do the keys match?</q> but
+        <q>are the things being combined actually measuring the same reality?</q>
       </p>
-    </introduction>
-  </section>
+    </insight>
+  </subsection>
+
+  <!-- ================================================================= -->
+  <!-- 3. BINDING BY ROWS (APPENDING)                                    -->
+  <!-- ================================================================= -->
+  <subsection xml:id="ss-binding-by-rows">
+    <title>Binding by Rows: Stacking Farmer Lists for Fertilizer Vouchers</title>
+
+    <p>
+      Every planting season, the Kenyan government subsidises fertilizer for
+      smallholder farmers and distributes it through National Cereals and
+      Produce Board (NCPB) depots.
+      A farmer registers once, and is issued a voucher by SMS: turn up at the
+      depot with your phone and your ID, the clerk checks you against the
+      system, and you walk away with fertilizer at a fraction of the market
+      price.
+      For a smallholder farmer, that price difference is not a minor saving.
+      It can be the difference between planting a full acre and planting
+      half of one.
+    </p>
+
+    <p>
+      Behind that single lookup at the depot counter sits a chain of
+      ordinary data work: registration lists have to be
+      combined into one national list, and that list has to be checked
+      against a farmer's ID and phone details before a voucher is issued.
+    </p>
+
+    <p>
+      One way to build a national registry is to take every local list
+      of registered farmers and stack them into a single table, one after
+      another.
+      In everyday data language this is called an <term>append</term>, or a
+      <term>row bind</term>.
+      For it to work cleanly, every list being stacked has to agree on its
+      columns: the same column names, meaning the same thing, all the way
+      down.
+      If one office's spreadsheet calls a column <c>phone_number</c> and
+      another calls the same thing <c>mobile_no</c>, software does not stop
+      and ask what to do.
+      It creates a new column for the name it hasn't seen before, and fills
+      it with <term>NA</term> <mdash/> <q>not available</q>, the standard way
+      software marks a hole in the data <mdash/> everywhere that column does
+      not apply.
+      A registry that should have five clean columns quietly grows extra
+      ones nobody asked for, and a farmer's real phone number can end up
+      split across two of them depending on which office registered them.
+    </p>
+
+    <p>
+      A Kenyan phone number can correctly be written as <c>0712345678</c>,
+      <c>254712345678</c>, or <c>+254 712 345 678</c> <mdash/> a person reads
+      all three and knows immediately they are the same number.
+      A join does not.
+      To a join, <c>"0712345678"</c> and <c>"254712345678"</c> are two
+      unrelated pieces of text.
+      A join that cannot find a match does not fail loudly.
+      It simply leaves that row without a match, quietly, as if the person
+      had never registered at all.
+    </p>
+
+    <insight xml:id="insight-schema-drift">
+      <title>Computers Match Characters, Not Intent</title>
+
+      <p>
+        Two records that look identical to a human being can be completely
+        different to a computer if the column names, spacing, or exact text
+        differ by even a single character.
+        An append needs every table to agree on its columns before you stack
+        them, and ideally needs a rule for what counts as
+        <q>the same real-world entity twice</q> before it lets a duplicate
+        in.
+        A join needs a shared column to be written the exact same way in
+        every table it touches.
+        Neither operation will warn you when this goes wrong <mdash/> it will
+        simply hand back a table with holes, or duplicates, in it, and leave
+        you to notice.
+      </p>
+    </insight>
+  </subsection>
+
+  <!-- ================================================================= -->
+  <!-- 4. MERGING / INTRODUCING THE IDEA OF A KEY                        -->
+  <!-- ================================================================= -->
+  <subsection xml:id="ss-merging-keys">
+    <title>Merging and the Idea of a Key: The Homa Bay Health System</title>
+
+    <p>
+      Homa Bay County, on the shore of Lake Victoria, has a significant HIV
+      burden and a well-established HIV care programme.
+      Health facilities there run on electronic medical record systems, the
+      same as facilities across much of the country, but a 2025
+      study of Homa Bay's digital health landscape found that its single
+      county referral hospital was running not one such system, but seven,
+      side by side.
+      Three of those seven, all built specifically for HIV care, do share a
+      common patient identifier with each other.
+      The other four <mdash/> covering general outpatient care, inpatient
+      stays, the laboratory, and faith-based providers <mdash/> connect to
+      none of the HIV systems, and not reliably to each other either.
+    </p>
+
+    <p>
+      To make that concrete: picture a hypothetical patient, built from the
+      study's own findings rather than a specific case it reported.
+      A woman is HIV-positive and pregnant.
+      Her HIV care sits in the HIV system.
+      Her antenatal visits, being outside HIV care, are logged somewhere
+      else.
+      If she is admitted to hospital, her inpatient stay goes somewhere else
+      again.
+      This is not a stretch: the study's own interviews describe exactly
+      this pattern in general, with people <q>assigned multiple numbers for
+      different purposes, i.e., at the inpatient, outpatient and antenatal
+      clinics.</q>
+    </p>
+
+    <p>
+      Every operation involving merging tables depends on the same quiet assumption:
+      that somewhere in your data, there is a column that reliably means
+      <q>this same real-world thing</q>, everywhere it appears.
+      That column is called a <term>key</term>.
+      Homa Bay's hospital records show what happens when that assumption
+      holds for only part of a system.
+    </p>
+
+    <p>
+      The 2025 study found that patient identifiers were manually generated
+      in most of the county's EMR systems and manually allocated at first
+      interaction in 97% of facilities, with no county-wide identifier
+      linking a person across every system they might touch.
+      Within HIV care specifically, a shared identifier does exist and does
+      its job.
+      Step outside HIV care, and there is no column, anywhere in the
+      hospital, that reliably means <q>this same person</q> across the rest
+      of the systems she might touch.
+    </p>
+
+    <p>
+      This is not a missing-data problem.
+      Her details are captured correctly, every single time, in whichever
+      system records them.
+      The problem is that there is nothing to <term>join</term> or <term>merge</term> most of
+      those correct records together on.
+      Stack or link the non-HIV systems anyway, without a shared key, and
+      one of two things happens.
+      Either the same person is silently counted more than once across
+      different systems, inflating whatever gets reported to the county or
+      the ministry at the end of the month, or a clinician treating her for
+      a complication during pregnancy has no way of seeing, from where they
+      are sitting, that she is currently on HIV treatment at all <mdash/>
+      even though that exact information exists, correctly recorded, one
+      system over.
+    </p>
+
+    <p>
+      Before you can join two tables, or even meaningfully ask whether they
+      should be joined, something has to exist that means the same
+      real-world thing in both of them.
+      Sometimes the first job in a data project is not fixing a key.
+      It is building one, from nothing, because nobody thought to build it
+      in the first place.
+    </p>
+
+    <insight xml:id="insight-homa-bay-no-key">
+      <title>You Cannot Join What Was Never Given a Shared Key</title>
+
+      <p>
+        A join, a stack, a reshape <mdash/> every one of these operations
+        assumes a key already exists linking your tables together.
+        When separate systems are built independently, with no agreement in
+        advance on how a person, place, or thing will be identified across
+        all of them, no amount of clever code recovers that link later.
+        The key has to be designed in, before the data is collected, not
+        discovered afterward.
+      </p>
+    </insight>
+  </subsection>
+
+  <!-- ================================================================= -->
+  <!-- 5. WHAT IF THE KEY IS WRONG?                                      -->
+  <!-- ================================================================= -->
+  <subsection xml:id="ss-key-errors">
+    <title>What If the Key Is Wrong? The IEBC Voter Register</title>
+
+    <p>
+      Before national elections in Kenya, the Independent Electoral and
+      Boundaries Commission (IEBC) has to check its master voter register
+      against other government records: identity records, to catch invalid
+      or duplicate registrations, and death records, to remove voters who
+      have since died.
+      Checking one table against another like this is a <term>lookup</term>,
+      or <term>join</term>, and the sensible key to join on is each person's
+      National ID number.
+      The same register also periodically needs its own duplicates removed,
+      a step usually called <term>deduplication</term>: find rows that
+      represent the same person entered twice, and collapse them into one.
+    </p>
+
+    <p>
+      Both of these jobs depend entirely on one thing: having a key that is
+      both correct for every row, and unique to one person.
+      Get that wrong, and a register can break in two opposite directions
+      at once.
+    </p>
+
+    <p>
+      <term>A key that isn't actually unique inflates the numbers.</term>
+      If a system ever falls back to matching people on something other
+      than a clean, unique identifier <mdash/> a full name and date of
+      birth together, say <mdash/> that can go wrong in an easy-to-miss
+      way.
+      If ten voters share a name and date of birth, and a second table
+      contains three other people with that same name and date of birth, a
+      join does not pick one sensible match.
+      It matches every one of the ten against every one of the three,
+      producing thirty rows out of what should have been, at most, one real
+      match.
+      Run that same overly broad matching rule through a deduplication step
+      instead, and the failure runs the other way: anyone who happens to
+      share those same details with someone else gets treated as a
+      duplicate of them, and is quietly deleted, even though they are two
+      entirely different, entirely real people.
+    </p>
+
+    <p>
+      <term>A key that's untidy hides real matches.</term>
+      Even with a clean, unique identifier as the key, small formatting
+      differences break things: one system stores an ID as a plain number,
+      another stores the same ID as text with a leading zero kept in front
+      of it, a third has a stray space typed in at the end of the number by
+      accident.
+      To a human, these are obviously the same ID.
+      To a join or a deduplication step, they are three unrelated pieces of
+      text, and no match is ever found.
+    </p>
+
+    <p>
+      What KPMG's 2022 audit of the IEBC register actually reported was a
+      third variant of the same underlying problem: a shared, empty value.
+      The audit found that <term>481,711</term> individuals were registered
+      as voters with duplicated blank ID or passport reference fields
+      <mdash/> records where that field had simply never been filled in.
+      A blank matches a blank exactly as confidently as a real ID matches a
+      real ID, so any process checking for duplicate identity references
+      will flag every one of those empty-field records against every other
+      one, whether or not the people behind them are actually the same.
+      The same 2022 audit also found nearly 246,000 deceased voters still
+      listed as active on the register, and 226,000 entries attached to
+      invalid ID numbers.
+    </p>
+
+    <insight xml:id="insight-cartesian-explosion">
+      <title>A Key Is Either Too Broad or Too Untidy, Rarely Neither</title>
+
+      <p>
+        A join should never make your row count bigger than expected; if it
+        does, the key you joined on is not unique on at least one side.
+        A deduplication step should only ever remove rows you can point to
+        as genuine duplicates; if entries you know are distinct disappear,
+        your key was too broad.
+        And if a join or a deduplication misses matches that are obviously
+        the same to a human eye, check spacing, leading zeros, and whether
+        both sides are storing the value as the same kind of thing, before
+        you trust the result.
+      </p>
+    </insight>
+  </subsection>
+</section>
+
   <!-- ================================================================= -->
   <!--  SECTION 3: applied to the flamingo data                          -->
   <!-- ================================================================= -->
@@ -582,6 +587,31 @@
         reshaping.
         But long format is not always what you want to <em>look</em> at, and
         reshaping between the two is a skill in its own right.
+      </p>
+
+      <p>
+        TODO: exercise idea?
+
+idea?: Kenya's health and demographic data.
+
+"Has vaccination coverage in Kenya improved, and does it vary by county?"
+
+To answer that:
+
+Survey data from multiple years (KDHS 2008, 2014, 2022) — each a separate file which need to be appended.
+County-level population data from KNBS — a different source → you need to merge it
+The vaccination data might come with one column per vaccine type (BCG, Polio, Measles...) — which is wide format → you need to pivot longer to plot it properly
+And underneath all of this is the question of what a data rectangle actually is, and why the tidy principle of "one row per observation" matters
+
+start with a question, discover the data is in three separate places in incompatible shapes, and work through each operation to get to an answer.
+
+Introduction — the question (vaccination coverage by county over time), showing the three separate datasets that exist and why none of them alone answers it
+Section 1: Appending — combining the three KDHS survey years into one dataset
+Section 2: Merging — joining the population data to the survey data
+Section 3: Longer/Wider — reshaping the vaccine columns so each vaccine is a row, enabling plotting
+Section 4: Data Rectangles — now that we have done all three operations, step back and ask: what shape should data be in, and why?
+
+Named definitions too?
       </p>
     </introduction>
 
@@ -631,9 +661,8 @@
       </program>
       <p>
         Same numbers, same information, a different shape <mdash/> and this is
-        "table-lake-species-crosstab" from
-        <xref ref="ch-exploring-data"/>, arrived at mechanically rather than
-        typed by hand.
+        "table-lake-species-crosstab" from <xref ref="ch-exploring-data"/>,
+        arrived at mechanically rather than typed by hand.
       </p>
     </subsection>
 
@@ -673,42 +702,6 @@
       </p>
     </subsection>
   </section>
-  <!-- ================================================================= -->
-  <!--  OBJECTIVES                                                       -->
-  <!-- ================================================================= -->
-  <objectives xml:id="objectives-data-shapes">
-    <title>By the end of this topic you will be able to</title>
-
-    <ul>
-      <li>
-        <p>
-          Distinguish wide and long data shapes, and identify which one a given
-          dataset is in.
-        </p>
-      </li>
-
-      <li>
-        <p>
-          Explain why the same data, differently shaped, can make an operation
-          trivial or nearly impossible.
-        </p>
-      </li>
-
-      <li>
-        <p>
-          Reshape data between wide and long using <c>pivot_wider()</c> and
-          <c>pivot_longer()</c>.
-        </p>
-      </li>
-
-      <li>
-        <p>
-          Recognise a merging or aggregation failure as a shape problem, not
-          just a data-quality problem.
-        </p>
-      </li>
-    </ul>
-  </objectives>
   <!-- ================================================================= -->
   <!--  EXERCISES                                                        -->
   <!-- ================================================================= -->
@@ -750,9 +743,9 @@
           Using <xref ref="ss-shapes-long-to-wide"/> as a model, build a wide
           table of mean <c>body_mass_g</c> by <c>lake</c> (rows) and
           <c>species</c> (columns), instead of counts.
-          Which version, this one or "table-lake-species-crosstab",
-          would you send to someone who wanted to read it in an email, and which
-          would you hand to someone who wanted to plot it in <c>ggplot2</c>?
+          Which version, this one or "table-lake-species-crosstab", would you
+          send to someone who wanted to read it in an email, and which would you
+          hand to someone who wanted to plot it in <c>ggplot2</c>?
         </p>
       </statement>
     </exercise>
@@ -772,4 +765,62 @@
       </statement>
     </exercise>
   </exercises>
+
+  <!-- ================================================================= -->
+  <!--  REFERENCES                                                       -->
+  <!-- ================================================================= -->
+  <section xml:id="sec-shapes-references">
+    <title>References</title>
+
+    <p>
+      Sources for the real-world cases discussed in this chapter, in the order
+      they appear.
+    </p>
+
+    <p>
+      Chepkirui, M., Dellicour, S., Musuva, R., et al. (2025). Missed
+      opportunities for digital health data use in healthcare
+      decision-making: A cross-sectional digital health landscape assessment
+      in Homa Bay county, Kenya. <foreign>PLOS Digital Health</foreign>,
+      4(6), e0000870. https://doi.org/10.1371/journal.pdig.0000870
+    </p>
+
+    <p>
+      The fertilizer voucher story in this chapter is a labelled hypothetical,
+      not a documented case, and so has no citation.
+      It is built around the real structure of Kenya's e-voucher fertilizer
+      subsidy programme (registration through NCPB and partner agents,
+      SMS-based voucher redemption), but the specific failure described is
+      illustrative rather than reported.
+    </p>
+
+    <p>
+      KPMG. (2022). <foreign>Preliminary audit report on the Register of
+      Voters</foreign>, prepared for the Independent Electoral and Boundaries
+      Commission (IEBC) [As reported in: IEBC press briefing, June 8, 2022;
+      see Ministry of Interior and National Administration press archive and
+      contemporaneous coverage in the <foreign>Daily Nation</foreign>,
+      <foreign>The Star</foreign>, and <foreign>Citizen Digital</foreign>].
+    </p>
+
+    <p>
+      Dong, E., Ratcliff, J., Goyea, T. D., Katz, A., Lau, R., Ng, T. K.,
+      Garcia, B., Bolt, E., Prata, S., Zhang, D., Murray, R. C., Blake, M. R.,
+      Du, H., Ganjkhanloo, F., Ahmadi, F., Williams, J., Choudhury, S., &amp;
+      Gardner, L. M. (2022). The Johns Hopkins University Center for Systems
+      Science and Engineering COVID-19 Dashboard: Data collection process,
+      challenges faced, and lessons learned. <foreign>The Lancet Infectious
+      Diseases</foreign>, 22(12), e370&ndash;e376.
+      https://doi.org/10.1016/S1473-3099(22)00434-0
+    </p>
+
+    <p>
+      Smith, H., Ameh, C., Godia, P., Maua, J., Bartilol, K., Amoth, P.,
+      Mathai, M., &amp; van den Broek, N. (2017). Implementing maternal death
+      surveillance and response in Kenya: Incremental progress and lessons
+      learned. <foreign>Global Health: Science and Practice</foreign>, 5(3),
+      345&ndash;354. https://doi.org/10.9745/GHSP-D-17-00034
+    </p>
+  </section>
+
 </chapter>

@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
-
-
-
-
-
 <!-- ================================================================= -->
 <!--  Chapter 8: Handling Missing Values                               -->
 <!--                                                                    -->
@@ -43,154 +37,183 @@
 <!--  with Wald as the MNAR example rather than presenting the taxonomy -->
 <!--  cold.                                                             -->
 <!-- ================================================================= -->
-
 <chapter xml:id="ch-handling-missing-values" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Handling Missing Values</title>
 
   <introduction xml:id="intro-handling-missing-values">
     <p>
-      <xref ref="ch-exploring-data" /> hit <c>NA</c> the moment it tried to
-      compute a mean, and set the problem aside. <xref ref="ch-cleaning-recoding" />
-      audited the gaps and started reasoning informally about why
-      <c>bill_depth_mm</c>, <c>body_mass_g</c> and <c>sex</c> specifically
-      had them. Both chapters promised a proper answer later. This is later.
+      <xref ref="ch-exploring-data"/> hit <c>NA</c> the moment it tried to
+      compute a mean, and set the problem aside.
+      <xref ref="ch-cleaning-recoding"/> audited the gaps and started reasoning
+      informally about why <c>bill_depth_mm</c>, <c>body_mass_g</c> and
+      <c>sex</c> specifically had them.
+      Both chapters promised a proper answer later.
+      This is later.
     </p>
 
     <p>
       The central idea of this chapter is easy to state and easy to
       underestimate: <em>why</em> a value is missing determines what you are
-      allowed to do about it. Sometimes missingness is background noise,
-      safely ignorable. Sometimes it is the single most important piece of
-      information in the dataset. The story below is the case where getting
-      that distinction right won a real argument, in wartime, against
-      everyone's first instinct.
+      allowed to do about it.
+      Sometimes missingness is background noise, safely ignorable.
+      Sometimes it is the single most important piece of information in the
+      dataset.
+      The story below is the case where getting that distinction right won a
+      real argument, in wartime, against everyone's first instinct.
     </p>
   </introduction>
-
-<!-- ================================================================= -->
-<!--  SECTION 1: Wald and the bombers                                  -->
-<!-- ================================================================= -->
-
+  <!-- ================================================================= -->
+  <!--  SECTION 1: Wald and the bombers                                  -->
+  <!-- ================================================================= -->
   <section xml:id="sec-intro-story">
     <title>Motivating introduction story</title>
 
     <p>
-    todo Example in Kenya
+      todo Example in Kenya (based on its own abstract and how later papers
+      describe it): Maina and colleagues at Kenya's Ministry of Health evaluated
+      the completeness and quality of HIV-indicator data flowing through DHIS2 —
+      the system where every health facility in the country submits monthly
+      aggregate reports (on testing, treatment, PMTCT, etc.) that get rolled up
+      to county and national totals.
+      The paper is explicitly about the mechanics of assembling that rolled-up
+      national picture from thousands of individual facility submissions over
+      time, and it's one of the most-cited sources in the Kenyan literature on
+      this exact problem — later papers describe it as the reference point for
+      how to adjust for incomplete reporting, apart from where missing reports
+      were considered an indication that no services were provided, which is a
+      genuinely subtle data-shape judgment call: is a blank row a missing
+      observation, or a true zero?
+      Maina, I., et al.
+      (2020).
+      <em>Evaluating the quality and completeness of Kenya's routine HIV-indicator reporting data.</em>
+      PLOS ONE, 15(11), e0243047.
     </p>
-
   </section>
 
   <section xml:id="ss-ch8-stories">
     <title>todo</title>
+
     <introduction>
       <p>
         missing data stories: One MCAR, one MAR, and one MNAR.
-
-        MNAR: The Bombers That Didn't Come Back
-
-        Need a MCAR and MAR story. A famous good one.
-
-        (Remove the challenger one. Unless that is MAR)
+        MNAR: The Bombers That Didn't Come Back Need a MCAR and MAR story.
+        A famous good one.
+        (Remove the challenger one.
+        Unless that is MAR)
       </p>
     </introduction>
 
-      <subsection xml:id="sec-wald-survivorship">
-    <title>The Bombers That Didn't Come Back</title>
+    <subsection xml:id="sec-wald-survivorship">
+      <title>The Bombers That Didn't Come Back</title>
 
-    <introduction>
-      <p>
-        During the Second World War, the US military examined bombers
-        returning from missions over Germany and recorded where each one
-        had been hit. The damage was not evenly spread. It clustered
-        heavily on the wings and fuselage, far more than on the engines.
-        The obvious recommendation followed immediately: reinforce the
-        wings and fuselage, since that is clearly where the bullets go.
-
-        TODO: Get image of the affected points on the planes.
-      </p>
-    </introduction>
-
-    <subsubsection xml:id="ss-wald-the-catch">
-      <title>The data was correct. The dataset was incomplete.</title>
-
-      <p>
-        The Statistical Research Group (SRG) at Columbia University, a
-        team the US military had assembled to bring rigorous statistics to
-        exactly these kinds of operational problems, included the
-        mathematician Abraham Wald. Wald's objection to the obvious
-        recommendation was not that the damage counts were wrong. They were
-        almost certainly accurate. His objection was about which planes had
-        been counted at all.
-      </p>
-
-      <p>
-        Every bomber in that dataset had survived its mission and made it
-        home. A bomber hit badly enough in the engine did not return to be
-        inspected, photographed, and added to the tally. The data was not a
-        random sample of <q>where bombers get hit.</q> It was a sample of
-        <q>where bombers can be hit and still make it back</q> <mdash /> and
-        those are very different questions. Heavy wing and fuselage damage
-        was common in the surviving planes precisely <em>because</em> a
-        plane could absorb a great deal of damage there and keep flying.
-        The scarcity of engine damage in the data did not mean the engines
-        were rarely hit. It meant a hit there was rarely survived, which is
-        why those planes were missing from the dataset entirely.
-      </p>
-    </subsubsection>
-
-    <subsubsection xml:id="ss-wald-the-method">
-      <title>What Wald actually did about it</title>
-
-      <p>
-        Wald did not simply assert the intuition and stop there. Across a
-        series of memoranda for the SRG, later formalised and republished by
-        Mangel and Samaniego (1984), he built a statistical method for
-        estimating vulnerability by aircraft section that explicitly
-        accounted for the missing planes rather than reading the returning
-        planes' damage at face value. Roughly: assuming hits were
-        distributed over the airframe more or less in proportion to each
-        section's surface area, the pattern of damage on <em>survivors</em>
-        could be used to infer how survivable a hit to each section actually
-        was <mdash /> and a section that rarely showed damage on returning
-        planes, despite having no reason to be hit less often, was exactly
-        the section a hit was least likely to be survived.
-      </p>
-
-      <p>
-        The recommendation that followed was the reverse of the obvious one:
-        reinforce the sections that were <em>under</em>-represented in the
-        damage data, not over-represented, because that absence was the
-        signal.
-      </p>
-
-      <insight xml:id="insight-wald-lesson">
-        <title>The missing data was not noise. It was the finding.</title>
+      <introduction>
         <p>
-          It would have been easy to treat the absent engine damage as
-          nothing more than a smaller sample size for that section, safely
-          ignorable, and analyse the rest of the data as if the missing
-          rows simply were not there. Wald's insight was recognising that
-          the missingness itself was informative: which planes were absent
-          from the dataset depended directly on the thing being measured
-          (survivability), not on some unrelated cause. Deleting the
-          incomplete cases and moving on would not have lost a little
-          statistical power. It would have inverted the conclusion.
+          During the Second World War, the US military examined bombers
+          returning from missions over Germany and recorded where each one had
+          been hit.
+          The damage was not evenly spread.
+          It clustered heavily on the wings and fuselage, far more than on the
+          engines.
+          The obvious recommendation followed immediately: reinforce the wings
+          and fuselage, since that is clearly where the bullets go.
+          TODO: Get image of the affected points on the planes.
         </p>
-      </insight>
+      </introduction>
 
-      <p>
-        <term>Sources:</term> Wald, A. (1943). <em>A Method of Estimating
-        Plane Vulnerability Based on Damage of Survivors.</em> Statistical
-        Research Group, Columbia University, memorandum for the National
-        Defense Research Committee (reprinted, Center for Naval Analyses,
-        1980). Mangel, M. and Samaniego, F.J. (1984). <q>Abraham Wald's Work
-        on Aircraft Survivability.</q> <em>Journal of the American
-        Statistical Association</em>, 79(386), 259<ndash />267.
-      </p>
-    </subsubsection>
-  </subsection>
+      <subsubsection xml:id="ss-wald-the-catch">
+        <title>The data was correct. The dataset was incomplete.</title>
 
+        <p>
+          The Statistical Research Group (SRG) at Columbia University, a team
+          the US military had assembled to bring rigorous statistics to exactly
+          these kinds of operational problems, included the mathematician
+          Abraham Wald.
+          Wald's objection to the obvious recommendation was not that the damage
+          counts were wrong.
+          They were almost certainly accurate.
+          His objection was about which planes had been counted at all.
+        </p>
 
+        <p>
+          Every bomber in that dataset had survived its mission and made it
+          home.
+          A bomber hit badly enough in the engine did not return to be
+          inspected, photographed, and added to the tally.
+          The data was not a random sample of <q>where bombers get hit.</q> It
+          was a sample of <q>where bombers can be hit and still make it back</q>
+          <mdash/> and those are very different questions.
+          Heavy wing and fuselage damage was common in the surviving planes
+          precisely <em>because</em> a plane could absorb a great deal of damage
+          there and keep flying.
+          The scarcity of engine damage in the data did not mean the engines
+          were rarely hit.
+          It meant a hit there was rarely survived, which is why those planes
+          were missing from the dataset entirely.
+        </p>
+      </subsubsection>
+
+      <subsubsection xml:id="ss-wald-the-method">
+        <title>What Wald actually did about it</title>
+
+        <p>
+          Wald did not simply assert the intuition and stop there.
+          Across a series of memoranda for the SRG, later formalised and
+          republished by Mangel and Samaniego (1984), he built a statistical
+          method for estimating vulnerability by aircraft section that
+          explicitly accounted for the missing planes rather than reading the
+          returning planes' damage at face value.
+          Roughly: assuming hits were distributed over the airframe more or less
+          in proportion to each section's surface area, the pattern of damage on
+          <em>survivors</em> could be used to infer how survivable a hit to each
+          section actually was <mdash/> and a section that rarely showed damage
+          on returning planes, despite having no reason to be hit less often,
+          was exactly the section a hit was least likely to be survived.
+        </p>
+
+        <p>
+          The recommendation that followed was the reverse of the obvious one:
+          reinforce the sections that were <em>under</em>-represented in the
+          damage data, not over-represented, because that absence was the
+          signal.
+        </p>
+
+        <insight xml:id="insight-wald-lesson">
+          <title>The missing data was not noise. It was the finding.</title>
+
+          <p>
+            It would have been easy to treat the absent engine damage as nothing
+            more than a smaller sample size for that section, safely ignorable,
+            and analyse the rest of the data as if the missing rows simply were
+            not there.
+            Wald's insight was recognising that the missingness itself was
+            informative: which planes were absent from the dataset depended
+            directly on the thing being measured (survivability), not on some
+            unrelated cause.
+            Deleting the incomplete cases and moving on would not have lost a
+            little statistical power.
+            It would have inverted the conclusion.
+          </p>
+        </insight>
+
+        <p>
+          <term>Sources:</term> Wald, A.
+          (1943).
+          <em>A Method of Estimating
+        Plane Vulnerability Based on Damage of Survivors.</em>
+          Statistical Research Group, Columbia University, memorandum for the
+          National Defense Research Committee (reprinted, Center for Naval
+          Analyses, 1980).
+          Mangel, M.
+          and Samaniego, F.J.
+          (1984).
+          <q>Abraham Wald's Work
+        on Aircraft Survivability.</q>
+          <em>Journal of the American
+        Statistical Association</em>,
+          79(386), 259 <ndash/> 267.
+        </p>
+      </subsubsection>
+    </subsection>
 
     <subsection xml:id="ss-viz-challenger">
       <title>The Challenger disaster (1986)</title>
@@ -320,15 +343,15 @@
         axis and the amount of O-ring damage on the other.
       </p>
 
-        <figure xml:id="fig-challenger-tufte">
-          <caption>
-            O-ring damage plotted against temperature for previous shuttle
-            launches, with the forecast temperature for Challenger shown for
-            comparison.
-          </caption>
+      <figure xml:id="fig-challenger-tufte">
+        <caption>
+          O-ring damage plotted against temperature for previous shuttle
+          launches, with the forecast temperature for Challenger shown for
+          comparison.
+        </caption>
 
-          <image source="images/challenger-tufte" width="80%"/>
-        </figure>
+        <image source="images/challenger-tufte" width="80%"/>
+      </figure>
 
       <p>
         Now the pattern is much easier to see.
@@ -387,21 +410,19 @@
         <em>Visual Explanations: Images and Quantities, Evidence and Narrative.</em>
         Cheshire, CT: Graphics Press.
       </p>
-  </subsection>
+    </subsection>
   </section>
-
-<!-- ================================================================= -->
-<!--  SECTION 3: applied to the flamingo data                          -->
-<!-- ================================================================= -->
-
+  <!-- ================================================================= -->
+  <!--  SECTION 3: applied to the flamingo data                          -->
+  <!-- ================================================================= -->
   <section xml:id="sec-missing-applied">
     <title>Handling Missing Values, Applied</title>
 
     <introduction>
       <p>
-        Return to the gaps <xref ref="ch-cleaning-recoding" /> found and
-        reasoned about informally: 4 missing bill depths, 8 missing masses,
-        7 missing sexes.
+        Return to the gaps <xref ref="ch-cleaning-recoding"/> found and reasoned
+        about informally: 4 missing bill depths, 8 missing masses, 7 missing
+        sexes.
       </p>
 
       <program language="r">
@@ -418,46 +439,48 @@
       <title>Which pattern applies to which gap</title>
 
       <p>
-        <xref ref="ch-cleaning-recoding" /> already sketched plausible
+        <xref ref="ch-cleaning-recoding"/> already sketched plausible
         mechanisms; now they can be named properly.
+        <ul>
+          <li>
+            <p>
+              A scale battery failing mid-morning, so every mass after that
+              point goes unrecorded regardless of how heavy the bird was: this
+              is <term>MCAR</term>-ish, provided nothing about which birds
+              happened to be weighed that morning correlates with their mass.
+            </p>
+          </li>
 
-      <ul>
-        <li>
-          <p>
-            A scale battery failing mid-morning, so every mass after that
-            point goes unrecorded regardless of how heavy the bird was:
-            this is <term>MCAR</term>-ish, provided nothing about which
-            birds happened to be weighed that morning correlates with their
-            mass.
-          </p>
-        </li>
-        <li>
-          <p>
-            Determining sex requiring closer handling, which the field team
-            reserves for calmer birds: if <q>calm enough to handle
-            closely</q> is itself unrelated to a bird's other recorded
-            traits, this could be MCAR; if calmer birds are systematically a
-            particular species or size class, which the dataset also
-            records, it becomes <term>MAR</term> instead.
-          </p>
-        </li>
-        <li>
-          <p>
-            If, on the other hand, the heaviest and most powerful birds are
-            specifically the ones that struggle free before a mass reading
-            can be taken, that is <term>MNAR</term>: the missingness of a
-            mass value depends on the mass itself, the exact structure of
-            Wald's problem, and it means the 336 recorded masses are not a
-            fair sample of all 344 birds' true weights.
-          </p>
-        </li>
-      </ul>
+          <li>
+            <p>
+              Determining sex requiring closer handling, which the field team
+              reserves for calmer birds: if
+              <q>calm enough to handle
+            closely</q> is itself
+              unrelated to a bird's other recorded traits, this could be MCAR;
+              if calmer birds are systematically a particular species or size
+              class, which the dataset also records, it becomes <term>MAR</term>
+              instead.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              If, on the other hand, the heaviest and most powerful birds are
+              specifically the ones that struggle free before a mass reading can
+              be taken, that is <term>MNAR</term>: the missingness of a mass
+              value depends on the mass itself, the exact structure of Wald's
+              problem, and it means the 336 recorded masses are not a fair
+              sample of all 344 birds' true weights.
+            </p>
+          </li>
+        </ul>
       </p>
 
       <p>
-        The dataset alone cannot tell you which of these is true. That has
-        to come from knowing how the data was collected <mdash /> the same
-        conclusion <xref ref="ch-cleaning-recoding" /> reached, now with the
+        The dataset alone cannot tell you which of these is true.
+        That has to come from knowing how the data was collected <mdash/> the
+        same conclusion <xref ref="ch-cleaning-recoding"/> reached, now with the
         vocabulary to say precisely what is at stake in each case.
       </p>
     </subsection>
@@ -467,7 +490,8 @@
 
       <p>
         It removes the missing observations and computes on what remains.
-        Stated plainly: <em>you are no longer analysing the sample you
+        Stated plainly:
+        <em>you are no longer analysing the sample you
         thought you were.</em>
       </p>
 
@@ -475,16 +499,16 @@
         mean(flamingos$body_mass_g, na.rm = TRUE)
         #&gt; [1] 1957.405
       </program>
-
       <p>
-        This is the mean of 336 birds, not 344, and it is essential to be
-        clear that <c>na.rm = TRUE</c> is <em>not</em> imputation. It does
-        not estimate the missing values. It excludes those birds from the
-        calculation entirely, silently, unless you check <c>sum(!is.na(...))</c>
-        yourself. If the missingness is MCAR, that exclusion costs you
-        precision and nothing else. If it is MNAR, as with mass, it may
-        cost you accuracy in a direction you cannot detect from the
-        remaining 336 rows alone.
+        This is the mean of 336 birds, not 344, and it is essential to be clear
+        that <c>na.rm = TRUE</c> is <em>not</em> imputation.
+        It does not estimate the missing values.
+        It excludes those birds from the calculation entirely, silently, unless
+        you check <c>sum(!is.na(...))</c> yourself.
+        If the missingness is MCAR, that exclusion costs you precision and
+        nothing else.
+        If it is MNAR, as with mass, it may cost you accuracy in a direction you
+        cannot detect from the remaining 336 rows alone.
       </p>
     </subsection>
 
@@ -498,26 +522,27 @@
         nrow(flamingos)
         #&gt; [1] 344
       </program>
-
       <p>
         Only 325 of 344 rows are complete: 19 rows, 5.5%, have at least one
-        missing value somewhere, more than the 8 missing masses alone,
-        because the gaps fall in different rows for different variables.
-        Dropping every incomplete row (<term>listwise
-        deletion</term><idx><h>listwise deletion</h></idx>) is convenient
-        and keeps every analysis on an identical sample, but it discards
-        data unnecessarily: a bird missing only <c>sex</c> still has a
-        perfectly good mass measurement. For descriptive work, prefer
-        <c>na.rm = TRUE</c> variable by variable over blanket listwise
-        deletion, and report the <m>n</m> for each.
+        missing value somewhere, more than the 8 missing masses alone, because
+        the gaps fall in different rows for different variables.
+        Dropping every incomplete row ( <term>listwise
+        deletion</term>
+        <idx><h>listwise deletion</h></idx> ) is convenient and keeps every
+        analysis on an identical sample, but it discards data unnecessarily: a
+        bird missing only <c>sex</c> still has a perfectly good mass
+        measurement.
+        For descriptive work, prefer <c>na.rm = TRUE</c> variable by variable
+        over blanket listwise deletion, and report the <m>n</m> for each.
       </p>
 
       <remark xml:id="remark-report-n-ch8">
         <title>Report the n</title>
+
         <p>
           Never report a mean, a standard deviation, or any other summary
-          without also reporting the <m>n</m> it was computed from. A
-          summary over 344 birds, 336, or 325 are different claims about
+          without also reporting the <m>n</m> it was computed from.
+          A summary over 344 birds, 336, or 325 are different claims about
           different samples, and a table that omits <m>n</m> makes them
           indistinguishable.
         </p>
@@ -528,11 +553,10 @@
       <title>Imputation is a claim, not a fix</title>
 
       <p>
-        A common third option, beyond na.rm-style exclusion and full
-        listwise deletion, is <term>imputation</term><idx><h>imputation</h></idx>:
-        filling each missing value with an estimate, often the variable's
-        mean or a model-based prediction, so no rows need to be dropped at
-        all.
+        A common third option, beyond na.rm-style exclusion and full listwise
+        deletion, is <term>imputation</term> <idx><h>imputation</h></idx>:
+        filling each missing value with an estimate, often the variable's mean
+        or a model-based prediction, so no rows need to be dropped at all.
       </p>
 
       <program language="r">
@@ -542,52 +566,74 @@
           flamingos$body_mass_g
         )
       </program>
-
       <p>
-        This line runs without complaint and produces a column with no
-        missing values at all. It is also, if the missingness is MNAR,
-        actively worse than doing nothing: it does not just fail to fix the
-        bias, it hides it, replacing 8 honestly-missing values with 8
-        confident-looking numbers built from the very mean that bias has
-        already distorted. Imputation is a reasonable tool under MCAR or
-        MAR, where the observed data genuinely contains the information
-        needed to make a defensible estimate. Under MNAR it requires an
-        external model of <em>why</em> the data is missing <mdash /> Wald's
-        uniform-exposure assumption is exactly that kind of model <mdash />
-        not a one-line formula applied to whatever happens to remain.
+        This line runs without complaint and produces a column with no missing
+        values at all.
+        It is also, if the missingness is MNAR, actively worse than doing
+        nothing: it does not just fail to fix the bias, it hides it, replacing 8
+        honestly-missing values with 8 confident-looking numbers built from the
+        very mean that bias has already distorted.
+        Imputation is a reasonable tool under MCAR or MAR, where the observed
+        data genuinely contains the information needed to make a defensible
+        estimate.
+        Under MNAR it requires an external model of <em>why</em> the data is
+        missing <mdash/> Wald's uniform-exposure assumption is exactly that kind
+        of model <mdash/> not a one-line formula applied to whatever happens to
+        remain.
       </p>
     </subsection>
   </section>
-
-<!-- ================================================================= -->
-<!--  OBJECTIVES                                                       -->
-<!-- ================================================================= -->
-
+  <!-- ================================================================= -->
+  <!--  OBJECTIVES                                                       -->
+  <!-- ================================================================= -->
   <objectives xml:id="objectives-handling-missing-values">
     <title>By the end of this topic you will be able to</title>
+
     <ul>
-      <li><p>Explain why the reason a value is missing determines what you may safely do about it.</p></li>
-      <li><p>Distinguish MCAR, MAR, and MNAR, and identify which applies to a given case.</p></li>
-      <li><p>Explain what <c>na.rm = TRUE</c> and <c>complete.cases()</c> actually do, and what they do not do.</p></li>
-      <li><p>Recognise when imputation is a reasonable tool and when it disguises rather than fixes a bias.</p></li>
+      <li>
+        <p>
+          Explain why the reason a value is missing determines what you may
+          safely do about it.
+        </p>
+      </li>
+
+      <li>
+        <p>
+          Distinguish MCAR, MAR, and MNAR, and identify which applies to a given
+          case.
+        </p>
+      </li>
+
+      <li>
+        <p>
+          Explain what <c>na.rm = TRUE</c> and <c>complete.cases()</c> actually
+          do, and what they do not do.
+        </p>
+      </li>
+
+      <li>
+        <p>
+          Recognise when imputation is a reasonable tool and when it disguises
+          rather than fixes a bias.
+        </p>
+      </li>
     </ul>
   </objectives>
-
-<!-- ================================================================= -->
-<!--  EXERCISES                                                        -->
-<!-- ================================================================= -->
-
+  <!-- ================================================================= -->
+  <!--  EXERCISES                                                        -->
+  <!-- ================================================================= -->
   <exercises xml:id="exercises-handling-missing-values">
     <title>Exercises</title>
 
     <exercise xml:id="ex-missing-wald-recap">
       <statement>
         <p>
-          In your own words, explain why deleting the aircraft with the
-          heaviest hypothetical engine damage <mdash /> if the SRG had
-          somehow had partial records for a few of them <mdash /> would
-          still not have solved Wald's problem. What, specifically, does
-          MNAR data require that listwise deletion cannot provide?
+          In your own words, explain why deleting the aircraft with the heaviest
+          hypothetical engine damage <mdash/> if the SRG had somehow had partial
+          records for a few of them <mdash/> would still not have solved Wald's
+          problem.
+          What, specifically, does MNAR data require that listwise deletion
+          cannot provide?
         </p>
       </statement>
     </exercise>
@@ -595,12 +641,12 @@
     <exercise xml:id="ex-missing-classify-flamingo">
       <statement>
         <p>
-          <xref ref="ss-flamingo-mechanism" /> gives three different
-          possible mechanisms for the missing <c>body_mass_g</c> values,
-          corresponding to MCAR, MAR, and MNAR. For each mechanism, describe
-          one piece of additional information, beyond what
-          <c>kenya_flamingos.csv</c> already contains, that would let you
-          tell which mechanism actually applies.
+          <xref ref="ss-flamingo-mechanism"/> gives three different possible
+          mechanisms for the missing <c>body_mass_g</c> values, corresponding to
+          MCAR, MAR, and MNAR.
+          For each mechanism, describe one piece of additional information,
+          beyond what <c>kenya_flamingos.csv</c> already contains, that would
+          let you tell which mechanism actually applies.
         </p>
       </statement>
     </exercise>
@@ -608,18 +654,17 @@
     <exercise xml:id="ex-missing-imputation-risk">
       <statement>
         <p>
-          Using the code in <xref ref="ss-imputation-caution" /> as a
-          starting point, explain what would happen to the mean and the
-          standard deviation of <c>body_mass_g</c> if you used
-          <c>mass_imputed</c> instead of the original column with
-          <c>na.rm = TRUE</c>. Which one changes, which one doesn't, and
-          why does that matter for anyone reading a report built on this
-          column?
+          Using the code in <xref ref="ss-imputation-caution"/> as a starting
+          point, explain what would happen to the mean and the standard
+          deviation of <c>body_mass_g</c> if you used <c>mass_imputed</c>
+          instead of the original column with <c>na.rm = TRUE</c>.
+          Which one changes, which one doesn't, and why does that matter for
+          anyone reading a report built on this column?
         </p>
       </statement>
     </exercise>
 
-        <exercise xml:id="ex-clean-crop-recap">
+    <exercise xml:id="ex-clean-crop-recap">
       <statement>
         <p>
           In your own words, explain why filtering the crop data to
@@ -635,14 +680,14 @@
     <exercise xml:id="ex-missing-sex-mechanism">
       <statement>
         <p>
-          Propose a plausible MNAR mechanism for the 7 missing
-          <c>sex</c> values, distinct from the one given in
-          <xref ref="ss-flamingo-mechanism" />. Then propose a plausible
-          MCAR mechanism for the same variable. What would you need to know
-          about how the data was collected to decide between them?
+          Propose a plausible MNAR mechanism for the 7 missing <c>sex</c>
+          values, distinct from the one given in
+          <xref ref="ss-flamingo-mechanism"/>.
+          Then propose a plausible MCAR mechanism for the same variable.
+          What would you need to know about how the data was collected to decide
+          between them?
         </p>
       </statement>
     </exercise>
   </exercises>
-
 </chapter>
