@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!-- ================================================================= -->
 <!--  Chapter 6: Data Shapes                                           -->
 <!--                                                                    -->
@@ -26,605 +27,220 @@
       property of a dataset, not a formatting detail.
     </p>
   </introduction>
-
   <!-- ================================================================= -->
   <!--  SECTION 1: The opener, on its own, told in full                  -->
   <!-- ================================================================= -->
-  TODO: expand on this / explain better what we mean by "data shapes"
+  <section xml:id="sec-intro-data-shapes">
+    <title>The Same Information, the Wrong Shape</title>
 
-   <section xml:id="sec-intro-data-shapes">
+    <p>
+      In <xref ref="ch-cleaning-recoding"/>, we told the story of the Ebola
+      outbreak in West Africa from 2014 to 2016 - the largest ever recorded,
+      with more than 11,000 deaths across Guinea, Liberia, and Sierra Leone.
+      We focused there on the problems of data quality: duplicate records,
+      missing values, inconsistent variable names, paper forms degraded by
+      chlorine disinfection, data that had to be read through a fence and copied
+      by hand.
+      Those problems were real and serious.
+      But there was a second, deeper problem running alongside all of them, and
+      it is the one this chapter is about.
+    </p>
+
+    <p>
+      As the outbreak grew, Sierra Leone set up District Ebola Response Centres
+      (DERCs) within each district to manage the local response.
+      Each centre was responsible for tracking cases and contacts in its area:
+      who had tested positive, who had been in contact with them, who had died,
+      what the laboratory results showed.
+      This was the right structure for managing a geographically spread
+      outbreak.
+      Local centres could respond quickly to what was happening in their area,
+      without waiting for direction from the capital.
+      The data collection happened close to the ground, where the cases were.
+    </p>
+
+    <p>
+      In practice, the information flowing into each DERC was substantial and
+      varied.
+      Case investigation forms (CIFs) were filled in by surveillance officers in
+      the field and brought back to the DERC, where data managers entered them
+      into the Epi Info VHF database.
+      Blood samples were accompanied by a copy of the CIF to the laboratory.
+      But DERCs also had to manage a continuous stream of other information on a
+      daily basis: live alerts recording who had been seen and whether a sample
+      had been taken; death alerts noting whether a swab had been collected and
+      a burial team sent; quarantined households and their food supply; and
+      confirmed EVD positive case counts from laboratory results in health
+      facilities.
+      Most DERCs handled this by building manual dashboards — physical displays
+      showing the current situation in their district — and then transferring
+      the information into separate Microsoft Excel sheets or Word documents.
+    </p>
+
+    <p>
+      The result was that each DERC had data, often a great deal of it.
+      But there was no agreed method for how to structure that data across
+      districts.
+      Each centre had their own format; for example, own column names, own
+      definitions, own sense of what a row in a spreadsheet should represent.
+      In one district, for example, a row might have meant a patient; in
+      another, it might have meant a day, with columns recording how many new
+      cases and deaths occurred on that day.
+      In a third, confirmed and suspected cases might be on separate sheets
+      entirely.
+      None of these formats was wrong - each made sense to the team that
+      designed it given the forms they had and the questions they were being
+      asked locally.
+      But they were incompatible with each other in ways that turned out to
+      matter enormously.
+    </p>
+
+    <p>
+      When the national response team in Freetown tried to combine the district
+      files into a single national picture, the formats did not fit together.
+      A file where a row means a patient and a file where a row means a day
+      cannot simply be stacked because the rows mean different things.
+      A column called <c>EVD_positive</c> in one file might or might not be the
+      same as <c>confirmed_cases</c> in another.
+      Before anyone could count anything at the national level, someone had to
+      answer a prior question that was not agreed on before the outbreak
+      started: what shape should this data be in?
+    </p>
+
+    <p>
+      Owada et al.
+      (2016) are direct about the consequences.
+      <q>Lack of consistency</q> in how data was structured across districts
+      <q>caused problems with merging and aggregating cases 
+    to report critical information.</q>
+      That critical information included things that sound basic: how many new
+      alerts were reported today?
+      How many new confirmed cases?
+      How many blood tests were processed, and what did they show?
+      How many deaths occurred in each district?
+      These are exactly the numbers a national response team needs to see every
+      day to decide where to send resources, where to open new treatment units,
+      and where the outbreak is accelerating.
+      Without them, decisions were being made blind, or on the basis of
+      incomplete aggregations that took days of manual work to produce and were
+      already out of date by the time they arrived.
+    </p>
+
+    <p>
+      The deeper consequence was that much of the data proved impossible to use
+      retrospectively either.
+      The authors conclude that
+      <q>much 
+    of the data has never found its way into any structured database 
+    and may never be recoverable.</q>
+      These are formats that were individually reasonable and collectively
+      useless at the scale the outbreak demanded.
+      Data that existed, that had been collected at enormous effort under
+      dangerous conditions, could not be used because no one had agreed in
+      advance on what shape it should take.
+    </p>
+
+    <p>
+      Two of Owada et al.'s recommendations go directly to this problem.
+      The first calls for regular data harmonisation meetings between district
+      monitoring and evaluation officers and national data managers — not just
+      during an emergency, but before one, so that when the crisis comes, the
+      formats are already agreed.
+      The second calls for training of local surveillance officers and data
+      clerks in how to collect and enter data in a standardised way.
+      Both recommendations are, at their core, about shape: agreeing in advance
+      what a row means, what a column is called, and how files from different
+      places will eventually be combined.
+      These are not technical niceties.
+      In the Ebola response, they were the difference between data that could be
+      used to fight an outbreak and data that could not.
+    </p>
+
+    <p>
+      This chapter is about data shape: what it means, why it matters, and the
+      operations that change it.
+      If the district response centres had all used the same format, appending
+      their files would have been trivial.
+      If lab results had shared a patient identifier with case records, merging
+      them would have been straightforward.
+      And if there had been a shared understanding of what shape the national
+      reporting needed, much of what was lost might have been recoverable.
+    </p>
+
+    <p>
+      <term>Sources:</term> Owada, K., Eckmanns, T., Kamara, K.O.B.
+      and Olu, O.O.
+      (2016).
+      <q>Epidemiological Data Management during an
+        Outbreak of Ebola Virus Disease: Key Issues and Observations from
+        Sierra Leone.</q>
+      <em>Frontiers in Public Health</em>, 4, 163.
+    </p>
+  </section>
+  <!-- ================================================================= -->
+  <!--  SECTION 2: the STACK question that exemplifies this              -->
+  <!-- ================================================================= -->
+  <section xml:id="sec-ch6-stack">
     <title>TODO</title>
-  <p>
-    <xref ref="ss-ebola-transmission"/> described something that, looked 
-    at again, is a shape problem. Sierra Leone's Ebola response did not 
-    fail to merge its district data because anyone lost it or typed it 
-    wrong. It failed because <q>each district response centre had adopted 
-    its own method for recording cases,</q> and inconsistent Excel 
-    line-list formats across districts <q>caused ongoing problems merging 
-    and aggregating cases into national totals.</q> Different districts 
-    were not disagreeing about what happened. They were recording the 
-    same kind of information in incompatible shapes.
-  </p>
-
-  <p>
-    One district might have one row per patient. Another might have one 
-    row per day, with patient counts as columns. A third might have 
-    separate sheets for confirmed and suspected cases. Each format made 
-    sense locally — it matched the workflow of the people filling it in. 
-    But when the national team tried to stack them together into a single 
-    picture of the outbreak, the shapes did not fit. Cases could not be 
-    counted without first deciding what a row meant, and that decision 
-    was different in every district file.
-  </p>
-
-  <p>
-    This chapter is about data shape: what it means, why it matters, and 
-    the operations that change it. The three core operations are 
-    <term>appending</term> — stacking datasets that have the same columns 
-    but different rows; <term>merging</term> — joining datasets that share 
-    a common identifier but carry different information; and 
-    <term>reshaping</term> — converting data between wide formats (one 
-    column per measurement type) and long formats (one row per 
-    measurement). Any one of these would have helped the Ebola response. 
-    In practice, real data problems usually require all three.
-  </p>
-</section>    
-
-# Then a STACK question on appending
-
-# TODO: Illustrative example(s)
-# what I should do here is do a hands-on example in R, with data, and code, and graphs, and output to illustrate the issue and show what goes wrong
-# (for each of these five stories, but in our own data)
-# and then we say the story of "an example of this "in real life" and introduce these five stories. 
-# so this is in 5 different sections.
-# 1. Wide to Long (flamingo example below?) -- could go into rectangles, maybe.
-# 2. Binding by Rows (Appending) -- we downloaded that data for exploring, and for cleaning. But FYI there are two sheets! So, here, appending that. 
-# 3. Merging example - a. Data Definitions -- need a merging data example for this, and one for others to play with. Two real data sets to merge. But from different sources (maybe two hospitals. Or can I find maternity data bits?)
-# 4. Merging example - b. Introducing the Idea of a Key. -- use example above, or, a multilevel type data set that we can merge two data sets in on ("key" being the key bit here)
-# 5. Merging example - c. What happens in the merging if the Key is Wrong? -- demonstrate the consequences of incorrect keys
-
-# Then exercises.
-
-
-
-#  "real cases" where it's gone wrong, and the consequences of that. These are all real stories, with references,
-# but we don't need to go into them in detail. Just a paragraph or two each, with a reference to the source,
-# after the illustrative example in R
-
-<section xml:id="sec-data-shapes">
-  <title>Data Shapes: Structuring, Binding, and Joining Tables</title>
-
-  <introduction>
-    <p>
-      Real-world data rarely arrives in a single, clean table ready for analysis. 
-      Understanding data shapes means mastering how tables change layout,
-      how rows are stacked, how variables are defined, and
-      how primary keys connect separate datasets without corrupting information.
-    </p>
-  </introduction>
-
-  <!-- ================================================================= -->
-  <!-- 1. WIDE TO LONG                                                   -->
-  <!-- ================================================================= -->
-  <subsection xml:id="ss-wide-to-long">
-    <title>Wide to Long: When a Table's Shape Can't Hold Still</title>
-
-    Add in our original story again back here as it has images/etc. (maybe not needed actually if 1. is done well. Let's see.)
-    <p>
-      In January 2020, researchers at Johns Hopkins University (JHU) launched
-      a public COVID-19 dashboard to track global infections.
-      The underlying dataset was published openly and laid out in what is
-      called a <term>wide</term> shape: one row per country or region, and
-      one column for every single calendar date, holding that place's
-      running case count on that day.
-    </p>
-
-    <p>
-      Most wide tables have a fixed, known set of columns that doesn't
-      change.
-      This one did not.
-      Every single day the pandemic continued, the table needed one more
-      column than it had the day before.
-      Anyone who wanted to calculate a trend, work out a weekly rate, or
-      merge in population figures first had to reshape the table into a
-      different layout, called <term>long</term> shape: one row per country
-      per date, with the date itself moved into its own column instead of
-      being a column header.
-      A wide table where every date is a different column header has no
-      single, stable column that another dataset can be matched against; a
-      long table does <mdash/> a fixed set of columns
-      (<c>region</c>, <c>date</c>, <c>cases</c>) that behaves the same way
-      no matter how many days have passed.
-    </p>
-
-    <p>
-      Every time analysts reshaped JHU's files into long format and matched
-      them up with country codes for merging, an upstream change by JHU
-      <mdash/> adding new columns, or reorganising how regions were labelled
-      <mdash/> would break their reshaping scripts all over again.
-      Wide and long are not a right shape and a wrong shape; wide is easy for
-      a person to scan by eye on a single day, long is what a computer needs
-      for tracking something over time or joining it to anything else.
-    </p>
-
-    <p>
-      This is not a guess about how JHU's data behaved.
-      The team that built and ran the dashboard published their own account
-      of the difficulty, in a paper aptly titled <foreign>data collection
-      process, challenges faced, and lessons learned</foreign>.
-      Reporting standards changed as the pandemic went on, formats varied
-      from one source feeding the dashboard to another, and every one of
-      those changes rippled downstream into anyone else's code that had
-      been written to expect a particular shape.
-      The dashboard's own repository still carries a note for exactly this
-      reason: the table's structure was adjusted more than once over the
-      life of the project, and any script written against an earlier
-      structure would need to be updated to keep working.
-      A dataset that keeps changing shape underneath you is not a hypothetical
-      teaching example; it was daily reality for one of the most-used
-      datasets of the pandemic.
-    </p>
-
-    <insight xml:id="insight-wide-long-pivot">
-      <title>Pivoting Standardizes Keys for Downstream Joins</title>
-
-      <p>
-        Wide tables store observation attributes across column headers; long
-        tables store observation attributes as row values under a unified key
-        column.
-        Transforming wide data to long format is often a mandatory precursor
-        to joining external demographic or temporal variables.
-      </p>
-    </insight>
-  </subsection>
-
-  <!-- ================================================================= -->
-  <!-- 2. DATA DEFINITIONS                                               -->
-  <!-- ================================================================= -->
-  <subsection xml:id="ss-data-definitions">
-    <title>Same Column Name, Different Definition</title>
-
-    <p>
-      A statistician might receive three datasets to combine: one from health
-      facility logs, one from civil death registration, and one from a
-      household survey.
-      Each dataset contains a column named <c>maternal_death</c>, and in each,
-      some rows are marked <c>TRUE</c>.
-      The datasets look perfectly compatible.
-      A software join executes without a single error.
-      Yet a successful software merge does not make the three <c>TRUE</c>
-      values the exact same claim.
-    </p>
-
-    <p>
-      In 2014, Kenya worked to strengthen its Maternal Death Surveillance and
-      Response (MDSR) system, as reported by Smith et al. (2017).
-      At the time, official national estimates placed annual maternal deaths
-      at approximately 8,000, derived from a modeled maternal mortality ratio
-      of 510 deaths per 100,000 live births.
-      Concurrently, the District Health Information System (DHIS2) recorded
-      exactly 945 maternal deaths in health facilities.
-    </p>
-
-    <p>
-      The eight-fold difference between 945 and 8,000 was not a calculation
-      error, but a difference in operational definitions.
-      The national estimate attempted to capture maternal deaths across the
-      entire population (including deaths at home), while DHIS2 recorded only
-      deaths occurring inside health facilities that were formally entered
-      into logbooks.
-    </p>
-
-    <table xml:id="table-mmr-sources">
-      <title>Maternal Mortality Observation Systems in Kenya</title>
-
-      <tabular halign="left">
-        <row header="yes" bottom="minor">
-          <cell>Data Source</cell>
-          <cell>Observation Scope &amp; Mechanism</cell>
-        </row>
-
-        <row>
-          <cell>DHIS2 Facility Logs</cell>
-          <cell>
-            Maternal deaths recorded directly inside health facility registers
-          </cell>
-        </row>
-
-        <row>
-          <cell>MDSR Reviews</cell>
-          <cell>
-            Notified maternal deaths undergoing formal clinical audit reviews
-          </cell>
-        </row>
-
-        <row>
-          <cell>Civil Registration (CRVS)</cell>
-          <cell>
-            Officially issued death certificates with classified causes of death
-          </cell>
-        </row>
-
-        <row>
-          <cell>DHS Household Surveys</cell>
-          <cell>
-            Retrospective sibling mortality reported by survey respondents
-          </cell>
-        </row>
-
-        <row>
-          <cell>UN Model Estimates</cell>
-          <cell>
-            Statistical population modeling combining multiple administrative inputs
-          </cell>
-        </row>
-      </tabular>
-    </table>
-
-    <p>
-      Smith et al. (2017) found that of the 945 deaths recorded in DHIS2 in 2014, only 484
-      (51.2%) underwent formal audit reviews.
-      Of those audited, 447 (92.4%) were assessed as having received
-      suboptimal care, and in 394 cases (81.4%), assessors judged that
-      different management could have altered the outcome.
-      Even after notification forms were integrated directly into DHIS2,
-      structural gaps remained between DHIS2 and Civil Registration systems.
-    </p>
-
-    <p>
-      This operational challenge is universal.
-      A meta-analysis by Ahmed, Cresswell, and Say (2023) evaluated maternal
-      death reporting globally and estimated that maternal death recording was
-      34% incomplete, with overall maternal mortality underestimated by 39%
-      due to underreporting and misclassification.
-    </p>
-
-    <p>
-      <term>Data shapes</term> is not merely about managing rows and columns
-      in code.
-      It is about understanding what an observation and a variable actually
-      represent in the physical world.
-      Two tables that look identical in software schema can still measure
-      fundamentally different realities.
-    </p>
-
-    <insight xml:id="insight-variable-definitions">
-      <title>A Variable Name Is Not a Definition</title>
-
-      Work on this one!
-
-      <p>
-        Software checks whether column names and data types match during a
-        join; it cannot verify whether the underlying data-generation
-        processes are comparable.
-        Before combining data from different sources, ask not just
-        <q>do the keys match?</q> but
-        <q>are the things being combined actually measuring the same reality?</q>
-      </p>
-    </insight>
-  </subsection>
-
-  <!-- ================================================================= -->
-  <!-- 3. BINDING BY ROWS (APPENDING)                                    -->
-  <!-- ================================================================= -->
-  <subsection xml:id="ss-binding-by-rows">
-    <title>Binding by Rows: Stacking Farmer Lists for Fertilizer Vouchers</title>
-
-    <p>
-      Every planting season, the Kenyan government subsidises fertilizer for
-      smallholder farmers and distributes it through National Cereals and
-      Produce Board (NCPB) depots.
-      A farmer registers once, and is issued a voucher by SMS: turn up at the
-      depot with your phone and your ID, the clerk checks you against the
-      system, and you walk away with fertilizer at a fraction of the market
-      price.
-      For a smallholder farmer, that price difference is not a minor saving.
-      It can be the difference between planting a full acre and planting
-      half of one.
-    </p>
-
-    <p>
-      Behind that single lookup at the depot counter sits a chain of
-      ordinary data work: registration lists have to be
-      combined into one national list, and that list has to be checked
-      against a farmer's ID and phone details before a voucher is issued.
-    </p>
-
-    <p>
-      One way to build a national registry is to take every local list
-      of registered farmers and stack them into a single table, one after
-      another.
-      In everyday data language this is called an <term>append</term>, or a
-      <term>row bind</term>.
-      For it to work cleanly, every list being stacked has to agree on its
-      columns: the same column names, meaning the same thing, all the way
-      down.
-      If one office's spreadsheet calls a column <c>phone_number</c> and
-      another calls the same thing <c>mobile_no</c>, software does not stop
-      and ask what to do.
-      It creates a new column for the name it hasn't seen before, and fills
-      it with <term>NA</term> <mdash/> <q>not available</q>, the standard way
-      software marks a hole in the data <mdash/> everywhere that column does
-      not apply.
-      A registry that should have five clean columns quietly grows extra
-      ones nobody asked for, and a farmer's real phone number can end up
-      split across two of them depending on which office registered them.
-    </p>
-
-    <p>
-      A Kenyan phone number can correctly be written as <c>0712345678</c>,
-      <c>254712345678</c>, or <c>+254 712 345 678</c> <mdash/> a person reads
-      all three and knows immediately they are the same number.
-      A join does not.
-      To a join, <c>"0712345678"</c> and <c>"254712345678"</c> are two
-      unrelated pieces of text.
-      A join that cannot find a match does not fail loudly.
-      It simply leaves that row without a match, quietly, as if the person
-      had never registered at all.
-    </p>
-
-    <insight xml:id="insight-schema-drift">
-      <title>Computers Match Characters, Not Intent</title>
-
-      <p>
-        Two records that look identical to a human being can be completely
-        different to a computer if the column names, spacing, or exact text
-        differ by even a single character.
-        An append needs every table to agree on its columns before you stack
-        them, and ideally needs a rule for what counts as
-        <q>the same real-world entity twice</q> before it lets a duplicate
-        in.
-        A join needs a shared column to be written the exact same way in
-        every table it touches.
-        Neither operation will warn you when this goes wrong <mdash/> it will
-        simply hand back a table with holes, or duplicates, in it, and leave
-        you to notice.
-      </p>
-    </insight>
-  </subsection>
-
-  <!-- ================================================================= -->
-  <!-- 4. MERGING / INTRODUCING THE IDEA OF A KEY                        -->
-  <!-- ================================================================= -->
-  <subsection xml:id="ss-merging-keys">
-    <title>Merging and the Idea of a Key: The Homa Bay Health System</title>
-
-    <p>
-      Homa Bay County, on the shore of Lake Victoria, has a significant HIV
-      burden and a well-established HIV care programme.
-      Health facilities there run on electronic medical record systems, the
-      same as facilities across much of the country, but a 2025
-      study of Homa Bay's digital health landscape found that its single
-      county referral hospital was running not one such system, but seven,
-      side by side.
-      Three of those seven, all built specifically for HIV care, do share a
-      common patient identifier with each other.
-      The other four <mdash/> covering general outpatient care, inpatient
-      stays, the laboratory, and faith-based providers <mdash/> connect to
-      none of the HIV systems, and not reliably to each other either.
-    </p>
-
-    <p>
-      To make that concrete: picture a hypothetical patient, built from the
-      study's own findings rather than a specific case it reported.
-      A woman is HIV-positive and pregnant.
-      Her HIV care sits in the HIV system.
-      Her antenatal visits, being outside HIV care, are logged somewhere
-      else.
-      If she is admitted to hospital, her inpatient stay goes somewhere else
-      again.
-      This is not a stretch: the study's own interviews describe exactly
-      this pattern in general, with people <q>assigned multiple numbers for
-      different purposes, i.e., at the inpatient, outpatient and antenatal
-      clinics.</q>
-    </p>
-
-    <p>
-      Every operation involving merging tables depends on the same quiet assumption:
-      that somewhere in your data, there is a column that reliably means
-      <q>this same real-world thing</q>, everywhere it appears.
-      That column is called a <term>key</term>.
-      Homa Bay's hospital records show what happens when that assumption
-      holds for only part of a system.
-    </p>
-
-    <p>
-      The 2025 study found that patient identifiers were manually generated
-      in most of the county's EMR systems and manually allocated at first
-      interaction in 97% of facilities, with no county-wide identifier
-      linking a person across every system they might touch.
-      Within HIV care specifically, a shared identifier does exist and does
-      its job.
-      Step outside HIV care, and there is no column, anywhere in the
-      hospital, that reliably means <q>this same person</q> across the rest
-      of the systems she might touch.
-    </p>
-
-    <p>
-      This is not a missing-data problem.
-      Her details are captured correctly, every single time, in whichever
-      system records them.
-      The problem is that there is nothing to <term>join</term> or <term>merge</term> most of
-      those correct records together on.
-      Stack or link the non-HIV systems anyway, without a shared key, and
-      one of two things happens.
-      Either the same person is silently counted more than once across
-      different systems, inflating whatever gets reported to the county or
-      the ministry at the end of the month, or a clinician treating her for
-      a complication during pregnancy has no way of seeing, from where they
-      are sitting, that she is currently on HIV treatment at all <mdash/>
-      even though that exact information exists, correctly recorded, one
-      system over.
-    </p>
-
-    <p>
-      Before you can join two tables, or even meaningfully ask whether they
-      should be joined, something has to exist that means the same
-      real-world thing in both of them.
-      Sometimes the first job in a data project is not fixing a key.
-      It is building one, from nothing, because nobody thought to build it
-      in the first place.
-    </p>
-
-    <insight xml:id="insight-homa-bay-no-key">
-      <title>You Cannot Join What Was Never Given a Shared Key</title>
-
-      <p>
-        A join, a stack, a reshape <mdash/> every one of these operations
-        assumes a key already exists linking your tables together.
-        When separate systems are built independently, with no agreement in
-        advance on how a person, place, or thing will be identified across
-        all of them, no amount of clever code recovers that link later.
-        The key has to be designed in, before the data is collected, not
-        discovered afterward.
-      </p>
-    </insight>
-  </subsection>
-
-  <!-- ================================================================= -->
-  <!-- 5. WHAT IF THE KEY IS WRONG?                                      -->
-  <!-- ================================================================= -->
-  <subsection xml:id="ss-key-errors">
-    <title>What If the Key Is Wrong? The IEBC Voter Register</title>
-
-    <p>
-      Before national elections in Kenya, the Independent Electoral and
-      Boundaries Commission (IEBC) has to check its master voter register
-      against other government records: identity records, to catch invalid
-      or duplicate registrations, and death records, to remove voters who
-      have since died.
-      Checking one table against another like this is a <term>lookup</term>,
-      or <term>join</term>, and the sensible key to join on is each person's
-      National ID number.
-      The same register also periodically needs its own duplicates removed,
-      a step usually called <term>deduplication</term>: find rows that
-      represent the same person entered twice, and collapse them into one.
-    </p>
-
-    <p>
-      Both of these jobs depend entirely on one thing: having a key that is
-      both correct for every row, and unique to one person.
-      Get that wrong, and a register can break in two opposite directions
-      at once.
-    </p>
-
-    <p>
-      <term>A key that isn't actually unique inflates the numbers.</term>
-      If a system ever falls back to matching people on something other
-      than a clean, unique identifier <mdash/> a full name and date of
-      birth together, say <mdash/> that can go wrong in an easy-to-miss
-      way.
-      If ten voters share a name and date of birth, and a second table
-      contains three other people with that same name and date of birth, a
-      join does not pick one sensible match.
-      It matches every one of the ten against every one of the three,
-      producing thirty rows out of what should have been, at most, one real
-      match.
-      Run that same overly broad matching rule through a deduplication step
-      instead, and the failure runs the other way: anyone who happens to
-      share those same details with someone else gets treated as a
-      duplicate of them, and is quietly deleted, even though they are two
-      entirely different, entirely real people.
-    </p>
-
-    <p>
-      <term>A key that's untidy hides real matches.</term>
-      Even with a clean, unique identifier as the key, small formatting
-      differences break things: one system stores an ID as a plain number,
-      another stores the same ID as text with a leading zero kept in front
-      of it, a third has a stray space typed in at the end of the number by
-      accident.
-      To a human, these are obviously the same ID.
-      To a join or a deduplication step, they are three unrelated pieces of
-      text, and no match is ever found.
-    </p>
-
-    <p>
-      What KPMG's 2022 audit of the IEBC register actually reported was a
-      third variant of the same underlying problem: a shared, empty value.
-      The audit found that <term>481,711</term> individuals were registered
-      as voters with duplicated blank ID or passport reference fields
-      <mdash/> records where that field had simply never been filled in.
-      A blank matches a blank exactly as confidently as a real ID matches a
-      real ID, so any process checking for duplicate identity references
-      will flag every one of those empty-field records against every other
-      one, whether or not the people behind them are actually the same.
-      The same 2022 audit also found nearly 246,000 deceased voters still
-      listed as active on the register, and 226,000 entries attached to
-      invalid ID numbers.
-    </p>
-
-    <insight xml:id="insight-cartesian-explosion">
-      <title>A Key Is Either Too Broad or Too Untidy, Rarely Neither</title>
-
-      <p>
-        A join should never make your row count bigger than expected; if it
-        does, the key you joined on is not unique on at least one side.
-        A deduplication step should only ever remove rows you can point to
-        as genuine duplicates; if entries you know are distinct disappear,
-        your key was too broad.
-        And if a join or a deduplication misses matches that are obviously
-        the same to a human eye, check spacing, leading zeros, and whether
-        both sides are storing the value as the same kind of thing, before
-        you trust the result.
-      </p>
-    </insight>
-  </subsection>
-</section>
-
-  <!-- ================================================================= -->
-  <!--  SECTION 3: applied to the flamingo data                          -->
-  <!-- ================================================================= -->
-  <section xml:id="sec-shapes-applied">
-    <title>Wide and Long, Applied</title>
 
     <introduction>
       <p>
-        <c>kenya_flamingos.csv</c> has always been in <term>long</term> format:
-        one row per bird, one column per variable.
-        That shape is why every <c>ggplot2</c> call in
-        <xref ref="ch-visualising-multidimensional-data"/> worked without any
-        reshaping.
-        But long format is not always what you want to <em>look</em> at, and
-        reshaping between the two is a skill in its own right.
+        TODO
       </p>
+    </introduction>
+
+    <subsection xml:id="subsec-ch6-stack">
+      <title>TODO</title>
 
       <p>
-        TODO: exercise idea?
+        TODO: insert STACK question
+      </p>
+    </subsection>
+  </section>
+  <!-- ================================================================= -->
+  <!--  SECTION 3: Applying and looking at different shapes              -->
+  <!-- ================================================================= -->
+  <section xml:id="sec-shapes-applied">
+    <title>todo</title>
 
-idea?: Kenya's health and demographic data.
-
-"Has vaccination coverage in Kenya improved, and does it vary by county?"
-
-To answer that:
-
-Survey data from multiple years (KDHS 2008, 2014, 2022) — each a separate file which need to be appended.
-County-level population data from KNBS — a different source → you need to merge it
-The vaccination data might come with one column per vaccine type (BCG, Polio, Measles...) — which is wide format → you need to pivot longer to plot it properly
-And underneath all of this is the question of what a data rectangle actually is, and why the tidy principle of "one row per observation" matters
-
-start with a question, discover the data is in three separate places in incompatible shapes, and work through each operation to get to an answer.
-
-Introduction — the question (vaccination coverage by county over time), showing the three separate datasets that exist and why none of them alone answers it
-Section 1: Appending — combining the three KDHS survey years into one dataset
-Section 2: Merging — joining the population data to the survey data
-Section 3: Longer/Wider — reshaping the vaccine columns so each vaccine is a row, enabling plotting
-Section 4: Data Rectangles — now that we have done all three operations, step back and ask: what shape should data be in, and why?
-
-Named definitions too?
+    <introduction>
+      <p>
+        # what I should do here is do a hands-on example in R, with data, and
+        code, and graphs, and output to illustrate the issue and show what goes
+        wrong # (for each of these five stories, but in our own data) # and then
+        we say the story of "an example of this "in real life" and introduce
+        these five stories.
       </p>
     </introduction>
 
     <subsection xml:id="ss-shapes-long-to-wide">
-      <title>From long to wide: making a report table</title>
+      <title>Wide or Long?</title>
 
-      <p>
-        Suppose you want a simple summary table, birds per lake per species,
-        laid out the way a person reading a report would expect: lakes down the
-        side, species across the top.
-      </p>
+      <introduction>
+        <p>
+          TODO
+        </p>
+      </introduction>
 
-      <program language="r">
+      <subsubsection xml:id="subsubsec-shapes-long-to-wide">
+        <title>Flamingos Data - Wide to Long</title>
+
+        <p>
+          <c>kenya_flamingos.csv</c> has always been in <term>long</term>
+          format: one row per bird, one column per variable.
+          That shape is why all our visualisations using <c>ggplot2</c> work
+          without any reshaping.
+          But long format is not always what you want to <em>look</em> at, and
+          reshaping between the two is a skill in its own right.
+        </p>
+
+        <p>
+          Suppose you want a simple summary table, birds per lake per species,
+          laid out the way a person reading a report would expect: lakes down
+          the side, species across the top.
+        </p>
+
+        <program language="r">
         library(dplyr)
         library(tidyr)
 
@@ -640,15 +256,18 @@ Named definitions too?
         #&gt; 4 Elementaita  Lesser Flamingo 38
         #&gt; 5      Nakuru Greater Flamingo 26
         #&gt; 6      Nakuru  Lesser Flamingo 126
-      </program>
-      <p>
-        <c>counts_long</c> is exactly the shape a computer wants: one row per
-        lake-species combination, one column holding the count.
-        It is not the shape a human wants to read at a glance.
-        <c>pivot_wider()</c> turns the <c>species</c> values into column names.
-      </p>
+        </program>
+        <p>
+          <c>counts_long</c> is exactly the shape a computer wants: one row per
+          lake-species combination, one column holding the count.
+          But, it is not the best shape to communicate to a human.
+          Comparing species counts across lakes is easier when the species are
+          in columns instead of rows.
+          <c>pivot_wider()</c> turns the <c>species</c> values into column
+          names.
+        </p>
 
-      <program language="r">
+        <program language="r">
         counts_wide &lt;- counts_long %&gt;%
           pivot_wider(names_from = species, values_from = n)
 
@@ -658,25 +277,25 @@ Named definitions too?
         #&gt; 1     Bogoria               10             114
         #&gt; 2 Elementaita               30              38
         #&gt; 3      Nakuru               26             126
-      </program>
-      <p>
-        Same numbers, same information, a different shape <mdash/> and this is
-        "table-lake-species-crosstab" from <xref ref="ch-exploring-data"/>,
-        arrived at mechanically rather than typed by hand.
-      </p>
-    </subsection>
+        </program>
+        <p>
+          Now the table is laid out in a way that is easy to read by eye, but it
+          is no longer in a shape that <c>ggplot2</c> can plot directly.
+        </p>
 
-    <subsection xml:id="ss-shapes-wide-to-long">
-      <title>From wide to long: getting back to something plottable</title>
+        <p>
+          <term>From wide to long</term>
+        </p>
 
-      <p>
-        Reverse the process with <c>pivot_longer()</c>, and <c>counts_wide</c>
-        becomes plottable again.
-      </p>
+        <p>
+          Reverse the process with <c>pivot_longer()</c>, and <c>counts_wide</c>
+          becomes plottable again.
+        </p>
 
-      <program language="r">
-        counts_wide %&gt;%
+        <program language="r">
+        counts_long &lt;- counts_wide %&gt;%
           pivot_longer(cols = -lake, names_to = "species", values_to = "n")
+        counts_long
 
         #&gt; # A tibble: 6 x 3
         #&gt;   lake        species              n
@@ -687,19 +306,1884 @@ Named definitions too?
         #&gt; 4 Elementaita Lesser Flamingo     38
         #&gt; 5 Nakuru      Greater Flamingo    26
         #&gt; 6 Nakuru      Lesser Flamingo    126
-      </program>
-      <p>
-        This round trip, long <mdash/> wide <mdash/> long, is not busywork.
-        Each direction serves a different reader.
-        Long format serves R: <c>ggplot2</c>, <c>group_by()</c>, and joins all
-        expect it.
-        Wide format serves a person scanning a table by eye, or a spreadsheet
-        cell reference that assumes species live in fixed columns.
-        Knowing which one a task actually needs, before writing any code, saves
-        exactly the repeated reshaping that cost Gassen a day's work when JHU's
-        columns shifted under him, and exactly the merging failure that cost
-        Sierra Leone's Ebola response.
-      </p>
+
+        
+ggplot(counts_long, aes(x = lake, y = n, fill = species)) + 
+  geom_bar(stat = "identity") +
+  labs(x = "Lake", y = "Count", fill = "Species")
+        </program>
+        <figure>
+          <caption>
+            A bar chart with three bars comparing the number of flamingoes at
+            each lake, split by species.
+            Created using data in a long format.
+          </caption>
+
+          <image source="images/ch6_long_plot.png" width="100%">
+            <description>
+              <p>
+                A bar chart with three bars comparing the number of flamingoes
+                at each lake, split by species.
+                The bar for Elementaita is the tallest, followed by Nakuru, then
+                Bogoria.
+                The bar for Lesser Flamingoes is taller than the bar for Greater
+                Flamingoes at each lake.
+              </p>
+            </description>
+          </image>
+        </figure>
+
+        <p>
+          This round trip, long <mdash/> wide <mdash/> long, is not busywork.
+          Each direction serves a different reader.
+          Long format serves R: <c>ggplot2</c>, <c>group_by()</c>, and joins all
+          expect it.
+          Wide format serves a person scanning a table by eye, or a spreadsheet
+          cell reference that assumes species live in fixed columns.
+          Knowing which one a task actually needs, before writing any code,
+          saves exactly the repeated reshaping that cost Gassen a day's work
+          when JHU's columns shifted under him, and exactly the merging failure
+          that cost Sierra Leone's Ebola response.
+          This JHU example is given below.
+        </p>
+      </subsubsection>
+
+      <subsubsection xml:id="sec-jhu-shapes">
+        <title>A Format That Grew a New Column Every Day</title>
+
+        <p>
+          In January 2020, a small team at Johns Hopkins University's Center for
+          Systems Science and Engineering (CSSE) launched a public COVID-19
+          dashboard, described the following May in a peer-reviewed paper by
+          Dong, Du, and Gardner (2020).
+          It became, within weeks, one of the single most-used sources of
+          COVID-19 data in the world <mdash/> the map that news outlets,
+          governments, and researchers everywhere pulled numbers from.
+          The underlying data was published openly, and it started out
+          <term>wide</term>: one row per country or region, and one column for
+          every date, holding that location's cumulative case count on that day.
+        </p>
+
+        <p>
+          <alert>A table with no final column</alert>
+        </p>
+
+        <p>
+          Most wide tables have a fixed, known set of columns.
+          This one did not.
+          Every single day the pandemic continued, the dataset needed one more
+          column than it had the day before, for as long as anyone was tracking
+          the outbreak.
+          Anyone who wanted to do more than eyeball the day's totals <mdash/>
+          plot a trend, compute a weekly change, merge in a country's population
+          to calculate a rate <mdash/> first had to reshape the table from wide
+          to long, and had to do it again every time a new day's column was
+          added.
+          Wide format was not <em>hard</em> to use.
+          It was hard to use
+          <em>repeatedly, at
+        growing scale, indefinitely.</em>
+        </p>
+
+        <figure xml:id="fig-covid-wide-format">
+          <caption>
+            Confirmed COVID-19 cases worldwide, 22 January to 2 February 2020.
+            Each row represents a country or region, while each date is stored
+            as a separate column.
+            As more days are added, the dataset quickly becomes very wide.
+            This is one of three datasets in the original collection: Confirmed
+            Cases, Deaths, and Recovered.
+          </caption>
+
+          <image source="images/covid_wide_format.png" width="60%">
+            <description>
+              <p>
+                A screenshot of a wide COVID-19 dataset.
+                Rows represent countries and regions, with columns for location,
+                latitude and longitude followed by daily confirmed case counts
+                from 22 January 2020 onwards.
+                The many date columns illustrate how the dataset becomes
+                increasingly wide as observations are recorded for each new day.
+                This is the "Confirmed Cases" dataset; equivalent datasets were
+                provided for deaths and recovered cases.
+              </p>
+            </description>
+          </image>
+        </figure>
+
+        <p>
+          <alert>Reshaping it themselves, and having the ground move</alert>
+        </p>
+
+        <p>
+          For a dashboard glanced at once a day, wide was never actually broken.
+          It was the perfect format.
+          But, some individuals needed to do more than glance at the data, and
+          so they reshaped it themselves.
+        </p>
+
+        <p>
+          On 23 March 2020, the researcher Joachim Gassen published R code that
+          pulled JHU's wide file and reshaped it to long <mdash/> one row per
+          country per date <mdash/> specifically so it could be merged with
+          other data.
+          A wide table with a different date in every column has no single
+          column two datasets can agree to join on; a long table does.
+          Gassen's code went further, attaching standardised <term>ISO3c</term>
+          country codes to every row, because without a shared identifier,
+          nobody could reliably bring in a country's population to convert raw
+          case counts into a per-capita rate.
+        </p>
+
+        <figure xml:id="fig-covid-long-format">
+          <caption>
+            The same confirmed-case numbers as
+            <xref ref="fig-covid-wide-format"/>, reshaped to long format: one
+            row per country per date, with a standardised country code attached
+            for merging.
+          </caption>
+
+          <image source="images/covid_long_format.png" width="60%">
+            <description>
+              <p>
+                A long-format COVID-19 dataset with one row per country per
+                date.
+                Columns include a standardised ISO3c country code, country name,
+                date, and confirmed case count, instead of one column per date.
+              </p>
+            </description>
+          </image>
+        </figure>
+
+        <p>
+          The reshaping held up for about a day.
+          On 24 March 2020, Gassen published a follow-up post:
+          <q>Just hours after my old blog post
+        about tidying Johns Hopkins CSSE Covid-19 data the team has changed
+        their time-series table data structure.</q>
+          JHU had restructured the wide file's own columns <mdash/> adding
+          latitude and longitude, and reorganising how US states were broken out
+          <mdash/> a genuine improvement, but one that broke every piece of code
+          written against the old column layout, Gassen's included.
+          He rewrote and republished the same day.
+        </p>
+
+        <insight xml:id="insight-jhu-shapes-lesson">
+          <title>
+            Reshaping isn't a one-time fix.
+            It's a job that keeps coming back.
+          </title>
+
+          <p>
+            JHU never made its published file long, and it didn't need to
+            <mdash/> wide genuinely was the right shape for a dashboard scanned
+            once a day.
+            The people who needed it long, to merge, to compute rates, to plot
+            trends across countries, had to reshape it themselves.
+            And because they did not control the source format, a change nobody
+            warned them about broke that reshaping within a day of them
+            publishing it.
+            Wide and long are not a wrong version and a right version of the
+            same table.
+            They serve different readers, and whoever needs the other shape is
+            the one who ends up doing the reshaping <mdash/> repeatedly, for as
+            long as the source keeps changing underneath them.
+          </p>
+        </insight>
+
+        <p>
+          <term>Sources:</term> Dong, E., Du, H.
+          and Gardner, L.
+          (2020).
+          <q>An interactive web-based dashboard to track COVID-19 in real
+        time.</q>
+          <em>The Lancet Infectious Diseases</em>, 20(5), 533 <ndash/> 534.
+          Gassen, J.
+          (23 March 2020).
+          <q>Tidying the John Hopkins Covid-19 data.</q> Blog post.
+          Gassen, J.
+          (24 March 2020).
+          <q>Tidying the new Johns Hopkins Covid-19
+        time-series datasets.</q>
+          Blog post.
+          Data repository:
+          <url href="https://github.com/CSSEGISandData/COVID-19" visual="github.com/CSSEGISandData/COVID-19"/>.
+        </p>
+      </subsubsection>
+    </subsection>
+
+    <subsection xml:id="ss-shapes-append">
+      <title>Appending Data</title>
+
+      <introduction>
+        <p>
+          TODO
+        </p>
+      </introduction>
+
+      <subsubsection xml:id="subsubsec-shapes-append">
+        <title>TODO</title>
+
+        <p>
+          In <xref ref="ch-exploring-data"/> and
+          <xref ref="ch-cleaning-recoding"/> we worked with the Kenya Road
+          Accidents database covering April to June 2016.
+          This same excel file contains a second sheet with data from 2017.
+          This is a natural appending problem: two datasets recording the same
+          kind of information, in the same format, for different time periods.
+          The goal is to combine them into one.
+        </p>
+
+        <program language="r">
+          <code>
+        library(dplyr)
+        library(tidyr)
+        library(readxl)
+
+        kenya_accidents_2016 &lt;- read_excel("kenya-accidents-database.xlsx")
+        kenya_accidents_2017 &lt;- read_excel("kenya-accidents-database.xlsx",
+                                            sheet = "2017")
+          </code>
+        </program>
+
+        <p>
+          Before combining anything, it is worth looking at both datasets side
+          by side.
+          What columns do they share?
+          What is different?
+        </p>
+
+        <program language="r">
+          <code>
+        head(kenya_accidents_2016)
+        #&gt; # A tibble: 6 × 13
+        #&gt;   `TIME 24 HOURS` `BASE/SUB BASE` COUNTY       ROAD            PLACE
+        #&gt;   &lt;chr&gt;           &lt;chr&gt;           &lt;chr&gt;        &lt;chr&gt;           &lt;chr&gt;
+        #&gt; 1 630             KITUI           MAKUENI      KITUI-ITHOKWE   KITUI SCHOOL
+        #&gt; 2 830             VOI             TAITA TAVETA MOMBASA-NAIROBI IKANGA
+        #&gt; 3 1330            MARIAKANI       KILIFI       MOMBASA-NAIROBI KATOLANI
+        #&gt; 4 2100            ONGATA RONGAI   NAKURU       NAKURU-NAIROBI  MAASAI LODGE
+        #&gt; 5 1900            MATUU           MACHAKOS     MATUU-MWINGI    KIVANI
+        #&gt; 6 2130            NYANDO          HOMA BAY     KATITO-KENDU B… PAP ONDITI
+        #&gt; # ... with 8 more variables: BRIEF ACCIDENT DETAILS &lt;chr&gt;, GENDER &lt;chr&gt;,
+        #&gt; #   AGE &lt;chr&gt;, CAUSE CODE &lt;dbl&gt;, VICTIM &lt;chr&gt;, NO. &lt;dbl&gt;,
+        #&gt; #   Date DD/MM/YYYY &lt;dttm&gt;, ...13 &lt;chr&gt;
+
+        head(kenya_accidents_2017)
+        #&gt; # A tibble: 6 × 15
+        #&gt;   `TIME 24 HOURS` `BASE/SUB BASE` COUNTY  ROAD  PLACE `MV INVOLVED`
+        #&gt;   &lt;chr&gt;           &lt;chr&gt;           &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+        #&gt; 1 745             KISUMU          KISUMU  NAIR… KASA… KBS 163T/ZD …
+        #&gt; 2 1430            NAROK           NAROK   NARO… NARO… KBS 518A HON…
+        #&gt; 3 1515            LONDIANI        KERICHO KERI… JUBE… KTCB 472K JO…
+        #&gt; 4 1600            KIMILILI        BUNGOMA BOKO… BITU… KBW 374M TOY…
+        #&gt; 5 1747            NAKURU          NAKURU  PIPE… PIPE… KMDQ 433R DA…
+        #&gt; 6 1830            ONGATA RONGAI   KAJIADO MAGA… CHAP… KBG 936M T/M…
+        #&gt; # ... with 9 more variables: BRIEF ACCIDENT DETAILS &lt;chr&gt;,
+        #&gt; #   NAME OF VICTIM &lt;chr&gt;, GENDER &lt;chr&gt;, AGE &lt;chr&gt;, CAUSE CODE &lt;dbl&gt;,
+        #&gt; #   VICTIM &lt;chr&gt;, NO. &lt;dbl&gt;, Date DD/MM/YYYY &lt;dttm&gt;, ...15 &lt;dttm&gt;
+          </code>
+        </program>
+
+        <p>
+          The two datasets share 12 columns with the same names and the same
+          data types: <c>TIME 24 HOURS</c>, <c>COUNTY</c>, <c>GENDER</c>,
+          <c>AGE</c>, and so on.
+          The 2016 data has a 13th column ( <c>...13</c> ) that we established
+          in the cleaning chapter is just a stray note, not real data.
+          The 2017 data has two extra columns that 2016 does not:
+          <c>MV INVOLVED</c> (the vehicle registration number) and
+          <c>NAME OF VICTIM</c>, as well as its own stray column ( <c>...15</c>
+          ).
+          We drop the stray columns from both before proceeding.
+        </p>
+
+        <program language="r">
+          <code>
+        kenya_accidents_2016$`...13` &lt;- NULL
+        kenya_accidents_2017$`...15` &lt;- NULL
+          </code>
+        </program>
+
+        <p>
+          <alert>When the columns match: a clean append</alert>
+        </p>
+
+        <p>
+          In <c>dplyr</c>, <c>bind_rows()</c> stacks two data frames vertically:
+          the rows of the second are placed below the rows of the first.
+          It is the computational equivalent of printing both spreadsheets and
+          stapling them together.
+        </p>
+
+        <program language="r">
+          <code>
+        kenya_accidents_all &lt;- bind_rows(kenya_accidents_2016, 
+                                          kenya_accidents_2017)
+
+        head(kenya_accidents_all, 10)
+        #&gt; # A tibble: 10 × 14
+        #&gt;    `TIME 24 HOURS` `BASE/SUB BASE` COUNTY       ROAD            PLACE
+        #&gt;    &lt;chr&gt;           &lt;chr&gt;           &lt;chr&gt;        &lt;chr&gt;           &lt;chr&gt;
+        #&gt;  1 630             KITUI           MAKUENI      KITUI-ITHOKWE   KITUI SCHOOL
+        #&gt;  2 830             VOI             TAITA TAVETA MOMBASA-NAIROBI IKANGA
+        #&gt;  3 1330            MARIAKANI       KILIFI       MOMBASA-NAIROBI KATOLANI
+        #&gt;  4 2100            ONGATA RONGAI   NAKURU       NAKURU-NAIROBI  MAASAI LODGE
+        #&gt;  5 1900            MATUU           MACHAKOS     MATUU-MWINGI    KIVANI
+        #&gt;  6 2130            NYANDO          HOMA BAY     KATITO-KENDU B… PAP ONDITI
+        #&gt;  7 1200            MWEA            KIRINYAGA    MAKUTANO-MUMB… MUMAI
+        #&gt;  8 1330            NAKURU          NAKURU       KENYA-UGANDA    NEAR NAKURU
+        #&gt;  9 1930            KAYOLE          NAIROBI      EASTERN BYPASS  NEAR KAYOLE
+        #&gt; 10 2030            THIKA           KIAMBU       NYERI ROAD      BLUE POSTS
+        #&gt; # ... with 4 more variables: BRIEF ACCIDENT DETAILS &lt;chr&gt;, GENDER &lt;chr&gt;,
+        #&gt; #   AGE &lt;chr&gt;, CAUSE CODE &lt;dbl&gt;, VICTIM &lt;chr&gt;, NO. &lt;dbl&gt;,
+        #&gt; #   Date DD/MM/YYYY &lt;dttm&gt;, MV INVOLVED &lt;chr&gt;, NAME OF VICTIM &lt;chr&gt;
+          </code>
+        </program>
+
+        <p>
+          It works.
+          Notice that the columns that exist only in the 2017 data (
+          <c>MV INVOLVED</c> and <c>NAME OF VICTIM</c> ) appear in the combined
+          dataset, filled with <c>NA</c> for all the 2016 rows.
+          <c>bind_rows()</c> handles this gracefully: it creates a column for
+          every column that exists in either dataset, and fills the gaps with
+          missing values.
+          No data is lost and nothing errors.
+        </p>
+
+        <p>
+          We can verify that the append worked by plotting the date
+          distribution.
+          If both years are present, we should see dates spanning 2016 and 2017.
+        </p>
+
+        <program language="r">
+          <code>
+        library(ggplot2)
+        library(lubridate)
+
+        kenya_accidents_all %&gt;%
+          mutate(year = lubridate::year(`Date DD/MM/YYYY`)) %&gt;%
+          count(year)
+        #&gt; # A tibble: 2 × 2
+        #&gt;    year     n
+        #&gt;   &lt;dbl&gt; &lt;int&gt;
+        #&gt; 1  2016   378
+        #&gt; 2  2017   740
+          </code>
+        </program>
+
+        <p>
+          There are 378 rows from 2016 and 740 from 2017.
+          Both years present, as expected.
+          This is the kind of quick check worth doing after every append:
+          confirm that the row count is what you expected, and that the data
+          from each source is actually there.
+        </p>
+
+        <p>
+          It is also worth checking the columns.
+          The 2016 data had 12 columns and the 2017 data had 14 — but the
+          combined dataset does not have 12 + 14 = 26 columns.
+          It has 14, because most columns are shared between the two datasets
+          and appear only once.
+          The two extra columns from 2017 ( <c>MV INVOLVED</c> and
+          <c>NAME OF VICTIM</c> ) are added to the shared set, giving 14 in
+          total.
+          If a column name appeared in one dataset but not the other and was
+          genuinely a different variable — not just a naming inconsistency — you
+          would expect to see it appear as an extra column filled with <c>NA</c>
+          s for the dataset that did not have it.
+          Checking the column count after an append, and inspecting any
+          unexpected columns, is a quick way to catch naming mismatches before
+          they cause problems downstream.
+        </p>
+
+        <p>
+          <alert>When the column names don't match</alert>
+        </p>
+
+        <p>
+          A clean append depends on both datasets using the same column names
+          for the same variables.
+          One issue that may have arisen in Ebola response story is if different
+          districts used different names for the same field.
+          In this case, the files could not be combined correctly.
+          We can recreate that problem deliberately.
+        </p>
+
+        <p>
+          Suppose the 2016 data had been collected with the column called
+          <c>SEX</c> instead of <c>GENDER</c>.
+          We simulate that by renaming it:
+        </p>
+
+        <program language="r">
+          <code>
+        kenya_accidents_2016 &lt;- dplyr::rename(kenya_accidents_2016, 
+                                               "SEX" = "GENDER")
+        names(kenya_accidents_2016)
+        #&gt;  [1] "TIME 24 HOURS"          "BASE/SUB BASE"         
+        #&gt;  [3] "COUNTY"                 "ROAD"                  
+        #&gt;  [5] "PLACE"                  "BRIEF ACCIDENT DETAILS"
+        #&gt;  [7] "SEX"                    "AGE"                   
+        #&gt;  [9] "CAUSE CODE"             "VICTIM"                
+        #&gt; [11] "NO."                    "Date DD/MM/YYYY"
+          </code>
+        </program>
+
+        <p>
+          Now what happens when we append?
+        </p>
+
+        <program language="r">
+          <code>
+        bind_rows(kenya_accidents_2016, kenya_accidents_2017)
+        #&gt; # A tibble: 10 × 16
+        #&gt;    `TIME 24 HOURS` `BASE/SUB BASE` COUNTY  ROAD  PLACE
+        #&gt;    &lt;chr&gt;           &lt;chr&gt;           &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;
+        #&gt;  1 630             KITUI           MAKUENI KITU… KITU…
+        #&gt;  2 830             VOI             TAITA … MOMB… IKAN…
+        #&gt;  3 1330            MARIAKANI       KILIFI  MOMB… KATO…
+        #&gt; # ... with 7 more variables: BRIEF ACCIDENT DETAILS &lt;chr&gt;,
+        #&gt; #   SEX &lt;chr&gt;, AGE &lt;chr&gt;, CAUSE CODE &lt;dbl&gt;, VICTIM &lt;chr&gt;,
+        #&gt; #   NO. &lt;dbl&gt;, Date DD/MM/YYYY &lt;dttm&gt;, MV INVOLVED &lt;chr&gt;,
+        #&gt; #   NAME OF VICTIM &lt;chr&gt;, GENDER &lt;chr&gt;
+          </code>
+        </program>
+
+        <p>
+          No error — but look carefully at the columns.
+          Both <c>SEX</c> and <c>GENDER</c> appear in the combined dataset as
+          separate columns.
+          R has no way of knowing that <c>SEX</c> in the 2016 data and
+          <c>GENDER</c> in the 2017 data are the same variable.
+          From R's perspective, they are two different column names, so they
+          become two different columns.
+          The 2016 rows have values in <c>SEX</c> and <c>NA</c> in
+          <c>GENDER</c>; the 2017 rows have values in <c>GENDER</c> and
+          <c>NA</c> in <c>SEX</c>.
+          The information is all there, but it is now split across two columns
+          that should be one.
+          Any analysis of sex or gender would need to reconcile them first.
+        </p>
+
+        <p>
+          The ideal fix is to standardise the column name before appending:
+        </p>
+
+        <program language="r">
+          <code>
+        kenya_accidents_2016 &lt;- dplyr::rename(kenya_accidents_2016, 
+                                               "GENDER" = "SEX")
+          </code>
+        </program>
+
+        <p>
+          <alert>When the column types don't match</alert>
+        </p>
+
+        <p>
+          A more subtle problem arises when both datasets use the same column
+          name but store the values as different types.
+          The date column is a good illustration.
+          In both datasets, <c>Date DD/MM/YYYY</c> is read in as a
+          <c>POSIXct</c> datetime object.
+          But suppose we convert it to a simpler <c>Date</c> type in the 2016
+          data as part of cleaning, as we did in chapter 4, while leaving the
+          2017 data unconverted:
+        </p>
+
+        <program language="r">
+          <code>
+        kenya_accidents_2016 &lt;- kenya_accidents_2016 %&gt;%
+          mutate(`Date DD/MM/YYYY` = as.Date(`Date DD/MM/YYYY`))
+
+        class(kenya_accidents_2016$`Date DD/MM/YYYY`)
+        #&gt; [1] "Date"
+
+        class(kenya_accidents_2017$`Date DD/MM/YYYY`)
+        #&gt; [1] "POSIXct" "POSIXt"
+          </code>
+        </program>
+
+        <p>
+          Both represent dates, but R stores them differently.
+          What happens when we append?
+        </p>
+
+        <program language="r">
+          <code>
+        bind_rows(kenya_accidents_2016, kenya_accidents_2017)
+          </code>
+        </program>
+
+        <p>
+          It works!
+          <c>bind_rows()</c> silently converts both to <c>dttm</c> (datetime)
+          format to resolve the conflict.
+          This is convenient, but <q>silently</q> is worth noting: R made a
+          decision about your data without telling you.
+          In this case the decision is harmless, but in general it is worth
+          checking the types of the combined dataset after appending, rather
+          than assuming everything was resolved correctly.
+        </p>
+
+        <p>
+          Not all type mismatches are resolved so gracefully.
+          Convert <c>AGE</c> to numeric in the 2016 data, like in
+          <xref ref="ch-cleaning-recoding"/>, using <c>as.numeric()</c>, and
+          leave it as character in the 2017 data.
+          The result is an error when you try to append:
+        </p>
+
+        <program language="r">
+          <code>
+        kenya_accidents_2016 &lt;- kenya_accidents_2016 %&gt;%
+          mutate(AGE = as.numeric(AGE))
+
+        class(kenya_accidents_2016$AGE)
+        #&gt; [1] "numeric"
+
+        class(kenya_accidents_2017$AGE)
+        #&gt; [1] "character"
+
+        bind_rows(kenya_accidents_2016, kenya_accidents_2017)
+        #&gt; Error in `bind_rows()`:
+        #&gt;   ! Can't combine `..1$AGE` &lt;double&gt; and `..2$AGE` &lt;character&gt;.
+        #&gt; Run `rlang::last_trace()` to see where the error occurred.
+          </code>
+        </program>
+
+        <p>
+          Unlike the date mismatch, R cannot automatically decide whether a
+          number and a string are the same thing, so it refuses rather than
+          guessing.
+          This error is actually helpful: it is telling you exactly which column
+          is causing the problem and what the conflict is.
+          The fix is to make the types consistent before appending — either
+          convert <c>AGE</c> to numeric in both datasets, or leave it as
+          character in both:
+        </p>
+
+        <insight xml:id="insight-append-lesson">
+          <title>
+            Appending reveals assumptions you didn't know you'd made.
+          </title>
+
+          <p>
+            A clean append requires that both datasets agree on three things:
+            the same column names for the same variables, the same data types
+            for each column, and the same definition of what a row represents.
+            When any of those assumptions breaks, the result is either an error
+            (which at least tells you something went wrong) or a silent
+            expansion — extra columns appearing, types being quietly coerced —
+            which may not.
+            The two sheets of the Kenya road accidents data fail at none of
+            them, which is why the append works so cleanly.
+            That is not accidental: it reflects a consistent data collection
+            format applied across both years.
+          </p>
+        </insight>
+      </subsubsection>
+
+      <subsubsection xml:id="ss-binding-by-rows">
+        <title>
+          Binding by Rows: Stacking Farmer Lists for Fertilizer Vouchers
+        </title>
+
+        <p>
+          Every planting season, the Kenyan government subsidises fertiliser for
+          smallholder farmers and distributes it through National Cereals and
+          Produce Board (NCPB) depots.
+          A farmer registers once, and is issued a voucher by SMS: turn up at
+          the depot with your phone and your ID, the clerk checks you against
+          the system, and you walk away with fertiliser at a fraction of the
+          market price.
+          For a smallholder farmer, that price difference is not a minor saving.
+          It can be the difference between planting a full acre and planting
+          half of one.
+        </p>
+
+        <p>
+          Behind that single lookup at the depot counter sits a chain of
+          ordinary data work: registration lists have to be combined into one
+          national list, and that list has to be checked against a farmer's ID
+          and phone details before a voucher is issued.
+        </p>
+
+        <p>
+          One way to build a national registry is to take every local list of
+          registered farmers and stack them into a single table, one after
+          another.
+          For it to work cleanly, every list being stacked has to agree on its
+          columns: the same column names, meaning the same thing, all the way
+          down.
+          If one office's spreadsheet calls a column <c>phone_number</c> and
+          another calls the same thing <c>mobile_no</c>, software does not stop
+          and ask what to do.
+          It creates a new column for the name it hasn't seen before, and fills
+          it with <term>NA</term> <mdash/> <q>not available</q>, the standard
+          way software marks a hole in the data <mdash/> everywhere that column
+          does not apply.
+          A registry that should have five clean columns quietly grows extra
+          ones nobody asked for, and a farmer's real phone number can end up
+          split across two of them depending on which office registered them.
+        </p>
+
+        <insight xml:id="insight-schema-drift">
+          <title>Computers Match Characters, Not Intent</title>
+
+          <p>
+            Two records that look identical to a human being can be completely
+            different to a computer if the column names, spacing, or exact text
+            differ by even a single character.
+            An append needs every table to agree on its columns before you stack
+            them, and ideally needs a rule for what counts as
+            <q>the same real-world entity twice</q> before it lets a duplicate
+            in.
+          </p>
+        </insight>
+      </subsubsection>
+
+      <subsubsection xml:id="subsec-ss-shapes-definitions">
+        <title>Same Column Name, Different Definition</title>
+
+        <p>
+          Suppose we wanted to append our 2016 Kenya road crash data with
+          equivalent data from Uganda to compare them.
+          The two datasets might have the same column names, the same data
+          types, and the same apparent structure (a row per crash, columns for
+          time, location, victim category, and cause), and hence
+          <c>bind_rows()</c> would run without error.
+          But Kenya and Uganda define a road fatality differently.
+          In Kenya, the NTSA appears to record only deaths at the scene — with
+          no follow-up at hospitals to determine whether injuries sustained in
+          the crash later proved fatal (Muguro et al., 2020).
+          Uganda, by contrast, classifies a road crash as fatal if an individual
+          dies at the scene or within a year and a day of the crash due to
+          injuries sustained in it (Apunyu et al., 2024).
+          This means that a person who died at the scene would be counted as a
+          road fatality in both countries, but a person who survived the scene
+          and died in hospital six months later would be counted in Uganda and
+          not in Kenya.
+          The data would contain a mix of values collected under different
+          rules, with no flag to tell you which is which.
+          The append would succeed technically and fail analytically.
+        </p>
+
+        <insight xml:id="insight-variable-definitions">
+          <title>A Variable Name Is Not a Definition</title>
+
+          <p>
+            Software checks whether column names and data types match during an
+            append; it cannot check whether the underlying data-generation
+            processes are comparable.
+            Before combining data from different sources, ask:
+            <q>are the things being combined actually measuring 
+      the same reality?</q>
+          </p>
+
+          <p>
+            Identical column names are not a guarantee of identical meaning.
+          </p>
+        </insight>
+
+        <p>
+          <term>Sources:</term> Muguro et al.
+          (2020), cited above, on Kenya NTSA fatality definition.
+          Apunyu, B.
+          et al.
+          (2024).
+          <q>Road Traffic Fatalities in Uganda.</q> <em>Urban Science</em>,
+          5(1), 29.
+          <url href="https://www.mdpi.com/2673-7590/5/1/29"/>.
+        </p>
+      </subsubsection>
+    </subsection>
+
+    <subsection xml:id="ss-shapes-merge">
+      <title>Merging: Bringing Different Information Together</title>
+
+      <introduction>
+        <p>
+          Appending stacks datasets that describe the same kind of thing.
+          Merging does something different: it brings together two datasets that
+          describe <em>different</em> things about the same subjects.
+          The Kenya road accidents data tells us where each crash happened,
+          when, and who was involved.
+          We saw when exploring the data that Nairobi had the most crashes, but
+          Nairobi also has the largest population of any county in Kenya.
+          Does that mean Nairobi's roads are the most dangerous, or simply that
+          more people use them?
+          The 2019 Kenya census tells us how many people live in each county.
+          Together, the two datasets can answer a question that neither could
+          answer alone:
+          <em>which counties have 
+  the most dangerous roads relative to their population?</em>
+          The answer, it turns out, is not Nairobi.
+        </p>
+      </introduction>
+
+      <subsubsection xml:id="ss-merge-census">
+        <title>Loading the census data</title>
+
+        <p>
+          The 2019 Kenya Population and Housing Census county-level data is
+          available directly from the Kenya National Bureau of Statistics (KNBS)
+          website, and also from the Humanitarian Data Exchange (HDX).
+          This is the same platform the accidents data came from.
+          <url href="https://www.knbs.or.ke/wp-content/uploads/2023/09/2019-Kenya-population-and-Housing-Census-Population-households-density-by-county.xlsx">Download
+      the county-level Excel file</url>
+          and load it into R:
+        </p>
+
+        <program language="r">
+          <code>
+        kenya_census_2019 &lt;- read_excel(
+          "2019-Kenya-population-and-Housing-Census-Population-households-density-by-county.xlsx"
+        )
+
+        head(kenya_census_2019)
+        #&gt; # A tibble: 6 × 10
+        #&gt;   `Population by Sex, Househo...` ...2  ...3  ...4  ...5  ...6  ...7  ...8  ...9  ...10
+        #&gt;   &lt;chr&gt;                           &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+        #&gt; 1 NA                              NA    NA    NA    NA    NA    NA    NA    NA    NA
+        #&gt; 2 NA                              Total Sex   NA    NA    Hous… NA    NA    Land… Dens…
+        #&gt; 3 County                          NA    Male  Fema… Inte… Total Conv… Grou… Sq Km Pers…
+        #&gt; 4 KENYA                           4756… 2354… 2401… 1524  1214… 1204… 1008… 5808… 81.8…
+        #&gt; 5 MOMBASA                         1208… 6102… 5980… 30    3784… 3762… 2127  219.… 5495…
+        #&gt; 6 KWALE                           8668… 4251… 4416… 18    1731… 1728… 374   8253… 105.…
+          </code>
+        </program>
+
+        <p>
+          This is an interesting start.
+          The spreadsheet has two rows of headers: a merged header spanning
+          multiple columns on row 2, and the actual column names on row 3.
+          The data doesn't start until row 4.
+          R expects exactly one header row, so it has read the first row of data
+          as column names and everything else as data.
+          We skip the first three rows and supply our own column names:
+        </p>
+
+        <program language="r">
+          <code>
+        kenya_census_2019 &lt;- read_excel(
+          "2019-Kenya-population-and-Housing-Census-Population-households-density-by-county.xlsx",
+          skip = 3
+        )
+
+        names(kenya_census_2019) &lt;- c("County", "Population", "Male", "Female",
+                                       "Intersex", "Households",
+                                       "Households_Conventional",
+                                       "Households_Group_Quarters",
+                                       "Land_Area_Sq_Km",
+                                       "Density_Per_Sq_Km")
+          </code>
+        </program>
+
+        <p>
+          The last row of the file contains a source note rather than data.
+          By flicking through the data we can see that Population has a value
+          for all rows, except this source note row.
+          So, we drop this final row by removing any row where <c>Population</c>
+          is <c>NA</c>:
+        </p>
+
+        <program language="r">
+          <code>
+        tail(kenya_census_2019)
+        #&gt; # A tibble: 6 × 10
+        #&gt;   County       Population    Male  Female Intersex Households ...
+        #&gt; 1 HOMA BAY        1131950  539560  592367       23     262036 ...
+        #&gt; 2 MIGORI          1116436  536187  580214       35     240168 ...
+        #&gt; 3 KISII           1266860  605784  661038       38     308054 ...
+        #&gt; 4 NYAMIRA          605576  290907  314656       13     150669 ...
+        #&gt; 5 NAIROBI CITY    4397073 2192452 2204376      245    1506888 ...
+        #&gt; 6 Source: 201…         NA      NA      NA       NA         NA ...
+
+        kenya_census_2019 &lt;- kenya_census_2019 %&gt;%
+          dplyr::filter(!is.na(Population))
+          </code>
+        </program>
+
+        <note>
+          <p>
+            Notice that the census data is in wide format: one row per county,
+            with separate columns for male and female population.
+            That is the right shape for displaying as a summary table, but as we
+            discussed earlier in this chapter, we may want to reshape it later
+            if we need to plot or analyse by sex.
+          </p>
+        </note>
+
+        <p>
+          <alert>Choosing the right join</alert>
+        </p>
+
+        <p>
+          Before joining, we need to tell R which column in each dataset
+          contains the shared identifier.
+          In <c>dplyr</c>, the join functions take a <c>by</c> argument
+          specifying this.
+          If we forget to supply it:
+        </p>
+
+        <program language="r">
+          <code>
+        kenya_accidents_join &lt;- dplyr::full_join(kenya_accidents_2016,
+                                           kenya_census_2019)
+        #&gt; Error in `full_join()`:
+        #&gt;   ! `by` must be supplied when `x` and `y` have no common variables.
+        #&gt;   ℹ Use `cross_join()` to perform a cross-join.
+          </code>
+        </program>
+
+        <p>
+          The error tells us exactly what is wrong: the two datasets share no
+          column with the same name, so R cannot guess which columns to join on.
+          In the accidents data the county column is called <c>COUNTY</c>; in
+          the census it is called <c>County</c>.
+          We specify the match explicitly:
+        </p>
+
+        <program language="r">
+          <code>
+        kenya_accidents_join &lt;- dplyr::full_join(kenya_accidents_2016,
+                                           kenya_census_2019,
+                                           by = c("COUNTY" = "County"))
+          </code>
+        </program>
+
+        <p>
+          But examining the result reveals a problem.
+          Let's look at the first five rows of the joined dataset, which shows
+          both the accident columns (from the accidents data) and the population
+          columns (from the census):
+        </p>
+
+        <table xml:id="table-ch6-joined-sample">
+          <title>
+            First five rows of the joined dataset, showing accident columns
+            (from the accidents data) and population columns (from the census).
+            Row 2 has <c>NA</c> for all census columns because
+            <c>TAITA TAVETA</c> did not yet match the census name
+            <c>TAITA/TAVETA</c>.
+          </title>
+
+          <tabular halign="right">
+            <col halign="left"/>
+            <col halign="right"/>
+            <col halign="right"/>
+            <col halign="right"/>
+            <col halign="right"/>
+            <col halign="right"/>
+            <row header="yes" bottom="minor">
+              <cell>Variable</cell>
+              <cell>Row 1</cell>
+              <cell>Row 2</cell>
+              <cell>Row 3</cell>
+              <cell>Row 4</cell>
+              <cell>Row 5</cell>
+            </row>
+
+            <row>
+              <cell>TIME 24 HOURS</cell>
+              <cell>630</cell>
+              <cell>830</cell>
+              <cell>1330</cell>
+              <cell>2100</cell>
+              <cell>1900</cell>
+            </row>
+
+            <row>
+              <cell>BASE/SUB BASE</cell>
+              <cell>KITUI</cell>
+              <cell>VOI</cell>
+              <cell>MARIAKANI</cell>
+              <cell>ONGATA RONGAI</cell>
+              <cell>MATUU</cell>
+            </row>
+
+            <row>
+              <cell>COUNTY</cell>
+              <cell>MAKUENI</cell>
+              <cell>TAITA TAVETA</cell>
+              <cell>KILIFI</cell>
+              <cell>NAKURU</cell>
+              <cell>MACHAKOS</cell>
+            </row>
+
+            <row>
+              <cell>ROAD</cell>
+              <cell>KITUI-ITHOKWE</cell>
+              <cell>MOMBASA-NAIROBI</cell>
+              <cell>MOMBASA-NAIROBI</cell>
+              <cell>NAKURU-NAIROBI</cell>
+              <cell>MATUU-MWINGI</cell>
+            </row>
+
+            <row>
+              <cell>PLACE</cell>
+              <cell>KITUI SCHOOL</cell>
+              <cell>IKANGA</cell>
+              <cell>KATOLANI</cell>
+              <cell>MAASAI LODGE</cell>
+              <cell>KIVANDINI</cell>
+            </row>
+
+            <row>
+              <cell>BRIEF ACCIDENT DETAILS</cell>
+              <cell>HEAD ON COLLISION</cell>
+              <cell>HEAD ON COLLISION</cell>
+              <cell>THE UNKNOWN M/V HIT THE MOTOR CYCLE</cell>
+              <cell>
+                THE VEHICLE KNOCKED DOWN A PEDESTRIAN WHO WAS CROSSING THE ROAD
+              </cell>
+              <cell>
+                THE VEHICLE OVERTOOK A M/CYCLE AND LOST CONTROL VEERING OFF THE
+                ROAD &amp; ROLLED
+              </cell>
+            </row>
+
+            <row>
+              <cell>GENDER</cell>
+              <cell>M</cell>
+              <cell>M</cell>
+              <cell>M</cell>
+              <cell>M</cell>
+              <cell>M</cell>
+            </row>
+
+            <row>
+              <cell>AGE</cell>
+              <cell>26</cell>
+              <cell>28</cell>
+              <cell>A &amp; J</cell>
+              <cell>65</cell>
+              <cell>A</cell>
+            </row>
+
+            <row>
+              <cell>CAUSE CODE</cell>
+              <cell>7</cell>
+              <cell>25</cell>
+              <cell>98</cell>
+              <cell>29</cell>
+              <cell>10</cell>
+            </row>
+
+            <row>
+              <cell>VICTIM</cell>
+              <cell>M/CYCLIST</cell>
+              <cell>M/CYCLIST</cell>
+              <cell>M/CYCLIST</cell>
+              <cell>PEDESTRIAN</cell>
+              <cell>PASSENGER</cell>
+            </row>
+
+            <row>
+              <cell>NO.</cell>
+              <cell>1</cell>
+              <cell>1</cell>
+              <cell>1</cell>
+              <cell>1</cell>
+              <cell>1</cell>
+            </row>
+
+            <row>
+              <cell>Date DD/MM/YYYY</cell>
+              <cell>2016-06-25</cell>
+              <cell>2016-06-25</cell>
+              <cell>2016-06-25</cell>
+              <cell>2016-06-25</cell>
+              <cell>2016-06-25</cell>
+            </row>
+
+            <row bottom="minor">
+              <cell><em>Census columns below</em></cell>
+              <cell/>
+              <cell/>
+              <cell/>
+              <cell/>
+              <cell/>
+            </row>
+
+            <row>
+              <cell>Population</cell>
+              <cell>987,653</cell>
+              <cell>NA</cell>
+              <cell>1,453,787</cell>
+              <cell>2,162,202</cell>
+              <cell>1,421,932</cell>
+            </row>
+
+            <row>
+              <cell>Male</cell>
+              <cell>489,691</cell>
+              <cell>NA</cell>
+              <cell>704,089</cell>
+              <cell>1,077,272</cell>
+              <cell>710,707</cell>
+            </row>
+
+            <row>
+              <cell>Female</cell>
+              <cell>497,942</cell>
+              <cell>NA</cell>
+              <cell>749,673</cell>
+              <cell>1,084,835</cell>
+              <cell>711,191</cell>
+            </row>
+
+            <row>
+              <cell>Intersex</cell>
+              <cell>20</cell>
+              <cell>NA</cell>
+              <cell>25</cell>
+              <cell>95</cell>
+              <cell>34</cell>
+            </row>
+
+            <row>
+              <cell>Households</cell>
+              <cell>244,669</cell>
+              <cell>NA</cell>
+              <cell>298,472</cell>
+              <cell>616,046</cell>
+              <cell>402,466</cell>
+            </row>
+
+            <row>
+              <cell>Households (Conventional)</cell>
+              <cell>243,979</cell>
+              <cell>NA</cell>
+              <cell>297,990</cell>
+              <cell>598,237</cell>
+              <cell>399,523</cell>
+            </row>
+
+            <row>
+              <cell>Households (Group Quarters)</cell>
+              <cell>690</cell>
+              <cell>NA</cell>
+              <cell>482</cell>
+              <cell>17,809</cell>
+              <cell>2,943</cell>
+            </row>
+
+            <row>
+              <cell>Land Area (Sq Km)</cell>
+              <cell>8,176.67</cell>
+              <cell>NA</cell>
+              <cell>12,553.27</cell>
+              <cell>7,504.91</cell>
+              <cell>6,037.27</cell>
+            </row>
+
+            <row>
+              <cell>Density (per Sq Km)</cell>
+              <cell>120.79</cell>
+              <cell>NA</cell>
+              <cell>115.81</cell>
+              <cell>288.11</cell>
+              <cell>235.53</cell>
+            </row>
+          </tabular>
+        </table>
+
+        <p>
+          Row 2 of the joined dataset has <c>NA</c> for all the census columns
+          because <c>TAITA TAVETA</c> did not match the census name
+          <c>TAITA/TAVETA</c>.
+          In fact, there are several counties in the accidents data that did not
+          match the census, and hence have <c>NA</c> for all columns.
+          This has happened where the county names are recorded differently in
+          the two datasets.
+          We can find these by looking for crash rows where <c>Population</c> is
+          <c>NA</c>:
+        </p>
+
+        <program language="r">
+          <code>
+    kenya_accidents_join %&gt;%
+      filter(is.na(Population)) %&gt;%
+      pull(COUNTY) %&gt;%
+      unique()
+    #&gt; [1] "TAITA TAVETA"    "NAIROBI"         "KERCHO"
+    #&gt; [4] "MURANGA"         "MWINGI"          "ELGEYO MARAKWET"
+    #&gt; [7] "MAKURU"          "NYAHURURU"        NA
+    #&gt; [10] "MARAKWET"
+          </code>
+        </program>
+
+        <p>
+          Each of these is a county name that appeared in the accidents data but
+          found no match in the census.
+          Comparing these to the County names in the census data shows where the
+          problems lay.
+          <ul>
+            <li>
+              <p>
+                Some are spelling differences: the accidents data used
+                <c>NAIROBI</c> where the census uses <c>NAIROBI CITY</c>, and
+                <c>TAITA TAVETA</c> where the census uses <c>TAITA/TAVETA</c>.
+              </p>
+            </li>
+
+            <li>
+              <p>
+                Some are errors carried forward from the original data:
+                <c>KERCHO</c> and <c>MAKURU</c> were identified as typos for
+                <c>KERICHO</c> and <c>NAKURU</c> back in
+                <xref ref="ch-cleaning-recoding"/>.
+              </p>
+            </li>
+
+            <li>
+              <p>
+                And some are towns that were recorded as counties when they are
+                not: Nyahururu is a town in Laikipia County, and Mwingi is a
+                town in Kitui County.
+              </p>
+            </li>
+          </ul>
+          For every one of these mismatches, R had no way of knowing that
+          <c>NAIROBI</c> and <c>NAIROBI CITY</c> refer to the same place.
+          The join key must match character for character.
+          A difference of one space, one slash, or one letter is enough for R to
+          treat two values as completely different.
+          We still have the crash and the population data, but without an
+          identical key, the two cannot be connected.
+          Hence, we need to change those counties names in the accidents data to
+          match the census names before we can join them.
+        </p>
+
+        <p>
+          We can also check whether any rows have <c>NA</c> as their county
+          value.
+          These are crashes where the county was not recorded at all:
+        </p>
+
+        <program language="r">
+          <code>
+    kenya_accidents_2016 %&gt;%
+      filter(is.na(COUNTY))
+          </code>
+        </program>
+
+        <table xml:id="table-ch6-na-county">
+          <title>
+            Rows with missing county values.
+            The county can be inferred from the <c>BASE/SUB BASE</c> column:
+            Nanyuki and Kinangop are both towns, not counties.
+          </title>
+
+          <tabular halign="left">
+            <col halign="right"/>
+            <col halign="right"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="right"/>
+            <col halign="left"/>
+            <col halign="right"/>
+            <col halign="left"/>
+            <row header="yes" bottom="minor">
+              <cell>Row</cell>
+              <cell>TIME</cell>
+              <cell>BASE/SUB BASE</cell>
+              <cell>COUNTY</cell>
+              <cell>ROAD</cell>
+              <cell>PLACE</cell>
+              <cell>BRIEF ACCIDENT DETAILS</cell>
+              <cell>GENDER</cell>
+              <cell>AGE</cell>
+              <cell>CAUSE CODE</cell>
+              <cell>VICTIM</cell>
+              <cell>NO.</cell>
+              <cell>Date</cell>
+            </row>
+
+            <row>
+              <cell>1</cell>
+              <cell>2205</cell>
+              <cell>NANYUKI</cell>
+              <cell>NA</cell>
+              <cell>KINAMBA</cell>
+              <cell>NGARUA</cell>
+              <cell>The vehicle overturned killing 6 victims</cell>
+              <cell>4F &amp; INF</cell>
+              <cell>A</cell>
+              <cell>26</cell>
+              <cell>PASSENGER</cell>
+              <cell>6</cell>
+              <cell>2016-04-08</cell>
+            </row>
+
+            <row>
+              <cell>2</cell>
+              <cell>2142</cell>
+              <cell>KINANGOP</cell>
+              <cell>NA</cell>
+              <cell>NJAMBINI OLKALAO</cell>
+              <cell>KAMAGUTA</cell>
+              <cell>The vehicle hit a pedal cyclist</cell>
+              <cell>M</cell>
+              <cell>33</cell>
+              <cell>98</cell>
+              <cell>P/CYCLIST</cell>
+              <cell>1</cell>
+              <cell>2016-04-08</cell>
+            </row>
+          </tabular>
+        </table>
+
+        <p>
+          Both rows have a missing county, but neither is a mystery.
+          The <c>BASE/SUB BASE</c> column tells us where each crash was reported
+          from: Nanyuki is a town in Laikipia County, and Kinangop is a
+          sub-county in Nyandarua County.
+          We can fill in the missing county values using <c>BASE/SUB BASE</c> as
+          a fallback, which is already handled by the <c>case_when()</c>
+          corrections applied earlier:
+        </p>
+
+        <program language="r">
+          <code>
+    kenya_accidents_2016 &lt;- kenya_accidents_2016 %&gt;%
+  mutate(COUNTY = case_when(
+    
+    # Spelling and formatting corrections to match census names
+    COUNTY == "TAITA TAVETA"    ~ "TAITA/TAVETA",
+    COUNTY == "NAIROBI"         ~ "NAIROBI CITY",
+    COUNTY == "ELGEYO MARAKWET" ~ "ELGEYO/MARAKWET",
+    COUNTY == "MARAKWET"        ~ "ELGEYO/MARAKWET",
+    COUNTY == "MURANGA"         ~ "MURANG'A",
+    
+    # Corrections carried forward from data cleaning in Chapter 4
+    COUNTY == "MAKURU"          ~ "NAKURU",
+    COUNTY == "KERCHO"          ~ "KERICHO",
+    
+    # Towns incorrectly recorded as counties
+    # Nanyuki and Nyahururu are both towns in Laikipia County
+    `BASE/SUB BASE` == "NANYUKI"         ~ "LAIKIPIA",
+    COUNTY == "NYAHURURU"       ~ "LAIKIPIA",
+    # Mwingi is a town in Kitui County
+    COUNTY == "MWINGI"          ~ "KITUI",
+    # Kinangop is a sub-county in Nyandarua County
+    `BASE/SUB BASE` == "KINANGOP"        ~ "NYANDARUA",
+    
+    # Everything else stays as is
+    TRUE ~ COUNTY
+  ))
+
+  # Confirm no remaining NA counties
+    kenya_accidents_2016 %&gt;%
+      filter(is.na(COUNTY)) %&gt;%
+      nrow()
+    #&gt; [1] 0
+          </code>
+        </program>
+
+        <p>
+          We can also check the other direction — which census counties have no
+          corresponding crashes in the accidents data:
+        </p>
+
+        <program language="r">
+          <code>
+    setdiff(unique(kenya_census_2019$County),
+            unique(kenya_accidents_2016$COUNTY))
+    #&gt; [1] "KENYA"         "TANA RIVER"    "LAMU"
+    #&gt; [4] "WAJIR"         "MANDERA"       "MARSABIT"
+    #&gt; [7] "ISIOLO"        "THARAKA-NITHI" "TURKANA"
+    #&gt; [10] "WEST POKOT"    "SAMBURU"
+          </code>
+        </program>
+
+        <p>
+          This second list is expected — these are counties with no recorded
+          fatal crashes in this three-month extract, which is plausible for
+          sparsely populated or remote counties.
+          The first list required fixing.
+          After applying all the county name corrections described earlier in
+          this chapter, we verify that no mismatches remain:
+        </p>
+
+        <program language="r">
+          <code>
+    setdiff(unique(kenya_accidents_2016$COUNTY),
+            unique(kenya_census_2019$County))
+    #&gt; character(0)
+          </code>
+        </program>
+
+        <p>
+          Every county name in the accidents data now has an exact match in the
+          census.
+          Only then does it make sense to run the join again.
+        </p>
+
+        <p>
+          <alert>Choosing the right join</alert>
+        </p>
+
+        <paragraphs>
+          <title>Choosing the right join: left_join</title>
+
+          <p>
+            With the county names fixed, we run the join again.
+            But we still need to think about which kind of join to use.
+            A <c>full_join()</c> keeps every row from both datasets:
+          </p>
+
+          <program language="r">
+            <code>
+      kenya_accidents_join &lt;- full_join(kenya_accidents_2016,
+                                         kenya_census_2019,
+                                         by = c("COUNTY" = "County"))
+
+      nrow(kenya_accidents_2016)
+      #&gt; [1] 378
+
+      nrow(kenya_accidents_join)
+      #&gt; [1] 389
+            </code>
+          </program>
+
+          <p>
+            We have gained 11 rows.
+            These are counties that exist in the census but have no recorded
+            crashes in the accidents data — Tana River, Lamu, Wajir, and others.
+            A <c>full_join()</c> has added them as empty rows, with <c>NA</c>
+            for every accident column.
+            We do not want these.
+            Our question is about crash rates, and a county with no crashes in
+            the accidents extract is not the same as a county with no crashes at
+            all — it simply means no fatal crash was recorded there in this
+            three-month period.
+          </p>
+
+          <p>
+            What we want is a <c>left_join()</c>: keep every row from the left
+            dataset (the accidents data), bring in matching information from the
+            right dataset (the census), and discard any right-side rows that
+            have no match on the left.
+            In other words — every crash gets population data attached, and no
+            new rows are added.
+          </p>
+
+          <program language="r">
+            <code>
+      kenya_accidents_join &lt;- left_join(kenya_accidents_2016,
+                                         kenya_census_2019,
+                                         by = c("COUNTY" = "County"))
+
+      nrow(kenya_accidents_join)
+      #&gt; [1] 378
+            </code>
+          </program>
+
+          <p>
+            Back to 378 rows.
+            The first five rows of the joined dataset are shown below.
+            Notice that row 2 — previously <c>TAITA TAVETA</c>, which had failed
+            to match — now correctly shows <c>TAITA/TAVETA</c> and has a full
+            set of population values.
+          </p>
+        </paragraphs>
+
+        <table xml:id="table-ch6-left-joined-sample">
+          <title>
+            First five rows after the corrected left join.
+            Every row now has population data attached.
+            Row 2 previously failed to match; after correcting the county name
+            to <c>TAITA/TAVETA</c> it now joins successfully.
+          </title>
+
+          <tabular halign="left">
+            <col halign="right"/>
+            <col halign="right"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="right"/>
+            <col halign="left"/>
+            <col halign="right"/>
+            <col halign="right"/>
+            <col halign="right"/>
+            <col halign="right"/>
+            <col halign="right"/>
+            <row header="yes" bottom="minor">
+              <cell>Row</cell>
+              <cell>TIME</cell>
+              <cell>BASE</cell>
+              <cell>COUNTY</cell>
+              <cell>ROAD</cell>
+              <cell>PLACE</cell>
+              <cell>ACCIDENT DETAILS</cell>
+              <cell>GENDER</cell>
+              <cell>AGE</cell>
+              <cell>CAUSE</cell>
+              <cell>VICTIM</cell>
+              <cell>NO.</cell>
+              <cell>Population</cell>
+              <cell>Male</cell>
+              <cell>Female</cell>
+              <cell>Density</cell>
+            </row>
+
+            <row>
+              <cell>1</cell>
+              <cell>630</cell>
+              <cell>KITUI</cell>
+              <cell>MAKUENI</cell>
+              <cell>KITUI-ITHOKWE</cell>
+              <cell>KITUI SCHOOL</cell>
+              <cell>HEAD ON COLLISION</cell>
+              <cell>M</cell>
+              <cell>26</cell>
+              <cell>7</cell>
+              <cell>M/CYCLIST</cell>
+              <cell>1</cell>
+              <cell>987,653</cell>
+              <cell>489,691</cell>
+              <cell>497,942</cell>
+              <cell>120.79</cell>
+            </row>
+
+            <row>
+              <cell>2</cell>
+              <cell>830</cell>
+              <cell>VOI</cell>
+              <cell>TAITA/TAVETA</cell>
+              <cell>MOMBASA-NAIROBI</cell>
+              <cell>IKANGA</cell>
+              <cell>HEAD ON COLLISION</cell>
+              <cell>M</cell>
+              <cell>28</cell>
+              <cell>25</cell>
+              <cell>M/CYCLIST</cell>
+              <cell>1</cell>
+              <cell>340,671</cell>
+              <cell>173,337</cell>
+              <cell>167,327</cell>
+              <cell>19.86</cell>
+            </row>
+
+            <row>
+              <cell>3</cell>
+              <cell>1330</cell>
+              <cell>MARIAKANI</cell>
+              <cell>KILIFI</cell>
+              <cell>MOMBASA-NAIROBI</cell>
+              <cell>KATOLANI</cell>
+              <cell>The unknown M/V hit the motor cycle</cell>
+              <cell>M</cell>
+              <cell>A &amp; J</cell>
+              <cell>98</cell>
+              <cell>M/CYCLIST</cell>
+              <cell>1</cell>
+              <cell>1,453,787</cell>
+              <cell>704,089</cell>
+              <cell>749,673</cell>
+              <cell>115.81</cell>
+            </row>
+
+            <row>
+              <cell>4</cell>
+              <cell>2100</cell>
+              <cell>ONGATA RONGAI</cell>
+              <cell>NAKURU</cell>
+              <cell>NAKURU-NAIROBI</cell>
+              <cell>MAASAI LODGE</cell>
+              <cell>The vehicle knocked down a pedestrian</cell>
+              <cell>M</cell>
+              <cell>65</cell>
+              <cell>29</cell>
+              <cell>PEDESTRIAN</cell>
+              <cell>1</cell>
+              <cell>2,162,202</cell>
+              <cell>1,077,272</cell>
+              <cell>1,084,835</cell>
+              <cell>288.11</cell>
+            </row>
+
+            <row>
+              <cell>5</cell>
+              <cell>1900</cell>
+              <cell>MATUU</cell>
+              <cell>MACHAKOS</cell>
+              <cell>MATUU-MWINGI</cell>
+              <cell>KIVANDINI</cell>
+              <cell>The vehicle overtook a M/cycle and lost control</cell>
+              <cell>M</cell>
+              <cell>A</cell>
+              <cell>10</cell>
+              <cell>PASSENGER</cell>
+              <cell>1</cell>
+              <cell>1,421,932</cell>
+              <cell>710,707</cell>
+              <cell>711,191</cell>
+              <cell>235.53</cell>
+            </row>
+          </tabular>
+        </table>
+
+        <p>
+          Finally, we confirm that no crash rows are missing population data:
+        </p>
+
+        <program language="r">
+          <code>
+    kenya_accidents_join %&gt;%
+      filter(is.na(Population)) %&gt;%
+      nrow()
+    #&gt; [1] 0
+          </code>
+        </program>
+
+        <p>
+          Every crash has been matched to its county's census data.
+          The join is complete.
+        </p>
+
+        <p>
+          <alert>What the merge makes possible</alert>
+        </p>
+
+        <p>
+          With population data attached to every crash, we can now answer a
+          question that the accidents data alone could never answer: how many
+          crashes occurred <em>per person</em> in each county.
+          Raw crash counts favour populous counties simply because more people
+          live there and travel there.
+          A rate adjusts for that, and reveals which counties have genuinely
+          dangerous roads rather than just more traffic.
+        </p>
+
+        <program language="r">
+          <code>
+        library(ggplot2)
+        library(dplyr)
+
+        crash_rate &lt;- kenya_accidents_join %&gt;%
+          group_by(COUNTY, Population) %&gt;%
+          summarise(crashes = n(), .groups = "drop") %&gt;%
+          mutate(crashes_per_100k = crashes / Population * 100000) %&gt;%
+          arrange(desc(crashes_per_100k))
+
+        ggplot(crash_rate,
+               aes(x = reorder(COUNTY, crashes_per_100k),
+                   y = crashes_per_100k)) +
+          geom_col(fill = "#44575E") +
+          geom_col(data = filter(crash_rate, COUNTY == "NAIROBI CITY"),
+                   fill = "#F37021") +
+          coord_flip() +
+          labs(
+            title = "Fatal road crashes per 100,000 people by county",
+            subtitle = "Kenya, April–June 2016. Nairobi highlighted in orange.",
+            x = NULL,
+            y = "Crashes per 100,000 population"
+          ) +
+          theme_bw()
+          </code>
+        </program>
+
+        <figure xml:id="fig-ch6-crash-rate">
+          <caption>
+            Fatal road crashes per 100,000 population by county, Kenya, April to
+            June 2016.
+            Nairobi City is highlighted in orange.
+            Makueni leads by a substantial margin, followed by Embu.
+            Nairobi, which had the most crashes in raw terms, ranks third.
+          </caption>
+
+          <image source="images/ch6_crash_rate.png" width="100%">
+            <description>
+              <p>
+                A horizontal bar chart with county names on the y-axis and
+                crashes per 100,000 population on the x-axis, ordered from
+                highest to lowest rate.
+                Makueni has the longest bar at just under 2.5 crashes per
+                100,000, followed by Embu at around 1.7.
+                Nairobi City is shown in orange and ranks third at approximately
+                1.5.
+                Nakuru and Kiambu follow closely.
+                The bars shorten progressively down to Nandi at the bottom with
+                fewer than 0.2 crashes per 100,000.
+                Counties with small populations but meaningful crash counts
+                appear higher in the ranking than they would in a raw count
+                chart.
+              </p>
+            </description>
+          </image>
+        </figure>
+
+        <p>
+          The story this chart tells is quite different from the raw crash
+          count.
+          Nairobi had the most crashes in absolute terms — 71 in this
+          three-month period — and it leads any ranking based on counts alone.
+          Makueni had 26 crashes and Embu had just 10.
+          In a raw count chart, Embu would barely register.
+          But Nairobi has a population of over 4.4 million people; Makueni has
+          just under one million; and Embu has around 560,000.
+          Once population is accounted for, those 10 crashes in Embu represent a
+          higher rate per person than Nairobi's 71.
+          Makueni's 26 crashes, spread across a smaller population still,
+          produce the highest rate of all.
+        </p>
+
+        <p>
+          This matters for policy.
+          A government deciding where to invest in road safety on the basis of
+          raw crash counts would prioritise Nairobi, Nakuru, and Kiambu (the
+          most populous counties with the most crashes).
+          A government working from crash rates would also prioritise Makueni
+          and Embu.
+          The ranking changes because the question changes: not
+          <em>where do the most crashes happen?</em> but
+          <em>where are people most at risk?</em> And the only reason we can ask
+          the second question is because we merged in the population data.
+        </p>
+
+        <insight xml:id="insight-merge-lesson">
+          <title>A join is only as good as its key</title>
+
+          <p>
+            The entire value of this merge depended on the county names matching
+            perfectly between both datasets.
+            A mismatch of even one character ( <c>NAIROBI</c> v
+            <c>NAIROBI CITY</c>; <c>TAITA TAVETA</c> v <c>TAITA/TAVETA</c> )
+            silently drops that county from the joined result.
+            Without a matching key, R has no way to connect them.
+            Checking join quality is the difference between a merge that worked
+            and a merge that looked like it worked.
+          </p>
+        </insight>
+
+        <p>
+          <term>Sources:</term> Kenya National Bureau of Statistics (2019).
+          <em>2019 Kenya Population and Housing Census, Volume I:
+      Population by County and Sub-County.</em>
+          Nairobi: KNBS.
+          Available at:
+          <url href="https://www.knbs.or.ke/2019-kenya-population-and-housing-census-results/"/>.
+          Kenya Road Accidents database: openAFRICA / Humanitarian Data
+          Exchange,
+          <url href="https://data.humdata.org/dataset/kenya-road-accidents-database"/>.
+        </p>
+      </subsubsection>
+
+      <subsubsection xml:id="ss-merging-keys">
+        <title>Merging and the Idea of a Key: The Homa Bay Health System</title>
+
+        <p>
+          Homa Bay County, on the shore of Lake Victoria, has a significant HIV
+          burden and a well-established HIV care programme.
+          Health facilities there run on electronic medical record systems, the
+          same as facilities across much of the country, but a 2025 study of
+          Homa Bay's digital health landscape found that its single county
+          referral hospital was running not one such system, but seven, side by
+          side.
+          Three of those seven, all built specifically for HIV care, do share a
+          common patient identifier with each other.
+          The other four cover general outpatient care, inpatient stays, the
+          laboratory, and faith-based providers.
+          These connect to none of the HIV systems, and not reliably to each
+          other either.
+        </p>
+
+        <p>
+          To make that concrete: picture a hypothetical patient, built from the
+          study's own findings rather than a specific case it reported.
+          A woman is HIV-positive and pregnant.
+          Her HIV care sits in the HIV system.
+          Her antenatal visits, being outside HIV care, are logged somewhere
+          else.
+          If she is admitted to hospital, her inpatient stay goes somewhere else
+          again.
+          This is not a stretch: the study's own interviews describe exactly
+          this pattern in general, with people
+          <q>assigned multiple numbers for
+      different purposes, i.e., at the inpatient, outpatient and antenatal
+      clinics.</q>
+        </p>
+
+        <p>
+          Every operation involving merging tables depends on the same quiet
+          assumption: that somewhere in your data, there is a column that
+          reliably means <q>this same real-world thing</q>, everywhere it
+          appears.
+          That column is called a <term>key</term>.
+          Homa Bay's hospital records show what happens when that assumption
+          holds for only part of a system.
+          TODO: we saw exactly how this can go wrong in the illustrative
+          example, when county names failed to match
+        </p>
+
+        <p>
+          The 2025 study found that patient identifiers were manually generated
+          in most of the county's EMR systems and manually allocated at first
+          interaction in 97% of facilities, with no county-wide identifier
+          linking a person across every system they might touch.
+          Within HIV care specifically, a shared identifier does exist and does
+          its job.
+          Step outside HIV care, and there is no column, anywhere in the
+          hospital, that reliably means <q>this same person</q> across the rest
+          of the systems she might touch.
+        </p>
+
+        <p>
+           The problem is that there is nothing to <term>join</term> or
+          <term>merge</term> most of those correct records together on.
+          Stack or link the non-HIV systems anyway, without a shared key, and
+          one of two things happens.
+          Either the same person is silently counted more than once across
+          different systems, inflating whatever gets reported to the county or
+          the ministry at the end of the month, or a clinician treating her for
+          a complication during pregnancy has no way of seeing, from where they
+          are sitting, that she is currently on HIV treatment at all <mdash/>
+          even though that exact information exists, correctly recorded, one
+          system over.
+        </p>
+
+        <insight xml:id="insight-homa-bay-no-key">
+          <title>You Cannot Join What Was Never Given a Shared Key</title>
+
+          <p>
+            A join, a stack, a reshape <mdash/> every one of these operations
+            assumes a key already exists linking your tables together.
+            When separate systems are built independently, with no agreement in
+            advance on how a person, place, or thing will be identified across
+            all of them, no amount of clever code recovers that link later.
+            The key has to be designed in, before the data is collected, not
+            discovered afterward.
+          </p>
+        </insight>
+
+        <p>
+          <term>Sources:</term> Chepkirui, M., Dellicour, S., Musuva, R., et al.
+          (2025).
+          Missed opportunities for digital health data use in healthcare
+          decision-making: A cross-sectional digital health landscape assessment
+          in Homa Bay county, Kenya.
+          <foreign>PLOS Digital Health</foreign>, 4(6), e0000870.
+          https://doi.org/10.1371/journal.pdig.0000870
+        </p>
+      </subsubsection>
+
+      <subsubsection xml:id="ss-key-errors">
+        <title>What If the Key Is Wrong? The IEBC Voter Register</title>
+
+        <p>
+          Before national elections in Kenya, the Independent Electoral and
+          Boundaries Commission (IEBC) has to check its master voter register
+          against other government records: identity records, to catch invalid
+          or duplicate registrations, and death records, to remove voters who
+          have since died.
+          Checking one table against another like this is a <term>lookup</term>,
+          or <term>join</term>, and the sensible key to join on is each person's
+          National ID number.
+          The same register also periodically needs its own duplicates removed,
+          a step usually called <term>deduplication</term>: find rows that
+          represent the same person entered twice, and collapse them into one.
+        </p>
+
+        <p>
+          Both of these jobs depend entirely on one thing: having a key that is
+          both correct for every row, and unique to one person.
+          Get that wrong, and a register can break in two opposite directions at
+          once.
+        </p>
+
+        <p>
+          <term>A key that isn't actually unique inflates the numbers.</term> If
+          a system ever falls back to matching people on something other than a
+          clean, unique identifier <mdash/> a full name and date of birth
+          together, say <mdash/> that can go wrong in an easy-to-miss way.
+          If ten voters share a name and date of birth, and a second table
+          contains three other people with that same name and date of birth, a
+          join does not pick one sensible match.
+          It matches every one of the ten against every one of the three,
+          producing thirty rows out of what should have been, at most, one real
+          match.
+          Run that same overly broad matching rule through a deduplication step
+          instead, and the failure runs the other way: anyone who happens to
+          share those same details with someone else gets treated as a duplicate
+          of them, and is quietly deleted, even though they are two entirely
+          different, entirely real people.
+
+          TODO: equate this to our example -- e.g., the census data was repeated multiple tiems. teh NAIROBI CITY row was just once in the 2019 census data, but was repeated for every NAIROBI CITY row in the joint data. 
+          That's what we wanted tehre. But, here, that isn't what someone wants?
+        </p>
+
+        <p>
+          <term>A key that's untidy hides real matches.</term> Even with a
+          clean, unique identifier as the key, small formatting differences
+          break things: one system stores an ID as a plain number, another
+          stores the same ID as text with a leading zero kept in front of it, a
+          third has a stray space typed in at the end of the number by accident.
+          To a human, these are obviously the same ID.
+          To a join or a deduplication step, they are three unrelated pieces of
+          text, and no match is ever found.
+        </p>
+
+        <p>
+          What KPMG's 2022 audit of the IEBC register actually reported was a
+          third variant of the same underlying problem: a shared, empty value.
+          The audit found that <term>481,711</term> individuals were registered
+          as voters with duplicated blank ID or passport reference fields
+          <mdash/> records where that field had simply never been filled in.
+          A blank matches a blank exactly as confidently as a real ID matches a
+          real ID, so any process checking for duplicate identity references
+          will flag every one of those empty-field records against every other
+          one, whether or not the people behind them are actually the same.
+          The same 2022 audit also found nearly 246,000 deceased voters still
+          listed as active on the register, and 226,000 entries attached to
+          invalid ID numbers.
+        </p>
+
+        <insight xml:id="insight-cartesian-explosion">
+          <title>A Key Is Either Too Broad or Too Untidy, Rarely Neither</title>
+
+          <p>
+            A join should never make your row count bigger than expected; if it
+            does, the key you joined on is not unique on at least one side.
+            A deduplication step should only ever remove rows you can point to
+            as genuine duplicates; if entries you know are distinct disappear,
+            your key was too broad.
+            And if a join or a deduplication misses matches that are obviously
+            the same to a human eye, check spacing, leading zeros, and whether
+            both sides are storing the value as the same kind of thing, before
+            you trust the result.
+          </p>
+        </insight>
+
+        <p>
+          <term>Sources:</term> KPMG.
+          (2022).
+          <foreign>Preliminary audit report on the Register of
+      Voters</foreign>,
+          prepared for the Independent Electoral and Boundaries Commission
+          (IEBC) [As reported in: IEBC press briefing, June 8, 2022; see
+          Ministry of Interior and National Administration press archive and
+          contemporaneous coverage in the <foreign>Daily Nation</foreign>,
+          <foreign>The Star</foreign>, and <foreign>Citizen Digital</foreign> ].
+        </p>
+      </subsubsection>
     </subsection>
   </section>
   <!-- ================================================================= -->
@@ -719,6 +2203,17 @@ Named definitions too?
           Would switching to long format on its own have fixed that particular
           problem?
           Why or why not?
+        </p>
+      </statement>
+    </exercise>
+
+    <exercise xml:id="ex-reshape-census-data">
+      <statement>
+        <p>
+          TODO: exercise idea: reshape the census data to have male and female
+          as a single column, with a new column for sex.
+          Then plot the population of males and females by county, using a
+          different colour for each.
         </p>
       </statement>
     </exercise>
@@ -765,62 +2260,4 @@ Named definitions too?
       </statement>
     </exercise>
   </exercises>
-
-  <!-- ================================================================= -->
-  <!--  REFERENCES                                                       -->
-  <!-- ================================================================= -->
-  <section xml:id="sec-shapes-references">
-    <title>References</title>
-
-    <p>
-      Sources for the real-world cases discussed in this chapter, in the order
-      they appear.
-    </p>
-
-    <p>
-      Chepkirui, M., Dellicour, S., Musuva, R., et al. (2025). Missed
-      opportunities for digital health data use in healthcare
-      decision-making: A cross-sectional digital health landscape assessment
-      in Homa Bay county, Kenya. <foreign>PLOS Digital Health</foreign>,
-      4(6), e0000870. https://doi.org/10.1371/journal.pdig.0000870
-    </p>
-
-    <p>
-      The fertilizer voucher story in this chapter is a labelled hypothetical,
-      not a documented case, and so has no citation.
-      It is built around the real structure of Kenya's e-voucher fertilizer
-      subsidy programme (registration through NCPB and partner agents,
-      SMS-based voucher redemption), but the specific failure described is
-      illustrative rather than reported.
-    </p>
-
-    <p>
-      KPMG. (2022). <foreign>Preliminary audit report on the Register of
-      Voters</foreign>, prepared for the Independent Electoral and Boundaries
-      Commission (IEBC) [As reported in: IEBC press briefing, June 8, 2022;
-      see Ministry of Interior and National Administration press archive and
-      contemporaneous coverage in the <foreign>Daily Nation</foreign>,
-      <foreign>The Star</foreign>, and <foreign>Citizen Digital</foreign>].
-    </p>
-
-    <p>
-      Dong, E., Ratcliff, J., Goyea, T. D., Katz, A., Lau, R., Ng, T. K.,
-      Garcia, B., Bolt, E., Prata, S., Zhang, D., Murray, R. C., Blake, M. R.,
-      Du, H., Ganjkhanloo, F., Ahmadi, F., Williams, J., Choudhury, S., &amp;
-      Gardner, L. M. (2022). The Johns Hopkins University Center for Systems
-      Science and Engineering COVID-19 Dashboard: Data collection process,
-      challenges faced, and lessons learned. <foreign>The Lancet Infectious
-      Diseases</foreign>, 22(12), e370&ndash;e376.
-      https://doi.org/10.1016/S1473-3099(22)00434-0
-    </p>
-
-    <p>
-      Smith, H., Ameh, C., Godia, P., Maua, J., Bartilol, K., Amoth, P.,
-      Mathai, M., &amp; van den Broek, N. (2017). Implementing maternal death
-      surveillance and response in Kenya: Incremental progress and lessons
-      learned. <foreign>Global Health: Science and Practice</foreign>, 5(3),
-      345&ndash;354. https://doi.org/10.9745/GHSP-D-17-00034
-    </p>
-  </section>
-
 </chapter>
