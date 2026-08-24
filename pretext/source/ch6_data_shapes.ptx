@@ -5,10 +5,7 @@
 <!--                                                                    -->
 <!--  A short, explicitly cross-referenced     -->
 <!--  callback to the Ebola district-Excel-format line already used in  -->
-<!--  ch4 (sec-shapes-ebola-callback - not retold in full, just         -->
-<!--  revisited through the "shape" lens), paired with a fresh,         -->
-<!--  independently verified real story: the Johns Hopkins CSSE         -->
-<!--  COVID-19 time-series data, March 2020.                            -->
+<!--  ch4, paired with a fresh, independently verified real stories     -->
 <!-- ================================================================== -->
 <chapter xml:id="ch-data-shapes" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Data Shapes</title>
@@ -177,6 +174,7 @@
       <em>Frontiers in Public Health</em>, 4, 163.
     </p>
   </section>
+  
   <!-- ================================================================= -->
   <!--  SECTION 2: the STACK question that exemplifies this              -->
   <!-- ================================================================= -->
@@ -197,19 +195,19 @@
       </p>
     </subsection>
   </section>
+
   <!-- ================================================================= -->
   <!--  SECTION 3: Applying and looking at different shapes              -->
   <!-- ================================================================= -->
   <section xml:id="sec-shapes-applied">
-    <title>todo</title>
+    <title>Shape Problems in Practice</title>
 
     <introduction>
       <p>
-        # what I should do here is do a hands-on example in R, with data, and
-        code, and graphs, and output to illustrate the issue and show what goes
-        wrong # (for each of these five stories, but in our own data) # and then
-        we say the story of "an example of this "in real life" and introduce
-        these five stories.
+        The next three sections work through the same shape problems in
+        different datasets (flamingos, Kenya road accidents, and the census).
+        The aim is to show exactly what goes wrong and how to fix it, before
+        meeting an example of each problem in the wild.
       </p>
     </introduction>
 
@@ -218,12 +216,32 @@
 
       <introduction>
         <p>
-          TODO
+          The same data can be arranged in fundamentally different ways
+          depending on who needs to use it:
+          <ul>
+            <li>
+              <p>
+                <term>Long format</term> is one row per observation, one column
+                per variable.
+                This is the shape that plotting and analysis tools expect.
+              </p>
+            </li>
+
+            <li>
+              <p>
+                <term>Wide format</term> is one column per category, one row per
+                group.
+                This is the shape that a human reader often wants to scan.
+              </p>
+            </li>
+          </ul>
+          Knowing when to use each and how to move between them is a useful
+          skills when working with data.
         </p>
       </introduction>
 
       <subsubsection xml:id="subsubsec-shapes-long-to-wide">
-        <title>Flamingos Data - Wide to Long</title>
+        <title>Pivoting the Flamingos Data</title>
 
         <p>
           <c>kenya_flamingos.csv</c> has always been in <term>long</term>
@@ -517,12 +535,18 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
 
       <introduction>
         <p>
-          TODO
+          Appending is the simplest shape operation: take two datasets that
+          describe the same kind of thing and stack them into one.
+          It sounds straightforward, and when everything is consistent it is.
+          But column names, data types, and variable definitions all need to
+          match.
+          When they do not, the result is either an error or, more dangerously,
+          a silent expansion that looks fine until you try to use it.
         </p>
       </introduction>
 
       <subsubsection xml:id="subsubsec-shapes-append">
-        <title>TODO</title>
+        <title>Appending the 2016 and 2017 Kenya Road Accidents Data</title>
 
         <p>
           In <xref ref="ch-exploring-data"/> and
@@ -548,7 +572,7 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
 
         <p>
           Before combining anything, it is worth looking at both datasets side
-          by side.
+          by side to see how they compare.
           What columns do they share?
           What is different?
         </p>
@@ -2047,7 +2071,7 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </p>
 
         <p>
-           The problem is that there is nothing to <term>join</term> or
+          The problem is that there is nothing to <term>join</term> or
           <term>merge</term> most of those correct records together on.
           Stack or link the non-HIV systems anyway, without a shared key, and
           one of two things happens.
@@ -2112,8 +2136,8 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         <p>
           <term>A key that isn't actually unique inflates the numbers.</term> If
           a system ever falls back to matching people on something other than a
-          clean, unique identifier <mdash/> a full name and date of birth
-          together, say <mdash/> that can go wrong in an easy-to-miss way.
+          clean, unique identifier (for example, a full name and date of birth
+          together), that can go wrong in an easy-to-miss way.
           If ten voters share a name and date of birth, and a second table
           contains three other people with that same name and date of birth, a
           join does not pick one sensible match.
@@ -2125,9 +2149,22 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           share those same details with someone else gets treated as a duplicate
           of them, and is quietly deleted, even though they are two entirely
           different, entirely real people.
+        </p>
 
-          TODO: equate this to our example -- e.g., the census data was repeated multiple tiems. teh NAIROBI CITY row was just once in the 2019 census data, but was repeated for every NAIROBI CITY row in the joint data. 
-          That's what we wanted tehre. But, here, that isn't what someone wants?
+        <p>
+          We saw a benign version of this in our own join.
+          The <c>NAIROBI CITY</c> row appears exactly once in the 2019 census
+          data.
+          But it appears 71 times in the accidents data, once for each crash
+          recorded in Nairobi.
+          The left join correctly matched each of those 71 crash rows to the
+          same single census row, repeating Nairobi's population figure 71 times
+          in the joined dataset.
+          That is exactly what we wanted.
+          But it would be a serious problem if that same behaviour of one record
+          matching many occurred in a voter register context.
+          Whether repeated matches are correct or catastrophic depends entirely
+          on what the key represents and what the join is meant to do.
         </p>
 
         <p>
@@ -2195,8 +2232,8 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
     <exercise xml:id="ex-shapes-jhu-daily">
       <statement>
         <p>
-          <xref ref="ss-jhu-wide-problem"/> says a new column had to be added to
-          the wide-format dataset every single day.
+          <xref ref="insight-jhu-shapes-lesson"/> says a new column had to be
+          added to the wide-format dataset every single day.
           Sketch, in words, what would have gone wrong for a downstream user's
           code if it referenced date columns by a fixed position (for example,
           <q>column 47</q> ) rather than by name.
@@ -2210,10 +2247,15 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
     <exercise xml:id="ex-reshape-census-data">
       <statement>
         <p>
-          TODO: exercise idea: reshape the census data to have male and female
-          as a single column, with a new column for sex.
-          Then plot the population of males and females by county, using a
-          different colour for each.
+          The census data loaded in <xref ref="ss-merge-census"/> has separate
+          columns for <c>Male</c> and <c>Female</c> population.
+          Using <c>pivot_longer()</c>, reshape it so that each county appears
+          twice, once for male population and once for female, with a new column
+          called <c>sex</c> and a column called <c>population</c> holding the
+          count.
+          Then plot the population of males and females side by side for each
+          county using <c>ggplot2</c>, with a different colour for each sex.
+          Which counties have the most unequal sex distributions?
         </p>
       </statement>
     </exercise>
@@ -2221,9 +2263,8 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
     <exercise xml:id="ex-shapes-ebola-standard">
       <statement>
         <p>
-          <xref ref="sec-shapes-ebola-callback"/> argues that agreeing on a
-          shape in advance is cheaper than reconciling incompatible shapes
-          afterward.
+          <xref ref="sec-intro-data-shapes"/> argues that agreeing on a shape in
+          advance is cheaper than reconciling incompatible shapes afterward.
           Propose one concrete rule Sierra Leone's district response centres
           could have agreed to in advance <mdash/> about column names, row
           structure, or file format <mdash/> that would have prevented the
