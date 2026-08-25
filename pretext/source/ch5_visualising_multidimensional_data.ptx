@@ -678,11 +678,11 @@
   <!--  SECTION 3: the STACK question that exemplifies this              -->
   <!-- ================================================================= -->
   <section xml:id="sec-ch5-stack">
-    <title>Your turn: ...</title>
+    <title>STACK Question Here</title>
 
     <introduction>
       <p>
-        TODO
+        TODO - add in our stack question on visualising multidimensional data
       </p>
     </introduction>
 
@@ -698,7 +698,7 @@
   <!--  SECTION 4: Gapminder                                             -->
   <!-- ================================================================= -->
   <section xml:id="sec-gapminder">
-    <title>Building Up Dimensions: The Gapminder Activity</title>
+    <title>Building Up Dimensions in R</title>
 
     <introduction>
       <p>

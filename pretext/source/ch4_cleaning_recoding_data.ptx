@@ -366,13 +366,13 @@
   <!--  SECTION 2: the STACK question that exemplifies this              -->
   <!-- ================================================================= -->
   <section xml:id="sec-stack-crop-example">
-    <title>TODO: STACK QUESTION (Your turn: cleaning a crop survey dataset)</title>
+    <title>STACK Question Here</title>
 
     <introduction>
       <p>
         The scale is nowhere near comparable, but the underlying mistake in the
-        Ebola data — deciding, without quite deciding, what an absence in the
-        data actually means — shows up constantly at far smaller scale.
+        Ebola data is deciding, without quite deciding, what anomalies in the
+        data actually means. This shows up constantly at far smaller scale.
         Before you can ask a question of a dataset, you need to know whether the
         data is actually ready to be asked.
         The following exercise asks you to do exactly that.

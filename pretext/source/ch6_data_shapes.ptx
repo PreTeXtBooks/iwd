@@ -179,7 +179,7 @@
   <!--  SECTION 2: the STACK question that exemplifies this              -->
   <!-- ================================================================= -->
   <section xml:id="sec-ch6-stack">
-    <title>TODO: INSERT STACK QUESTION</title>
+    <title>STACK Question Here</title>
 
     <introduction>
       <p>
@@ -200,7 +200,7 @@
   <!--  SECTION 3: Applying and looking at different shapes              -->
   <!-- ================================================================= -->
   <section xml:id="sec-shapes-applied">
-    <title>Shape Problems in Practice</title>
+    <title>Reshaping Data in R</title>
 
     <introduction>
       <p>

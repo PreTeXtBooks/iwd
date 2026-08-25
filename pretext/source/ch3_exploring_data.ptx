@@ -33,20 +33,15 @@
 
     <introduction>
       <p>
-        TODO
-      </p>
-    </introduction>
-
-    <subsection xml:id="ss-ntsa-crashes">
-      <title>Who is dying on Kenya's roads, and where?</title>
-
-      <p>
         Since 2012, the National Transport and Safety Authority (NTSA) has
         recorded road crash data across Kenya, including information on county,
         road, time, vehicle type, road user category.
         This is published in summaries annually on their website.
       </p>
+    </introduction>
 
+    <subsection xml:id="ss-ntsa-crashes">
+      <title>Who is dying on Kenya's roads, and where?</title>
       <p>
         The NTSA publishes two kinds of records.
         The first are daily comparative reports, which summarise fatalities and
@@ -956,11 +951,11 @@
   <!--  SECTION 1: the data-first hook                                   -->
   <!-- ================================================================= -->
   <section xml:id="sec-ch3-stack">
-    <title>TODO: STACK Pivot Table Question Here</title>
+    <title>STACK Question Here</title>
 
     <introduction>
       <p>
-        Insert the STACK question here
+        Insert the STACK (Pivot Table) question here
       </p>
     </introduction>
 
@@ -969,154 +964,6 @@
 
       <p>
         TODO
-      </p>
-    </subsection>
-  </section>
-
-  <section xml:id="sec-ch3-data-concepts">
-    <title>Core Concepts in Data Exploration</title>
-
-    <introduction>
-      <p>
-        Different approaches to explore data are outlined in this section.
-        In this section, we look at:
-        <ul>
-          <li>
-            <p>
-              Understand how a pivot table summarises raw data.
-            </p>
-          </li>
-
-          <li>
-            <p>
-              Identify appropriate visualisations for categorical data.
-            </p>
-          </li>
-
-          <li>
-            <p>
-              Select effective visualisations for numerical data.
-            </p>
-          </li>
-        </ul>
-      </p>
-
-      <p>
-        Before writing code to explore a dataset, you must understand the nature
-        of the data you are examining.
-        Data generally falls into two broad buckets:
-        <term>categorical data</term> (labels, names, or groups) and
-        <term>numerical data</term> (counts, measurements, or continuous
-        numbers).
-        We go into categorical data in more detail in
-        <xref ref="ch-handling-factors"/>.
-        This section introduces the foundational tools used to summarise and
-        view these data types.
-      </p>
-    </introduction>
-
-    <subsection xml:id="subsec-pivot-tables">
-      <title>Summarising Data with Pivot Tables</title>
-
-      <p>
-        When dealing with thousands of rows of raw information, it is impossible
-        to spot trends by eye.
-        A <term>pivot table</term> is a structural tool used to aggregate and
-        rearrange data dynamically.
-      </p>
-
-      <p>
-        A pivot table performs three core actions:
-        <ul>
-          <li>
-            <p>
-              <term>Splitting:</term> It groups your raw data rows by a specific
-              categorical variable.
-            </p>
-          </li>
-
-          <li>
-            <p>
-              <term>Applying:</term> It runs a calculation on those groups, such
-              as a count, a sum, or an average.
-            </p>
-          </li>
-
-          <li>
-            <p>
-              <term>Combining:</term> It displays the final results in a
-              compact, easy-to-read summary matrix.
-            </p>
-          </li>
-        </ul>
-      </p>
-    </subsection>
-
-    <subsection xml:id="subsec-categorical-visualisation">
-      <title>Visualising Categorical Data</title>
-
-      <p>
-        Categorical data tells you "which group" an observation belongs to.
-        Visualising this data requires showing how frequently each group
-        appears.
-      </p>
-
-      <p>
-        The primary visual tools for categorical data is a bar chart, as
-        illustrated in <xref ref="fig-frequency-by-county-time"/>.
-        In a bar chart, the length or height of each bar represents the count or
-        percentage belonging to that category, allowing quick visual comparison
-        between groups.
-      </p>
-    </subsection>
-
-    <subsection xml:id="subsec-numerical-visualisation">
-      <title>Visualising Numerical Data</title>
-
-      <p>
-        Numerical data represents quantifiable measurements.
-        When visualising numbers, the goal shifts to understanding the spread,
-        distribution, and relationship between values.
-      </p>
-
-      <p>
-        The primary visual tools for numerical data include:
-        <dl>
-          <li>
-            <title>Histograms</title>
-
-            <p>
-              Used to show the overall distribution of a single numerical
-              variable.
-              It groups continuous numbers into equal intervals (bins) and uses
-              vertical bars to show how many data points fall into each
-              interval.
-            </p>
-          </li>
-
-          <li>
-            <title>Boxplots</title>
-
-            <p>
-              Excellent for displaying the spread, central tendency, and
-              unexpected outliers of a numerical dataset.
-              They are highly efficient for comparing distributions side-by-side
-              across different categories.
-              An example of this is given in <xref ref="fig-muguro-boxplot"/>.
-            </p>
-          </li>
-
-          <li>
-            <title>Scatter Plots</title>
-
-            <p>
-              The standard visual tool for examining the relationship between
-              two distinct numerical variables.
-              Each point represents an observation, allowing you to check if the
-              variables move together or in opposite directions.
-            </p>
-          </li>
-        </dl>
       </p>
     </subsection>
   </section>
