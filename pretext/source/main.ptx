@@ -32,7 +32,6 @@
     <xi:include href="./ch6_data_shapes.ptx" />
     <xi:include href="./ch7_handling_factors.ptx" />
     <xi:include href="./ch8_handling_missing_values.ptx" />
-    <xi:include href="./ch9_variability.ptx" />
 
     <!-- Chapters 9-10 (Measuring and Observing Variability; Accounting
          for Variability) will be added here as they are written.
