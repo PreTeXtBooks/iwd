@@ -1,4 +1,4 @@
-# Statistical Computing I
+# Introduction to Working with Data
 
 This repository is a skeleton template for creating a new PreTeXt book project. You can use it as a starting point, then customise the content, structure, and assets for your own book.
 
