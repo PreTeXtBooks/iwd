@@ -14,7 +14,7 @@
   <!-- to some short (non-spaced) description of your book         -->
   <book xml:id="book-id-here">
     <!-- The book needs a title and can have a subtitle  -->
-    <title>Title</title>
+    <title>An Introduction to Working with Data</title>
     <subtitle>Subtitle</subtitle>
 
     <!-- Now we include files containing each main devision.       -->
@@ -25,19 +25,14 @@
 
     <!-- Introduction chapter -->
     <xi:include href="./ch1_intro.ptx" />
-
     <xi:include href="./ch2_multilevel_data.ptx" />
     <xi:include href="./ch3_exploring_data.ptx" />
     <xi:include href="./ch4_cleaning_recoding_data.ptx" />
     <xi:include href="./ch5_visualising_multidimensional_data.ptx" />
     <xi:include href="./ch6_data_shapes.ptx" />
-    <!-- ch7_handling_factors.ptx currently contains ONLY the opening
-         story (sensitive real-world content on South African census
-         race/population-group classification, pending the user's
-         review) - the "what is a factor" mechanics section has not
-         been written yet. -->
     <xi:include href="./ch7_handling_factors.ptx" />
     <xi:include href="./ch8_handling_missing_values.ptx" />
+    <xi:include href="./ch9_variability.ptx" />
 
     <!-- Chapters 9-10 (Measuring and Observing Variability; Accounting
          for Variability) will be added here as they are written.

@@ -17,8 +17,7 @@
     <p>
       In the previous chapter, we explored the Kenya Road Accidents database and
       noticed problems along the way: county names spelled two different ways,
-      times recorded as two digits instead of four, victim categories that meant
-      the same thing written differently.
+      and ages given in groups as well as numerically.
       We noted them and moved on.
       This chapter is about what to do with them.
     </p>
@@ -28,8 +27,7 @@
       This can be by fixing inconsistencies, handling missing values, recoding
       variables into more useful forms, and checking that what the data says it
       contains is actually what it contains.
-      It is unglamorous work, and it is easy to underestimate how much it
-      matters.
+      It is easy to underestimate how much it matters.
       Decisions you make while cleaning include what counts as a duplicate, what
       an absent value means, and how to group a free-text description.
       These decisions shape every result that follows.
@@ -253,16 +251,6 @@
         <ul>
           <li>
             <p>
-              Different treatment units recorded different variables in
-              different formats.
-              For example, units used Microsoft Access, other units used Excel.
-              This data had to be reconciled before it could be analysed
-              together.
-            </p>
-          </li>
-
-          <li>
-            <p>
               Data-entry was not consistent.
               It varied between treatment units and, within a treatment unit.
               This made it difficult to track the severity of the epidemic.
@@ -316,8 +304,8 @@
       </p>
 
       <p>
-        An initial quality audit <mdash/> a random sample of patient records
-        compared field by field against the original scanned charts <mdash/>
+        An initial quality audit was performed where a random sample of patient records
+        was compared field by field against the original scanned charts. The audit 
         found error rates high enough that the organisation had to re-enter
         large sections of the dataset by hand.
         Even then, resources were limited enough that a choice had to be made
@@ -378,7 +366,7 @@
   <!--  SECTION 2: the STACK question that exemplifies this              -->
   <!-- ================================================================= -->
   <section xml:id="sec-stack-crop-example">
-    <title>Your turn: cleaning a crop survey dataset</title>
+    <title>TODO: STACK QUESTION (Your turn: cleaning a crop survey dataset)</title>
 
     <introduction>
       <p>

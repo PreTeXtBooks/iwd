@@ -19,9 +19,9 @@
       <q>correct</q> way to analyse anything.
       The goal is smaller and more important than that: open the data, look at
       it, and let it surprise you.
-      Every method introduced later in this module <mdash/> cleaning,
-      multidimensional graphics, factors, formal treatment of missing values,
-      measures of variability <mdash/> exists to answer a question that this
+      Every method introduced later in this book, such as cleaning,
+      multidimensional visualisations, factors, formal treatment of missing
+      values, and measures of variability, exists to answer a question that this
       chapter is going to raise and deliberately leave open.
     </p>
   </introduction>
@@ -955,17 +955,12 @@
   <!-- ================================================================= -->
   <!--  SECTION 1: the data-first hook                                   -->
   <!-- ================================================================= -->
-  <section xml:id="sec-flamingo-hook">
-    <title>A Question About Flamingos</title>
+  <section xml:id="sec-ch3-stack">
+    <title>TODO: STACK Pivot Table Question Here</title>
 
     <introduction>
       <p>
-        The Kenya crash data came from exploring five years of incident report
-        data.
-        The rest of this chapter ...
-        <alert>Perhaps we can have a STACK question here using our
-          Flamingos data for the students to try out exploring for
-          themselves.</alert>
+        Insert the STACK question here
       </p>
     </introduction>
 
@@ -1141,16 +1136,27 @@
       </p>
 
       <p>
+        Before writing code to explore a dataset, it helps to understand what
+        kind of data you are working with.
+        Data generally falls into two broad types: <term>categorical data</term>
+        (labels, names, or groups, like county or victim category) and
+        <term>numerical data</term> (counts, measurements, or continuous
+        numbers, like age or the time of a crash).
+        Each type calls for different tools.
+        We will meet both in this dataset.
+      </p>
+
+      <p>
         If you have not already installed the packages we will use in this
         section, run the following once:
       </p>
 
       <program language="r">
         <code>
-      install.packages("rpivotTable")
-      install.packages("readxl")
-      install.packages("dplyr")
-      install.packages("ggplot2")
+        install.packages("rpivotTable")
+        install.packages("readxl")
+        install.packages("dplyr")
+        install.packages("ggplot2")
         </code>
       </program>
 
@@ -1159,17 +1165,19 @@
         You can either specify the file path directly, or use the
         <em>Import Dataset</em> button in the Environment panel in RStudio
         (click <em>From Excel...</em> ) to navigate to the file.
-        TODO: insert image
+      </p>
+      <p>
+                TODO: insert image
       </p>
 
       <program language="r">
         <code>
-      library(rpivotTable)
-      library(readxl)
-      library(dplyr)
-      library(ggplot2)
+        library(rpivotTable)
+        library(readxl)
+        library(dplyr)
+        library(ggplot2)
 
-      kenya_accidents &lt;- read_excel("kenya-accidents-database.xlsx")
+        kenya_accidents &lt;- read_excel("kenya-accidents-database.xlsx")
         </code>
       </program>
     </introduction>
@@ -1213,26 +1221,34 @@
 
       <p>
         A few things are immediately apparent.
-        The <c>AGE</c> column is stored as text rather than a number - you can
-        see values like <c>"A &amp; J"</c> (presumably Adult and Juvenile) mixed
-        in with numeric ages.
-        The <c>TIME 24 HOURS</c> column is also text, and as we will see
-        shortly, contains some ambiguous values.
-        And there is a mysterious 13th column with a note in it.
-        All of this is normal when working with real data - and spotting these
+        The <c>AGE</c> column has values like <c>"A &amp; J"</c>
+        (presumably Adult and Juvenile) mixed in with numeric ages. As a result,
+        R has treated the entire column as text rather than numbers.
+        The <c>TIME 24 HOURS</c> column is also text, and contains some
+        ambiguous values.
+        There is also a mysterious 13th column with a stray note in it.
+        All of this is normal when working with real data, and spotting these
         issues early is exactly what exploratory analysis is for.
-        We will come back to data cleaning in the next chapter; for now, we work
-        with what we have.
+        We will come back to data cleaning in
+        <xref ref="ch-cleaning-recoding"/>; for now, we work with what we have.
       </p>
     </subsection>
 
     <subsection xml:id="ss-ntsa-pivot">
-      <title>Exploring with a pivot table</title>
+      <title>Summarising data with a pivot table</title>
 
       <p>
-        A pivot table lets you drag variables into rows and columns and
-        instantly see counts and summaries.
-        The <c>rpivotTable</c> package brings this directly into R.
+        When dealing with hundreds or thousands of rows of raw information, it
+        is impossible to spot patterns by eye.
+        A <term>pivot table</term> is one of the most useful tools for
+        summarising data quickly.
+        It performs three core actions: it <em>splits</em> your data by a
+        categorical variable, <em>applies</em> a calculation to each group (such
+        as a count, a sum, or an average), and <em>combines</em> the results
+        into a compact summary.
+        The <c>rpivotTable</c> package brings this directly into R as an
+        interactive tool: drag variables into rows and columns and the table
+        updates instantly.
       </p>
 
       <program language="r">
@@ -1242,13 +1258,9 @@
       </program>
 
       <p>
-        TODO: multiple images here: County in (and the arrow pressed), and COUNTY by DATE with HEATMAP
-
-        This opens an interactive table in your viewer.
-        Try dragging <c>COUNTY</c> into the row area - you will immediately see
-        that Nairobi has 72 incidents in the dataset, that seems like it could be
-        one for every day of the three-month period covered. We can check this using
-        the <c>Date</c> variable.
+        Try dragging <c>COUNTY</c> into the row area.
+        You will immediately see that Nairobi has 72 incidents in the dataset,
+        almost one for every day of the three-month period covered.
         Move <c>COUNTY</c> to the top and <c>Date</c> to the left, and you get a
         breakdown of accidents by county by date: Kiambu, Nakuru, and Nairobi
         show incidents on almost every day.
@@ -1257,94 +1269,50 @@
       </p>
 
       <p>
+        TODO: add image
+      </p>
+
+      <p>
         Now try adding <c>VICTIM</c> alongside <c>COUNTY</c>.
         In Nairobi, most victims are pedestrians.
-        In Makueni, the picture is different - only 2 pedestrians, but 8
-        motorcyclists, 6 passengers, and 7 drivers.
+        In Makueni, the picture is quite different. There are only two pedestrians,
+        but 8 motorcyclists, 6 passengers, and 7 drivers.
         The county-level pattern from Muguro et al. (2020)
         starts to emerge even in this small three-month slice of data.
       </p>
 
       <p>
-        Pivot tables are also useful for spotting data quality issues.
-        If you put <c>COUNTY</c> in rows and <c>VICTIM</c> in columns, you will
-        see both <c>M/CYCLIST</c> and <c>MOTOR CYCLIST</c> appearing as separate
-        categories — almost certainly the same category, entered inconsistently.
-        Similarly, <c>P/PASSENGER</c> and <c>P/PASENGER</c> both appear, the
-        latter with a typo.
-        These are the kinds of problems that only become visible when you look
-        at the data carefully - and a pivot table is one of the quickest ways to
-        find them.
-        We return to data cleaning in the next chapter.
-      </p>
-
-      <p>
-        Similarly, put <c>TIME 24 HOURS</c> into the rows.
-        The most common accident times are between 19:00 and 21:00 — consistent
-        with the evening rush hour peak Muguro et al. (2020)
-        found in the five-year dataset.
-        But you will also notice some unusual values: <c>45</c>, <c>10</c>,
-        <c>140</c>.
-        Does <c>140</c> mean 01:40, or 14:00, or something else entirely?
-        This is another data quality issue that exploration reveals before any
-        formal analysis begins.
+        Pivot tables are also useful for spotting data quality issues: if you
+        put <c>COUNTY</c> in rows and <c>VICTIM</c> in columns, you will see
+        both <c>M/CYCLIST</c> and <c>MOTOR CYCLIST</c> appear as separate
+        categories, almost certainly the same category entered inconsistently.
       </p>
     </subsection>
 
-    <subsection xml:id="ss-ntsa-summaries">
-      <title>Summaries and plots</title>
+    <subsection xml:id="ss-ntsa-categorical">
+      <title>Visualising data</title>
 
       <p>
-        Beyond the pivot table, we can use R's standard summary tools.
-        The <c>AGE</c> column needs to be converted to numeric first - the
-        non-numeric entries like <c>"A &amp; J"</c> will become <c>NA</c>, which
-        is fine for now.
+        Categorical data tells you which group an observation belongs to.
+        The primary tool for visualising it is a <term>bar chart</term>, where
+        the length of each bar represents how many observations fall into each
+        category.
+        This makes it easy to compare groups at a glance.
       </p>
 
-      <program language="r">
-        <code>
-        kenya_accidents$AGE &lt;- as.numeric(kenya_accidents$AGE)
-        summary(kenya_accidents$AGE)
-
-        #&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
-        #&gt;    1.50   23.00   30.00   31.53   40.00   90.00     193
-        </code>
-      </program>
-
       <p>
-        Ages range from 1.5 to 90 years, with a median of 30 - consistent with
-        the finding across the five-year dataset that working-age adults bear
-        the greatest burden of road fatalities.
-        Note that 193 of the 378 rows have no usable age recorded, which is
-        worth keeping in mind when interpreting any age-based analysis.
-      </p>
-      <p>
-        We can see the spread of this data clearer by looking at a boxplot.
-        TODO: give image of boxplot. 
-        In the boxplot, we can see that the 90 year old is just a one-off, and that
-        the next oldest person is under 80 years old.
-        We can also see more clearly that the highest concentration of incidents
-        occur for approximately 20 to 40 year olds.
-      </p>
-
-      <program language="r">
-        <code>
-        boxplot(kenya_accidents$AGE)
-        </code>
-      </program>
-
-      <p>
-        For the categorical columns, converting them to factors before calling
-        <c>summary()</c> gives us counts for each level rather than just a
-        description of the column type.
+        For the categorical columns in our data, converting them to factors
+        before calling <c>summary()</c> gives us counts for each level rather
+        than just a description of the column type:
       </p>
 
       <program language="r">
         <code>
         kenya_accidents$COUNTY &lt;- as.factor(kenya_accidents$COUNTY)
         kenya_accidents$GENDER &lt;- as.factor(kenya_accidents$GENDER)
-        kenya_accidents$ROAD &lt;- as.factor(kenya_accidents$ROAD)
+        kenya_accidents$VICTIM &lt;- as.factor(kenya_accidents$VICTIM)
 
+        summary(kenya_accidents$COUNTY)
         summary(kenya_accidents$COUNTY)
         #&gt;           BARINGO           BOMET         BUNGOMA           BUSIA ELGEYO MARAKWET 
         #&gt;                 6               4              10               3               2 
@@ -1381,43 +1349,33 @@
       </program>
 
       <p>
-        Nairobi leads by a substantial margin, followed by Nakuru and Kiambu -
-        matching the county concentration Muguro et al. (2020)
-        found across the full five years.
+        Nairobi has the highest frequency of incidents by a substantial margin,
+        followed by Nakuru and Kiambu — matching the county concentration Muguro
+        et al.(2020) found across the full five years.
         When looking at roads, the Nairobi-Mombasa route comes up the most frequently
         as the road with the most incidents.
         Male victims outnumber female victims by more than six to one.
-        The <c>(Other)</c> category in gender includes entries like
-        <c>"M &amp; F"</c> and <c>"2M &amp; 2F"</c>. These are crashes with multiple
-        victims of different genders recorded in a single row, another data
-        quality issue that exploration surfaces.
+        The entries like <c>"M &amp; F"</c> and <c>"2M &amp; 2F"</c> are crashes
+        with multiple victims of different genders recorded in a single row each.
+        This is another data quality issue that exploration surfaces.
       </p>
 
       <p>
-        Summaries tell us the counts, and plots can make the distribution visible.
+        Summaries tell us the counts; plots make the distribution visible.
         A bar chart of county gives an immediate sense of where incidents
-        concentrate, and rotating the axis labels makes the county names
-        readable.
-        Barcharts can be done by using <c>barchart</c> function, or by
+        concentrate, and using <c>coord_flip()</c> rotates the axis labels to
+        make the county names readable:
+      </p>
+      <p>
+        Barcharts can be created by using <c>barchart</c> function, or by
         <c>ggplot2</c> which is discussed in more detail in the Visualising
         Multidimensionality chapter.
-        TODO: put in plots.
       </p>
 
       <program language="r">
         <code>
         # one approach
         barchart(kenya_accidents$COUNTY)
-
-        # or another option
-        ggplot(kenya_accidents, aes(x = COUNTY)) +
-          geom_bar() +
-          coord_flip() +
-          labs(
-            title = "Fatal road accidents by county, Kenya 2016",
-            x = "County",
-            y = "Number of incidents"
-          )
         </code>
       </program>
 
@@ -1433,6 +1391,10 @@
           )
         </code>
       </program>
+
+      <p>
+        TODO: put in plots.
+      </p>
 
       <p>
         Similarly for victim category:
@@ -1452,6 +1414,10 @@
       </program>
 
       <p>
+        TODO: put in plots.
+      </p>
+
+      <p>
         These are not polished publication-ready figures.
         They are exploratory plots — the kind you produce quickly to get a feel
         for what the data contains before deciding what to look at more
@@ -1460,16 +1426,112 @@
         <xref ref="ch-visualising-multidimensional-data"/>.
       </p>
     </subsection>
-  </section>
 
+    <subsection xml:id="ss-ntsa-numerical">
+      <title>Visualising numerical data</title>
+
+      <p>
+        Numerical data represents quantifiable measurements.
+        When visualising numbers, the goal shifts from counting groups to
+        understanding the <em>spread</em> and <em>distribution</em> of values.
+        The main tools are histograms, which show how values are distributed
+        across their full range, and boxplots, which efficiently summarise the
+        spread and highlight outliers.
+      </p>
+
+      <p>
+        The <c>AGE</c> column needs to be converted to numeric first. The
+        non-numeric entries like <c>"A &amp; J"</c> will become <c>NA</c>, which
+        is fine for now:
+      </p>
+
+      <program language="r">
+        <code>
+        kenya_accidents$AGE &lt;- as.numeric(kenya_accidents$AGE)
+        summary(kenya_accidents$AGE)
+        #&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+        #&gt;    1.50   23.00   30.00   31.53   40.00   90.00     193
+        </code>
+      </program>
+
+      <p>
+        Ages range from 1.5 to 90 years, with a median of 30.
+        Note that 193 of the 378 rows have no usable age recorded.
+        A histogram shows the full distribution:
+      </p>
+
+      <program language="r">
+        <code>
+        hist(kenya_accidents$AGE,
+             main = "Age of road accident victims, Kenya 2016",
+             xlab = "Age (years)",
+             breaks = 20)
+        </code>
+      </program>
+
+      <p>
+        TODO: give image of histogram. 
+      </p>
+
+      <p>
+        There are notable spikes at ages 30, 35, 40, 50, 60, and 70 — multiples
+        of five and ten — which is a classic sign of age rounding in the
+        original records.
+        People were recording estimated rather than exact ages.
+        A boxplot makes the spread and any outliers visible more directly:
+      </p>
+
+      <program language="r">
+        <code>
+        boxplot(kenya_accidents$AGE,
+                main = "Age of road accident victims, Kenya 2016",
+                ylab = "Age (years)")
+        </code>
+      </program>
+
+      <p>
+        TODO: give image of boxplot.
+      </p>
+
+      <p>
+        The 90-year-old appears as an isolated point above the main
+        distribution.
+        The box itself covers the middle 50% of the data. It sits roughly
+        between 23 and 40 years old, with a median around 30.
+        The highest concentration of incidents occurs for people approximately
+        20 to 40 years old: working-age adults. Are these the
+        boda-boda riders and pedestrians we saw dominating the victim
+        categories? We can explore that too.
+      </p>
+
+      <p>
+        Scatter plots are the standard tool for examining the relationship
+        between two numerical variables.
+        The Kenya accidents data has few pairs of numerical variables to compare
+        directly, but in <xref ref="ch-visualising-multidimensional-data"/> we
+        will use scatter plots extensively on richer datasets.
+      </p>
+    </subsection>
+  </section>
   <exercises xml:id="exercises-exploring-data">
     <title>Exercises</title>
 
     <introduction>
       <p>
-        This chapter uses the Flamingos data introduced in <xref ref = "ch-intro"/>.
-        TODO: Have this as an uncleaned version here, so that then some ideas can come out later in the cleaning section that help show how cleaning the data changes conclusions?
-        Then does Ch5 use this cleaned version, or another version? Idk. 
+        This chapter uses the Flamingos data introduced in
+        <xref ref="ch-intro"/>.
+      </p>
+
+      <p>
+        TODO: Have this as an uncleaned version here, so that then some ideas
+        can come out later in the cleaning section that help show how cleaning
+        the data changes conclusions?
+        Then does Ch5 use this cleaned version, or another version.
+        Think about that.
+      </p>
+
+      <p>
+        TODO2: Add in relevant STACK questions here on boxplots/summaries/etc
       </p>
     </introduction>
 
@@ -1493,8 +1555,8 @@
           Build a pivot table of <c>lake</c> against <c>sex</c>.
           Does the balance of males and females look different from lake to
           lake?
-          Say which comparison (row proportions or column proportions)
-          you used to answer that, and why you chose it.
+          Say which comparison (row proportions or column proportions) you used
+          to answer that, and why you chose it.
         </p>
       </statement>
     </exercise>
@@ -1504,8 +1566,8 @@
         <p>
           Pick any one numeric variable in the dataset other than
           <c>body_mass_g</c> or <c>bill_length_mm</c>.
-          Look at it, however you like: a histogram, a table of rounded
-          values, sorting it and scanning by eye.
+          Look at it, however you like: a histogram, a table of rounded values,
+          sorting it and scanning by eye.
           Write two or three sentences describing what you notice and one
           question it raises that you cannot yet answer.
           There is no single correct answer here; the point is practising the

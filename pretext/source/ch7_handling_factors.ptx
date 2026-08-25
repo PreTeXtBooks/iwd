@@ -120,11 +120,33 @@
       </p>
     </subsection>
   </section>
+
+    <!-- ================================================================= -->
+  <!--  SECTION 3: the STACK question that exemplifies this              -->
+  <!-- ================================================================= -->
+  <section xml:id="sec-ch7-stack">
+    <title>TODO: STACK QUESTION</title>
+
+    <introduction>
+      <p>
+        TODO
+      </p>
+    </introduction>
+
+    <subsection xml:id="subsec-ch7-stack">
+      <title>TODO</title>
+
+      <p>
+        TODO: insert STACK question
+      </p>
+    </subsection>
+  </section>
+  
   <!-- ================================================================= -->
   <!--  SECTION 2: ordered vs. unordered, and when to factor at all       -->
   <!-- ================================================================= -->
   <section xml:id="sec-factors-ordered-vs-unordered">
-    <title>TODO -- types of factors / illustrative example in R</title>
+    <title>The Power of Factors using R</title>
 
     <introduction>
       <p>
@@ -921,27 +943,6 @@
           place.
         </p>
       </subsubsection>
-    </subsection>
-  </section>
-
-  <!-- ================================================================= -->
-  <!--  SECTION 3: the STACK question that exemplifies this              -->
-  <!-- ================================================================= -->
-  <section xml:id="sec-ch7-stack">
-    <title>TODO</title>
-
-    <introduction>
-      <p>
-        TODO
-      </p>
-    </introduction>
-
-    <subsection xml:id="subsec-ch7-stack">
-      <title>TODO</title>
-
-      <p>
-        TODO: insert STACK question
-      </p>
     </subsection>
   </section>
 

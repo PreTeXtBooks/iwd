@@ -478,40 +478,7 @@
       </p>
     </subsection>
   </section>
-  <!-- ================================================================= -->
-  <!--  TODO: Now to build the actual course content lol                 -->
-  <!-- ================================================================= -->
-  <objectives xml:id="objectives-multilevel-data">
-    <title>By the end of this topic you will be able to</title>
-
-    <ul>
-      <li>
-        <p>
-          Identify examples of datasets with multiple levels.
-        </p>
-      </li>
-
-      <li>
-        <p>
-          Describe the characteristics and structure of multilevel data.
-        </p>
-      </li>
-
-      <li>
-        <p>
-          Apply basic methods to explore and prepare multilevel data for
-          analysis.
-        </p>
-      </li>
-
-      <li>
-        <p>
-          Recognise when a single, pooled summary is hiding rather than
-          describing group-level structure.
-        </p>
-      </li>
-    </ul>
-  </objectives>
+  
   <!-- ================================================================= -->
   <!--  EXERCISES                                                        -->
   <!-- ================================================================= -->
