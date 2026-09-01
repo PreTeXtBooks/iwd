@@ -1,0 +1,1810 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ================================================================= -->
+<!--  Chapter 9: Understanding Variability                              -->
+<!-- ================================================================= -->
+<chapter xml:id="ch-variability" xmlns:xi="http://www.w3.org/2001/XInclude">
+    <title>Understanding Variability</title>
+
+    <introduction xml:id="intro-ch9-variability">
+        <p>
+            Data is never perfectly consistent: measure the same thing twice and
+            you will rarely get exactly the same answer.
+            Track the population in a single country over fifty years and the
+            numbers will shift, sometimes smoothly, sometimes in sudden jolts.
+            This chapter is about variability: what it is, where it comes from,
+            and how to measure it.
+            We begin with a story about a journey that took four times as long
+            as expected, and use it to introduce the three types of variability
+            that appear in almost every dataset.
+            We then work through the main measures of variability (range,
+            variance, standard deviation, interquartile range, and least
+            squares) using life expectancy data from African countries as our
+            running example.
+            By the end of the chapter, you will be able to choose the right
+            measure for a given situation, interpret what it tells you, and
+            explain what it does not.
+        </p>
+    </introduction>
+
+    <section xml:id="sec-variability-journeys">
+        <title>The Same Journey, Every Day Different</title>
+
+        <introduction>
+            <p>
+                In August 2026, on a Friday evening, I was leaving Nairobi's CBD
+                to catch a late flight home to London.
+                I had a flight at 11:40pm and ordered an Uber around 7:30pm.
+                The first driver appeared, then cancelled while I was outside
+                looking for them.
+                I had lost wifi in the chaos of the streets and could not track
+                them live through the app.
+                The same thing happened with a second driver.
+                When I finally got wifi, the second driver agreed to pick me up
+                from a hotel across the road, but in a one-way street so he had
+                to turn around first.
+                I waited twenty minutes on that pavement, with traffic moving
+                slowly around me, and I could not see the driver anywhere.
+                I eventually walked through the traffic in the hope that I could
+                find wifi and order a new driver out of the hustle and bustle of
+                the CBD.
+            </p>
+
+            <p>
+                While standing on some pavement, surrounded by traffic, a worker
+                outside noticed me, clearly lost and increasingly frantic, and
+                insisted I come in.
+                They sat me down, connected to the wifi, and gave me a moment to
+                think.
+                Without that kindness I am not sure what I would have done.
+                I caught the flight.
+            </p>
+
+            <p>
+                The app said the third taxi was ten minutes away.
+                They took over an hour.
+                The app had estimated ten minutes, and I had believed it because
+                I had no reason not to.
+                I sat watching the little car barely move, block after block, as
+                the minutes ticked by and my flight window got smaller.
+                I was not even in the taxi yet.
+            </p>
+
+            <p>
+                Ask someone from Nairobi what happened, and they will tell you
+                immediately: it was Friday evening, in the CBD, at 7:30pm.
+                That is a journey you plan hours around, or you do not make it.
+                The traffic leaving the central business district on a Friday
+                evening is not unpredictable.
+                It is entirely predictable.
+                It is just that I did not know to predict it.
+            </p>
+
+            <p>
+                That gap between how much the journey actually varied and how
+                much of that variation I had accounted for is what this
+                chapter is about: How do we measure variability?
+                How do we put a number on how spread out a set of values is?
+                And what do those numbers tell us?
+            </p>
+
+            <p>
+                Now imagine you know one thing: rush hour is slower.
+                Suddenly you can plan.
+                You leave earlier on the days that matter, and book less time
+                for the quiet morning run.
+                You may still be wrong sometimes (you cannot know about the
+                accident on Ngong Road, or the blocked junction in town) but you
+                are systematically less wrong than before.
+                Knowing even one source of variation and accounting for it makes
+                your predictions better.
+                My mistake on that Friday evening was not unavoidable.
+                It was a failure to account for something that was entirely
+                knowable.
+            </p>
+
+            <p>
+                This is what statisticians mean by the three types of
+                variability.
+                Some variation is <term>accounted-for variability</term>: you
+                know what causes it, you have measured it, and you can use it to
+                make better predictions.
+                Time of day is exactly this — and it is exactly what I failed to
+                account for on that Friday evening in August.
+                Once you know it is 5pm on a Friday in Nairobi's CBD, you
+                already know something useful about the journey ahead.
+                Some variation is <term>unaccounted-for variability</term>:
+                other things affect the journey — accidents, roadworks, the
+                school term starting — but you have not measured them and cannot
+                include them in your predictions.
+                They are real causes of variation, making your predictions less
+                reliable even when you have accounted for everything else you
+                can.
+                And some variation is just <term>natural variability</term>: the
+                boda-boda rider caught a green light, or took a slightly
+                different line through the roundabout, or the gap in traffic
+                opened a few seconds earlier than usual.
+                No amount of information would have predicted it.
+                It simply happened.
+            </p>
+
+            <p>
+                The problem is not the natural variability — any honest
+                prediction has to live with it.
+                The problem is mistaking unaccounted-for variation for natural
+                variation.
+                If you assume that everything you cannot account for is just
+                noise, you will underestimate how wrong your predictions can be,
+                and you will miss the fact that some of that wrongness has a
+                cause that could, in principle, be found and understood.
+                A boda-boda rider who thinks the variation in their journey
+                times is just random bad luck will never think to check whether
+                there is a pattern — whether certain roads are systematically
+                worse, whether the school term changes things, whether the
+                weather is a factor.
+                Those patterns are real.
+                Mistaking them for noise means never looking for them.
+            </p>
+        </introduction>
+
+        <subsection xml:id="subsec-traffic-variation">
+            <title>Traffic Variation in Nairobi</title>
+
+            <p>
+                This variation has been measured.
+                The
+                <url href="https://www.tomtom.com/traffic-index/city/nairobi/">TomTom Traffic Index</url>
+                records journey times across Nairobi continuously, aggregating
+                anonymised GPS data from millions of trips.
+                It found that in 2025 a 10 kilometre drive in the city took an
+                average of 26 minutes and 47 seconds.
+                But that single number conceals an enormous range.
+                At 4 in the morning, the same 10 kilometres takes around 18
+                minutes.
+                At 4 in the afternoon on a weekday, it takes around 37 minutes —
+                more than twice as long.
+            </p>
+
+            <p>
+                The visualisations by TomTom make the three types of variability
+                visible in a way that numbers alone cannot.
+            </p>
+
+            <p>
+                The first image below shows travel time across every hour of
+                every day of the week, averaged across 2025.
+                Each cell represents one two-hour slot on one day of the week;
+                darker red means longer journey times, lighter pink means
+                shorter.
+                The pattern is immediately visible: weekday mornings and
+                evenings are dark, weekend days are lighter, and the middle of
+                the night is the lightest of all.
+                This is <term>accounted-for variability</term> made visible: the
+                variation that follows a predictable pattern, week after week,
+                and that anyone who knows Nairobi already carries in their head.
+                If I had looked at this chart before ordering my Uber on that
+                Friday evening in August, I would have seen immediately that
+                7:30pm on a Friday is one of the darker cells on the whole grid.
+            </p>
+
+            <figure xml:id="fig-tomtom-heatmap-week">
+                <caption>
+                    Travel time heatmap for Nairobi across all hours and days of
+                    the week, averaged across 2025.
+                    Darker red indicates longer journey times; lighter pink
+                    indicates shorter.
+                    The pattern of weekday congestion, particularly the evening
+                    peak from around 5pm to 7pm, is clearly visible, as is the
+                    relative freedom of weekend mornings and nights.
+                    Source: TomTom Traffic Index 2025,
+                    <url href="https://www.tomtom.com/traffic-index/city/nairobi/" visual="tomtom.com/traffic-index/city/nairobi"/>.
+                </caption>
+
+                <image source="images/ch9_tomtom_heatmap_week.png" width="100%">
+                    <description>
+                        <p>
+                            A heatmap with days of the week (Monday to Sunday)
+                            across the top and hours of the day (midnight to
+                            11pm) down the left side.
+                            Cells are coloured from light pink to dark red.
+                            The darkest cells — indicating the longest journey
+                            times — appear in the band from approximately 5pm to
+                            7pm on weekdays, with Monday and Thursday appearing
+                            particularly congested.
+                            The 4am to 5am slot on Monday appears notably light.
+                            Saturday and Sunday are substantially lighter
+                            throughout, especially in the morning hours.
+                            The pattern clearly shows the weekday rush hour
+                            effect.
+                        </p>
+                    </description>
+                </image>
+            </figure>
+
+            <p>
+                The next two images show where in Nairobi that congestion falls
+                during the morning and evening rush hours — not just when, but
+                where.
+                Yellow hexagons indicate moderate congestion; orange and red
+                indicate heavier delays.
+                The CBD and the main arterial roads radiating outward from it
+                are visibly darker than the outer suburbs.
+                During the morning rush, the congestion concentrates in the city
+                centre as commuters flow in; during the evening rush, it spreads
+                more broadly as people try to get home.
+                This spatial pattern is also displaying
+                <term>accounted-for variability</term> — predictable,
+                measurable, and useful for planning.
+            </p>
+
+            <figure xml:id="fig-tomtom-map-morning">
+                <caption>
+                    Traffic conditions in Nairobi during the morning rush hour,
+                    averaged across 2025.
+                    Yellow indicates moderate congestion, orange and red
+                    indicate heavier delays.
+                    Source: TomTom Traffic Index 2025.
+                </caption>
+
+                <image source="images/ch9_tomtom_map_morning.png" width="90%">
+                    <description>
+                        <p>
+                            A hexagonal heatmap overlaid on a dark map of
+                            Nairobi.
+                            The hexagons covering the central business district
+                            and major roads leading into it are coloured orange
+                            to red, indicating significant congestion.
+                            The outer suburbs and peripheral areas are
+                            predominantly yellow, indicating lighter congestion.
+                            The pattern shows congestion concentrated in the
+                            city centre and along main arterial routes during
+                            the morning peak.
+                        </p>
+                    </description>
+                </image>
+            </figure>
+
+            <figure xml:id="fig-tomtom-map-evening">
+                <caption>
+                    Traffic conditions in Nairobi during the evening rush hour,
+                    averaged across 2025.
+                    The congestion spreads more broadly than in the morning,
+                    with orange and red extending further into residential areas
+                    as commuters make their way home.
+                    Source: TomTom Traffic Index 2025.
+                </caption>
+
+                <image source="images/ch9_tomtom_map_evening.png" width="90%">
+                    <description>
+                        <p>
+                            A hexagonal heatmap overlaid on a dark map of
+                            Nairobi during the evening rush hour.
+                            Compared to the morning map, the orange and red
+                            hexagons extend further outward from the CBD into
+                            surrounding residential neighbourhoods.
+                            The overall impression is of broader, more
+                            distributed congestion than the morning peak,
+                            consistent with commuters dispersing in multiple
+                            directions rather than converging on a single
+                            centre.
+                        </p>
+                    </description>
+                </image>
+            </figure>
+
+            <p>
+                But even knowing the time of day and the location is not enough
+                to predict any specific journey perfectly.
+                The fourth image illustrates why.
+                This is a screenshot I have just taken showing live congestion
+                in Nairobi right now <fn>25th August 2026, 18:48 EAT</fn>,
+                against the usual congestion level for the same time slot.
+                The orange line is what is happening right now, the dotted
+                yellow line is what typically happens at this time.
+                On Monday morning, live congestion spiked to nearly 90 percent,
+                well above the usual level of around 65 percent at that hour.
+                On Tuesday afternoon, at the time this image was captured, live
+                congestion was running at over 100 percent, higher than the
+                typical level, and still climbing.
+                Something was making that particular day worse than a typical
+                Tuesday.
+                Perhaps an accident, or roadworks, or nothing identifiable at
+                all.
+            </p>
+
+            <p>
+                This is <term>unaccounted-for variability</term> in action.
+                TomTom's usual congestion line represents what the accounted-for
+                variability predicts, the pattern that repeats week after week.
+                The gap between that line and the live reading is the part that
+                the pattern cannot account for.
+                Some of that gap has a cause, something happened on that road on
+                that day that pushed congestion above its normal level.
+                And some of it is just <term>natural variability</term>: small
+                fluctuations that remain even after everything predictable has
+                been accounted for.
+                The chart shows all three types of variability at once: the
+                repeating pattern (accounted for), the unexplained spike above
+                it (unaccounted for), and the jagged noise around both lines
+                (natural).
+            </p>
+
+            <figure xml:id="fig-tomtom-live-congestion">
+                <caption>
+                    Live versus usual congestion level in Nairobi across Monday
+                    and Tuesday, with live speed shown below.
+                    The orange line shows actual congestion; the dotted yellow
+                    line shows the typical level for that time slot.
+                    The gap between the two lines represents variation that the
+                    usual pattern does not predict — unaccounted-for and natural
+                    variability.
+                    Source: TomTom Traffic Index, captured August 2026.
+                </caption>
+
+                <image source="images/ch9_tomtom_live_congestion.png" width="100%">
+                    <description>
+                        <p>
+                            A line chart showing congestion level as a
+                            percentage on the y-axis and time across Monday and
+                            Tuesday on the x-axis.
+                            An orange solid line shows live congestion and a
+                            dotted yellow line shows the usual congestion level.
+                            Both lines show peaks around 8am and 5pm on each
+                            day.
+                            On Monday afternoon, the orange live line spikes to
+                            nearly 90 percent, substantially above the yellow
+                            usual line of around 65 percent.
+                            On Tuesday afternoon, the live line reaches over 100
+                            percent and continues rising at the right edge of
+                            the chart, labelled NOW, again running above the
+                            usual level.
+                            Below the congestion chart, a bar chart shows live
+                            speed in km/h, with speeds dropping to around 10
+                            km/h at peak congestion periods.
+                        </p>
+                    </description>
+                </image>
+            </figure>
+
+            <p>
+                <term>Source:</term> TomTom Traffic Index 2025.
+                Nairobi city profile.
+                Available at:
+                <url href="https://www.tomtom.com/traffic-index/city/nairobi/" visual="tomtom.com/traffic-index/city/nairobi"/>.
+                Based on anonymised GPS data from drivers across the Nairobi
+                metropolitan area.
+                Live congestion chart captured August 2026.
+            </p>
+        </subsection>
+
+        <subsection xml:id="subsec-survey-variation">
+            <title>Survey Data on Nairobi Commutes</title>
+
+            <p>
+                Survey data tells a similar story from a different angle.
+                A 2013 World Bank survey of 14,580 households across 15 Kenyan
+                cities found that the median commute time in Nairobi was 30
+                minutes — but matatu commuters spent roughly twice as long
+                travelling as walk commuters making similar trips in the same
+                city (Salon and Gulyani, 2019).
+                And that median of 30 minutes is, in a sense, misleading on its
+                own.
+                On a traffic-free day, a typical Nairobi commute might take 30
+                minutes.
+                During rush hour (7am to 9am or 5pm to 7pm) the same journey can
+                stretch to two hours.
+                A factor of four, depending purely on when you leave (Express
+                Impress, 2024).
+                Similar variation has been documented across East African
+                cities: a study of commuting in Dar es Salaam found that a trip
+                to the city centre could take anything from 30 minutes to three
+                hours depending on traffic conditions (Andreasen and
+                Møller-Jensen, 2017).
+                And in Kampala, analysis of close to a million boda-boda trips
+                found significant variation in travel speed across different
+                periods of the day (Saddier, 2025).
+            </p>
+
+            <p>
+                The three types of variability that this chapter is about are
+                all visible in a single Nairobi commute.
+                The part that we can account for is the time of day.
+                The part that we cannot account for is the unexpected events,
+                such as an accident or a burst water main.
+                These are real causes that are simply not measured.
+                And pure randomness explains the rest — natural variability, the
+                irreducible noise that we cannot eliminate.
+                A car might catch a green light, or a boda-boda might take a
+                slightly different line through the roundabout.
+                Understanding what each type contributes, how to measure the
+                total, and what to do about it is what this chapter is about.
+            </p>
+
+            <p>
+                <term>Sources:</term>
+            </p>
+
+            <p>
+                TomTom Traffic Index 2025.
+                Nairobi city profile.
+                <url href="https://www.tomtom.com/traffic-index/city/nairobi/" visual="tomtom.com/traffic-index/city/nairobi"/>.
+                Salon, D.
+                and Gulyani, S.
+                (2019).
+            </p>
+
+            <p>
+                <q>Commuting in Urban Kenya: 
+    Unpacking Travel Demand in Large and Small Kenyan Cities.</q>
+                <em>Sustainability</em>, 11(14), 3823.
+                <url href="https://doi.org/10.3390/su11143823"/>.
+                CC BY 3.0.
+            </p>
+
+            <p>
+                Saddier, S.
+                (2025).
+                <q>Are motorcycle taxis competing with collective 
+    public transport? Analyzing the role of boda-bodas in Kampala's urban 
+    mobility system.</q>
+                <em>Research in Transportation Economics</em>, 111, 101562.
+                <url href="https://doi.org/10.1016/j.retrec.2025.101562"/>.
+            </p>
+
+            <p>
+                Andreasen, M.H.; Møller-Jensen, L (2017).
+                <q>Access to the city: Mobility patterns, transport and accessibility in peripheral settlements of Dar es Salaam.
+                    </q>
+                <em>J. Transp. Geogr.</em>, 62, 20-29.
+            </p>
+
+            <p>
+                Express Impress (2024).
+                <q>Leaving 10 Minutes Earlier Could Save You 30: Here's How to Beat Nairobi Traffic.</q>
+                <url href="https://expressimpress.co.ke/leaving-10-minutes-earlier-could-save-you-30-heres-how-to-beat-nairobi-traffic/"/>.
+            </p>
+        </subsection>
+    </section>
+
+    <section xml:id="sec-ch9-variability-illustration">
+        <title>Illustration of Variability</title>
+
+        <p>
+            Before measuring variability, it helps to see what the different
+            types actually look like.
+            We can build them up from scratch, starting with a dataset that has
+            no variability at all.
+        </p>
+
+        <paragraphs>
+            <title>No variability</title>
+
+            <p>
+                If <m>y</m> is always the same value regardless of anything
+                else, there is nothing to explain and nothing to measure.
+                Every point sits on a flat horizontal line.
+            </p>
+        </paragraphs>
+
+        <program language="r">
+            <code>
+      x &lt;- 1:10
+      y &lt;- rep(1, 10)
+      df0 &lt;- data.frame(x, y)
+
+      ggplot(df0, aes(x = x, y = y)) +
+        geom_point() +
+        geom_line() +
+        labs(title = "No variability: y is always 1",
+             y = "y", x = "x") +
+        theme_bw()
+            </code>
+        </program>
+
+        <figure xml:id="fig-ch9-no-variability">
+            <caption>
+                No variability.
+                <m>y = 1</m> regardless of <m>x</m>.
+                There is nothing to account for, and nothing to measure.
+            </caption>
+
+            <image source="images/ch9_no_variability.png" width="70%">
+                <description>
+                    <p>
+                        A scatter plot with x on the horizontal axis and y on
+                        the vertical axis.
+                        All ten points sit at exactly y = 1, connected by a flat
+                        horizontal line.
+                        There is no spread in the y values at all.
+                    </p>
+                </description>
+            </image>
+        </figure>
+
+        <paragraphs>
+            <title>Accounted-for variability only</title>
+
+            <p>
+                Now let <m>y = x</m>.
+                There is variability in <m>y</m> — the values change — but all
+                of it is accounted for by <m>x</m>.
+                As <m>x</m> increases, <m>y</m> increases by exactly the same
+                amount.
+                No randomness, no surprises.
+            </p>
+        </paragraphs>
+
+        <program language="r">
+            <code>
+      x &lt;- 1:10
+      y &lt;- x
+      df1 &lt;- data.frame(x, y)
+
+      ggplot(df1, aes(x = x, y = y)) +
+        geom_point() +
+        geom_line() +
+        labs(title = "Accounted for variability only: y = x",
+             y = "y", x = "x") +
+        theme_bw()
+            </code>
+        </program>
+
+        <figure xml:id="fig-ch9-explained-only">
+            <caption>
+                Accounted for variability only.
+                <m>y = x</m>: all variability in <m>y</m> is accounted for by
+                <m>x</m>.
+            </caption>
+
+            <image source="images/ch9_explained_only.png" width="70%">
+                <description>
+                    <p>
+                        A scatter plot where all ten points fall exactly on a
+                        straight diagonal line from the lower left to the upper
+                        right.
+                        There is no scatter around the line.
+                    </p>
+                </description>
+            </image>
+        </figure>
+
+        <paragraphs>
+            <title>Accounted for and natural variability</title>
+
+            <p>
+                Now add some random noise.
+                The relationship between <m>x</m> and <m>y</m> is still there.
+                <m>y</m> still tends to increase with <m>x</m>, but the points
+                no longer fall exactly on the line.
+                Some additional randomness is pushing them above or below where
+                the line would predict.
+                This is natural variability: noise that remains even after
+                <m>x</m> is accounted for.
+            </p>
+        </paragraphs>
+
+        <program language="r">
+            <code>
+      x &lt;- 1:10
+      y &lt;- x + rnorm(10)
+      df2 &lt;- data.frame(x, y)
+
+      ggplot(df2, aes(x = x, y = y)) +
+        geom_point() +
+        geom_line(data = df1, aes(x = x, y = y),
+                  linetype = "dashed", colour = "grey50") +
+        labs(title = "Accounted for + natural variability: y = x + error",
+             subtitle = "Dashed line shows y = x",
+             y = "y", x = "x") +
+        theme_bw()
+            </code>
+        </program>
+
+        <figure xml:id="fig-ch9-explained-natural">
+            <caption>
+                Explained and natural variability.
+                <m>y = x + \varepsilon</m>: points scatter around the line
+                <m>y = x</m> (shown dashed) due to random noise.
+                The trend is still visible but no longer perfect.
+            </caption>
+
+            <image source="images/ch9_explained_natural.png" width="70%">
+                <description>
+                    <p>
+                        A scatter plot where the ten points are scattered around
+                        a dashed diagonal line representing y = x.
+                        Some points are above the line and some below, with no
+                        obvious pattern to the deviations.
+                        The overall upward trend is still visible.
+                    </p>
+                </description>
+            </image>
+        </figure>
+
+        <paragraphs>
+            <title>
+                Accounted for, unaccounted-for, and natural variability
+            </title>
+
+            <p>
+                Finally, introduce a second variable <m>z</m> that also
+                influences <m>y</m>, but which we do not have in our dataset.
+                In the code below, <m>z</m> takes the value 1 for the first five
+                observations and 10 for the last five.
+                We can see the effect it has: the points no longer scatter
+                evenly around the line, but jump up noticeably in the second
+                half.
+                But if we did not know <m>z</m> existed, we would have no way to
+                explain that jump.
+                It would simply look like unusually large random variation.
+            </p>
+        </paragraphs>
+
+        <program language="r">
+            <code>
+      x  &lt;- 1:10
+      z  &lt;- c(rep(1, 5), rep(10, 5))  # hidden variable
+      y  &lt;- x + z + rnorm(10)
+      df3 &lt;- data.frame(x, y)
+
+      ggplot(df3, aes(x = x, y = y)) +
+        geom_point() +
+        geom_smooth(method = "lm", se = FALSE,
+                    colour = "#44575E", linewidth = 0.8) +
+        labs(title = "Accounted for, unaccounted-for, and natural variability",
+             subtitle = "The line fits poorly because z is not in the data",
+             y = "y", x = "x") +
+        theme_bw()
+            </code>
+        </program>
+
+        <figure xml:id="fig-ch9-all-variability">
+            <caption>
+                Accounted for, unaccounted for, and natural variability.
+                <m>y = x + z + \varepsilon</m>, but <m>z</m> is not in the data.
+                The line of best fit through <m>x</m> alone fits poorly — the
+                points in the second half jump above the line because of
+                <m>z</m>, which we cannot see.
+            </caption>
+
+            <image source="images/ch9_all_variability.png" width="70%">
+                <description>
+                    <p>
+                        A scatter plot where the first five points scatter
+                        around the lower part of a fitted line and the last five
+                        points scatter around a noticeably higher position.
+                        The fitted line is a poor summary of the data because it
+                        cannot account for the jump caused by the hidden
+                        variable z.
+                        The residuals are large and systematically patterned
+                        rather than randomly scattered.
+                    </p>
+                </description>
+            </image>
+        </figure>
+
+        <p>
+            This last scenario is the most realistic.
+            In the real world, we never have all the variables.
+            There will always be something we have not measured that is
+            influencing the outcome.
+            The question is how much of the variability we can account for with
+            what we do have — and how honest we are about what remains
+            unaccounted for.
+            The Nairobi traffic data is exactly this: time of day accounts for
+            some of the variability in journey time, but unknown events
+            (accidents, roadworks, broken-down matatus) account for more, and
+            pure randomness accounts for the rest.
+        </p>
+    </section>
+
+    <section xml:id="sec-ch9-stack">
+        <title>Variability STACK Question</title>
+
+        <p>
+            TODO: Insert STACK question on variability here.
+        </p>
+    </section>
+
+    <section xml:id="sec-measuring-variability-r">
+        <title>Measuring Variability in R</title>
+
+        <introduction>
+            <p>
+                The previous section introduced the idea of variability and why
+                it matters.
+                This section works through how to measure it, using example.
+                We will start with the data itself, then build up through
+                several measures of variability, each one revealing something
+                slightly different about the spread of the data.
+            </p>
+
+            <p>
+                We use the <c>gapminder</c> package, which is already installed
+                from <xref ref="sec-gapminder"/>.
+                We filter to African countries only:
+            </p>
+
+            <program language="r">
+                <code>
+        library(tidyverse)
+        library(gapminder)
+
+        africa &lt;- gapminder %&gt;% filter(continent == "Africa")
+
+        head(africa)
+        #&gt; # A tibble: 6 x 6
+        #&gt;   country continent  year lifeExp      pop gdpPercap
+        #&gt;   &lt;fct&gt;   &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+        #&gt; 1 Algeria Africa     1952    43.1  9279525     2449.
+        #&gt; 2 Algeria Africa     1957    45.7 10270856     3014.
+        #&gt; 3 Algeria Africa     1962    48.3 11000948     2551.
+        #&gt; 4 Algeria Africa     1967    51.4 12760499     3247.
+        #&gt; 5 Algeria Africa     1972    54.5 14760787     4183.
+        #&gt; 6 Algeria Africa     1977    58.0 17152804     4910.
+                </code>
+            </program>
+
+            <p>
+                Each row is one country in one year.
+                The variable we will focus on is the life expectancy at birth,
+                in years ( <c>lifeExp</c> ).
+                A quick summary shows some statistics on the variability:
+            </p>
+
+            <program language="r">
+                <code>
+        summary(africa$lifeExp)
+        #&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+        #&gt;   23.60   42.37   47.79   48.87   54.41   76.44
+                </code>
+            </program>
+
+            <p>
+                The minimum life expectancy across all African countries and
+                years is 23.6 years; the maximum is 76.4.
+                The mean is 48.9.
+                But those three numbers alone do not tell you much about the
+                shape of the variation.
+                That is what the rest of this section is for.
+            </p>
+        </introduction>
+
+        <subsection xml:id="ss-variance-sd">
+            <title>Variance and Standard Deviation</title>
+
+            <p>
+                The most common way to measure variability is the
+                <term>standard deviation</term>.
+                This single number that summarises how spread out the values are
+                around the mean.
+                Before we get to standard deviation, it helps to understand
+                <term>variance</term>, which is what standard deviation is built
+                from.
+            </p>
+
+            <p>
+                Both variance and standard deviation answer the same basic
+                question: on average, how far away from the mean is a typical
+                data point?
+                Variance computes this by taking the average of the squared
+                distances from the mean.
+                Standard deviation then takes the square root of the variance,
+                bringing the answer back into the same units as the original
+                data, making it much easier to interpret.
+            </p>
+
+            <p>
+                We can compute the standard deviation and variance for each year
+                across all African countries in the dataset.
+                In other words, for each year we take all the African countries
+                in the data set, calculate how far each country's life
+                expectancy is from the African average that year, and summarise
+                that spread:
+            </p>
+
+            <program language="r">
+                <code>
+        africa %&gt;%
+          group_by(year) %&gt;%
+          summarise(SD       = sd(lifeExp),
+                    variance = var(lifeExp))
+        #&gt; # A tibble: 12 x 3
+        #&gt;     year    SD variance
+        #&gt;    &lt;int&gt; &lt;dbl&gt;    &lt;dbl&gt;
+        #&gt;  1  1952  5.15     26.5
+        #&gt;  2  1957  5.62     31.6
+        #&gt;  3  1962  5.88     34.5
+        #&gt;  4  1967  6.08     37.0
+        #&gt;  5  1972  6.42     41.2
+        #&gt;  6  1977  6.81     46.4
+        #&gt;  7  1982  7.38     54.4
+        #&gt;  8  1987  7.86     61.8
+        #&gt;  9  1992  9.46     89.5
+        #&gt; 10  1997  9.10     82.9
+        #&gt; 11  2002  9.59     91.9
+        #&gt; 12  2007  9.63     92.8
+                </code>
+            </program>
+
+            <p>
+                The standard deviation starts at 5.15 years in 1952 and rises to
+                9.63 years in 2007.
+                What does this mean?
+                In 1952, a typical African country had a life expectancy within
+                about 5 years of the average across the continent.
+                By 2007, that spread had nearly doubled: it appears that some
+                countries had made dramatic improvements, while others had not,
+                or had gone backwards.
+                The gap between African countries grew over time, not shrunk.
+            </p>
+
+            <p>
+                The spike in standard deviation around 1992 to 2002 is
+                particularly notable.
+                This is the period when the HIV/AIDS epidemic was most severe in
+                southern and eastern Africa, pulling the life expectancy of
+                countries like Botswana, Zimbabwe, and Swaziland sharply
+                downward while others continued to improve.
+                The standard deviation captures this divergence as a single
+                number.
+            </p>
+
+            <p>
+                A quick summary of the pros and cons of standard deviation and
+                variance as measures of variability:
+            </p>
+
+            <tabular halign="left">
+                <col halign="left" width="20%"/>
+                <col halign="left" width="40%"/>
+                <col halign="left" width="40%"/>
+                <row header="yes" bottom="minor">
+                    <cell/>
+                    <cell>Pros</cell>
+                    <cell>Cons</cell>
+                </row>
+
+                <row>
+                    <cell><term>Variance</term></cell>
+                    <cell>Takes all data points into account.</cell>
+                    <cell>
+                        Not in the same units as the original data (a variance
+                        of 92.8 is hard to interpret when the data is in years).
+                        Sensitive to outliers, so a single extreme value can
+                        pull the standard deviation up substantially.
+                        (this is arguably also a pro, as it reflects the true
+                        spread of the data, but it can be misleading if you are
+                        not aware of it).
+                    </cell>
+                </row>
+
+                <row>
+                    <cell><term>Standard deviation</term></cell>
+                    <cell>
+                        Takes all data points into account.
+                        Same units as the original data, so directly
+                        interpretable.
+                    </cell>
+                    <cell>
+                        Sensitive to outliers, so a single extreme value can
+                        pull the standard deviation up substantially.
+                        (this is arguably also a pro, as it reflects the true
+                        spread of the data, but it can be misleading if you are
+                        not aware of it).
+                    </cell>
+                </row>
+            </tabular>
+        </subsection>
+
+        <subsection xml:id="ss-cv">
+            <title>Coefficient of Variation</title>
+
+            <p>
+                The standard deviation is useful for comparing variability
+                within the same dataset.
+                But what if you want to compare variability across datasets with
+                very different means?
+                A standard deviation of nine years means something very
+                different if the average life expectancy is 50 years versus 80
+                years.
+            </p>
+
+            <p>
+                The <term>coefficient of variation</term> (CV) solves this by
+                expressing the standard deviation as a percentage of the mean.
+                A CV of 20% means that, on average, values deviate from the mean
+                by about 20% of the mean's value.
+                This makes it possible to compare the relative spread of very
+                different datasets.
+            </p>
+
+            <program language="r">
+                <code>
+        africa %&gt;%
+          group_by(year) %&gt;%
+          summarise(CV = sd(lifeExp) / mean(lifeExp) * 100)
+        #&gt; # A tibble: 12 x 2
+        #&gt;     year    CV
+        #&gt;    &lt;int&gt; &lt;dbl&gt;
+        #&gt;  1  1952  13.2
+        #&gt;  2  1957  13.6
+        #&gt;  3  1962  13.6
+        #&gt;  4  1967  13.4
+        #&gt;  5  1972  13.5
+        #&gt;  6  1977  13.7
+        #&gt;  7  1982  14.3
+        #&gt;  8  1987  14.7
+        #&gt;  9  1992  17.6
+        #&gt; 10  1997  17.0
+        #&gt; 11  2002  18.0
+        #&gt; 12  2007  17.6
+                </code>
+            </program>
+
+            <p>
+                We previously saw that the standard deviation roughly doubled
+                from 1952 to 2007, but here the CV only increased from 13.2% to
+                17.6%.
+                This is because the mean life expectancy also increased
+                substantially over the same period.
+                Part of what looked like growing variability in the standard
+                deviation was simply that the whole distribution shifted upward.
+                The CV adjusts for this, showing that the relative spread grew
+                more modestly.
+            </p>
+
+            <p>
+                However, limitations to the CV are that it assumes the data is
+                roughly symmetric around the mean, and it behaves poorly when
+                the mean is close to zero.
+                For life expectancy data, which is always positive and not too
+                skewed, it works well.
+            </p>
+        </subsection>
+
+        <subsection xml:id="ss-boxplot-variability">
+            <title>Visualising Variability: the Boxplot</title>
+
+            <p>
+                Variance, standard deviation, and CV are all
+                <term>point statistics</term>: single numbers that summarise the
+                spread of the data.
+                While useful, they do not show the shape of the distribution:
+                whether values cluster in the middle or spread evenly, whether
+                the data is skewed, or whether there are unusual outliers.
+            </p>
+
+            <p>
+                A <term>boxplot</term> shows all of this at once.
+                It displays the five-number summary with the minimum, first
+                quartile (Q1), median, third quartile (Q3), and maximum as a box
+                with whiskers.
+                It additionally marks any outliers as individual points.
+                Here is the boxplot for life expectancy across African countries
+                in 2007:
+            </p>
+
+            <figure xml:id="fig-ch9-africa-boxplot-2007">
+                <caption>
+                    Life expectancy across African countries in 2007, shown as a
+                    boxplot with the five-number summary labelled.
+                    The dot below the lower whisker is Swaziland (now Eswatini),
+                    whose life expectancy was severely reduced by the HIV/AIDS
+                    epidemic.
+                </caption>
+
+                <image source="images/ch9_africa_boxplot_2007.png" width="70%">
+                    <description>
+                        <p>
+                            A vertical boxplot showing life expectancy in years
+                            on the y-axis.
+                            The box spans from Q1 (57.2 years) to Q3 (76.4
+                            years), with a median line at 71.9 years.
+                            Labelled arrows point to each of the five summary
+                            statistics.
+                            A single outlier point appears below the lower
+                            whisker, labelled as the minimum value (39.6 years).
+                        </p>
+                    </description>
+                </image>
+            </figure>
+
+            <p>
+                Reading this boxplot: the median life expectancy across African
+                countries in 2007 was around 71.9 years.
+                In 2007, the life expectancy in African countries varied
+                considerably: half of all countries fell between roughly 57.2
+                and 76.4 years (the box).
+                The whiskers extend to the most extreme non-outlier values.
+                The single dot below the lower whisker is Swaziland (now
+                Eswatini) at 39.6 years, driven almost entirely by the HIV/AIDS
+                epidemic at its peak.
+                This is a real event, visible as an outlier because its cause
+                was so severe and so specific to that country.
+            </p>
+
+            <p>
+                We can verify which country is at the bottom:
+            </p>
+
+            <program language="r">
+                <code>
+        africa_2007 &lt;- gapminder %&gt;% filter(continent == "Africa", 
+                                             year == 2007)
+
+        africa_2007 %&gt;%
+          arrange(lifeExp) %&gt;%
+          select(country, lifeExp) %&gt;%
+          head(5)
+        #&gt; # A tibble: 5 x 2
+        #&gt;   country                  lifeExp
+        #&gt;   &lt;fct&gt;                      &lt;dbl&gt;
+        #&gt; 1 Swaziland                   39.6
+        #&gt; 2 Mozambique                  42.1
+        #&gt; 3 Zambia                      42.4
+        #&gt; 4 Sierra Leone                42.6
+        #&gt; 5 Lesotho                     42.6
+                </code>
+            </program>
+
+            <insight xml:id="insight-outliers">
+                <title>What to do with outliers?</title>
+
+                <p>
+                    As always, it depends on the context and the cause - like
+                    with missing data.
+                </p>
+
+                <p>
+                    If an outlier is a genuine data error, such as having an
+                    adult with a height of 162m, then it is good practice to
+                    verify what the correct value should be and fix it.
+                    If it cannot be verified, it is reasonable to remove it from
+                    the dataset.
+                    But, removing an outlier simply because it is inconvenient
+                    or makes the data look messy is not good practice.
+                </p>
+
+                <p>
+                    In October 1987, a weather forecaster on the BBC dismissed a
+                    concerns about an approaching storm, saying there was
+                    nothing to worry about.
+                    Hours later, the most destructive storm to hit southern
+                    England in three centuries caused billions of pounds of
+                    damage and killed eighteen people.
+                    The forecasting models had flagged an unusual pressure
+                    reading, but this was treated as noise rather than as real.
+                    The outlier was the story.
+                </p>
+
+                <p>
+                    Eswatini's life expectancy in 2007 is an outlier in the same
+                    sense: not a data error, but a real event with a real cause.
+                    Removing it would make the distribution look tidier and the
+                    standard deviation smaller.
+                    But, it would erase the HIV/AIDS epidemic in Eswatini from
+                    the data.
+                    The right response to an outlier is always to ask why it is
+                    there.
+                    It can be an error, but it can be one of the most
+                    interesting parts of the dataset.
+                </p>
+            </insight>
+
+            <p>
+                We can look at how variability changed across years, displaying
+                the same boxplot repeated for each year, with Kenya highlighted:
+            </p>
+
+            <program language="r">
+                <code>
+kenya &lt;- africa %&gt;%
+  filter(country == "Kenya")
+
+ggplot(africa, aes(y = lifeExp, x = factor(year))) +
+  geom_boxplot(width = 0.4, fill = "#F37021", colour = "#44575E",
+               outlier.colour = "#F37021", outlier.size = 2) +
+  # Kenya points
+  geom_point(data = kenya,
+             aes(y = lifeExp, x = factor(year)),
+             colour = "#44575E", size = 3, shape = 18) +
+  # Kenya line connecting the points
+  geom_line(data = kenya,
+            aes(y = lifeExp, x = as.numeric(factor(year))),
+            colour = "#44575E", linewidth = 0.8) +
+  # Label on the last point only
+  geom_label(data = kenya %&gt;% filter(year == max(year)),
+             aes(y = lifeExp, x = factor(year), label = "Kenya"),
+             hjust = -0.1, size = 3.2, fill = "white",
+             colour = "#44575E", label.size = 0.3) +
+  labs(
+    title    = "Life expectancy across African countries",
+    subtitle = "Each point represents one country. Kenya highlighted in dark teal.",
+    y        = "Life expectancy (years)",
+    x        = "Year"
+  ) +
+  theme_bw() +
+  theme(
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank()
+  )
+                </code>
+            </program>
+
+            <figure xml:id="fig-ch9-africa-boxplot-years">
+                <caption>
+                    Life expectancy across African countries from 1952 to 2007,
+                    with Kenya shown as a connected dark teal line.
+                    The widening of the boxes over time reflects growing
+                    divergence between countries.
+                    Kenya's dip in the 1990s reflects the HIV/AIDS epidemic.
+                </caption>
+
+                <image source="images/ch9_africa_boxplot_years.png" width="100%">
+                    <description>
+                        <p>
+                            A series of boxplots, one every five years from 1952
+                            to 2007, showing life expectancy across African
+                            countries.
+                            The boxes gradually widen over time, consistent with
+                            the increasing standard deviation shown in the table
+                            above.
+                            A dark teal connected line and diamond points show
+                            Kenya's trajectory, rising steadily until the 1990s,
+                            then dipping before recovering in 2002 and 2007.
+                        </p>
+                    </description>
+                </image>
+            </figure>
+
+            <p>
+                The widening boxes over time tell the same story as the
+                increasing standard deviation, but now you can visualise it.
+                The median life expectancy across African countries rises
+                steadily from 1952 through to the late 1980s/90s, then stalls
+                and dips.
+                In the late 1980s, the boxes start to plateau, and in the late
+                1990s, the whiskers begin to stretch further downward,
+                potentially from the impact of the HIV/AIDS epidemic.
+                In 1992, a single orange point appears far below the rest.
+                This is Rwanda, whose life expectancy had collapsed to around 23
+                years, the lowest of any country in the dataset.
+                This was the period surrounding the Rwandan genocide of 1994,
+                and the violence and displacement of the years immediately
+                before it.
+                It registers in the data as a stark outlier, a single point
+                sitting far beneath every other country on the continent.
+                We saw this same point when we animated the Gapminder data in
+                <xref ref="ch-visualising-multidimensional-data"/> and confirmed
+                this variability is not a data error.
+            </p>
+
+            <p>
+                Kenya's trajectory, shown by the dark teal line, shows
+                concretely how an individual country's experience can reflect
+                broader continental trends.
+                Life expectancy rises consistently from 1952 to 1987, tracking
+                close to the continental median.
+                Then it falls, steeply, through the 1990s before recovering in
+                the 2000s.
+                By 2007, Kenya is back above the continental median, but the dip
+                is visible in the data as clearly as it was in lived experience.
+            </p>
+        </subsection>
+
+        <subsection xml:id="ss-range">
+            <title>The Range</title>
+
+            <p>
+                The simplest measure of variability is the <term>range</term>:
+                the difference between the largest and smallest values in the
+                dataset.
+                In R:
+            </p>
+
+            <program language="r">
+                <code>
+      africa %&gt;%
+        group_by(year) %&gt;%
+        summarise(range     = max(lifeExp) - min(lifeExp),
+                  max_lifeExp = max(lifeExp),
+                  min_lifeExp = min(lifeExp))
+      #&gt; # A tibble: 12 x 4
+      #&gt;     year range max_lifeExp min_lifeExp
+      #&gt;    &lt;int&gt; &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+      #&gt;  1  1952  21.4        52.7        31.3
+      #&gt;  2  1957  22.1        58.1        36.0
+      #&gt;  3  1962  26.9        60.2        33.3
+      #&gt;  4  1967  24.2        64.4        40.2
+      #&gt;  5  1972  26.1        65.0        38.8
+      #&gt;  6  1977  28.9        67.1        38.2
+      #&gt;  7  1982  33.4        70.0        36.7
+      #&gt;  8  1987  36.5        71.9        35.4
+      #&gt;  9  1992  52.5        73.6        23.6
+      #&gt; 10  1997  40.9        74.8        36.1
+      #&gt; 11  2002  43.1        75.7        39.2
+      #&gt; 12  2007  40.0        76.4        39.6
+                </code>
+            </program>
+
+            <p>
+                The range is easy to understand and easy to compute.
+                In 1952, the gap between the country with the highest life
+                expectancy and the lowest was 21.4 years.
+                By 2007 that had grown to 40 years.
+                In other words, in 2007 one country within Africa had a life
+                expectancy more than 40 years longer than another.
+            </p>
+
+            <p>
+                The increasing range can be visualised in
+                <xref ref="fig-ch9-africa-boxplot-years"/> too, where the gap
+                between the top and bottom of each boxplot widens noticeably
+                from left to right
+            </p>
+
+            <p>
+                Look at 1992: the range jumps to 52.5 years.
+                That is almost entirely Rwanda, a single country whose life
+                expectancy had collapsed to 23.6 years, far below every other
+                country on the continent, pulling the minimum down and the range
+                up dramatically.
+                By 1997, once the immediate crisis had passed, the range fell
+                back to 40.9.
+            </p>
+
+            <p>
+                This illustrates the main weakness of the range: it depends
+                entirely on the two most extreme values.
+                One unusual country (such as Rwanda in 1992, or Eswatini at the
+                height of the HIV/AIDS epidemic) can dramatically change the
+                range, even if every other country in the dataset is clustered
+                tightly together.
+                The range tells you about the extremes, not about the typical
+                spread.
+                This is why the interquartile range was developed.
+            </p>
+        </subsection>
+
+        <subsection xml:id="ss-iqr">
+            <title>The Interquartile Range</title>
+
+            <p>
+                The box in a boxplot has a specific width: it spans from Q1 to
+                Q3.
+                That width is called the <term>interquartile range</term> (IQR).
+                It measures the spread of the middle 50% of the data, which is
+                the range within which the central half of all values fall.
+            </p>
+
+            <p>
+                The IQR is more <term>robust</term> than the standard deviation,
+                meaning it is less affected by outliers.
+                Eswatini's extreme value pulls the standard deviation up, but it
+                has no effect on the IQR because the IQR only cares about the
+                middle half of the data.
+                This makes the IQR a better measure of variability when you have
+                skewed data or known outliers that you do not want to dominate
+                the summary.
+            </p>
+
+            <program language="r">
+                <code>
+        africa %&gt;%
+          group_by(year) %&gt;%
+          summarise(IQR = IQR(lifeExp),
+                    SD  = sd(lifeExp))
+        #&gt; # A tibble: 12 x 3
+        #&gt;     year   IQR    SD
+        #&gt;    &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+        #&gt;  1  1952  7.44  5.15
+        #&gt;  2  1957  7.33  5.62
+        #&gt;  3  1962  8.08  5.88
+        #&gt;  4  1967  8.25  6.08
+        #&gt;  5  1972  8.96  6.42
+        #&gt;  6  1977  9.89  6.81
+        #&gt;  7  1982 11.8   7.38
+        #&gt;  8  1987 12.3   7.86
+        #&gt;  9  1992 13.9   9.46
+        #&gt; 10  1997 13.4   9.10
+        #&gt; 11  2002 13.5   9.59
+        #&gt; 12  2007 14.5   9.63
+                </code>
+            </program>
+
+            <p>
+                Both the IQR and SD tend to increase over time, consistent with
+                growing divergence between African countries.
+                But notice that the IQR is generally larger than the SD in the
+                early years, and smaller in the later years.
+                This reflects the growing influence of the outliers in the 1990s
+                and 2000s which pull the SD up more than the IQR, because the SD
+                is sensitive to their extreme values while the IQR is not.
+            </p>
+
+            <p>
+                We can visualise this increase in the IQR by looking at
+                <xref ref="fig-ch9-africa-boxplot-years"/>.
+                The boxes get taller over time because Q1 and Q3 move further
+                apart.
+                The IQR in 1952 was around 7 years; by 2007 it had almost
+                doubled to 14.5.
+            </p>
+
+            <insight xml:id="insight-boxplot-variability-types">
+                <title>Two kinds of variability in one chart</title>
+
+                <p>
+                    The chart in <xref ref="fig-ch9-africa-boxplot-years"/>
+                    shows two distinct kinds of variability at the same time,
+                    and it is worth separating them.
+                </p>
+
+                <p>
+                    The first is
+                    <term>variability across countries within a single 
+  year</term>,
+                    shown by the height of each box.
+                    In any given year, some African countries have life
+                    expectancies well above the median and some well below.
+                    What drives this?
+                    Some of it could in principle be accounted for — if we had
+                    data on each country's wealth, access to healthcare,
+                    sanitation infrastructure, or disease burden, we could
+                    account for some of why one country sits above the box and
+                    another sits below it.
+                    The gapminder dataset gives us GDP per capita as a rough
+                    proxy for some of those things, but not all.
+                    Some drivers are harder to capture in data at all, and would
+                    hence be unaccounted for: governance quality, geography, the
+                    strength of public health systems, the legacy of particular
+                    conflicts.
+                    And some of the remaining variation between countries is
+                    simply natural: even two countries that look identical on
+                    every variable we can measure will not have exactly the same
+                    life expectancy.
+                </p>
+
+                <p>
+                    The second is
+                    <term>variability across years within Kenya</term>,
+                    illustrated by the rise and fall of the teal line.
+                    Kenya's life expectancy in 1952 was around 42 years; by 1987
+                    it had risen to nearly 60; by 2002 it had fallen back to
+                    around 51, before recovering again.
+                    Again, some of it could in principle be accounted for.
+                    If we had data on improvements in medicine, sanitation, and
+                    nutrition over time, or on the spread of the HIV/AIDS
+                    epidemic, we could account for much of the rise and the
+                    subsequent dip.
+                    But we do not have those variables here.
+                    Some drivers are harder to capture in data at all: droughts,
+                    political instability, specific health policy decisions in
+                    particular years.
+                    These all affected Kenyan life expectancy but are rarely
+                    available as measured variables.
+                    And some is natural: even in a stable period, life
+                    expectancy fluctuates slightly from year to year for reasons
+                    no dataset would ever fully capture.
+                </p>
+
+                <p>
+                    You might notice that year is in our dataset, and we can see
+                    that life expectancy in Kenya changes depending on year.
+                    So does year account for the variability in Kenya's life
+                    expectancy over time?
+                    In a narrow sense, yes: if you know the year, you can
+                    predict roughly where Kenya's life expectancy will sit.
+                    But there is an important distinction between
+                    <term>accounting for</term> variability and
+                    <term>explaining</term> it.
+                    Year accounts for the pattern — it tells you when things
+                    changed.
+                    It does not explain why.
+                    The actual causes of the rise (improvements in medicine,
+                    sanitation, and nutrition) and the dip (the HIV/AIDS
+                    epidemic) are not in this dataset.
+                    Year is acting as a proxy for all of them combined.
+                    Accounting for variability means being able to predict or
+                    describe a pattern; explaining it means knowing what
+                    actually drove it.
+                    The two are not the same, and confusing them is one of the
+                    most common mistakes in data analysis.
+                </p>
+            </insight>
+        </subsection>
+
+        <subsection xml:id="ss-least-squares">
+            <title>Least Squares: Measuring Variability Around a Line</title>
+
+            <p>
+                So far, we have measured variability around a single value.
+                But sometimes the question is not "how spread out are the
+                values?" but "how well does a line describe the relationship
+                between two variables?" The answer involves measuring
+                variability around a line rather than around a point.
+            </p>
+
+            <p>
+                Consider Kenya's population over time.
+                There is a clear upward trend, but the data does not fall
+                perfectly on a straight line.
+                Each observed value sits some distance above or below the line.
+                Those distances are called <term>residuals</term>.
+                The plot below shows them as orange arrows:
+            </p>
+
+            <figure xml:id="fig-ch9-kenya-residuals">
+                <caption>
+                    Population in Kenya, 1952 to 2007, with a line of best fit.
+                    Orange arrows show the residual for each year (the distance
+                    between the observed value and the line).
+                    Years where the actual population was below the line have
+                    arrows pointing upward; years above the line have arrows
+                    pointing downward.
+                </caption>
+
+                <image source="images/ch9_kenya_residuals.png" width="90%">
+                    <description>
+                        <p>
+                            A scatterplot of Kenya's population by year, with a
+                            dark teal line of best fit and orange arrows
+                            connecting each observed data point to the fitted
+                            line.
+                        </p>
+                    </description>
+                </image>
+            </figure>
+
+            <p>
+                The goal of <term>least squares</term> is to find the line that
+                makes those arrows (residuals) as short as possible, so that the
+                line is as close to the data as possible.
+                Specifically, it minimises the sum of the <em>squared</em>
+                residuals.
+                Why squared?
+                First, squaring makes all residuals positive (so positive and
+                negative errors do not cancel each other out).
+                Second, squaring gives more weight to large residuals: a point
+                that is far from the line contributes much more to the total
+                than a point that is close.
+                This means the line is pulled toward fitting the most extreme
+                deviations, rather than ignoring them.
+            </p>
+
+            <p>
+                The squared residuals can be visualised literally as squares.
+                The side length of each square equals the residual for that
+                point; the area equals the squared residual.
+                The line of best fit is the one that minimises the total area of
+                all the squares combined:
+            </p>
+
+            <figure xml:id="fig-ch9-least-squares-comparison">
+                <caption>
+                    Left: a flat horizontal line through the mean, representing
+                    a poor fit, producing large squares.
+                    Right: the line of best fit, which minimises the total area
+                    of the squares.
+                    The reduction in square area from left to right is the
+                    reduction in unaccounted-for variability.
+                </caption>
+
+                <image source="images/ch9_least_squares_comparison.png" width="100%">
+                    <description>
+                        <p>
+                            Two side-by-side plots of Kenya's population by
+                            year.
+                            In the left panel, a horizontal line sits at the
+                            mean population, and large orange squares connect
+                            each observed point to that line.
+                            This is particularly large for the early and late
+                            years.
+                            In the right panel, the line of best fit slopes
+                            upward, and the orange squares are substantially
+                            smaller.
+                            The total area of the squares in the right panel is
+                            much less than in the left.
+                        </p>
+                    </description>
+                </image>
+            </figure>
+
+            <p>
+                The animation below shows this process in action: the line
+                rotating from horizontal to the line of best fit, with the
+                squares shrinking and the total squared error falling as it
+                moves:
+            </p>
+
+            <figure xml:id="fig-ch9-least-squares-animation">
+                <caption>
+                    Animation showing the line rotating from a flat horizontal
+                    line (maximum squared error) to the line of best fit
+                    (minimum squared error).
+                    The total squared error is shown in the subtitle and
+                    decreases as the line improves.
+                </caption>
+
+                <image source="images/ch9_least_squares.gif" width="90%">
+                    <description>
+                        <p>
+                            An animated GIF showing Kenya's population data
+                            points with a line rotating from horizontal to the
+                            line of best fit.
+                            Orange squares shrink as the line rotates.
+                            The subtitle updates to show the decreasing total
+                            squared error.
+                        </p>
+                    </description>
+                </image>
+            </figure>
+
+            <p>
+                The size of the squares (residuals) from this process are
+                themselves a measure of variability: they represent everything
+                in the outcome that the line cannot explain.
+                A small total squared error means the line accounts for most of
+                the variability; a large total squared error means much of the
+                variability is still unaccounted for.
+            </p>
+        </subsection>
+
+        <subsection xml:id="ss-variability-summary">
+            <title>Choosing a Measure of Variability</title>
+
+            <p>
+                We have now seen several measures of variability.
+                They are not interchangeable — each captures something slightly
+                different, and each has situations where it is the right choice
+                and situations where it is not.
+            </p>
+
+            <tabular halign="left">
+                <col halign="left" width="20%"/>
+                <col halign="left" width="25%"/>
+                <col halign="left" width="25%"/>
+                <col halign="left" width="30%"/>
+                <row header="yes" bottom="minor">
+                    <cell>Measure</cell>
+                    <cell>What it captures</cell>
+                    <cell>Sensitive to outliers?</cell>
+                    <cell>When to use</cell>
+                </row>
+
+                <row>
+                    <cell><term>Variance</term></cell>
+                    <cell>Average squared distance from the mean</cell>
+                    <cell>Yes</cell>
+                    <cell>
+                        When you need a mathematically convenient form; rarely
+                        reported directly
+                    </cell>
+                </row>
+
+                <row>
+                    <cell><term>Standard deviation</term></cell>
+                    <cell>
+                        Average distance from the mean, in original units
+                    </cell>
+                    <cell>Yes</cell>
+                    <cell>
+                        Symmetric data without extreme outliers; most common
+                        default
+                    </cell>
+                </row>
+
+                <row>
+                    <cell><term>Coefficient of variation</term></cell>
+                    <cell>SD as a percentage of the mean</cell>
+                    <cell>Yes</cell>
+                    <cell>
+                        Comparing variability across datasets with different
+                        means or units
+                    </cell>
+                </row>
+
+                <row>
+                    <cell><term>IQR</term></cell>
+                    <cell>Spread of the middle 50% of the data</cell>
+                    <cell>No</cell>
+                    <cell>
+                        Skewed data or data with meaningful outliers you do not
+                        want to dominate
+                    </cell>
+                </row>
+
+                <row>
+                    <cell><term>Least squares</term></cell>
+                    <cell>Variability around a line</cell>
+                    <cell>Yes</cell>
+                    <cell>
+                        When measuring how well a trend or relationship fits the
+                        data
+                    </cell>
+                </row>
+            </tabular>
+
+            <p>
+                In practice, you will often report more than one.
+                A boxplot gives the IQR visually; the standard deviation gives a
+                single number for the spread; the CV lets you compare across
+                groups.
+                None of them is complete on its own, and the right choice
+                depends on what you are trying to communicate and what your data
+                looks like.
+            </p>
+        </subsection>
+    </section>
+    <exercises xml:id="exercises-ch9">
+        <title>Exercises</title>
+
+        <exercise xml:id="ex-variability-types">
+            <statement>
+                <p>
+                    For each of the following situations, identify which type of
+                    variability is being described (accounted-for,
+                    unaccounted-for, or natural) and briefly explain your
+                    reasoning.
+                </p>
+
+                <ol>
+                    <li>
+                        <p>
+                            Matatu journey times in Nairobi are consistently
+                            longer on Friday evenings than on Tuesday mornings.
+                        </p>
+                    </li>
+
+                    <li>
+                        <p>
+                            Two students take the same boda-boda route on the
+                            same Tuesday morning and arrive at slightly
+                            different times, even though nothing unusual
+                            happened on either journey.
+                        </p>
+                    </li>
+
+                    <li>
+                        <p>
+                            Life expectancy in several southern African
+                            countries dropped sharply in the 1990s due to the
+                            HIV/AIDS epidemic, but this variable was not
+                            included in the dataset being analysed.
+                        </p>
+                    </li>
+
+                    <li>
+                        <p>
+                            A farmer's crop yield varies from year to year.
+                            The analyst has data on rainfall but not on soil
+                            quality, which also affects yield.
+                        </p>
+                    </li>
+                </ol>
+            </statement>
+        </exercise>
+
+        <exercise xml:id="ex-variability-measures">
+            <statement>
+                <p>
+                    Using the <c>gapminder</c> package in R, filter the data to
+                    a year of your choice and compute the following for life
+                    expectancy across all countries:
+                </p>
+
+                <ol>
+                    <li>
+                        <p>
+                            The range
+                        </p>
+                    </li>
+
+                    <li>
+                        <p>
+                            The standard deviation
+                        </p>
+                    </li>
+
+                    <li>
+                        <p>
+                            The interquartile range
+                        </p>
+                    </li>
+
+                    <li>
+                        <p>
+                            The coefficient of variation
+                        </p>
+                    </li>
+                </ol>
+
+                <p>
+                    Now repeat the exercise for each continent separately using
+                    <c>group_by(continent)</c>.
+                    Which continent has the highest standard deviation?
+                    Which has the highest IQR?
+                    Are they the same continent?
+                    Why might they differ?
+                </p>
+            </statement>
+        </exercise>
+
+        <exercise xml:id="ex-variability-outlier">
+            <statement>
+                <p>
+                    In the Africa life expectancy data, Rwanda in 1992 appears
+                    as an extreme outlier with a life expectancy of 23.6 years.
+                </p>
+
+                <ol>
+                    <li>
+                        <p>
+                            Compute the standard deviation and IQR of African
+                            life expectancy in 1992, with and without Rwanda
+                            included.
+                            How much does each measure change?
+                        </p>
+                    </li>
+
+                    <li>
+                        <p>
+                            Which measure is more affected by removing Rwanda:
+                            the standard deviation or the IQR?
+                            Does this match what you would expect given the
+                            properties of each measure?
+                        </p>
+                    </li>
+
+                    <li>
+                        <p>
+                            Should Rwanda be removed from the dataset for
+                            analysis purposes?
+                            Justify your answer.
+                        </p>
+                    </li>
+                </ol>
+            </statement>
+        </exercise>
+
+        <exercise xml:id="ex-variability-boxplot">
+            <statement>
+                <p>
+                    Produce a boxplot of life expectancy for all African
+                    countries in two different years of your choice.
+                </p>
+
+                <ol>
+                    <li>
+                        <p>
+                            Describe what changed between these two years in
+                            terms of the median, the IQR, and the presence of
+                            outliers.
+                        </p>
+                    </li>
+
+                    <li>
+                        <p>
+                            The standard deviation in one year is higher than in
+                            the other year.
+                            Does the boxplot suggest this is because values are
+                            more spread out overall, or because of specific
+                            outliers?
+                            How can you tell?
+                        </p>
+                    </li>
+
+                    <li>
+                        <p>
+                            Add Kenya's data point to both boxplots using
+                            <c>geom_point()</c>.
+                            In which year is Kenya further from the continental
+                            median, and in which direction?
+                        </p>
+                    </li>
+                </ol>
+            </statement>
+        </exercise>
+    </exercises>
+</chapter>
