@@ -14,10 +14,8 @@
             numbers will shift, sometimes smoothly, sometimes in sudden jolts.
             This chapter is about variability: what it is, where it comes from,
             and how to measure it.
-            We begin with a story about a journey that took four times as long
-            as expected, and use it to introduce the three types of variability
-            that appear in almost every dataset.
-            We then work through the main measures of variability (range,
+            In this chapter, we ....
+            [TODO] We work through the main measures of variability (range,
             variance, standard deviation, interquartile range, and least
             squares) using life expectancy data from African countries as our
             running example.
@@ -27,142 +25,20 @@
         </p>
     </introduction>
 
-    <section xml:id="sec-variability-journeys">
-        <title>The Same Journey, Every Day Different</title>
+    <section xml:id="sec-variability-how-much">
+        <title>How Much Does It Vary?</title>
 
         <introduction>
             <p>
-                In August 2026, on a Friday evening, I was leaving Nairobi's CBD
-                to catch a late flight home to London.
-                I had a flight at 11:40pm and ordered an Uber around 7:30pm.
-                The first driver appeared, then cancelled while I was outside
-                looking for them.
-                I had lost wifi in the chaos of the streets and could not track
-                them live through the app.
-                The same thing happened with a second driver.
-                When I finally got wifi, the second driver agreed to pick me up
-                from a hotel across the road, but in a one-way street so he had
-                to turn around first.
-                I waited twenty minutes on that pavement, with traffic moving
-                slowly around me, and I could not see the driver anywhere.
-                I eventually walked through the traffic in the hope that I could
-                find wifi and order a new driver out of the hustle and bustle of
-                the CBD.
+                How long does it take to get somewhere in Nairobi?
+                The honest answer is: it depends on where you are going, what
+                time you leave, what day of the week it is, and a dozen other
+                things you may not know until you are already in the traffic.
+                In other words, journey times in any city vary.
+                This chapter is about how to measure that variation.
             </p>
 
             <p>
-                While standing on some pavement, surrounded by traffic, a worker
-                outside noticed me, clearly lost and increasingly frantic, and
-                insisted I come in.
-                They sat me down, connected to the wifi, and gave me a moment to
-                think.
-                Without that kindness I am not sure what I would have done.
-                I caught the flight.
-            </p>
-
-            <p>
-                The app said the third taxi was ten minutes away.
-                They took over an hour.
-                The app had estimated ten minutes, and I had believed it because
-                I had no reason not to.
-                I sat watching the little car barely move, block after block, as
-                the minutes ticked by and my flight window got smaller.
-                I was not even in the taxi yet.
-            </p>
-
-            <p>
-                Ask someone from Nairobi what happened, and they will tell you
-                immediately the problem: it was Friday evening, in the CBD, at
-                7:30pm.
-                That is a journey you plan hours around, or you do not make it.
-                The traffic leaving the central business district on a Friday
-                evening is not unpredictable.
-                It is entirely predictable.
-                It is just that I did not know to predict it.
-                I had not accounted for the time of day, the day of the week, or
-                the particular chaos of Nairobi's CBD.
-            </p>
-
-            <p>
-                Imagine you had no information at all about how long a boda-boda
-                ride across Nairobi would take.
-                No knowledge of rush hour, no sense of which roads are usually
-                busy, no awareness that Fridays are worse than Tuesdays, or that
-                the end of the month is worse than the middle.
-                Every day, you would treat each journey as if it were identical
-                to every other, and you would be wrong, repeatedly, in ways that
-                cost you time, money, and patience.
-                You would book the same amount of time for a 7am ride and a 5pm
-                ride.
-                You would be surprised, every single Friday afternoon, by the
-                traffic.
-                You would have no way to plan.
-            </p>
-
-            <p>
-                Now imagine you know one thing: rush hour is slower.
-                Suddenly you can plan.
-                You leave earlier on the days that matter, and book less time
-                for the quiet morning run.
-                You may still be wrong sometimes (you cannot know about the
-                accident on Ngong Road, or the blocked junction in town) but you
-                are systematically less wrong than before.
-                Knowing even one source of variation and accounting for it makes
-                your predictions better.
-                My mistake on that Friday evening was not unavoidable.
-                It was a failure to account for something that was entirely
-                knowable.
-            </p>
-
-            <p>
-                This is what statisticians mean by the three types of
-                variability.
-                Some variation is <term>accounted-for variability</term>: you
-                know what causes it, you have measured it, and you can use it to
-                make better predictions.
-                Time of day is exactly this — and it is exactly what I failed to
-                account for on that Friday evening in August.
-                Once you know it is 5pm on a Friday in Nairobi's CBD, you
-                already know something useful about the journey ahead.
-                Some variation is <term>unaccounted-for variability</term>:
-                other things affect the journey — accidents, roadworks, the
-                school term starting — but you have not measured them and cannot
-                include them in your predictions.
-                They are real causes of variation, making your predictions less
-                reliable even when you have accounted for everything else you
-                can.
-                And some variation is just <term>natural variability</term>: the
-                boda-boda rider caught a green light, or took a slightly
-                different line through the roundabout, or the gap in traffic
-                opened a few seconds earlier than usual.
-                No amount of information would have predicted it.
-                It simply happened.
-            </p>
-
-            <p>
-                The problem is not the natural variability — any honest
-                prediction has to live with it.
-                The problem is mistaking unaccounted-for variation for natural
-                variation.
-                If you assume that everything you cannot account for is just
-                noise, you will underestimate how wrong your predictions can be,
-                and you will miss the fact that some of that wrongness has a
-                cause that could, in principle, be found and understood.
-                A boda-boda rider who thinks the variation in their journey
-                times is just random bad luck will never think to check whether
-                there is a pattern — whether certain roads are systematically
-                worse, whether the school term changes things, whether the
-                weather is a factor.
-                Those patterns are real.
-                Mistaking them for noise means never looking for them.
-            </p>
-        </introduction>
-
-        <subsection xml:id="subsec-traffic-variation">
-            <title>Traffic Variation in Nairobi</title>
-
-            <p>
-                This variation has been measured.
                 The
                 <url href="https://www.tomtom.com/traffic-index/city/nairobi/">TomTom Traffic Index</url>
                 records journey times across Nairobi continuously, aggregating
@@ -170,32 +46,66 @@
                 It found that in 2025 a 10 kilometre drive in the city took an
                 average of 26 minutes and 47 seconds.
                 But that single number conceals an enormous range.
-                At 4 in the morning, the same 10 kilometres takes around 18
+                At 4am, the same 10 kilometres takes around 18 minutes.
+                At 4pm on a weekday, it takes more than twice as long at around
+                37 minutes.
+            </p>
+
+            <p>
+                Over the entirety of 2025,
+                <url href="https://www.tomtom.com/traffic-index/city/nairobi/">TomTom Traffic Index</url>
+                estimated that the average Nairobi driver lost more than four
+                and a half days (109 hours) sitting in traffic beyond what those
+                same journeys would have taken at free-flow speeds.
+            </p>
+
+            <p>
+                Survey data tells a similar story.
+                A 2013 World Bank survey of 14,580 households across 15 Kenyan
+                cities found that the median commute time in Nairobi was 30
                 minutes.
-                At 4 in the afternoon on a weekday, it takes around 37 minutes —
-                more than twice as long.
+                A separate survey from the same year found an average of 49
+                minutes — more than 50 percent higher.
+                Both surveys measured the same city in the same year.
+                The difference reflects who was sampled, how questions were
+                asked, and what counted as a commute.
+                Matatu commuters spent roughly twice as long travelling as walk
+                commuters making similar trips in the same city (Salon and
+                Gulyani, 2019).
+                And the variation is not unique to Nairobi: a study of Dar es
+                Salaam found that a trip to the city centre could take anything
+                from 30 minutes to three hours depending on traffic conditions
+                (Andreasen and Møller-Jensen, 2017).
             </p>
 
             <p>
-                The visualisations by TomTom make the three types of variability
-                visible in a way that numbers alone cannot.
+                None of these numbers contradict each other.
+                They are all measuring the same underlying reality: journeys
+                vary.
+                A lot.
+                The question this chapter asks is how to measure this variation.
+                How do we summarise spread?
+                What does a single number like 109 hours or a range of 18 to 37
+                minutes actually tell us?
+                And when two measures give different answers, how do we decide
+                which one to use?
+                These are the questions this chapter is about.
             </p>
+        </introduction>
+
+        <subsection xml:id="subsec-traffic-variation-measuring">
+            <title>Visualising Traffic Variation in Nairobi</title>
 
             <p>
-                The first image below shows travel time across every hour of
-                every day of the week, averaged across 2025.
-                Each cell represents one two-hour slot on one day of the week;
-                darker red means longer journey times, lighter pink means
-                shorter.
-                The pattern is immediately visible: weekday mornings and
-                evenings are dark, weekend days are lighter, and the middle of
-                the night is the lightest of all.
-                This is <term>accounted-for variability</term> made visible: the
-                variation that follows a predictable pattern, week after week,
-                and that anyone who knows Nairobi already carries in their head.
-                If I had looked at this chart before ordering my Uber on that
-                Friday evening in August, I would have seen immediately that
-                7:30pm on a Friday is one of the darker cells on the whole grid.
+                The heatmap below shows travel time across every hour of every
+                day of the week in Nairobi, averaged across 2025.
+                Each cell represents one two-hour slot on one day; darker red
+                means longer journey times, lighter pink means shorter.
+                The variation is immediately visible — some cells are nearly
+                white, others deeply red.
+                The total range from the lightest to the darkest cell captures,
+                in one image, the same variation that the numbers above describe
+                in words.
             </p>
 
             <figure xml:id="fig-tomtom-heatmap-week">
@@ -204,9 +114,6 @@
                     the week, averaged across 2025.
                     Darker red indicates longer journey times; lighter pink
                     indicates shorter.
-                    The pattern of weekday congestion, particularly the evening
-                    peak from around 5pm to 7pm, is clearly visible, as is the
-                    relative freedom of weekend mornings and nights.
                     Source: TomTom Traffic Index 2025,
                     <url href="https://www.tomtom.com/traffic-index/city/nairobi/" visual="tomtom.com/traffic-index/city/nairobi"/>.
                 </caption>
@@ -215,37 +122,30 @@
                     <description>
                         <p>
                             A heatmap with days of the week (Monday to Sunday)
-                            across the top and hours of the day (midnight to
-                            11pm) down the left side.
+                            across the top and hours of the day down the left
+                            side.
                             Cells are coloured from light pink to dark red.
-                            The darkest cells — indicating the longest journey
-                            times — appear in the band from approximately 5pm to
-                            7pm on weekdays, with Monday and Thursday appearing
-                            particularly congested.
-                            The 4am to 5am slot on Monday appears notably light.
+                            The darkest cells appear in the band from
+                            approximately 5pm to 7pm on weekdays, particularly
+                            Monday to Thursday.
                             Saturday and Sunday are substantially lighter
                             throughout, especially in the morning hours.
-                            The pattern clearly shows the weekday rush hour
-                            effect.
+                            The 4am slot on Monday is notably light.
                         </p>
                     </description>
                 </image>
             </figure>
 
             <p>
-                The next two images show where in Nairobi that congestion falls
-                during the morning and evening rush hours — not just when, but
-                where.
-                Yellow hexagons indicate moderate congestion; orange and red
-                indicate heavier delays.
-                The CBD and the main arterial roads radiating outward from it
-                are visibly darker than the outer suburbs.
-                During the morning rush, the congestion concentrates in the city
-                centre as commuters flow in; during the evening rush, it spreads
-                more broadly as people try to get home.
-                This spatial pattern is also displaying
-                <term>accounted-for variability</term> — predictable,
-                measurable, and useful for planning.
+                The magnitude of that variation also differs across the city.
+                The maps below show average traffic conditions during the
+                morning and evening rush hours.
+                The central business district and main arterial roads are
+                consistently darker — more congested — while the outer suburbs
+                are lighter.
+                And the pattern shifts between morning and evening: congestion
+                concentrates inward as commuters arrive in the morning, and
+                spreads outward as they leave in the evening.
             </p>
 
             <figure xml:id="fig-tomtom-map-morning">
@@ -279,9 +179,9 @@
                 <caption>
                     Traffic conditions in Nairobi during the evening rush hour,
                     averaged across 2025.
-                    The congestion spreads more broadly than in the morning,
-                    with orange and red extending further into residential areas
-                    as commuters make their way home.
+                    Congestion spreads more broadly than in the morning,
+                    extending further into residential areas as commuters make
+                    their way home.
                     Source: TomTom Traffic Index 2025.
                 </caption>
 
@@ -304,409 +204,34 @@
             </figure>
 
             <p>
-                But even knowing the time of day and the location is not enough
-                to predict any specific journey perfectly.
-                The fourth image illustrates why.
-                This is a screenshot I have just taken showing live congestion
-                in Nairobi right now <fn>25th August 2026, 18:48 EAT</fn>,
-                against the usual congestion level for the same time slot.
-                The orange line is what is happening right now, the dotted
-                yellow line is what typically happens at this time.
-                On Monday morning, live congestion spiked to nearly 90 percent,
-                well above the usual level of around 65 percent at that hour.
-                On Tuesday afternoon, at the time this image was captured, live
-                congestion was running at over 100 percent, higher than the
-                typical level, and still climbing.
-                Something was making that particular day worse than a typical
-                Tuesday.
-                Perhaps an accident, or roadworks, or nothing identifiable at
-                all.
+                These images show that variation exists and where it is largest.
+                They do not yet tell us how to summarise it in a single number,
+                or how to compare the spread in one dataset against another.
+                That is what the rest of this chapter is for.
             </p>
 
             <p>
-                This is <term>unaccounted-for variability</term> in action.
-                TomTom's usual congestion line represents what the accounted-for
-                variability predicts, the pattern that repeats week after week.
-                The gap between that line and the live reading is the part that
-                the pattern cannot account for.
-                Some of that gap has a cause, something happened on that road on
-                that day that pushed congestion above its normal level.
-                And some of it is just <term>natural variability</term>: small
-                fluctuations that remain even after everything predictable has
-                been accounted for.
-                The chart shows all three types of variability at once: the
-                repeating pattern (accounted for), the unexplained spike above
-                it (unaccounted for), and the jagged noise around both lines
-                (natural).
-            </p>
-
-            <figure xml:id="fig-tomtom-live-congestion">
-                <caption>
-                    Live versus usual congestion level in Nairobi across Monday
-                    and Tuesday, with live speed shown below.
-                    The orange line shows actual congestion; the dotted yellow
-                    line shows the typical level for that time slot.
-                    The gap between the two lines represents variation that the
-                    usual pattern does not predict — unaccounted-for and natural
-                    variability.
-                    Source: TomTom Traffic Index, captured August 2026.
-                </caption>
-
-                <image source="images/ch9_tomtom_live_congestion.png" width="100%">
-                    <description>
-                        <p>
-                            A line chart showing congestion level as a
-                            percentage on the y-axis and time across Monday and
-                            Tuesday on the x-axis.
-                            An orange solid line shows live congestion and a
-                            dotted yellow line shows the usual congestion level.
-                            Both lines show peaks around 8am and 5pm on each
-                            day.
-                            On Monday afternoon, the orange live line spikes to
-                            nearly 90 percent, substantially above the yellow
-                            usual line of around 65 percent.
-                            On Tuesday afternoon, the live line reaches over 100
-                            percent and continues rising at the right edge of
-                            the chart, labelled NOW, again running above the
-                            usual level.
-                            Below the congestion chart, a bar chart shows live
-                            speed in km/h, with speeds dropping to around 10
-                            km/h at peak congestion periods.
-                        </p>
-                    </description>
-                </image>
-            </figure>
-
-            <p>
-                <term>Source:</term> TomTom Traffic Index 2025.
+                <term>Sources:</term> TomTom Traffic Index 2025.
                 Nairobi city profile.
                 Available at:
-                <url href="https://www.tomtom.com/traffic-index/city/nairobi/" visual="tomtom.com/traffic-index/city/nairobi"/>.
-                Based on anonymised GPS data from drivers across the Nairobi
-                metropolitan area.
-                Live congestion chart captured August 2026.
-            </p>
-        </subsection>
-
-        <subsection xml:id="subsec-survey-variation">
-            <title>Survey Data on Nairobi Commutes</title>
-
-            <p>
-                Survey data tells a similar story from a different angle.
-                A 2013 World Bank survey of 14,580 households across 15 Kenyan
-                cities found that the median commute time in Nairobi was 30
-                minutes — but matatu commuters spent roughly twice as long
-                travelling as walk commuters making similar trips in the same
-                city (Salon and Gulyani, 2019).
-                And that median of 30 minutes is, in a sense, misleading on its
-                own.
-                On a traffic-free day, a typical Nairobi commute might take 30
-                minutes.
-                During rush hour (7am to 9am or 5pm to 7pm) the same journey can
-                stretch to two hours.
-                A factor of four, depending purely on when you leave (Express
-                Impress, 2024).
-                Similar variation has been documented across East African
-                cities: a study of commuting in Dar es Salaam found that a trip
-                to the city centre could take anything from 30 minutes to three
-                hours depending on traffic conditions (Andreasen and
-                Møller-Jensen, 2017).
-                And in Kampala, analysis of close to a million boda-boda trips
-                found significant variation in travel speed across different
-                periods of the day (Saddier, 2025).
-            </p>
-
-            <p>
-                The three types of variability that this chapter is about are
-                all visible in a single Nairobi commute.
-                The part that we can account for is the time of day.
-                The part that we cannot account for is the unexpected events,
-                such as an accident or a burst water main.
-                These are real causes that are simply not measured.
-                And pure randomness explains the rest — natural variability, the
-                irreducible noise that we cannot eliminate.
-                A car might catch a green light, or a boda-boda might take a
-                slightly different line through the roundabout.
-                Understanding what each type contributes, how to measure the
-                total, and what to do about it is what this chapter is about.
-            </p>
-
-            <p>
-                <term>Sources:</term>
-            </p>
-
-            <p>
-                TomTom Traffic Index 2025.
-                Nairobi city profile.
                 <url href="https://www.tomtom.com/traffic-index/city/nairobi/" visual="tomtom.com/traffic-index/city/nairobi"/>.
                 Salon, D.
                 and Gulyani, S.
                 (2019).
-            </p>
-
-            <p>
                 <q>Commuting in Urban Kenya: 
-    Unpacking Travel Demand in Large and Small Kenyan Cities.</q>
+      Unpacking Travel Demand in Large and Small Kenyan Cities.</q>
                 <em>Sustainability</em>, 11(14), 3823.
                 <url href="https://doi.org/10.3390/su11143823"/>.
                 CC BY 3.0.
-            </p>
-
-            <p>
-                Saddier, S.
-                (2025).
-                <q>Are motorcycle taxis competing with collective 
-    public transport? Analyzing the role of boda-bodas in Kampala's urban 
-    mobility system.</q>
-                <em>Research in Transportation Economics</em>, 111, 101562.
-                <url href="https://doi.org/10.1016/j.retrec.2025.101562"/>.
-            </p>
-
-            <p>
-                Andreasen, M.H.; Møller-Jensen, L (2017).
-                <q>Access to the city: Mobility patterns, transport and accessibility in peripheral settlements of Dar es Salaam.
-                    </q>
-                <em>J. Transp. Geogr.</em>, 62, 20-29.
-            </p>
-
-            <p>
-                Express Impress (2024).
-                <q>Leaving 10 Minutes Earlier Could Save You 30: Here's How to Beat Nairobi Traffic.</q>
-                <url href="https://expressimpress.co.ke/leaving-10-minutes-earlier-could-save-you-30-heres-how-to-beat-nairobi-traffic/"/>.
+                Andreasen, M.H.
+                and Møller-Jensen, L.
+                (2017).
+                <q>Access to the 
+      city: Mobility patterns, transport and accessibility in 
+      peripheral settlements of Dar es Salaam.</q>
+                <em>Journal of Transport Geography</em>, 62, 20 <ndash/> 29.
             </p>
         </subsection>
-    </section>
-
-    <section xml:id="sec-ch9-variability-illustration">
-        <title>Illustration of Variability</title>
-
-        <p>
-            Before measuring variability, it helps to see what the different
-            types actually look like.
-            We can build them up from scratch, starting with a dataset that has
-            no variability at all.
-        </p>
-
-        <paragraphs>
-            <title>No variability</title>
-
-            <p>
-                If <m>y</m> is always the same value regardless of anything
-                else, there is nothing to explain and nothing to measure.
-                Every point sits on a flat horizontal line.
-            </p>
-        </paragraphs>
-
-        <program language="r">
-            <code>
-      x &lt;- 1:10
-      y &lt;- rep(1, 10)
-      df0 &lt;- data.frame(x, y)
-
-      ggplot(df0, aes(x = x, y = y)) +
-        geom_point() +
-        geom_line() +
-        labs(title = "No variability: y is always 1",
-             y = "y", x = "x") +
-        theme_bw()
-            </code>
-        </program>
-
-        <figure xml:id="fig-ch9-no-variability">
-            <caption>
-                No variability.
-                <m>y = 1</m> regardless of <m>x</m>.
-                There is nothing to account for, and nothing to measure.
-            </caption>
-
-            <image source="images/ch9_no_variability.png" width="70%">
-                <description>
-                    <p>
-                        A scatter plot with x on the horizontal axis and y on
-                        the vertical axis.
-                        All ten points sit at exactly y = 1, connected by a flat
-                        horizontal line.
-                        There is no spread in the y values at all.
-                    </p>
-                </description>
-            </image>
-        </figure>
-
-        <paragraphs>
-            <title>Accounted-for variability only</title>
-
-            <p>
-                Now let <m>y = x</m>.
-                There is variability in <m>y</m> — the values change — but all
-                of it is accounted for by <m>x</m>.
-                As <m>x</m> increases, <m>y</m> increases by exactly the same
-                amount.
-                No randomness, no surprises.
-            </p>
-        </paragraphs>
-
-        <program language="r">
-            <code>
-      x &lt;- 1:10
-      y &lt;- x
-      df1 &lt;- data.frame(x, y)
-
-      ggplot(df1, aes(x = x, y = y)) +
-        geom_point() +
-        geom_line() +
-        labs(title = "Accounted for variability only: y = x",
-             y = "y", x = "x") +
-        theme_bw()
-            </code>
-        </program>
-
-        <figure xml:id="fig-ch9-explained-only">
-            <caption>
-                Accounted for variability only.
-                <m>y = x</m>: all variability in <m>y</m> is accounted for by
-                <m>x</m>.
-            </caption>
-
-            <image source="images/ch9_explained_only.png" width="70%">
-                <description>
-                    <p>
-                        A scatter plot where all ten points fall exactly on a
-                        straight diagonal line from the lower left to the upper
-                        right.
-                        There is no scatter around the line.
-                    </p>
-                </description>
-            </image>
-        </figure>
-
-        <paragraphs>
-            <title>Accounted for and natural variability</title>
-
-            <p>
-                Now add some random noise.
-                The relationship between <m>x</m> and <m>y</m> is still there.
-                <m>y</m> still tends to increase with <m>x</m>, but the points
-                no longer fall exactly on the line.
-                Some additional randomness is pushing them above or below where
-                the line would predict.
-                This is natural variability: noise that remains even after
-                <m>x</m> is accounted for.
-            </p>
-        </paragraphs>
-
-        <program language="r">
-            <code>
-      x &lt;- 1:10
-      y &lt;- x + rnorm(10)
-      df2 &lt;- data.frame(x, y)
-
-      ggplot(df2, aes(x = x, y = y)) +
-        geom_point() +
-        geom_line(data = df1, aes(x = x, y = y),
-                  linetype = "dashed", colour = "grey50") +
-        labs(title = "Accounted for + natural variability: y = x + error",
-             subtitle = "Dashed line shows y = x",
-             y = "y", x = "x") +
-        theme_bw()
-            </code>
-        </program>
-
-        <figure xml:id="fig-ch9-explained-natural">
-            <caption>
-                Explained and natural variability.
-                <m>y = x + \varepsilon</m>: points scatter around the line
-                <m>y = x</m> (shown dashed) due to random noise.
-                The trend is still visible but no longer perfect.
-            </caption>
-
-            <image source="images/ch9_explained_natural.png" width="70%">
-                <description>
-                    <p>
-                        A scatter plot where the ten points are scattered around
-                        a dashed diagonal line representing y = x.
-                        Some points are above the line and some below, with no
-                        obvious pattern to the deviations.
-                        The overall upward trend is still visible.
-                    </p>
-                </description>
-            </image>
-        </figure>
-
-        <paragraphs>
-            <title>
-                Accounted for, unaccounted-for, and natural variability
-            </title>
-
-            <p>
-                Finally, introduce a second variable <m>z</m> that also
-                influences <m>y</m>, but which we do not have in our dataset.
-                In the code below, <m>z</m> takes the value 1 for the first five
-                observations and 10 for the last five.
-                We can see the effect it has: the points no longer scatter
-                evenly around the line, but jump up noticeably in the second
-                half.
-                But if we did not know <m>z</m> existed, we would have no way to
-                explain that jump.
-                It would simply look like unusually large random variation.
-            </p>
-        </paragraphs>
-
-        <program language="r">
-            <code>
-      x  &lt;- 1:10
-      z  &lt;- c(rep(1, 5), rep(10, 5))  # hidden variable
-      y  &lt;- x + z + rnorm(10)
-      df3 &lt;- data.frame(x, y)
-
-      ggplot(df3, aes(x = x, y = y)) +
-        geom_point() +
-        geom_smooth(method = "lm", se = FALSE,
-                    colour = "#44575E", linewidth = 0.8) +
-        labs(title = "Accounted for, unaccounted-for, and natural variability",
-             subtitle = "The line fits poorly because z is not in the data",
-             y = "y", x = "x") +
-        theme_bw()
-            </code>
-        </program>
-
-        <figure xml:id="fig-ch9-all-variability">
-            <caption>
-                Accounted for, unaccounted for, and natural variability.
-                <m>y = x + z + \varepsilon</m>, but <m>z</m> is not in the data.
-                The line of best fit through <m>x</m> alone fits poorly — the
-                points in the second half jump above the line because of
-                <m>z</m>, which we cannot see.
-            </caption>
-
-            <image source="images/ch9_all_variability.png" width="70%">
-                <description>
-                    <p>
-                        A scatter plot where the first five points scatter
-                        around the lower part of a fitted line and the last five
-                        points scatter around a noticeably higher position.
-                        The fitted line is a poor summary of the data because it
-                        cannot account for the jump caused by the hidden
-                        variable z.
-                        The residuals are large and systematically patterned
-                        rather than randomly scattered.
-                    </p>
-                </description>
-            </image>
-        </figure>
-
-        <p>
-            This last scenario is the most realistic.
-            In the real world, we never have all the variables.
-            There will always be something we have not measured that is
-            influencing the outcome.
-            The question is how much of the variability we can account for with
-            what we do have — and how honest we are about what remains
-            unaccounted for.
-            The Nairobi traffic data is exactly this: time of day accounts for
-            some of the variability in journey time, but unknown events
-            (accidents, roadworks, broken-down matatus) account for more, and
-            pure randomness accounts for the rest.
-        </p>
     </section>
 
     <section xml:id="sec-ch9-stack">
@@ -721,6 +246,15 @@
         <title>Measuring Variability in R</title>
 
         <introduction>
+            <p>
+                TODO: Need to split it up to be measuring separated from
+                accounting for variability.
+            </p>
+
+            <p>
+                TODO: accounting for -- do a whole thing on ANOVA
+            </p>
+
             <p>
                 The previous section introduced the idea of variability and why
                 it matters.
