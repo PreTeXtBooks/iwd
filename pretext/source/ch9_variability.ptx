@@ -320,13 +320,11 @@
                 Nairobi city profile.
                 Available at:
                 <url href="https://www.tomtom.com/traffic-index/city/nairobi/" visual="tomtom.com/traffic-index/city/nairobi"/>.
-
                 Japan International Cooperation Agency (JICA) (2013).
                 <em>The Project on Integrated Urban Development Master Plan 
   for the City of Nairobi in the Republic of Kenya: Household Travel 
   Survey 2013.</em>
                 Tokyo: JICA.
-
                 Salon, D.
                 and Gulyani, S.
                 (2019).
@@ -351,15 +349,6 @@
         <title>Measuring Variability in R</title>
 
         <introduction>
-            <p>
-                TODO: Need to split it up to be measuring separated from
-                accounting for variability.
-            </p>
-
-            <p>
-                TODO: accounting for -- do a whole thing on ANOVA
-            </p>
-
             <p>
                 The previous section introduced the idea of variability and why
                 it matters.
@@ -434,9 +423,8 @@
             </p>
 
             <p>
-                Both variance and standard deviation answer the same basic
-                question: on average, how far away from the mean is a typical
-                data point?
+                Both variance and standard deviation give an average of how far
+                each data point sits from the mean.
                 Variance computes this by taking the average of the squared
                 distances from the mean.
                 Standard deviation then takes the square root of the variance,
@@ -445,108 +433,324 @@
             </p>
 
             <p>
-                We can compute the standard deviation and variance for each year
-                across all African countries in the dataset.
-                In other words, for each year we take all the African countries
-                in the data set, calculate how far each country's life
-                expectancy is from the African average that year, and summarise
-                that spread:
+                We can visualise what variance actually means using the African
+                life expectancy data.
+                The same variance visualisation for 1952 and 2007 are shown side
+                by side in <xref ref="fig-ch9-variance-squares"/>.
+                Here, each country is shown as a point, with their respective
+                life expectancy for that year on the y axis.
+                The horizontal line in each panel sits at the mean life
+                expectancy for that year, and each square's area represents the
+                squared distance of one country from that mean.
+                Four countries are highlighted in orange to illustrate different
+                cases.
+            </p>
+
+            <p>
+                Each square's side length equals the distance between that
+                country's life expectancy and the mean, so its area equals the
+                squared distance.
+                The variance Life Expectancy in 2007 is simply the average area
+                of all squares (grey and orange combined) in the right hand
+                panel.
+                Countries far from the mean contribute large squares; countries
+                close to the mean contribute small ones.
+            </p>
+
+            <figure xml:id="fig-ch9-variance-squares">
+                <caption>
+                    Variance visualised for African life expectancy in 1952
+                    (left) and 2007 (right).
+                    Each square's area equals the squared distance from that
+                    country's life expectancy to the continental mean
+                    (horizontal line).
+                    Variance is the average area of all squares.
+                    Four countries are highlighted in orange: Botswana, Kenya,
+                    Libya, and Swaziland.
+                </caption>
+
+                <image source="images/ch9_variance_squares.png" width="100%">
+                    <description>
+                        <p>
+                            Two side-by-side scatter plots of African countries
+                            ordered by life expectancy on the x-axis, with life
+                            expectancy in years on the y-axis.
+                            Grey and orange squares connect each country's point
+                            to a horizontal mean line.
+                            In the left panel (1952), the mean sits at around 39
+                            years and the squares are relatively small and
+                            clustered together, reflecting low variance.
+                            Botswana appears above the mean with a notable
+                            orange square; Kenya, Libya, and Swaziland are all
+                            close to the mean with small squares.
+                            In the right panel (2007), the mean has risen to
+                            around 55 years and the squares are dramatically
+                            larger overall.
+                            Botswana now sits close to or below the mean.
+                            Kenya remains close to the mean just below it.
+                            Libya sits well above the mean with a large orange
+                            square.
+                            Swaziland sits far below the mean at around 39 years
+                            with by far the largest orange square in the panel,
+                            illustrating its enormous contribution to the
+                            overall variance.
+                            Several unlabelled grey squares from countries above
+                            the mean are also large, reflecting the countries
+                            that improved dramatically between 1952 and 2007.
+                        </p>
+                    </description>
+                </image>
+            </figure>
+
+            <p>
+                Several things are immediately visible.
+                <ul>
+                    <li>
+                        <p>
+                            The squares are dramatically larger in 2007 than in
+                            1952.
+                            This shows that the variance has increased
+                            substantially, without any calculation needed.
+                        </p>
+                    </li>
+
+                    <li>
+                        <p>
+                            The mean line has shifted upward, from around 39
+                            years in 1952 to around 55 years in 2007.
+                            Countries improved overall, but they spread apart as
+                            they did so.
+                        </p>
+                    </li>
+
+                    <li>
+                        <p>
+                            The four highlighted countries tell very different
+                            stories.
+                            <ol>
+                                <li>
+                                    <p>
+                                        Life Expectancy in Botswana was far
+                                        above the mean in 1952.
+                                        Life Expectancy increased in Botswana
+                                        from 1952 to 2007, but, at a slower rate
+                                        than the continental average increase.
+                                        Hence, in 2007, the Life Expectancy in
+                                        Botswana was below the continental
+                                        average.
+                                    </p>
+                                </li>
+
+                                <li>
+                                    <p>
+                                        Kenya sits close to the mean in both
+                                        years, just slightly below it in 2007 —
+                                        its square is moderate.
+                                    </p>
+                                </li>
+
+                                <li>
+                                    <p>
+                                        Life Expectancy in Libya was comparable
+                                        to Kenya in 1952, but in 2007 sits well
+                                        above the mean with a large orange
+                                        square.
+                                        It improved substantially while many
+                                        other countries did not, pulling it far
+                                        from the average.
+                                    </p>
+                                </li>
+
+                                <li>
+                                    <p>
+                                        Swaziland sits far below the mean in
+                                        2007, with by far the largest orange
+                                        square in the right panel.
+                                        Its contribution to the overall variance
+                                        is enormous — a single country whose
+                                        square dwarfs those of most others
+                                        combined.
+                                    </p>
+                                </li>
+                            </ol>
+                        </p>
+                    </li>
+                </ul>
+            </p>
+
+            <p>
+                We can now put numbers on what the image shows.
+                The table below gives the standard deviation and variance of
+                African life expectancy for each year from 1952 to 2007:
             </p>
 
             <program language="r">
                 <code>
-        africa %&gt;%
-          group_by(year) %&gt;%
-          summarise(SD       = sd(lifeExp),
-                    variance = var(lifeExp))
-        #&gt; # A tibble: 12 x 3
-        #&gt;     year    SD variance
-        #&gt;    &lt;int&gt; &lt;dbl&gt;    &lt;dbl&gt;
-        #&gt;  1  1952  5.15     26.5
-        #&gt;  2  1957  5.62     31.6
-        #&gt;  3  1962  5.88     34.5
-        #&gt;  4  1967  6.08     37.0
-        #&gt;  5  1972  6.42     41.2
-        #&gt;  6  1977  6.81     46.4
-        #&gt;  7  1982  7.38     54.4
-        #&gt;  8  1987  7.86     61.8
-        #&gt;  9  1992  9.46     89.5
-        #&gt; 10  1997  9.10     82.9
-        #&gt; 11  2002  9.59     91.9
-        #&gt; 12  2007  9.63     92.8
+    africa %&gt;%
+      group_by(year) %&gt;%
+      summarise(SD       = round(sd(lifeExp), 2),
+                variance = round(var(lifeExp), 2))
+    #&gt; # A tibble: 12 x 3
+    #&gt;     year    SD variance
+    #&gt;    &lt;int&gt; &lt;dbl&gt;    &lt;dbl&gt;
+    #&gt;  1  1952  5.15     26.5
+    #&gt;  2  1957  5.62     31.6
+    #&gt;  3  1962  5.88     34.5
+    #&gt;  4  1967  6.08     37.0
+    #&gt;  5  1972  6.42     41.2
+    #&gt;  6  1977  6.81     46.4
+    #&gt;  7  1982  7.38     54.4
+    #&gt;  8  1987  7.86     61.8
+    #&gt;  9  1992  9.46     89.5
+    #&gt; 10  1997  9.10     82.9
+    #&gt; 11  2002  9.59     91.9
+    #&gt; 12  2007  9.63     92.8
                 </code>
             </program>
 
             <p>
-                The standard deviation starts at 5.15 years in 1952 and rises to
-                9.63 years in 2007.
-                What does this mean?
-                In 1952, a typical African country had a life expectancy within
-                about 5 years of the average across the continent.
-                By 2007, that spread had nearly doubled: it appears that some
-                countries had made dramatic improvements, while others had not,
-                or had gone backwards.
-                The gap between African countries grew over time, not shrunk.
+                The standard deviation starts at 5.15 years in 1952 and nearly
+                doubles to 9.63 years by 2007.
+                The numbers confirm what the image showed: the squares got
+                bigger.
+                But the table also reveals something the two-panel image does
+                not: the spike around 1992.
+                The standard deviation jumps from 7.86 in 1987 to 9.46 in 1992 —
+                its largest single-year increase in the entire dataset.
+                The figure below shows why.
             </p>
 
             <p>
-                The spike in standard deviation around 1992 to 2002 is
-                particularly notable.
-                This is the period when the HIV/AIDS epidemic was most severe in
-                southern and eastern Africa, pulling the life expectancy of
-                countries like Botswana, Zimbabwe, and Swaziland sharply
-                downward while others continued to improve.
-                The standard deviation captures this divergence as a single
-                number.
+                The three panels show our 1952 and 2007 plot, now with 1992 in
+                it (centre).
+                All three have Rwanda highlighted.
+                In the centre panel, the picture changes completely.
+                Rwanda's orange square dominates the panel.
+                This is a single country whose life expectancy had collapsed to
+                23.6 years in the period surrounding the genocide, producing a
+                squared distance from the mean so large that it pushed the
+                variance up more than the cumulative increase of the previous
+                decade.
+                The standard deviation then dips slightly to 9.10 in 1997 as
+                Rwanda begins to recover, before rising again as Swaziland and
+                other southern African countries are pulled downward by HIV/AIDS
+                (right panel).
+            </p>
+
+            <figure xml:id="fig-ch9-rwanda-variance">
+                <caption>
+                    Variance visualised for African life expectancy in 1952
+                    (left), 1992 (centre), and 2007 (right).
+                    Rwanda's enormous orange square in the centre panel
+                    illustrates how a single outlier can dominate the variance.
+                    By 2007, Rwanda has recovered toward the mean, but other
+                    countries, particularly in southern Africa, have been pulled
+                    downward by HIV/AIDS.
+                </caption>
+
+                <image source="images/ch9_rwanda_variance.png" width="100%">
+                    <description>
+                        <p>
+                            Three side-by-side scatter plots of African
+                            countries ordered by life expectancy.
+                            The left panel shows 1952, with the mean at around
+                            52 years and grey squares of moderate size.
+                            The centre panel shows 1992: a large orange square
+                            extends from Rwanda's point at around 23.6 years
+                            down to the bottom of the panel, dwarfing all other
+                            squares and pulling the mean line down slightly.
+                            The right panel shows 2007, where Rwanda's orange
+                            point sits close to the mean and has a small square,
+                            reflecting its recovery.
+                            Several other countries now have large grey squares
+                            above and below the mean, reflecting the growing
+                            spread caused by the HIV/AIDS epidemic in southern
+                            Africa.
+                        </p>
+                    </description>
+                </image>
+            </figure>
+
+            <p>
+                Variance is sensitive to outliers precisely because squaring the
+                distances gives disproportionate weight to points far from the
+                mean.
+                Rwanda's squared distance from the mean in 1992 is enormously
+                larger than its simple distance: Squaring amplifies it.
+                This means the variance captures the full impact of extreme
+                values, but it also means that a single unusual country can
+                dominate the summary statistic — as Rwanda did in 1992, and
+                Eswatini did in 2007.
+                We will return to this when we discuss the interquartile range,
+                which is designed specifically to be robust to outliers like
+                these.
             </p>
 
             <p>
-                A quick summary of the pros and cons of standard deviation and
-                variance as measures of variability:
+                We can visualise the increase in standard deviation:
             </p>
 
-            <tabular halign="left">
-                <col halign="left" width="20%"/>
-                <col halign="left" width="40%"/>
-                <col halign="left" width="40%"/>
-                <row header="yes" bottom="minor">
-                    <cell/>
-                    <cell>Pros</cell>
-                    <cell>Cons</cell>
-                </row>
+            <program language="r">
+                <code>
+    africa %&gt;%
+      group_by(year) %&gt;%
+      summarise(SD = sd(lifeExp)) %&gt;%
+      ggplot(aes(x = year, y = SD)) +
+        geom_line(colour = "#44575E", linewidth = 1) +
+        geom_point(colour = "#44575E", size = 3) +
+        labs(
+          title = "Standard deviation of life expectancy across African countries",
+          subtitle = "By year, 1952 to 2007",
+          x = "Year",
+          y = "Standard deviation (years)"
+        ) +
+        theme_bw()
+                </code>
+            </program>
 
-                <row>
-                    <cell><term>Variance</term></cell>
-                    <cell>Takes all data points into account.</cell>
-                    <cell>
-                        Not in the same units as the original data (a variance
-                        of 92.8 is hard to interpret when the data is in years).
-                        Sensitive to outliers, so a single extreme value can
-                        pull the standard deviation up substantially.
-                        (this is arguably also a pro, as it reflects the true
-                        spread of the data, but it can be misleading if you are
-                        not aware of it).
-                    </cell>
-                </row>
+            <figure xml:id="fig-ch9-sd-over-time">
+                <caption>
+                    Standard deviation of life expectancy across African
+                    countries, 1952 to 2007.
+                    The overall trend is upward, reflecting growing divergence
+                    between countries.
+                    The sharp spike in 1992 reflects Rwanda; the sustained high
+                    values from 1992 onward reflect the HIV/AIDS epidemic in
+                    southern Africa.
+                </caption>
 
-                <row>
-                    <cell><term>Standard deviation</term></cell>
-                    <cell>
-                        Takes all data points into account.
-                        Same units as the original data, so directly
-                        interpretable.
-                    </cell>
-                    <cell>
-                        Sensitive to outliers, so a single extreme value can
-                        pull the standard deviation up substantially.
-                        (this is arguably also a pro, as it reflects the true
-                        spread of the data, but it can be misleading if you are
-                        not aware of it).
-                    </cell>
-                </row>
-            </tabular>
+                <image source="images/ch9_sd_over_time.png" width="90%">
+                    <description>
+                        <p>
+                            A line chart with year on the x-axis and standard
+                            deviation in years on the y-axis.
+                            The line rises steadily from around 5.15 in 1952 to
+                            around 7.86 in 1987, then spikes sharply to 9.46 in
+                            1992 before dipping slightly to 9.10 in 1997 and
+                            rising again to 9.63 in 2007.
+                            The overall trend is clearly upward throughout the
+                            period.
+                        </p>
+                    </description>
+                </image>
+            </figure>
+
+            <p>
+                The line illustrates the standard deviation across all twelve
+                years at once.
+                There is a steadily widening spread, with some countries
+                diverging as they improved life expectancy at a faster pace than
+                others, and others not improving.
+                This is punctuated by two sharp events: Rwanda in 1992, and the
+                sustained impact of HIV/AIDS from the mid-1990s onward.
+                Standard deviation captures all of this in a single number per
+                year, but the number only makes sense if you know what is
+                driving it.
+                That is why the squares matter: they show you not just the size
+                of the variance, but where it is coming from.
+            </p>
         </subsection>
-
+        
         <subsection xml:id="ss-cv">
             <title>Coefficient of Variation</title>
 
@@ -667,7 +871,7 @@
                 considerably: half of all countries fell between roughly 57.2
                 and 76.4 years (the box).
                 The whiskers extend to the most extreme non-outlier values.
-                The single dot below the lower whisker is Swaziland (now
+                The single dot below the lower whisker is Eswatini (now
                 Eswatini) at 39.6 years, driven almost entirely by the HIV/AIDS
                 epidemic at its peak.
                 This is a real event, visible as an outlier because its cause
@@ -981,88 +1185,6 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
                 The IQR in 1952 was around 7 years; by 2007 it had almost
                 doubled to 14.5.
             </p>
-
-            <insight xml:id="insight-boxplot-variability-types">
-                <title>Two kinds of variability in one chart</title>
-
-                <p>
-                    The chart in <xref ref="fig-ch9-africa-boxplot-years"/>
-                    shows two distinct kinds of variability at the same time,
-                    and it is worth separating them.
-                </p>
-
-                <p>
-                    The first is
-                    <term>variability across countries within a single 
-  year</term>,
-                    shown by the height of each box.
-                    In any given year, some African countries have life
-                    expectancies well above the median and some well below.
-                    What drives this?
-                    Some of it could in principle be accounted for — if we had
-                    data on each country's wealth, access to healthcare,
-                    sanitation infrastructure, or disease burden, we could
-                    account for some of why one country sits above the box and
-                    another sits below it.
-                    The gapminder dataset gives us GDP per capita as a rough
-                    proxy for some of those things, but not all.
-                    Some drivers are harder to capture in data at all, and would
-                    hence be unaccounted for: governance quality, geography, the
-                    strength of public health systems, the legacy of particular
-                    conflicts.
-                    And some of the remaining variation between countries is
-                    simply natural: even two countries that look identical on
-                    every variable we can measure will not have exactly the same
-                    life expectancy.
-                </p>
-
-                <p>
-                    The second is
-                    <term>variability across years within Kenya</term>,
-                    illustrated by the rise and fall of the teal line.
-                    Kenya's life expectancy in 1952 was around 42 years; by 1987
-                    it had risen to nearly 60; by 2002 it had fallen back to
-                    around 51, before recovering again.
-                    Again, some of it could in principle be accounted for.
-                    If we had data on improvements in medicine, sanitation, and
-                    nutrition over time, or on the spread of the HIV/AIDS
-                    epidemic, we could account for much of the rise and the
-                    subsequent dip.
-                    But we do not have those variables here.
-                    Some drivers are harder to capture in data at all: droughts,
-                    political instability, specific health policy decisions in
-                    particular years.
-                    These all affected Kenyan life expectancy but are rarely
-                    available as measured variables.
-                    And some is natural: even in a stable period, life
-                    expectancy fluctuates slightly from year to year for reasons
-                    no dataset would ever fully capture.
-                </p>
-
-                <p>
-                    You might notice that year is in our dataset, and we can see
-                    that life expectancy in Kenya changes depending on year.
-                    So does year account for the variability in Kenya's life
-                    expectancy over time?
-                    In a narrow sense, yes: if you know the year, you can
-                    predict roughly where Kenya's life expectancy will sit.
-                    But there is an important distinction between
-                    <term>accounting for</term> variability and
-                    <term>explaining</term> it.
-                    Year accounts for the pattern — it tells you when things
-                    changed.
-                    It does not explain why.
-                    The actual causes of the rise (improvements in medicine,
-                    sanitation, and nutrition) and the dip (the HIV/AIDS
-                    epidemic) are not in this dataset.
-                    Year is acting as a proxy for all of them combined.
-                    Accounting for variability means being able to predict or
-                    describe a pattern; explaining it means knowing what
-                    actually drove it.
-                    The two are not the same, and confusing them is one of the
-                    most common mistakes in data analysis.
-                </p>
-            </insight>
         </subsection>
 
         <subsection xml:id="ss-least-squares">
@@ -1137,8 +1259,6 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
                     a poor fit, producing large squares.
                     Right: the line of best fit, which minimises the total area
                     of the squares.
-                    The reduction in square area from left to right is the
-                    reduction in unaccounted-for variability.
                 </caption>
 
                 <image source="images/ch9_least_squares_comparison.png" width="100%">
@@ -1196,8 +1316,11 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
                 themselves a measure of variability: they represent everything
                 in the outcome that the line cannot explain.
                 A small total squared error means the line accounts for most of
-                the variability; a large total squared error means much of the
-                variability is still unaccounted for.
+                # discussing accounting for variability goes in Ch10.
+                Just measuring it here, so we can call this back and discuss
+                this in that context in ch10 the variability; a large total
+                squared error means much of the variability is still unaccounted
+                for.
             </p>
         </subsection>
 
@@ -1289,53 +1412,6 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
     </section>
     <exercises xml:id="exercises-ch9">
         <title>Exercises</title>
-
-        <exercise xml:id="ex-variability-types">
-            <statement>
-                <p>
-                    For each of the following situations, identify which type of
-                    variability is being described (accounted-for,
-                    unaccounted-for, or natural) and briefly explain your
-                    reasoning.
-                </p>
-
-                <ol>
-                    <li>
-                        <p>
-                            Matatu journey times in Nairobi are consistently
-                            longer on Friday evenings than on Tuesday mornings.
-                        </p>
-                    </li>
-
-                    <li>
-                        <p>
-                            Two students take the same boda-boda route on the
-                            same Tuesday morning and arrive at slightly
-                            different times, even though nothing unusual
-                            happened on either journey.
-                        </p>
-                    </li>
-
-                    <li>
-                        <p>
-                            Life expectancy in several southern African
-                            countries dropped sharply in the 1990s due to the
-                            HIV/AIDS epidemic, but this variable was not
-                            included in the dataset being analysed.
-                        </p>
-                    </li>
-
-                    <li>
-                        <p>
-                            A farmer's crop yield varies from year to year.
-                            The analyst has data on rainfall but not on soil
-                            quality, which also affects yield.
-                        </p>
-                    </li>
-                </ol>
-            </statement>
-        </exercise>
-
         <exercise xml:id="ex-variability-measures">
             <statement>
                 <p>

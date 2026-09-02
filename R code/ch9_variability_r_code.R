@@ -677,3 +677,60 @@ p_bad + p_good
 #' best suit your data and the information you want to extract. Additionally,
 #' visualisation tools like boxplots can complement these numerical measures. Adjust
 #' these examples based on the characteristics of your specific dataset.
+
+
+
+
+
+####
+
+y <- rep(1, 10)
+df0 <- data.frame(x, y)
+
+ggplot(df0, aes(x = x, y = y)) +
+  geom_point() +
+  geom_line() +
+  labs(title = "No variability: y is always 1",
+       y = "y", x = "x") +
+  theme_bw()
+
+x <- 1:10
+y <- x
+df1 <- data.frame(x, y)
+
+ggplot(df1, aes(x = x, y = y)) +
+  geom_point() +
+  geom_line() +
+  labs(title = "Accounted for variability only: y = x",
+       y = "y", x = "x") +
+  theme_bw()
+
+
+
+x <- 1:10
+y <- x + rnorm(10)
+df2 <- data.frame(x, y)
+
+ggplot(df2, aes(x = x, y = y)) +
+  geom_point() +
+  geom_line(data = df1, aes(x = x, y = y),
+            linetype = "dashed", colour = "grey50") +
+  labs(title = "Accounted for + natural variability: y = x + error",
+       subtitle = "Dashed line shows y = x",
+       y = "y", x = "x") +
+  theme_bw()
+
+
+x  <- 1:10
+z  <- c(rep(1, 5), rep(10, 5))  # hidden variable
+y  <- x + z + rnorm(10)
+df3 <- data.frame(x, y)
+
+ggplot(df3, aes(x = x, y = y)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE,
+              colour = "#44575E", linewidth = 0.8) +
+  labs(title = "Accounted for, unaccounted for, and natural variability",
+       subtitle = "The line fits poorly because z is not in the data",
+       y = "y", x = "x") +
+  theme_bw()
