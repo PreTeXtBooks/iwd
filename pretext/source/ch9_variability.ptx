@@ -1310,18 +1310,6 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
                     </description>
                 </image>
             </figure>
-
-            <p>
-                The size of the squares (residuals) from this process are
-                themselves a measure of variability: they represent everything
-                in the outcome that the line cannot explain.
-                A small total squared error means the line accounts for most of
-                # discussing accounting for variability goes in Ch10.
-                Just measuring it here, so we can call this back and discuss
-                this in that context in ch10 the variability; a large total
-                squared error means much of the variability is still unaccounted
-                for.
-            </p>
         </subsection>
 
         <subsection xml:id="ss-variability-summary">
@@ -1410,6 +1398,7 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
             </p>
         </subsection>
     </section>
+
     <exercises xml:id="exercises-ch9">
         <title>Exercises</title>
         <exercise xml:id="ex-variability-measures">
