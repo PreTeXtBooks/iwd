@@ -409,6 +409,377 @@
             </p>
         </introduction>
 
+                <subsection xml:id="ss-range">
+            <title>The Range</title>
+
+            <p>
+                The simplest measure of variability is the <term>range</term>:
+                the difference between the largest and smallest values in the
+                dataset.
+                In R:
+            </p>
+
+            <program language="r">
+                <code>
+      africa %&gt;%
+        group_by(year) %&gt;%
+        summarise(range     = max(lifeExp) - min(lifeExp),
+                  max_lifeExp = max(lifeExp),
+                  min_lifeExp = min(lifeExp))
+      #&gt; # A tibble: 12 x 4
+      #&gt;     year range max_lifeExp min_lifeExp
+      #&gt;    &lt;int&gt; &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+      #&gt;  1  1952  21.4        52.7        31.3
+      #&gt;  2  1957  22.1        58.1        36.0
+      #&gt;  3  1962  26.9        60.2        33.3
+      #&gt;  4  1967  24.2        64.4        40.2
+      #&gt;  5  1972  26.1        65.0        38.8
+      #&gt;  6  1977  28.9        67.1        38.2
+      #&gt;  7  1982  33.4        70.0        36.7
+      #&gt;  8  1987  36.5        71.9        35.4
+      #&gt;  9  1992  52.5        73.6        23.6
+      #&gt; 10  1997  40.9        74.8        36.1
+      #&gt; 11  2002  43.1        75.7        39.2
+      #&gt; 12  2007  40.0        76.4        39.6
+                </code>
+            </program>
+
+            <p>
+                The range is easy to understand and easy to compute.
+                In 1952, the gap between the country with the highest life
+                expectancy and the lowest was 21.4 years.
+                By 2007 that had grown to 40 years.
+                In other words, in 2007 one country within Africa had a life
+                expectancy more than 40 years longer than another.
+            </p>
+
+            <p>
+                The increasing range can be visualised in
+                <xref ref="fig-ch9-africa-boxplot-years"/> too, where the gap
+                between the top and bottom of each boxplot widens noticeably
+                from left to right
+            </p>
+
+            <p>
+                Look at 1992: the range jumps to 52.5 years.
+                That is almost entirely Rwanda, a single country whose life
+                expectancy had collapsed to 23.6 years, far below every other
+                country on the continent, pulling the minimum down and the range
+                up dramatically.
+                By 1997, once the immediate crisis had passed, the range fell
+                back to 40.9.
+            </p>
+
+            <p>
+                This illustrates the main weakness of the range: it depends
+                entirely on the two most extreme values.
+                One unusual country (such as Rwanda in 1992, or Eswatini at the
+                height of the HIV/AIDS epidemic) can dramatically change the
+                range, even if every other country in the dataset is clustered
+                tightly together.
+                The range tells you about the extremes, not about the typical
+                spread.
+                This is why the interquartile range was developed.
+            </p>
+        </subsection>
+
+                <subsection xml:id="ss-boxplot-variability">
+            <title>Visualising Variability: the Boxplot</title>
+
+            <p>
+                Variance, standard deviation, and CV are all
+                <term>point statistics</term>: single numbers that summarise the
+                spread of the data.
+                While useful, they do not show the shape of the distribution:
+                whether values cluster in the middle or spread evenly, whether
+                the data is skewed, or whether there are unusual outliers.
+            </p>
+
+            <p>
+                A <term>boxplot</term> shows all of this at once.
+                It displays the five-number summary with the minimum, first
+                quartile (Q1), median, third quartile (Q3), and maximum as a box
+                with whiskers.
+                It additionally marks any outliers as individual points.
+                Here is the boxplot for life expectancy across African countries
+                in 2007:
+            </p>
+
+            <figure xml:id="fig-ch9-africa-boxplot-2007">
+                <caption>
+                    Life expectancy across African countries in 2007, shown as a
+                    boxplot with the five-number summary labelled.
+                    The dot below the lower whisker is Swaziland (now Eswatini),
+                    whose life expectancy was severely reduced by the HIV/AIDS
+                    epidemic.
+                </caption>
+
+                <image source="images/ch9_africa_boxplot_2007.png" width="70%">
+                    <description>
+                        <p>
+                            A vertical boxplot showing life expectancy in years
+                            on the y-axis.
+                            The box spans from Q1 (57.2 years) to Q3 (76.4
+                            years), with a median line at 71.9 years.
+                            Labelled arrows point to each of the five summary
+                            statistics.
+                            A single outlier point appears below the lower
+                            whisker, labelled as the minimum value (39.6 years).
+                        </p>
+                    </description>
+                </image>
+            </figure>
+
+            <p>
+                Reading this boxplot: the median life expectancy across African
+                countries in 2007 was around 71.9 years.
+                In 2007, the life expectancy in African countries varied
+                considerably: half of all countries fell between roughly 57.2
+                and 76.4 years (the box).
+                The whiskers extend to the most extreme non-outlier values.
+                The single dot below the lower whisker is Eswatini (now
+                Eswatini) at 39.6 years, driven almost entirely by the HIV/AIDS
+                epidemic at its peak.
+                This is a real event, visible as an outlier because its cause
+                was so severe and so specific to that country.
+            </p>
+
+            <p>
+                We can verify which country is at the bottom:
+            </p>
+
+            <program language="r">
+                <code>
+        africa_2007 &lt;- gapminder %&gt;% filter(continent == "Africa", 
+                                             year == 2007)
+
+        africa_2007 %&gt;%
+          arrange(lifeExp) %&gt;%
+          select(country, lifeExp) %&gt;%
+          head(5)
+        #&gt; # A tibble: 5 x 2
+        #&gt;   country                  lifeExp
+        #&gt;   &lt;fct&gt;                      &lt;dbl&gt;
+        #&gt; 1 Swaziland                   39.6
+        #&gt; 2 Mozambique                  42.1
+        #&gt; 3 Zambia                      42.4
+        #&gt; 4 Sierra Leone                42.6
+        #&gt; 5 Lesotho                     42.6
+                </code>
+            </program>
+
+            <insight xml:id="insight-outliers">
+                <title>What to do with outliers?</title>
+
+                <p>
+                    As always, it depends on the context and the cause - like
+                    with missing data.
+                </p>
+
+                <p>
+                    If an outlier is a genuine data error, such as having an
+                    adult with a height of 162m, then it is good practice to
+                    verify what the correct value should be and fix it.
+                    If it cannot be verified, it is reasonable to remove it from
+                    the dataset.
+                    But, removing an outlier simply because it is inconvenient
+                    or makes the data look messy is not good practice.
+                </p>
+
+                <p>
+                    In October 1987, a weather forecaster on the BBC dismissed a
+                    concerns about an approaching storm, saying there was
+                    nothing to worry about.
+                    Hours later, the most destructive storm to hit southern
+                    England in three centuries caused billions of pounds of
+                    damage and killed eighteen people.
+                    The forecasting models had flagged an unusual pressure
+                    reading, but this was treated as noise rather than as real.
+                    The outlier was the story.
+                </p>
+
+                <p>
+                    Eswatini's life expectancy in 2007 is an outlier in the same
+                    sense: not a data error, but a real event with a real cause.
+                    Removing it would make the distribution look tidier and the
+                    standard deviation smaller.
+                    But, it would erase the HIV/AIDS epidemic in Eswatini from
+                    the data.
+                    The right response to an outlier is always to ask why it is
+                    there.
+                    It can be an error, but it can be one of the most
+                    interesting parts of the dataset.
+                </p>
+            </insight>
+
+            <p>
+                We can look at how variability changed across years, displaying
+                the same boxplot repeated for each year, with Kenya highlighted:
+            </p>
+
+            <program language="r">
+                <code>
+kenya &lt;- africa %&gt;%
+  filter(country == "Kenya")
+
+ggplot(africa, aes(y = lifeExp, x = factor(year))) +
+  geom_boxplot(width = 0.4, fill = "#F37021", colour = "#44575E",
+               outlier.colour = "#F37021", outlier.size = 2) +
+  # Kenya points
+  geom_point(data = kenya,
+             aes(y = lifeExp, x = factor(year)),
+             colour = "#44575E", size = 3, shape = 18) +
+  # Kenya line connecting the points
+  geom_line(data = kenya,
+            aes(y = lifeExp, x = as.numeric(factor(year))),
+            colour = "#44575E", linewidth = 0.8) +
+  # Label on the last point only
+  geom_label(data = kenya %&gt;% filter(year == max(year)),
+             aes(y = lifeExp, x = factor(year), label = "Kenya"),
+             hjust = -0.1, size = 3.2, fill = "white",
+             colour = "#44575E", label.size = 0.3) +
+  labs(
+    title    = "Life expectancy across African countries",
+    subtitle = "Each point represents one country. Kenya highlighted in dark teal.",
+    y        = "Life expectancy (years)",
+    x        = "Year"
+  ) +
+  theme_bw() +
+  theme(
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank()
+  )
+                </code>
+            </program>
+
+            <figure xml:id="fig-ch9-africa-boxplot-years">
+                <caption>
+                    Life expectancy across African countries from 1952 to 2007,
+                    with Kenya shown as a connected dark teal line.
+                    The widening of the boxes over time reflects growing
+                    divergence between countries.
+                    Kenya's dip in the 1990s reflects the HIV/AIDS epidemic.
+                </caption>
+
+                <image source="images/ch9_africa_boxplot_years.png" width="100%">
+                    <description>
+                        <p>
+                            A series of boxplots, one every five years from 1952
+                            to 2007, showing life expectancy across African
+                            countries.
+                            The boxes gradually widen over time, consistent with
+                            the increasing standard deviation shown in the table
+                            above.
+                            A dark teal connected line and diamond points show
+                            Kenya's trajectory, rising steadily until the 1990s,
+                            then dipping before recovering in 2002 and 2007.
+                        </p>
+                    </description>
+                </image>
+            </figure>
+
+            <p>
+                The widening boxes over time tell the same story as the
+                increasing standard deviation, but now you can visualise it.
+                The median life expectancy across African countries rises
+                steadily from 1952 through to the late 1980s/90s, then stalls
+                and dips.
+                In the late 1980s, the boxes start to plateau, and in the late
+                1990s, the whiskers begin to stretch further downward,
+                potentially from the impact of the HIV/AIDS epidemic.
+                In 1992, a single orange point appears far below the rest.
+                This is Rwanda, whose life expectancy had collapsed to around 23
+                years, the lowest of any country in the dataset.
+                This was the period surrounding the Rwandan genocide of 1994,
+                and the violence and displacement of the years immediately
+                before it.
+                It registers in the data as a stark outlier, a single point
+                sitting far beneath every other country on the continent.
+                We saw this same point when we animated the Gapminder data in
+                <xref ref="ch-visualising-multidimensional-data"/> and confirmed
+                this variability is not a data error.
+            </p>
+
+            <p>
+                Kenya's trajectory, shown by the dark teal line, shows
+                concretely how an individual country's experience can reflect
+                broader continental trends.
+                Life expectancy rises consistently from 1952 to 1987, tracking
+                close to the continental median.
+                Then it falls, steeply, through the 1990s before recovering in
+                the 2000s.
+                By 2007, Kenya is back above the continental median, but the dip
+                is visible in the data as clearly as it was in lived experience.
+            </p>
+        </subsection>
+
+        
+        <subsection xml:id="ss-iqr">
+            <title>The Interquartile Range</title>
+
+            <p>
+                The box in a boxplot has a specific width: it spans from Q1 to
+                Q3.
+                That width is called the <term>interquartile range</term> (IQR).
+                It measures the spread of the middle 50% of the data, which is
+                the range within which the central half of all values fall.
+            </p>
+
+            <p>
+                The IQR is more <term>robust</term> than the standard deviation,
+                meaning it is less affected by outliers.
+                Eswatini's extreme value pulls the standard deviation up, but it
+                has no effect on the IQR because the IQR only cares about the
+                middle half of the data.
+                This makes the IQR a better measure of variability when you have
+                skewed data or known outliers that you do not want to dominate
+                the summary.
+            </p>
+
+            <program language="r">
+                <code>
+        africa %&gt;%
+          group_by(year) %&gt;%
+          summarise(IQR = IQR(lifeExp),
+                    SD  = sd(lifeExp))
+        #&gt; # A tibble: 12 x 3
+        #&gt;     year   IQR    SD
+        #&gt;    &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+        #&gt;  1  1952  7.44  5.15
+        #&gt;  2  1957  7.33  5.62
+        #&gt;  3  1962  8.08  5.88
+        #&gt;  4  1967  8.25  6.08
+        #&gt;  5  1972  8.96  6.42
+        #&gt;  6  1977  9.89  6.81
+        #&gt;  7  1982 11.8   7.38
+        #&gt;  8  1987 12.3   7.86
+        #&gt;  9  1992 13.9   9.46
+        #&gt; 10  1997 13.4   9.10
+        #&gt; 11  2002 13.5   9.59
+        #&gt; 12  2007 14.5   9.63
+                </code>
+            </program>
+
+            <p>
+                Both the IQR and SD tend to increase over time, consistent with
+                growing divergence between African countries.
+                But notice that the IQR is generally larger than the SD in the
+                early years, and smaller in the later years.
+                This reflects the growing influence of the outliers in the 1990s
+                and 2000s which pull the SD up more than the IQR, because the SD
+                is sensitive to their extreme values while the IQR is not.
+            </p>
+
+            <p>
+                We can visualise this increase in the IQR by looking at
+                <xref ref="fig-ch9-africa-boxplot-years"/>.
+                The boxes get taller over time because Q1 and Q3 move further
+                apart.
+                The IQR in 1952 was around 7 years; by 2007 it had almost
+                doubled to 14.5.
+            </p>
+        </subsection>
+
         <subsection xml:id="ss-variance-sd">
             <title>Variance and Standard Deviation</title>
 
@@ -817,375 +1188,6 @@
             </p>
         </subsection>
 
-        <subsection xml:id="ss-boxplot-variability">
-            <title>Visualising Variability: the Boxplot</title>
-
-            <p>
-                Variance, standard deviation, and CV are all
-                <term>point statistics</term>: single numbers that summarise the
-                spread of the data.
-                While useful, they do not show the shape of the distribution:
-                whether values cluster in the middle or spread evenly, whether
-                the data is skewed, or whether there are unusual outliers.
-            </p>
-
-            <p>
-                A <term>boxplot</term> shows all of this at once.
-                It displays the five-number summary with the minimum, first
-                quartile (Q1), median, third quartile (Q3), and maximum as a box
-                with whiskers.
-                It additionally marks any outliers as individual points.
-                Here is the boxplot for life expectancy across African countries
-                in 2007:
-            </p>
-
-            <figure xml:id="fig-ch9-africa-boxplot-2007">
-                <caption>
-                    Life expectancy across African countries in 2007, shown as a
-                    boxplot with the five-number summary labelled.
-                    The dot below the lower whisker is Swaziland (now Eswatini),
-                    whose life expectancy was severely reduced by the HIV/AIDS
-                    epidemic.
-                </caption>
-
-                <image source="images/ch9_africa_boxplot_2007.png" width="70%">
-                    <description>
-                        <p>
-                            A vertical boxplot showing life expectancy in years
-                            on the y-axis.
-                            The box spans from Q1 (57.2 years) to Q3 (76.4
-                            years), with a median line at 71.9 years.
-                            Labelled arrows point to each of the five summary
-                            statistics.
-                            A single outlier point appears below the lower
-                            whisker, labelled as the minimum value (39.6 years).
-                        </p>
-                    </description>
-                </image>
-            </figure>
-
-            <p>
-                Reading this boxplot: the median life expectancy across African
-                countries in 2007 was around 71.9 years.
-                In 2007, the life expectancy in African countries varied
-                considerably: half of all countries fell between roughly 57.2
-                and 76.4 years (the box).
-                The whiskers extend to the most extreme non-outlier values.
-                The single dot below the lower whisker is Eswatini (now
-                Eswatini) at 39.6 years, driven almost entirely by the HIV/AIDS
-                epidemic at its peak.
-                This is a real event, visible as an outlier because its cause
-                was so severe and so specific to that country.
-            </p>
-
-            <p>
-                We can verify which country is at the bottom:
-            </p>
-
-            <program language="r">
-                <code>
-        africa_2007 &lt;- gapminder %&gt;% filter(continent == "Africa", 
-                                             year == 2007)
-
-        africa_2007 %&gt;%
-          arrange(lifeExp) %&gt;%
-          select(country, lifeExp) %&gt;%
-          head(5)
-        #&gt; # A tibble: 5 x 2
-        #&gt;   country                  lifeExp
-        #&gt;   &lt;fct&gt;                      &lt;dbl&gt;
-        #&gt; 1 Swaziland                   39.6
-        #&gt; 2 Mozambique                  42.1
-        #&gt; 3 Zambia                      42.4
-        #&gt; 4 Sierra Leone                42.6
-        #&gt; 5 Lesotho                     42.6
-                </code>
-            </program>
-
-            <insight xml:id="insight-outliers">
-                <title>What to do with outliers?</title>
-
-                <p>
-                    As always, it depends on the context and the cause - like
-                    with missing data.
-                </p>
-
-                <p>
-                    If an outlier is a genuine data error, such as having an
-                    adult with a height of 162m, then it is good practice to
-                    verify what the correct value should be and fix it.
-                    If it cannot be verified, it is reasonable to remove it from
-                    the dataset.
-                    But, removing an outlier simply because it is inconvenient
-                    or makes the data look messy is not good practice.
-                </p>
-
-                <p>
-                    In October 1987, a weather forecaster on the BBC dismissed a
-                    concerns about an approaching storm, saying there was
-                    nothing to worry about.
-                    Hours later, the most destructive storm to hit southern
-                    England in three centuries caused billions of pounds of
-                    damage and killed eighteen people.
-                    The forecasting models had flagged an unusual pressure
-                    reading, but this was treated as noise rather than as real.
-                    The outlier was the story.
-                </p>
-
-                <p>
-                    Eswatini's life expectancy in 2007 is an outlier in the same
-                    sense: not a data error, but a real event with a real cause.
-                    Removing it would make the distribution look tidier and the
-                    standard deviation smaller.
-                    But, it would erase the HIV/AIDS epidemic in Eswatini from
-                    the data.
-                    The right response to an outlier is always to ask why it is
-                    there.
-                    It can be an error, but it can be one of the most
-                    interesting parts of the dataset.
-                </p>
-            </insight>
-
-            <p>
-                We can look at how variability changed across years, displaying
-                the same boxplot repeated for each year, with Kenya highlighted:
-            </p>
-
-            <program language="r">
-                <code>
-kenya &lt;- africa %&gt;%
-  filter(country == "Kenya")
-
-ggplot(africa, aes(y = lifeExp, x = factor(year))) +
-  geom_boxplot(width = 0.4, fill = "#F37021", colour = "#44575E",
-               outlier.colour = "#F37021", outlier.size = 2) +
-  # Kenya points
-  geom_point(data = kenya,
-             aes(y = lifeExp, x = factor(year)),
-             colour = "#44575E", size = 3, shape = 18) +
-  # Kenya line connecting the points
-  geom_line(data = kenya,
-            aes(y = lifeExp, x = as.numeric(factor(year))),
-            colour = "#44575E", linewidth = 0.8) +
-  # Label on the last point only
-  geom_label(data = kenya %&gt;% filter(year == max(year)),
-             aes(y = lifeExp, x = factor(year), label = "Kenya"),
-             hjust = -0.1, size = 3.2, fill = "white",
-             colour = "#44575E", label.size = 0.3) +
-  labs(
-    title    = "Life expectancy across African countries",
-    subtitle = "Each point represents one country. Kenya highlighted in dark teal.",
-    y        = "Life expectancy (years)",
-    x        = "Year"
-  ) +
-  theme_bw() +
-  theme(
-    panel.grid.major.x = element_blank(),
-    panel.grid.minor.x = element_blank()
-  )
-                </code>
-            </program>
-
-            <figure xml:id="fig-ch9-africa-boxplot-years">
-                <caption>
-                    Life expectancy across African countries from 1952 to 2007,
-                    with Kenya shown as a connected dark teal line.
-                    The widening of the boxes over time reflects growing
-                    divergence between countries.
-                    Kenya's dip in the 1990s reflects the HIV/AIDS epidemic.
-                </caption>
-
-                <image source="images/ch9_africa_boxplot_years.png" width="100%">
-                    <description>
-                        <p>
-                            A series of boxplots, one every five years from 1952
-                            to 2007, showing life expectancy across African
-                            countries.
-                            The boxes gradually widen over time, consistent with
-                            the increasing standard deviation shown in the table
-                            above.
-                            A dark teal connected line and diamond points show
-                            Kenya's trajectory, rising steadily until the 1990s,
-                            then dipping before recovering in 2002 and 2007.
-                        </p>
-                    </description>
-                </image>
-            </figure>
-
-            <p>
-                The widening boxes over time tell the same story as the
-                increasing standard deviation, but now you can visualise it.
-                The median life expectancy across African countries rises
-                steadily from 1952 through to the late 1980s/90s, then stalls
-                and dips.
-                In the late 1980s, the boxes start to plateau, and in the late
-                1990s, the whiskers begin to stretch further downward,
-                potentially from the impact of the HIV/AIDS epidemic.
-                In 1992, a single orange point appears far below the rest.
-                This is Rwanda, whose life expectancy had collapsed to around 23
-                years, the lowest of any country in the dataset.
-                This was the period surrounding the Rwandan genocide of 1994,
-                and the violence and displacement of the years immediately
-                before it.
-                It registers in the data as a stark outlier, a single point
-                sitting far beneath every other country on the continent.
-                We saw this same point when we animated the Gapminder data in
-                <xref ref="ch-visualising-multidimensional-data"/> and confirmed
-                this variability is not a data error.
-            </p>
-
-            <p>
-                Kenya's trajectory, shown by the dark teal line, shows
-                concretely how an individual country's experience can reflect
-                broader continental trends.
-                Life expectancy rises consistently from 1952 to 1987, tracking
-                close to the continental median.
-                Then it falls, steeply, through the 1990s before recovering in
-                the 2000s.
-                By 2007, Kenya is back above the continental median, but the dip
-                is visible in the data as clearly as it was in lived experience.
-            </p>
-        </subsection>
-
-        <subsection xml:id="ss-range">
-            <title>The Range</title>
-
-            <p>
-                The simplest measure of variability is the <term>range</term>:
-                the difference between the largest and smallest values in the
-                dataset.
-                In R:
-            </p>
-
-            <program language="r">
-                <code>
-      africa %&gt;%
-        group_by(year) %&gt;%
-        summarise(range     = max(lifeExp) - min(lifeExp),
-                  max_lifeExp = max(lifeExp),
-                  min_lifeExp = min(lifeExp))
-      #&gt; # A tibble: 12 x 4
-      #&gt;     year range max_lifeExp min_lifeExp
-      #&gt;    &lt;int&gt; &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
-      #&gt;  1  1952  21.4        52.7        31.3
-      #&gt;  2  1957  22.1        58.1        36.0
-      #&gt;  3  1962  26.9        60.2        33.3
-      #&gt;  4  1967  24.2        64.4        40.2
-      #&gt;  5  1972  26.1        65.0        38.8
-      #&gt;  6  1977  28.9        67.1        38.2
-      #&gt;  7  1982  33.4        70.0        36.7
-      #&gt;  8  1987  36.5        71.9        35.4
-      #&gt;  9  1992  52.5        73.6        23.6
-      #&gt; 10  1997  40.9        74.8        36.1
-      #&gt; 11  2002  43.1        75.7        39.2
-      #&gt; 12  2007  40.0        76.4        39.6
-                </code>
-            </program>
-
-            <p>
-                The range is easy to understand and easy to compute.
-                In 1952, the gap between the country with the highest life
-                expectancy and the lowest was 21.4 years.
-                By 2007 that had grown to 40 years.
-                In other words, in 2007 one country within Africa had a life
-                expectancy more than 40 years longer than another.
-            </p>
-
-            <p>
-                The increasing range can be visualised in
-                <xref ref="fig-ch9-africa-boxplot-years"/> too, where the gap
-                between the top and bottom of each boxplot widens noticeably
-                from left to right
-            </p>
-
-            <p>
-                Look at 1992: the range jumps to 52.5 years.
-                That is almost entirely Rwanda, a single country whose life
-                expectancy had collapsed to 23.6 years, far below every other
-                country on the continent, pulling the minimum down and the range
-                up dramatically.
-                By 1997, once the immediate crisis had passed, the range fell
-                back to 40.9.
-            </p>
-
-            <p>
-                This illustrates the main weakness of the range: it depends
-                entirely on the two most extreme values.
-                One unusual country (such as Rwanda in 1992, or Eswatini at the
-                height of the HIV/AIDS epidemic) can dramatically change the
-                range, even if every other country in the dataset is clustered
-                tightly together.
-                The range tells you about the extremes, not about the typical
-                spread.
-                This is why the interquartile range was developed.
-            </p>
-        </subsection>
-
-        <subsection xml:id="ss-iqr">
-            <title>The Interquartile Range</title>
-
-            <p>
-                The box in a boxplot has a specific width: it spans from Q1 to
-                Q3.
-                That width is called the <term>interquartile range</term> (IQR).
-                It measures the spread of the middle 50% of the data, which is
-                the range within which the central half of all values fall.
-            </p>
-
-            <p>
-                The IQR is more <term>robust</term> than the standard deviation,
-                meaning it is less affected by outliers.
-                Eswatini's extreme value pulls the standard deviation up, but it
-                has no effect on the IQR because the IQR only cares about the
-                middle half of the data.
-                This makes the IQR a better measure of variability when you have
-                skewed data or known outliers that you do not want to dominate
-                the summary.
-            </p>
-
-            <program language="r">
-                <code>
-        africa %&gt;%
-          group_by(year) %&gt;%
-          summarise(IQR = IQR(lifeExp),
-                    SD  = sd(lifeExp))
-        #&gt; # A tibble: 12 x 3
-        #&gt;     year   IQR    SD
-        #&gt;    &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
-        #&gt;  1  1952  7.44  5.15
-        #&gt;  2  1957  7.33  5.62
-        #&gt;  3  1962  8.08  5.88
-        #&gt;  4  1967  8.25  6.08
-        #&gt;  5  1972  8.96  6.42
-        #&gt;  6  1977  9.89  6.81
-        #&gt;  7  1982 11.8   7.38
-        #&gt;  8  1987 12.3   7.86
-        #&gt;  9  1992 13.9   9.46
-        #&gt; 10  1997 13.4   9.10
-        #&gt; 11  2002 13.5   9.59
-        #&gt; 12  2007 14.5   9.63
-                </code>
-            </program>
-
-            <p>
-                Both the IQR and SD tend to increase over time, consistent with
-                growing divergence between African countries.
-                But notice that the IQR is generally larger than the SD in the
-                early years, and smaller in the later years.
-                This reflects the growing influence of the outliers in the 1990s
-                and 2000s which pull the SD up more than the IQR, because the SD
-                is sensitive to their extreme values while the IQR is not.
-            </p>
-
-            <p>
-                We can visualise this increase in the IQR by looking at
-                <xref ref="fig-ch9-africa-boxplot-years"/>.
-                The boxes get taller over time because Q1 and Q3 move further
-                apart.
-                The IQR in 1952 was around 7 years; by 2007 it had almost
-                doubled to 14.5.
-            </p>
-        </subsection>
 
         <subsection xml:id="ss-least-squares">
             <title>Least Squares: Measuring Variability Around a Line</title>
@@ -1335,6 +1337,16 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
                 </row>
 
                 <row>
+                    <cell><term>IQR</term></cell>
+                    <cell>Spread of the middle 50% of the data</cell>
+                    <cell>No</cell>
+                    <cell>
+                        Skewed data or data with meaningful outliers you do not
+                        want to dominate
+                    </cell>
+                </row>
+
+                <row>
                     <cell><term>Variance</term></cell>
                     <cell>Average squared distance from the mean</cell>
                     <cell>Yes</cell>
@@ -1363,16 +1375,6 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
                     <cell>
                         Comparing variability across datasets with different
                         means or units
-                    </cell>
-                </row>
-
-                <row>
-                    <cell><term>IQR</term></cell>
-                    <cell>Spread of the middle 50% of the data</cell>
-                    <cell>No</cell>
-                    <cell>
-                        Skewed data or data with meaningful outliers you do not
-                        want to dominate
                     </cell>
                 </row>
 
