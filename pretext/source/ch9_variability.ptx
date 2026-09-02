@@ -30,82 +30,150 @@
 
         <introduction>
             <p>
-                How long does it take to get somewhere in Nairobi?
-                The honest answer is: it depends on where you are going, what
-                time you leave, what day of the week it is, and a dozen other
-                things you may not know until you are already in the traffic.
-                In other words, journey times in any city vary.
-                This chapter is about how to measure that variation.
+                In Kenya's capital city, Nairobi, streets are regularly
+                gridlocked.
+                News reports claim that commutes regularly exceed two hours each
+                way.
+                But is that consistently the case, and for whom is that the case
+                for?
+                The answer depends entirely on how you measure it, and who you
+                ask.
             </p>
 
             <p>
-                The
-                <url href="https://www.tomtom.com/traffic-index/city/nairobi/">TomTom Traffic Index</url>
-                records journey times across Nairobi continuously, aggregating
-                anonymised GPS data from millions of trips.
-                It found that in 2025 a 10 kilometre drive in the city took an
-                average of 26 minutes and 47 seconds.
-                But that single number conceals an enormous range.
-                At 4am, the same 10 kilometres takes around 18 minutes.
-                At 4pm on a weekday, it takes more than twice as long at around
-                37 minutes.
+                In 2013, a World Bank survey of 14,580 households across 15
+                Kenyan cities set out to answer this question systematically.
+                The researchers noted that while congestion at peak hours was
+                obvious to anyone on Nairobi's streets, it was simply not known
+                which commuters were experiencing that congestion, or what their
+                commute times actually were (Salon and Gulyani, 2019).
+                In the end, the survey found that the median commute time in
+                Nairobi was 30 minutes, and only 5% of those surveyed reported
+                commuting an hour or longer.
+                Far from a city of two-hour commutes, most Nairobi residents
+                appeared to be getting to work in half an hour.
             </p>
 
             <p>
-                Over the entirety of 2025,
-                <url href="https://www.tomtom.com/traffic-index/city/nairobi/">TomTom Traffic Index</url>
-                estimated that the average Nairobi driver lost more than four
-                and a half days (109 hours) sitting in traffic beyond what those
-                same journeys would have taken at free-flow speeds.
-            </p>
-
-            <p>
-                Survey data tells a similar story.
-                A 2013 World Bank survey of 14,580 households across 15 Kenyan
-                cities found that the median commute time in Nairobi was 30
-                minutes.
-                A separate survey from the same year found an average of 49
-                minutes — more than 50 percent higher.
+                But another major survey, conducted in the same year by JICA,
+                found an average (mean) commute time of 49 minutes - nearly
+                twice the World Bank figure.
                 Both surveys measured the same city in the same year.
-                The difference reflects who was sampled, how questions were
-                asked, and what counted as a commute.
-                Matatu commuters spent roughly twice as long travelling as walk
-                commuters making similar trips in the same city (Salon and
-                Gulyani, 2019).
-                And the variation is not unique to Nairobi: a study of Dar es
-                Salaam found that a trip to the city centre could take anything
-                from 30 minutes to three hours depending on traffic conditions
-                (Andreasen and Møller-Jensen, 2017).
+                The difference came down to who was sampled: the JICA survey had
+                oversampled car-owning households, who tend to have longer
+                motorised commutes, while the World Bank survey was more
+                representative of the full population — most of whom walk or
+                take a matatu.
+                Measure the same thing differently, and you get a different
+                answer.
+            </p>
+
+            <insight>
+                <title>Which Measurement -- TODO: better title.</title>
+
+                <p>
+                    Part of the difference between JICA and the World Bank is
+                    simply mean versus median.
+                    Averages are pulled upward by the small number of commuters
+                    with very long journeys, while medians are not.
+                    JICA reported a mean of 49 minutes, and a median of 40
+                    minutes; while the World Bank reported a median of 30
+                    minutes, and a mean of 31 minutes.
+                </p>
+            </insight>
+
+            <p>
+                Even within the World Bank survey, the variation is substantial.
+                Matatu commuters in Nairobi spent roughly twice as long
+                travelling as walk commuters making similar trips in the same
+                city.
+                The median commute time conceals the fact that some people's
+                journeys are short and some are long — and who experiences which
+                depends on how they travel, where they live, and what time they
+                leave.
             </p>
 
             <p>
-                None of these numbers contradict each other.
-                They are all measuring the same underlying reality: journeys
-                vary.
-                A lot.
-                The question this chapter asks is how to measure this variation.
-                How do we summarise spread?
-                What does a single number like 109 hours or a range of 18 to 37
-                minutes actually tell us?
-                And when two measures give different answers, how do we decide
-                which one to use?
-                These are the questions this chapter is about.
+                This is what variability looks like in practice.
+                This data is in a spread of values with a centre, a range, and a
+                shape, called a distribution.
+                Understanding that distribution, rather than just its average,
+                is what allows planners to know whether interventions are
+                helping everyone or only some commuters.
+                It is what allows researchers to compare across cities fairly.
+                And it is what allows the data analyst to say something honest
+                about what the data actually shows.
+                This chapter introduces the tools for observing and measuring
+                variability.
             </p>
         </introduction>
 
         <subsection xml:id="subsec-traffic-variation-measuring">
-            <title>Visualising Traffic Variation in Nairobi</title>
+            <title>Observing Variability in Nairobi Traffic</title>
 
             <p>
-                The heatmap below shows travel time across every hour of every
-                day of the week in Nairobi, averaged across 2025.
-                Each cell represents one two-hour slot on one day; darker red
-                means longer journey times, lighter pink means shorter.
-                The variation is immediately visible — some cells are nearly
-                white, others deeply red.
-                The total range from the lightest to the darkest cell captures,
-                in one image, the same variation that the numbers above describe
-                in words.
+                The TomTom Traffic Index records journey times across Nairobi
+                continuously, aggregating anonymised GPS data from millions of
+                trips across the entire road network.
+                In 2025, a 10 kilometre drive in the city took an average of 26
+                minutes and 47 seconds.
+                But that single number of the average is already hiding the
+                variability in journey times.
+                At 4am, the same 10 kilometres takes around 18 minutes.
+                At 4pm on a weekday, it takes more than twice as long at around
+                37 minutes.
+                The average sits between those two extremes, but it does not
+                tell you that the extremes exist, or how far apart they are.
+            </p>
+
+            <p>
+                One of the simplest ways to measure variability is the
+                <term>range</term>: the difference between the largest and
+                smallest values.
+                Here, the range of journey times across the day is roughly
+                <md>
+                    37 -18 = 19
+                </md>
+                minutes.
+                This is a very useful starting point to getting an idea about
+                the overall variability.
+            </p>
+
+            <p>
+                However, the range only tells you only about the two most
+                extreme values.
+                It does not say anything about a typical journey, or how much
+                most journeys deviate from the average.
+                And it is sensitive to unusual extremes: one exceptionally bad
+                hour can make the range look larger than it really is for most
+                people.
+            </p>
+
+            <p>
+                To get a fuller picture, TomTom also estimated that over the
+                entirety of 2025, the average Nairobi driver lost more than four
+                and a half days (109 hours) sitting in traffic beyond what those
+                same journeys would have taken at free-flow speeds.
+                That 109 hours is itself a summary of accumulated variability
+                across the whole year: some days the roads flow freely, some
+                days they do not, and the total adds up.
+            </p>
+
+            <p>
+                As we have seen, averages alone do not capture the full extent
+                of variability.
+                The variability can also be captured through various graphics.
+                For example, the heatmap below shows journey times across every
+                hour of every day of the week, averaged across 2025.
+                Each cell represents one two-hour slot on one day of the week;
+                darker red means longer journey times, lighter pink means
+                shorter.
+                This is a visual representation of variability: you can see at a
+                glance not just that variation exists, but that journeys on
+                weekday evenings are typically the longest, and journeys on
+                early Sunday mornings are typically the shortest.
+                The range from the lightest cell to the darkest is visible
+                without any calculation at all.
             </p>
 
             <figure xml:id="fig-tomtom-heatmap-week">
@@ -137,15 +205,19 @@
             </figure>
 
             <p>
-                The magnitude of that variation also differs across the city.
+                The same variation looks different when viewed spatially.
                 The maps below show average traffic conditions during the
-                morning and evening rush hours.
-                The central business district and main arterial roads are
-                consistently darker — more congested — while the outer suburbs
-                are lighter.
-                And the pattern shifts between morning and evening: congestion
-                concentrates inward as commuters arrive in the morning, and
-                spreads outward as they leave in the evening.
+                morning and evening rush hours across the city.
+                Not all parts of Nairobi are equally congested — the central
+                business district and main arterial roads are consistently
+                darker, while the outer suburbs are lighter.
+                And the spatial pattern of variability shifts between morning
+                and evening: congestion concentrates inward as commuters arrive
+                in the morning, and spreads outward as they leave in the
+                evening.
+                The same underlying variation in journey times, measured as an
+                average above, is now being shown as a distribution across space
+                rather than across time.
             </p>
 
             <figure xml:id="fig-tomtom-map-morning">
@@ -157,7 +229,7 @@
                     Source: TomTom Traffic Index 2025.
                 </caption>
 
-                <image source="images/ch9_tomtom_map_morning.png" width="90%">
+                <image source="images/ch9_tomtom_heatmap_morning.png" width="90%">
                     <description>
                         <p>
                             A hexagonal heatmap overlaid on a dark map of
@@ -185,7 +257,7 @@
                     Source: TomTom Traffic Index 2025.
                 </caption>
 
-                <image source="images/ch9_tomtom_map_evening.png" width="90%">
+                <image source="images/ch9_tomtom_heatmap_evening.png" width="90%">
                     <description>
                         <p>
                             A hexagonal heatmap overlaid on a dark map of
@@ -204,32 +276,65 @@
             </figure>
 
             <p>
-                These images show that variation exists and where it is largest.
-                They do not yet tell us how to summarise it in a single number,
-                or how to compare the spread in one dataset against another.
-                That is what the rest of this chapter is for.
+                With this data, different ways of observing and summarising the
+                same underlying variability in Nairobi journey times are
+                possible.
+                Each measurement reveals something the others do not.
+                The average gives you a centre; the range tells you how far the
+                extremes are from each other; the heatmap shows you where in the
+                day variation is concentrated; the spatial map shows you where
+                in the city it is concentrated.
+                The rest of this chapter introduces the formal measures that
+                complement these visual summaries, and explains when to use each
+                one.
             </p>
+
+            <insight xml:id="insight-what-you-measure">
+                <title>What you measure shapes what you find</title>
+
+                <p>
+                    The TomTom figures above include Nairobi's Expressway, which
+                    opened in 2022 and cut journey times on routes passing
+                    through it from around two hours to roughly 20 minutes.
+                    Other sources (including the Express Impress estimate of a
+                    30-minute to two-hour range for a specific surface-road
+                    journey in Nairobi) are measuring routes that do not use the
+                    Expressway at all.
+                    These two sources are measuring the same thing, and the
+                    apparent variability in journey times is different depending
+                    on which roads you include.
+                </p>
+
+                <p>
+                    This is a general principle that applies to any dataset: the
+                    variation you observe depends partly on what is actually
+                    varying in the world, and partly on what you chose to
+                    measure and what you left out.
+                    Keeping that in mind when comparing summaries from different
+                    sources is important in data analysis.
+                </p>
+            </insight>
 
             <p>
                 <term>Sources:</term> TomTom Traffic Index 2025.
                 Nairobi city profile.
                 Available at:
                 <url href="https://www.tomtom.com/traffic-index/city/nairobi/" visual="tomtom.com/traffic-index/city/nairobi"/>.
+
+                Japan International Cooperation Agency (JICA) (2013).
+                <em>The Project on Integrated Urban Development Master Plan 
+  for the City of Nairobi in the Republic of Kenya: Household Travel 
+  Survey 2013.</em>
+                Tokyo: JICA.
+
                 Salon, D.
                 and Gulyani, S.
                 (2019).
-                <q>Commuting in Urban Kenya: 
-      Unpacking Travel Demand in Large and Small Kenyan Cities.</q>
+                <q>Commuting in Urban Kenya: Unpacking Travel Demand in Large and 
+  Small Kenyan Cities.</q>
                 <em>Sustainability</em>, 11(14), 3823.
                 <url href="https://doi.org/10.3390/su11143823"/>.
                 CC BY 3.0.
-                Andreasen, M.H.
-                and Møller-Jensen, L.
-                (2017).
-                <q>Access to the 
-      city: Mobility patterns, transport and accessibility in 
-      peripheral settlements of Dar es Salaam.</q>
-                <em>Journal of Transport Geography</em>, 62, 20 <ndash/> 29.
             </p>
         </subsection>
     </section>
