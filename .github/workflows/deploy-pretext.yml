@@ -36,9 +36,9 @@ jobs:
         run: |
           pip install pretext
       
-      - name: Patch PreTeXt for XSL entity resolution and Runestone services
+      - name: Apply PreTeXt patches for build compatibility
         run: |
-          python3 patch_pretext.py
+          python3 -c "import fix_pretext"
           
       - name: Install ImageMagick for image conversion
         run: |
