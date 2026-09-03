@@ -35,6 +35,10 @@ jobs:
       - name: Install PreTeXt CLI
         run: |
           pip install pretext
+      
+      - name: Patch PreTeXt for XSL entity resolution and Runestone services
+        run: |
+          python3 patch_pretext.py
           
       - name: Install ImageMagick for image conversion
         run: |
