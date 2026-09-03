@@ -1,1 +1,1 @@
-pretext
+pretext==2.6.2
