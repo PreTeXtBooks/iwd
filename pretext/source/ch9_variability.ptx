@@ -56,8 +56,8 @@
 
             <p>
                 But another major survey, conducted in the same year by JICA,
-                found an average (mean) commute time of 49 minutes - nearly
-                twice the World Bank figure.
+                found a (mean) average commute time of 49 minutes — nearly twice
+                the World Bank figure.
                 Both surveys measured the same city in the same year.
                 The difference came down to who was sampled: the JICA survey had
                 oversampled car-owning households, who tend to have longer
@@ -74,8 +74,10 @@
                 <p>
                     Part of the difference between JICA and the World Bank is
                     simply mean versus median.
-                    Averages are pulled upward by the small number of commuters
-                    with very long journeys, while medians are not.
+                    The mean can be influenced by extreme values.
+                    Here, the small number of commuters with very long journeys
+                    pulls the average upward, while the median remains more
+                    representative of the typical commute.
                     JICA reported a mean of 49 minutes, and a median of 40
                     minutes; while the World Bank reported a median of 30
                     minutes, and a mean of 31 minutes.
@@ -95,8 +97,8 @@
 
             <p>
                 This is what variability looks like in practice.
-                This data is in a spread of values with a centre, a range, and a
-                shape, called a distribution.
+                A variable, such as commuting time, is in a spread of values
+                with a centre, a range, and a shape, called a distribution.
                 Understanding that distribution, rather than just its average,
                 is what allows planners to know whether interventions are
                 helping everyone or only some commuters.
@@ -115,10 +117,13 @@
                 The TomTom Traffic Index records journey times across Nairobi
                 continuously, aggregating anonymised GPS data from millions of
                 trips across the entire road network.
-                In 2025, a 10 kilometre drive in the city took an average of 26
-                minutes and 47 seconds.
-                But that single number of the average is already hiding the
-                variability in journey times.
+                The data estimated that in 2025, a 10 kilometre drive in the
+                city took an average of 26 minutes and 47 seconds.
+            </p>
+
+            <p>
+                But that single number is already hiding the variability in
+                journey times.
                 At 4am, the same 10 kilometres takes around 18 minutes.
                 At 4pm on a weekday, it takes more than twice as long at around
                 37 minutes.
@@ -131,12 +136,9 @@
                 <term>range</term>: the difference between the largest and
                 smallest values.
                 Here, the range of journey times across the day is roughly
-                <md>
-                    37 -18 = 19
-                </md>
-                minutes.
-                This is a very useful starting point to getting an idea about
-                the overall variability.
+                <c>37 - 18 = 19</c>.
+                This is a very useful starting point to gauge an overall idea
+                about the variability.
             </p>
 
             <p>
@@ -160,11 +162,9 @@
             </p>
 
             <p>
-                As we have seen, averages alone do not capture the full extent
-                of variability.
-                The variability can also be captured through various graphics.
-                For example, the heatmap below shows journey times across every
-                hour of every day of the week, averaged across 2025.
+                Variability can also be captured through various graphics; for
+                example, <xref ref="fig-tomtom-heatmap-week"/> shows the average
+                journey times every day of the week in 2025.
                 Each cell represents one two-hour slot on one day of the week;
                 darker red means longer journey times, lighter pink means
                 shorter.
@@ -205,9 +205,11 @@
             </figure>
 
             <p>
-                The same variation looks different when viewed spatially.
-                The maps below show average traffic conditions during the
-                morning and evening rush hours across the city.
+                The same variation can be viewed spatially.
+                <xref ref="fig-tomtom-map-morning"/> and
+                <xref ref="fig-tomtom-map-evening"/> show average traffic
+                conditions during the morning and evening rush hours across the
+                city.
                 Not all parts of Nairobi are equally congested — the central
                 business district and main arterial roads are consistently
                 darker, while the outer suburbs are lighter.
@@ -215,9 +217,8 @@
                 and evening: congestion concentrates inward as commuters arrive
                 in the morning, and spreads outward as they leave in the
                 evening.
-                The same underlying variation in journey times, measured as an
-                average above, is now being shown as a distribution across space
-                rather than across time.
+                The same underlying variation in journey times is now being
+                shown as a distribution across space rather than across time.
             </p>
 
             <figure xml:id="fig-tomtom-map-morning">
@@ -276,17 +277,16 @@
             </figure>
 
             <p>
-                With this data, different ways of observing and summarising the
-                same underlying variability in Nairobi journey times are
-                possible.
+                There are different ways of observing and summarising the same
+                underlying variability in Nairobi journey times.
                 Each measurement reveals something the others do not.
                 The average gives you a centre; the range tells you how far the
                 extremes are from each other; the heatmap shows you where in the
                 day variation is concentrated; the spatial map shows you where
                 in the city it is concentrated.
                 The rest of this chapter introduces the formal measures that
-                complement these visual summaries, and explains when to use each
-                one.
+                complement these visual summaries, and considers when to use
+                each one.
             </p>
 
             <insight xml:id="insight-what-you-measure">
@@ -300,9 +300,8 @@
                     30-minute to two-hour range for a specific surface-road
                     journey in Nairobi) are measuring routes that do not use the
                     Expressway at all.
-                    These two sources are measuring the same thing, and the
-                    apparent variability in journey times is different depending
-                    on which roads you include.
+                    The apparent variability in journey times is different
+                    depending on which roads you include.
                 </p>
 
                 <p>
@@ -350,18 +349,19 @@
 
         <introduction>
             <p>
-                The previous section introduced the idea of variability and why
-                it matters.
-                This section works through how to measure it, using example.
-                We will start with the data itself, then build up through
-                several measures of variability, each one revealing something
-                slightly different about the spread of the data.
+                The previous section introduced the idea of variability its
+                importance, and how to observe it.
+                This section works through how to measure it.
+                We will start with some data, then build up through several
+                measures of variability, each one revealing something slightly
+                different about the spread of the data.
             </p>
 
             <p>
                 We use the <c>gapminder</c> package, which is already installed
-                from <xref ref="sec-gapminder"/>.
-                We filter to African countries only:
+                from <xref ref="sec-gapminder"/>
+                <fn>To install the <c>gapminder</c> package, use <c>install.packages("gapminder")</c>.</fn>.
+                Then, for this example, we filter to African countries only:
             </p>
 
             <program language="r">
@@ -369,7 +369,7 @@
         library(tidyverse)
         library(gapminder)
 
-        africa &lt;- gapminder %&gt;% filter(continent == "Africa")
+        africa &lt;- gapminder %&gt;% dplyr::filter(continent == "Africa")
 
         head(africa)
         #&gt; # A tibble: 6 x 6
@@ -385,10 +385,20 @@
             </program>
 
             <p>
-                Each row is one country in one year.
+                Each row gives the life expectancy at birth ( <c>lifeExp</c> ),
+                the population ( <c>pop</c> ), and the GDP per capita (
+                <c>gdpPercap</c> ) for a single country from 1952 to 2007.
+                Data is given for 12 years, every five years, for 52 African
+                countries.
                 The variable we will focus on is the life expectancy at birth,
                 in years ( <c>lifeExp</c> ).
-                A quick summary shows some statistics on the variability:
+                A quick summary of <c>lifeExp</c> shows from 1952 to 2007,
+                across all African countries, the minimum life expectancy is
+                23.6 years; and the maximum is 76.4 years.
+                The mean is 48.9 years.
+                Those three numbers alone do not tell you much about the shape
+                of the variation.
+                That is what the rest of this section is for.
             </p>
 
             <program language="r">
@@ -398,25 +408,17 @@
         #&gt;   23.60   42.37   47.79   48.87   54.41   76.44
                 </code>
             </program>
-
-            <p>
-                The minimum life expectancy across all African countries and
-                years is 23.6 years; the maximum is 76.4.
-                The mean is 48.9.
-                But those three numbers alone do not tell you much about the
-                shape of the variation.
-                That is what the rest of this section is for.
-            </p>
         </introduction>
 
-                <subsection xml:id="ss-range">
+        <subsection xml:id="ss-range">
             <title>The Range</title>
 
             <p>
                 The simplest measure of variability is the <term>range</term>:
                 the difference between the largest and smallest values in the
                 dataset.
-                In R:
+                In R, we can compute the range of life expectancy for each year
+                across all African countries like this:
             </p>
 
             <program language="r">
@@ -445,61 +447,58 @@
             </program>
 
             <p>
-                The range is easy to understand and easy to compute.
+                The range is straightforward to understand and to compute.
                 In 1952, the gap between the country with the highest life
                 expectancy and the lowest was 21.4 years.
-                By 2007 that had grown to 40 years.
-                In other words, in 2007 one country within Africa had a life
-                expectancy more than 40 years longer than another.
+                By 2007 that had grown to 40 years — meaning one African country
+                had a life expectancy more than 40 years longer than another.
+                We can find out which countries sit at each extreme:
             </p>
 
-            <p>
-                The increasing range can be visualised in
-                <xref ref="fig-ch9-africa-boxplot-years"/> too, where the gap
-                between the top and bottom of each boxplot widens noticeably
-                from left to right
-            </p>
+            <program language="r">
+                <code>
+africa %&gt;%
+  dplyr::group_by(year) %&gt;%
+  dplyr::summarise(
+    max_country = country[which.max(lifeExp)],
+    max_lifeExp = max(lifeExp),
+    min_country = country[which.min(lifeExp)],
+    min_lifeExp = min(lifeExp),
+    range       = max(lifeExp) - min(lifeExp)
+  ) %&gt;%
+  dplyr::filter(year %in% c(1952, 2007))
 
-            <p>
-                Look at 1992: the range jumps to 52.5 years.
-                That is almost entirely Rwanda, a single country whose life
-                expectancy had collapsed to 23.6 years, far below every other
-                country on the continent, pulling the minimum down and the range
-                up dramatically.
-                By 1997, once the immediate crisis had passed, the range fell
-                back to 40.9.
-            </p>
-
-            <p>
-                This illustrates the main weakness of the range: it depends
-                entirely on the two most extreme values.
-                One unusual country (such as Rwanda in 1992, or Eswatini at the
-                height of the HIV/AIDS epidemic) can dramatically change the
-                range, even if every other country in the dataset is clustered
-                tightly together.
-                The range tells you about the extremes, not about the typical
-                spread.
-                This is why the interquartile range was developed.
-            </p>
+#&gt; # A tibble: 2 x 6
+#&gt;    year max_country max_lifeExp min_country min_lifeExp range
+#&gt;   &lt;int&gt; &lt;chr&gt;             &lt;dbl&gt; &lt;chr&gt;             &lt;dbl&gt; &lt;dbl&gt;
+#&gt; 1  1952 Reunion            52.7 Sierra Leone       30.3  21.4
+#&gt; 2  2007 Reunion            76.4 Swaziland          39.6  40.0
+                </code>
+            </program>
         </subsection>
 
-                <subsection xml:id="ss-boxplot-variability">
+        <subsection xml:id="ss-boxplot-variability">
             <title>Visualising Variability: the Boxplot</title>
 
             <p>
-                Variance, standard deviation, and CV are all
-                <term>point statistics</term>: single numbers that summarise the
-                spread of the data.
-                While useful, they do not show the shape of the distribution:
-                whether values cluster in the middle or spread evenly, whether
-                the data is skewed, or whether there are unusual outliers.
+                The range captures the full extent of the data, but it is built
+                from the only two values and tells you nothing about what
+                happens in between.
+                While useful, it does not show the shape of the distribution:
+                are most countries clustered near the middle, or spread evenly
+                across the full range?
+                Is the distribution skewed toward the top or the bottom?
+                Are there unusual outliers pulling the extremes apart while
+                everyone else sits close together?
+                The range cannot answer any of these questions, but a
+                <term>boxplot</term> can display the full distribution of the
+                data.
             </p>
 
             <p>
-                A <term>boxplot</term> shows all of this at once.
-                It displays the five-number summary with the minimum, first
-                quartile (Q1), median, third quartile (Q3), and maximum as a box
-                with whiskers.
+                A <term>boxplot</term> displays the five-number summary with the
+                minimum, first quartile (Q1), median, third quartile (Q3), and
+                maximum as a box with whiskers.
                 It additionally marks any outliers as individual points.
                 Here is the boxplot for life expectancy across African countries
                 in 2007:
@@ -509,9 +508,7 @@
                 <caption>
                     Life expectancy across African countries in 2007, shown as a
                     boxplot with the five-number summary labelled.
-                    The dot below the lower whisker is Swaziland (now Eswatini),
-                    whose life expectancy was severely reduced by the HIV/AIDS
-                    epidemic.
+                    The dot below the lower whisker is Swaziland (now Eswatini).
                 </caption>
 
                 <image source="images/ch9_africa_boxplot_2007.png" width="70%">
@@ -531,21 +528,24 @@
             </figure>
 
             <p>
-                Reading this boxplot: the median life expectancy across African
-                countries in 2007 was around 71.9 years.
-                In 2007, the life expectancy in African countries varied
-                considerably: half of all countries fell between roughly 57.2
-                and 76.4 years (the box).
-                The whiskers extend to the most extreme non-outlier values.
-                The single dot below the lower whisker is Eswatini (now
-                Eswatini) at 39.6 years, driven almost entirely by the HIV/AIDS
-                epidemic at its peak.
-                This is a real event, visible as an outlier because its cause
-                was so severe and so specific to that country.
+                The boxplot shows the range from 39.6 to 76.4 years, but it also
+                gives much more.
+                The box itself spans from Q1 (57.2 years) to Q3 (76.4 years),
+                meaning half of all African countries had life expectancies
+                within that range in 2007.
+                The median sits at 71.9 years.
+                The whiskers extend to the most extreme values that are not
+                considered outliers.
+                And the single dot below the lower whisker is a country whose
+                life expectancy is so far below the rest of the distribution
+                that it registers as an outlier.
+                An outlier means simply that the value is unusually far from the
+                bulk of the data, given the spread of the rest of the
+                distribution.
             </p>
 
             <p>
-                We can verify which country is at the bottom:
+                We can verify which country is this outlier:
             </p>
 
             <program language="r">
@@ -572,47 +572,57 @@
                 <title>What to do with outliers?</title>
 
                 <p>
-                    As always, it depends on the context and the cause - like
-                    with missing data.
+                    Like with missing data, how we treat outliers depends on the
+                    context and the cause.
                 </p>
 
                 <p>
-                    If an outlier is a genuine data error, such as having an
-                    adult with a height of 162m, then it is good practice to
-                    verify what the correct value should be and fix it.
-                    If it cannot be verified, it is reasonable to remove it from
-                    the dataset.
-                    But, removing an outlier simply because it is inconvenient
-                    or makes the data look messy is not good practice.
+                    Some outliers are clearly data errors.
+                    In this dataset, a negative life expectancy, or a life
+                    expectancy of 200 years would be impossible as no such
+                    values exist in reality.
+                    If one appeared in the data it would almost certainly be a
+                    typo or a unit error.
+                    In that case, it is good practice to verify what the correct
+                    value should be and fix it.
+                    If it cannot be verified, it is reasonable to remove it.
+                    But removing an outlier simply because it is inconvenient or
+                    makes the data look messier is not good practice.
                 </p>
 
                 <p>
-                    In October 1987, a weather forecaster on the BBC dismissed a
+                    In October 1987, a weather forecaster on the BBC dismissed
                     concerns about an approaching storm, saying there was
                     nothing to worry about.
                     Hours later, the most destructive storm to hit southern
                     England in three centuries caused billions of pounds of
                     damage and killed eighteen people.
                     The forecasting models had flagged an unusual pressure
-                    reading, but this was treated as noise rather than as real.
+                    reading, but it was treated as noise rather than as real.
                     The outlier was the story.
                 </p>
 
                 <p>
-                    Eswatini's life expectancy in 2007 is an outlier in the same
-                    sense: not a data error, but a real event with a real cause.
+                    Eswatini's life expectancy of 39.6 years in 2007 is an
+                    outlier in the same sense.
+                    Eswatini was one of the countries most severely affected by
+                    the HIV/AIDS epidemic.
+                    By 2007, adult HIV prevalence was estimated at over 25%,
+                    among the highest in the world, and life expectancy had
+                    fallen dramatically from what it had been two decades
+                    earlier.
+                    The value is shocking precisely because it is true.
                     Removing it would make the distribution look tidier and the
-                    standard deviation smaller.
-                    But, it would erase the HIV/AIDS epidemic in Eswatini from
-                    the data.
+                    standard deviation smaller, but it would erase the HIV/AIDS
+                    epidemic in Eswatini from the data entirely.
                     The right response to an outlier is always to ask why it is
-                    there.
-                    It can be an error, but it can be one of the most
-                    interesting parts of the dataset.
+                    there: It can be an error, but it can also be an important
+                    part of the story.
                 </p>
             </insight>
 
             <p>
+                <xref ref="fig-ch9-africa-boxplot-2007"/> displays just 2007.
                 We can look at how variability changed across years, displaying
                 the same boxplot repeated for each year, with Kenya highlighted:
             </p>
@@ -679,41 +689,60 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
             </figure>
 
             <p>
-                The widening boxes over time tell the same story as the
-                increasing standard deviation, but now you can visualise it.
-                The median life expectancy across African countries rises
-                steadily from 1952 through to the late 1980s/90s, then stalls
-                and dips.
-                In the late 1980s, the boxes start to plateau, and in the late
-                1990s, the whiskers begin to stretch further downward,
-                potentially from the impact of the HIV/AIDS epidemic.
-                In 1992, a single orange point appears far below the rest.
-                This is Rwanda, whose life expectancy had collapsed to around 23
-                years, the lowest of any country in the dataset.
-                This was the period surrounding the Rwandan genocide of 1994,
-                and the violence and displacement of the years immediately
-                before it.
-                It registers in the data as a stark outlier, a single point
-                sitting far beneath every other country on the continent.
+                The widening range of life expectancy across African countries
+                identified in <xref ref="ss-range"/> can be seen in
+                <xref ref="fig-ch9-africa-boxplot-years"/>, where the gap
+                between the top and bottom of each boxplot widens noticeably
+                from left to right.
+                The spike in the range in 1992 identified in
+                <xref ref="ss-range"/> is visible here too as a single orange
+                point sitting far below every other country on the chart.
+                That point is Rwanda, whose life expectancy had collapsed to
+                around 23 years — the lowest of any country in the dataset — in
+                the period surrounding the genocide of 1994 and the violence and
+                displacement of the years immediately before it.
                 We saw this same point when we animated the Gapminder data in
-                <xref ref="ch-visualising-multidimensional-data"/> and confirmed
-                this variability is not a data error.
+                <xref ref="ch-visualising-multidimensional-data"/>.
             </p>
 
             <p>
-                Kenya's trajectory, shown by the dark teal line, shows
-                concretely how an individual country's experience can reflect
-                broader continental trends.
+                The range alone cannot tell you whether the 1992 spike reflects
+                one country in crisis or a broad deterioration across the
+                continent, but a boxplot can.
+                The boxes and whiskers for 1992 look much like those for 1987 —
+                most African countries continued on much the same trajectory.
+                The single orange point sitting far below everything else is
+                just one country, and the gap between that point and the lower
+                whisker makes clear that it is an outlier rather than a
+                reflection of the overall distribution.
+                This is a weakness of the range: an outlier can dramatically
+                change the summary even if every other country is clustered
+                tightly together.
+            </p>
+
+            <p>
+                The boxes themselves tell a richer story.
+                The widening boxes over time show an increase in variability
+                across African countries over the 55-year period.
+                The median life expectancy across African countries rises
+                steadily from 1952 through to the late 1980s, then stalls.
+                In the late 1990s, the whiskers begin to stretch further
+                downward as the HIV/AIDS epidemic takes hold in southern Africa.
+            </p>
+
+            <p>
+                Kenya's trajectory, shown by the dark teal line, illustrates how
+                an individual country's experience can reflect broader
+                continental trends.
                 Life expectancy rises consistently from 1952 to 1987, tracking
                 close to the continental median.
                 Then it falls, steeply, through the 1990s before recovering in
                 the 2000s.
-                By 2007, Kenya is back above the continental median, but the dip
-                is visible in the data as clearly as it was in lived experience.
+                By 2007, Kenya is back above the continental median, but not
+                recovered to its 1992 levels.
             </p>
         </subsection>
 
-        
         <subsection xml:id="ss-iqr">
             <title>The Interquartile Range</title>
 
@@ -723,17 +752,8 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
                 That width is called the <term>interquartile range</term> (IQR).
                 It measures the spread of the middle 50% of the data, which is
                 the range within which the central half of all values fall.
-            </p>
-
-            <p>
-                The IQR is more <term>robust</term> than the standard deviation,
-                meaning it is less affected by outliers.
-                Eswatini's extreme value pulls the standard deviation up, but it
-                has no effect on the IQR because the IQR only cares about the
-                middle half of the data.
-                This makes the IQR a better measure of variability when you have
-                skewed data or known outliers that you do not want to dominate
-                the summary.
+                As a result, it is not affected by outliers or extreme values,
+                unlike the range.
             </p>
 
             <program language="r">
@@ -761,22 +781,12 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
             </program>
 
             <p>
-                Both the IQR and SD tend to increase over time, consistent with
-                growing divergence between African countries.
-                But notice that the IQR is generally larger than the SD in the
-                early years, and smaller in the later years.
-                This reflects the growing influence of the outliers in the 1990s
-                and 2000s which pull the SD up more than the IQR, because the SD
-                is sensitive to their extreme values while the IQR is not.
-            </p>
-
-            <p>
                 We can visualise this increase in the IQR by looking at
                 <xref ref="fig-ch9-africa-boxplot-years"/>.
-                The boxes get taller over time because Q1 and Q3 move further
+                The boxes get wider over time because Q1 and Q3 move further
                 apart.
-                The IQR in 1952 was around 7 years; by 2007 it had almost
-                doubled to 14.5.
+                The IQR in 1952 was 7.4 years; by 2007 it had almost doubled to
+                14.5.
             </p>
         </subsection>
 
@@ -784,7 +794,7 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
             <title>Variance and Standard Deviation</title>
 
             <p>
-                The most common way to measure variability is the
+                A common way to measure variability is the
                 <term>standard deviation</term>.
                 This single number that summarises how spread out the values are
                 around the mean.
@@ -806,26 +816,26 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
             <p>
                 We can visualise what variance actually means using the African
                 life expectancy data.
-                The same variance visualisation for 1952 and 2007 are shown side
-                by side in <xref ref="fig-ch9-variance-squares"/>.
-                Here, each country is shown as a point, with their respective
-                life expectancy for that year on the y axis.
-                The horizontal line in each panel sits at the mean life
-                expectancy for that year, and each square's area represents the
-                squared distance of one country from that mean.
-                Four countries are highlighted in orange to illustrate different
-                cases.
-            </p>
-
-            <p>
+                <xref ref="fig-ch9-variance-squares"/> shows 1952 and 2007 side
+                by side.
+                Each country is shown as a point, with the horizontal line
+                sitting at the continental mean for that year.
                 Each square's side length equals the distance between that
                 country's life expectancy and the mean, so its area equals the
                 squared distance.
-                The variance Life Expectancy in 2007 is simply the average area
-                of all squares (grey and orange combined) in the right hand
-                panel.
-                Countries far from the mean contribute large squares; countries
-                close to the mean contribute small ones.
+                Four countries are highlighted in orange to illustrate different
+                cases.
+                Variance is simply the average area of all those squares (grey
+                and orange combined) with countries far from the mean
+                contributing large squares and countries close to it
+                contributing small ones.
+                <fn>In practice, the variance is computed by dividing 
+  by <m>n - 1</m> rather than <m>n</m>, where <m>n</m> is the 
+  number of countries. This small technical adjustment makes the 
+  estimate more reliable when working with a sample rather than an 
+  entire population. For large datasets the difference is 
+  negligible, and the intuition remains the same: variance is the 
+  average squared distance from the mean.</fn>
             </p>
 
             <figure xml:id="fig-ch9-variance-squares">
@@ -875,13 +885,13 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
 
             <p>
                 Several things are immediately visible.
-                <ul>
+                <ol>
                     <li>
                         <p>
                             The squares are dramatically larger in 2007 than in
                             1952.
-                            This shows that the variance has increased
-                            substantially, without any calculation needed.
+                            This shows without any calculation that the variance
+                            has increased substantially from 1952 to 2007.
                         </p>
                     </li>
 
@@ -889,8 +899,8 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
                         <p>
                             The mean line has shifted upward, from around 39
                             years in 1952 to around 55 years in 2007.
-                            Countries improved overall, but they spread apart as
-                            they did so.
+                            Most countries improved their life expectancy, but
+                            they spread apart from each other as they did so.
                         </p>
                     </li>
 
@@ -898,25 +908,25 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
                         <p>
                             The four highlighted countries tell very different
                             stories.
-                            <ol>
+                            <ul>
                                 <li>
                                     <p>
-                                        Life Expectancy in Botswana was far
-                                        above the mean in 1952.
-                                        Life Expectancy increased in Botswana
-                                        from 1952 to 2007, but, at a slower rate
-                                        than the continental average increase.
-                                        Hence, in 2007, the Life Expectancy in
-                                        Botswana was below the continental
-                                        average.
+                                        Botswana sat well above the continental
+                                        mean in 1952.
+                                        By 2007 it had fallen below it because
+                                        other countries improved their life
+                                        expectancy at a faster rate.
+                                        Botswana was overtaken by the rising
+                                        continental average, pulled down further
+                                        by the HIV/AIDS epidemic that hit it
+                                        particularly hard.
                                     </p>
                                 </li>
 
                                 <li>
                                     <p>
                                         Kenya sits close to the mean in both
-                                        years, just slightly below it in 2007 —
-                                        its square is moderate.
+                                        years — its square is moderate.
                                     </p>
                                 </li>
 
@@ -934,19 +944,19 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
 
                                 <li>
                                     <p>
-                                        Swaziland sits far below the mean in
-                                        2007, with by far the largest orange
-                                        square in the right panel.
+                                        Swaziland (now Eswatini) sits far below
+                                        the mean in 2007, with by far the
+                                        largest orange square in the right
+                                        panel.
                                         Its contribution to the overall variance
-                                        is enormous — a single country whose
-                                        square dwarfs those of most others
-                                        combined.
+                                        is so large that its square dwarfs those
+                                        of most others combined.
                                     </p>
                                 </li>
-                            </ol>
+                            </ul>
                         </p>
                     </li>
-                </ul>
+                </ol>
             </p>
 
             <p>
@@ -984,28 +994,11 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
                 doubles to 9.63 years by 2007.
                 The numbers confirm what the image showed: the squares got
                 bigger.
-                But the table also reveals something the two-panel image does
-                not: the spike around 1992.
-                The standard deviation jumps from 7.86 in 1987 to 9.46 in 1992 —
-                its largest single-year increase in the entire dataset.
-                The figure below shows why.
-            </p>
-
-            <p>
-                The three panels show our 1952 and 2007 plot, now with 1992 in
-                it (centre).
-                All three have Rwanda highlighted.
-                In the centre panel, the picture changes completely.
-                Rwanda's orange square dominates the panel.
-                This is a single country whose life expectancy had collapsed to
-                23.6 years in the period surrounding the genocide, producing a
-                squared distance from the mean so large that it pushed the
-                variance up more than the cumulative increase of the previous
-                decade.
-                The standard deviation then dips slightly to 9.10 in 1997 as
-                Rwanda begins to recover, before rising again as Swaziland and
-                other southern African countries are pulled downward by HIV/AIDS
-                (right panel).
+                But the table also displays that Rwandan spike in the standard
+                deviation in 1992.
+                <xref ref="fig-ch9-rwanda-variance"/> visualises this spike,
+                showing the 1952 and 2007 plots alongside the 1992 plot in the
+                centre.
             </p>
 
             <figure xml:id="fig-ch9-rwanda-variance">
@@ -1043,19 +1036,63 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
             </figure>
 
             <p>
-                Variance is sensitive to outliers precisely because squaring the
-                distances gives disproportionate weight to points far from the
-                mean.
-                Rwanda's squared distance from the mean in 1992 is enormously
-                larger than its simple distance: Squaring amplifies it.
-                This means the variance captures the full impact of extreme
-                values, but it also means that a single unusual country can
-                dominate the summary statistic — as Rwanda did in 1992, and
-                Eswatini did in 2007.
-                We will return to this when we discuss the interquartile range,
-                which is designed specifically to be robust to outliers like
-                these.
+                <xref ref="fig-ch9-rwanda-variance"/> shows the squared distance
+                of each country, with Rwanda highlighted.
+                In 1992, Rwanda's orange square dominates the panel when their
+                life expectancy collapses to 23.6 years.
+                This produces a squared distance from the mean so large that it
+                pushes the variance up more than the cumulative increase of the
+                previous decade.
+                The standard deviation then dips slightly to 9.10 in 1997 as
+                Rwanda begins to recover, before rising again as some African
+                countries are pulled downward possibly by the HIV/AIDS epidemic
+                (right panel).
             </p>
+
+            <insight xml:id="insight-iqr-vs-sd">
+                <title>
+                    Variance, standard deviation, and IQR: which to use?
+                </title>
+
+                <p>
+                    Variance is computed by squaring the distances from the mean
+                    before averaging them, which gives disproportionate weight
+                    to points that are far away.
+                    For example, Rwanda's life expectancy in 1992 was around 29
+                    years below the continental mean — already a large distance.
+                    Squaring that gives around 841, which heavily influences the
+                    variance.
+                    As the square root of the variance, standard deviation
+                    inherits some of this sensitivity to outliers.
+                </p>
+
+                <p>
+                    The IQR is not affected in this way.
+                    It ignores everything outside the middle 50% of the data.
+                    Eswatini's life expectancy of 39.6 years in 2007 pulls the
+                    standard deviation up substantially, but has no effect on
+                    the IQR at all.
+                    This is why the IQR is generally larger than the SD in the
+                    early years, but smaller in the later years: as outliers
+                    grow more extreme through the 1990s and 2000s, the SD is
+                    pulled upward while the IQR remains anchored to the middle
+                    of the distribution.
+                </p>
+
+                <p>
+                    Neither measure is universally better.
+                    The standard deviation captures the full spread of the data,
+                    including the impact of extreme values, which matters if
+                    those extremes are real and important as they are here.
+                    The IQR gives a more stable summary of where most of the
+                    data sits, unaffected by a single country in crisis.
+                    The right choice depends on what you are trying to
+                    communicate: if Eswatini's situation is the point, use the
+                    standard deviation.
+                    If you want to describe the typical spread among African
+                    countries without letting one outlier dominate, use the IQR.
+                </p>
+            </insight>
 
             <p>
                 We can visualise the increase in standard deviation:
@@ -1121,7 +1158,7 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
                 of the variance, but where it is coming from.
             </p>
         </subsection>
-        
+
         <subsection xml:id="ss-cv">
             <title>Coefficient of Variation</title>
 
@@ -1130,9 +1167,14 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
                 within the same dataset.
                 But what if you want to compare variability across datasets with
                 very different means?
-                A standard deviation of nine years means something very
-                different if the average life expectancy is 50 years versus 80
-                years.
+                A standard deviation of 9 years means something very different
+                if the average life expectancy is 38 years versus 54 years,
+                which is exactly the situation we have when comparing 1952 to
+                2007 in <xref ref="fig-ch9-variance-squares"/>.
+                The standard deviation nearly doubled over that period, but the
+                mean increased too.
+                Some of what looks like growing variability might simply reflect
+                the fact that the whole distribution shifted upward.
             </p>
 
             <p>
@@ -1169,7 +1211,7 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
 
             <p>
                 We previously saw that the standard deviation roughly doubled
-                from 1952 to 2007, but here the CV only increased from 13.2% to
+                from 1952 to 2007, but here the CV only increases from 13.2% to
                 17.6%.
                 This is because the mean life expectancy also increased
                 substantially over the same period.
@@ -1180,14 +1222,14 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
             </p>
 
             <p>
-                However, limitations to the CV are that it assumes the data is
-                roughly symmetric around the mean, and it behaves poorly when
-                the mean is close to zero.
-                For life expectancy data, which is always positive and not too
-                skewed, it works well.
+                The CV works well for life expectancy data, which is always
+                positive and not too skewed.
+                It becomes less useful when the variable is highly skewed or
+                when the mean is close to zero.
+                If close to zero, a small change in the mean produces a large
+                change in the CV, making it an unstable and misleading summary.
             </p>
         </subsection>
-
 
         <subsection xml:id="ss-least-squares">
             <title>Least Squares: Measuring Variability Around a Line</title>
@@ -1202,11 +1244,11 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
 
             <p>
                 Consider Kenya's population over time.
-                There is a clear upward trend, but the data does not fall
-                perfectly on a straight line.
-                Each observed value sits some distance above or below the line.
-                Those distances are called <term>residuals</term>.
-                The plot below shows them as orange arrows:
+                There is a clear upward trend, but each (or most!) observed
+                value sits around the trend line rather than on it.
+                The distance from the observed value to the line are called
+                <term>residuals</term>, and they are given as orange arrows in
+                <xref ref="fig-ch9-kenya-residuals"/>.
             </p>
 
             <figure xml:id="fig-ch9-kenya-residuals">
@@ -1237,18 +1279,18 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
                 line is as close to the data as possible.
                 Specifically, it minimises the sum of the <em>squared</em>
                 residuals.
-                Why squared?
-                First, squaring makes all residuals positive (so positive and
-                negative errors do not cancel each other out).
-                Second, squaring gives more weight to large residuals: a point
-                that is far from the line contributes much more to the total
-                than a point that is close.
+                Like with the variance, squaring makes all residuals positive
+                (so positive and negative errors do not cancel each other out).
+                Furthermore, squaring gives more weight to large residuals: a
+                point that is far from the line contributes much more to the
+                total than a point that is close.
                 This means the line is pulled toward fitting the most extreme
                 deviations, rather than ignoring them.
             </p>
 
             <p>
-                The squared residuals can be visualised literally as squares.
+                Like variance, the squared residuals can be visualised literally
+                as squares.
                 The side length of each square equals the residual for that
                 point; the area equals the squared residual.
                 The line of best fit is the one that minimises the total area of
@@ -1319,9 +1361,9 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
 
             <p>
                 We have now seen several measures of variability.
-                They are not interchangeable — each captures something slightly
-                different, and each has situations where it is the right choice
-                and situations where it is not.
+                Each captures something slightly different, and each has
+                situations where it is the right choice and situations where it
+                is not.
             </p>
 
             <tabular halign="left">
@@ -1400,9 +1442,9 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
             </p>
         </subsection>
     </section>
-
     <exercises xml:id="exercises-ch9">
         <title>Exercises</title>
+
         <exercise xml:id="ex-variability-measures">
             <statement>
                 <p>
