@@ -30,151 +30,286 @@
   <section xml:id="sec-intro-data-shapes">
     <title>The Same Information, the Wrong Shape</title>
 
-    <p>
-      In <xref ref="ch-cleaning-recoding"/>, we told the story of the Ebola
-      outbreak in West Africa from 2014 to 2016 - the largest ever recorded,
-      with more than 11,000 deaths across Guinea, Liberia, and Sierra Leone.
-      We focused there on the problems of data quality: duplicate records,
-      missing values, inconsistent variable names, paper forms degraded by
-      chlorine disinfection, data that had to be read through a fence and copied
-      by hand.
-      Those problems were real and serious.
-      But there was a second, deeper problem running alongside all of them, and
-      it is the one this chapter is about.
-    </p>
+    <introduction>
+      <p>
+        In <xref ref="ch-cleaning-recoding"/> we followed one organisation
+        managing data across five Ebola treatment units.
+        That story was about data quality: forms degraded by chlorine, values
+        misheard across a fence, the same symptom written down under three
+        different names.
+        Every one of those problems lived inside a single record.
+      </p>
 
-    <p>
-      As the outbreak grew, Sierra Leone set up District Ebola Response Centres
-      (DERCs) within each district to manage the local response.
-      Each centre was responsible for tracking cases and contacts in its area:
-      who had tested positive, who had been in contact with them, who had died,
-      what the laboratory results showed.
-      This was the right structure for managing a geographically spread
-      outbreak.
-      Local centres could respond quickly to what was happening in their area,
-      without waiting for direction from the capital.
-      The data collection happened close to the ground, where the cases were.
-    </p>
+      <p>
+        Owada et al.
+        (2016) describe a different problem: a system in which the information
+        needed to run the response existed, but it had been recorded in shapes
+        that would not fit together, so could not be combined.
+      </p>
+    </introduction>
 
-    <p>
-      In practice, the information flowing into each DERC was substantial and
-      varied.
-      Case investigation forms (CIFs) were filled in by surveillance officers in
-      the field and brought back to the DERC, where data managers entered them
-      into the Epi Info VHF database.
-      Blood samples were accompanied by a copy of the CIF to the laboratory.
-      But DERCs also had to manage a continuous stream of other information on a
-      daily basis: live alerts recording who had been seen and whether a sample
-      had been taken; death alerts noting whether a swab had been collected and
-      a burial team sent; quarantined households and their food supply; and
-      confirmed EVD positive case counts from laboratory results in health
-      facilities.
-      Most DERCs handled this by building manual dashboards — physical displays
-      showing the current situation in their district — and then transferring
-      the information into separate Microsoft Excel sheets or Word documents.
-    </p>
+    <subsection xml:id="ss-ebola-two-systems">
+      <title>One patient, two records</title>
 
-    <p>
-      The result was that each DERC had data, often a great deal of it.
-      But there was no agreed method for how to structure that data across
-      districts.
-      Each centre had their own format; for example, own column names, own
-      definitions, own sense of what a row in a spreadsheet should represent.
-      In one district, for example, a row might have meant a patient; in
-      another, it might have meant a day, with columns recording how many new
-      cases and deaths occurred on that day.
-      In a third, confirmed and suspected cases might be on separate sheets
-      entirely.
-      None of these formats was wrong - each made sense to the team that
-      designed it given the forms they had and the questions they were being
-      asked locally.
-      But they were incompatible with each other in ways that turned out to
-      matter enormously.
-    </p>
+      <p>
+        Each Ebola case in Sierra Leone was supposed to be recorded on a paper
+        case investigation form (CIF), filled in by a surveillance officer in
+        the field.
+        That form was then entered into the Epi Info VHF database, a tool built
+        by the US Centers for Disease Control specifically for outbreak case and
+        contact tracing.
+        In principle, several people could enter data at once, and district
+        databases could be merged into a national one.
+      </p>
 
-    <p>
-      When the national response team in Freetown tried to combine the district
-      files into a single national picture, the formats did not fit together.
-      A file where a row means a patient and a file where a row means a day
-      cannot simply be stacked because the rows mean different things.
-      A column called <c>EVD_positive</c> in one file might or might not be the
-      same as <c>confirmed_cases</c> in another.
-      Before anyone could count anything at the national level, someone had to
-      answer a prior question that was not agreed on before the outbreak
-      started: what shape should this data be in?
-    </p>
+      <p>
+        But, in practice, it was not as simple.
+        There are three main things that went wrong.
+        (1) Most district data managers had never used the software before.
+        (2) Duplicate records, once created, were difficult to find and harder
+        to merge.
+        (3) And the paper forms routinely arrived at district response centres
+        days after the case was investigated, so the national database was never
+        fully current, even late in the outbreak.
+      </p>
 
-    <p>
-      Owada et al.
-      (2016) are direct about the consequences.
-      <q>Lack of consistency</q> in how data was structured across districts
-      <q>caused problems with merging and aggregating cases 
-    to report critical information.</q>
-      That critical information included things that sound basic: how many new
-      alerts were reported today?
-      How many new confirmed cases?
-      How many blood tests were processed, and what did they show?
-      How many deaths occurred in each district?
-      These are exactly the numbers a national response team needs to see every
-      day to decide where to send resources, where to open new treatment units,
-      and where the outbreak is accelerating.
-      Without them, decisions were being made blind, or on the basis of
-      incomplete aggregations that took days of manual work to produce and were
-      already out of date by the time they arrived.
-    </p>
+      <p>
+        However, the most consequential failure was quieter than any of these.
+        When a blood sample came back from the laboratory, the result was often
+        entered as a new record rather than added to the existing record for
+        that patient.
+        So now, one person, with one infection, had two rows in the same
+        database, with nothing linking them to show they were the same
+        individual.
+      </p>
 
-    <p>
-      The deeper consequence was that much of the data proved impossible to use
-      retrospectively either.
-      The authors conclude that
-      <q>much 
-    of the data has never found its way into any structured database 
-    and may never be recoverable.</q>
-      These are formats that were individually reasonable and collectively
-      useless at the scale the outbreak demanded.
-      Data that existed, that had been collected at enormous effort under
-      dangerous conditions, could not be used because no one had agreed in
-      advance on what shape it should take.
-    </p>
+      <p>
+        Alongside the Epi Info database, district teams kept a second, entirely
+        separate line list in Excel.
+        It was built mainly from laboratory sample results and held a subset of
+        the same information: age, sex, location, and the dates a sample was
+        collected, received, and tested.
+        Teams used it because it was faster for producing daily reports and
+        charts.
+        So a single patient might now exist in the national database, possibly
+        twice, and in a district spreadsheet, with no reliable way to tell which
+        entries described the same person between the two systems.
+      </p>
 
-    <p>
-      Two of Owada et al.'s recommendations go directly to this problem.
-      The first calls for regular data harmonisation meetings between district
-      monitoring and evaluation officers and national data managers — not just
-      during an emergency, but before one, so that when the crisis comes, the
-      formats are already agreed.
-      The second calls for training of local surveillance officers and data
-      clerks in how to collect and enter data in a standardised way.
-      Both recommendations are, at their core, about shape: agreeing in advance
-      what a row means, what a column is called, and how files from different
-      places will eventually be combined.
-      These are not technical niceties.
-      In the Ebola response, they were the difference between data that could be
-      used to fight an outbreak and data that could not.
-    </p>
+      <p>
+        Nothing here is a data quality failure in the sense of
+        <xref ref="ch-cleaning-recoding"/>.
+        But, the problem was structural: two systems collecting overlapping
+        information about the same people, with no agreed identifier and no
+        process for reconciling them.
+      </p>
+    </subsection>
 
-    <p>
-      This chapter is about data shape: what it means, why it matters, and the
-      operations that change it.
-      If the district response centres had all used the same format, appending
-      their files would have been trivial.
-      If lab results had shared a patient identifier with case records, merging
-      them would have been straightforward.
-      And if there had been a shared understanding of what shape the national
-      reporting needed, much of what was lost might have been recoverable.
-    </p>
+    <subsection xml:id="ss-ebola-districts">
+      <title>Every district its own shape</title>
 
-    <p>
-      <term>Sources:</term> Owada, K., Eckmanns, T., Kamara, K.O.B.
-      and Olu, O.O.
-      (2016).
-      <q>Epidemiological Data Management during an
-        Outbreak of Ebola Virus Disease: Key Issues and Observations from
-        Sierra Leone.</q>
-      <em>Frontiers in Public Health</em>, 4, 163.
-    </p>
+      <p>
+        As the outbreak grew, District Ebola Response Centres (DERCs) were set
+        up across the country.
+        Each was responsible for its own area: who had tested positive, who they
+        had been in contact with, who had died, what the laboratory said.
+        The data collection happened close to where the cases were, meaning that
+        local teams could act on what they saw without waiting for instructions
+        from the capital.
+      </p>
+
+      <p>
+        Each centre had to manage a continuous daily stream of information
+        beyond the case forms.
+        Live alerts recording who had been seen and whether a sample was taken.
+        Death alerts noting whether a swab was collected and a burial team
+        dispatched.
+        Quarantined households and their food supply.
+        Confirmed positive counts from health facilities.
+        Most centres tracked all of this on manual dashboards, physical displays
+        showing the current state of their district, then transferred the
+        numbers into Excel sheets or Word documents.
+      </p>
+
+      <p>
+        The result was that every district had data, but they had structured it
+        in their own way, with their own column names, and definitions, and
+        meanings.
+        For example, in one district's data set, a row might be a patient; but
+        in another a row might be a day, with columns counting how many new
+        cases and deaths occurred within it.
+        In a third, confirmed and suspected cases may sit on separate sheets
+        entirely.
+      </p>
+
+      <p>
+        It is worth being clear that no district was doing anything wrong here.
+        A team designing a spreadsheet for their own district's daily use has no
+        reason to anticipate how a national team will later want to combine it
+        with others.
+        The incompatibility only appeared when someone tried to put the files
+        together.
+      </p>
+
+      <p>
+        A file where a row is a patient and a file where a row is a day cannot
+        be stacked.
+        Placing one below the other produces a table in which the rows mean two
+        different things, and any count taken from it is meaningless.
+        A column called <c>EVD_positive</c> in one district's file and a column
+        called <c>confirmed_cases</c> in another's might hold the same thing or
+        might not, and there was no documentation to settle it.
+        Before the national team could count anything at all, someone had to
+        answer a question: what shape should this data be in?
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-ebola-cfr">
+      <title>The number that was wrong in both directions</title>
+
+      <p>
+        To see what this cost, follow a single number.
+        Of everyone who caught Ebola, what fraction died?
+        Epidemiologists call this the <term>case fatality rate</term>, and it is
+        about as fundamental as a number gets during an outbreak.
+        It tells you how deadly the disease is in this population, whether
+        treatment is helping, and whether the situation is improving or getting
+        worse.
+        It is confirmed deaths divided by confirmed cases.
+      </p>
+
+      <p>
+        Both halves of that fraction were unreliable, and they failed in ways
+        that pushed the answer in opposite directions.
+      </p>
+
+      <p>
+        Start with deaths: Confirming that a death was caused by Ebola required
+        a post-mortem mouth swab.
+        In areas that continued traditional burial practices, that swab was
+        frequently not taken.
+        Those deaths were real and were caused by Ebola, but they never entered
+        the count as confirmed.
+        Divide a count of deaths that is too low by a count of cases, and the
+        fraction comes out too small.
+        The outbreak looks less deadly than it is.
+      </p>
+
+      <p>
+        Now try to correct for that.
+        One reasonable fix is to calculate the fraction using only cases whose
+        outcome is known, either recovered or dead, ignoring everyone still in
+        treatment.
+        This removes the patients whose fate has not yet been decided.
+        But the two outcomes were not recorded on the same schedule.
+        A death could be entered the day it happened.
+        A recovery could only be entered once the patient's hospitalisation had
+        fully concluded, which took considerably longer.
+        At any given moment, the pool of cases waiting to be resolved therefore
+        contained more future deaths than the resolved cases suggested.
+        Restricting to known outcomes pushes the fraction too high.
+        The outbreak now looks more deadly than it is.
+      </p>
+
+      <p>
+        Underneath both calculations sat a third complication.
+        Before Ebola arrived, malaria already accounted for roughly 38% of
+        hospital admissions in Sierra Leone and about 30% of deaths in children
+        under five.
+        Malaria and Ebola share clinical features in their early stages.
+        That overlap plausibly delayed recognition of genuine Ebola cases, and
+        it also meant some malaria deaths risked being counted as Ebola deaths.
+        The same confusion moved the numbers in both directions, in different
+        places, at the same time.
+      </p>
+
+      <p>
+        Both answers were systematically biased, in opposite directions, by the
+        same underlying problem: records that described the same patient could
+        not be reliably linked and combined.
+        The death that needed to enter the numerator existed somewhere in the
+        laboratory records.
+        The case it belonged to existed somewhere in the case database.
+        Without a shared identifier to connect them, the fraction could not be
+        calculated correctly.
+      </p>
+
+      <p>
+        The national team drew the obvious conclusion.
+        The system built to hold the complete picture could not be trusted to
+        produce one, so for the rest of the outbreak they used laboratory data
+        for day-to-day situation reports instead.
+        The response to this was to stop relying on the case database for
+        routine reporting.
+        For the rest of the outbreak, analysts used laboratory data for
+        day-to-day situation reports instead.
+        A complete reconciliation of all case data was never finished.
+        When the outbreak ended, a large number of suspected cases remained
+        permanently unclassified, neither confirmed as Ebola nor ruled out.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-ebola-shape-lesson">
+      <title>Shape is a decision made before the data arrives</title>
+
+      <p>
+        Owada et al.
+        (2016) are direct about the cause.
+        <q>Lack of
+      consistency</q> in how data was structured across
+        districts
+        <q>caused problems with merging and aggregating cases to report
+      critical information.</q>
+        The critical information in question sounds almost mundane.
+        How many new alerts today?
+        How many new confirmed cases?
+        How many blood tests processed, and what did they show?
+        How many deaths in each district?
+        These are the numbers that decide where treatment units get built, where
+        contact tracers get sent, and where the response is losing ground.
+        When the underlying files cannot be combined automatically, producing
+        them at all becomes a manual exercise.
+      </p>
+
+      <p>
+        The loss was not only to the response as it happened.
+        The authors conclude that
+        <q>much of the data has never found its way into any
+  structured database and may never be recoverable.</q>
+        Data that was collected, at real cost and real risk, in formats that
+        were individually workable and collectively unusable.
+      </p>
+
+      <p>
+        Two of the paper's recommendations address this directly.
+        The first is regular data harmonisation meetings between district
+        monitoring and evaluation officers and national and external data
+        managers, to improve data quality and consistency at both levels.
+        The second is training for surveillance officers and data clerks in how
+        to collect and enter data.
+        Both are recommendations about shape: agreeing what a row means, what a
+        column is called, and how files from different places will eventually be
+        brought together.
+      </p>
+
+      <p>
+        This chapter is about the operations that bring data together, and about
+        the decisions that have to be made before those operations can work.
+        A shared understanding of what shape national reporting needed would
+        have made much of what was lost recoverable.
+      </p>
+
+      <p>
+        <term>Source:</term> Owada, K., Eckmanns, T., Kamara, K.O.B.
+        and Olu, O.O.
+        (2016).
+        <q>Epidemiological Data Management during an
+      Outbreak of Ebola Virus Disease: Key Issues and Observations
+      from Sierra Leone.</q>
+        <em>Frontiers in Public Health</em>, 4, 163.
+      </p>
+    </subsection>
   </section>
-  
   <!-- ================================================================= -->
   <!--  SECTION 2: the STACK question that exemplifies this              -->
   <!-- ================================================================= -->
@@ -195,7 +330,6 @@
       </p>
     </subsection>
   </section>
-
   <!-- ================================================================= -->
   <!--  SECTION 3: Applying and looking at different shapes              -->
   <!-- ================================================================= -->

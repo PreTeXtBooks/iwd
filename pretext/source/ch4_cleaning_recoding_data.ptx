@@ -49,316 +49,177 @@
 
     <introduction>
       <p>
-        From 2014 to 2016, an outbreak of Ebola virus disease swept through
-        Guinea, Liberia, and Sierra Leone.
-        There were more than 11,000 reported deaths — the largest Ebola epidemic
-        ever recorded.
+        From 2014 to 2016, the largest ever epidemic of Ebola virus disease
+        recorded swept through Guinea, Liberia, and Sierra Leone, killing more
+        than 11,000 people.
+        Fighting an epidemic at that scale depends on knowing, as close to real
+        time as possible, where cases are appearing, how fast they are growing,
+        and who each infected person has been in contact with.
       </p>
 
       <p>
-        Fighting an epidemic this size depends on knowing, as close to real time
-        as possible, where cases are appearing, how fast they are growing, and
-        who each infected person has been in contact with.
-        All of that depends on data.
-        Two independent accounts, written by people who worked inside the
-        response, describe how that data was managed at both the national level
-        and in individual treatment centres.
-        One of these accounts is very explicit about the consequence: the state
-        of the data management system
-        <q>may have 
-        contributed to the magnitude and long duration of the outbreak.</q>
-        This is a story about how failing to clean and reconcile data through
-        duplicate records, inconsistent values, and incomplete data may have
-        helped an epidemic run longer and grow larger, resulting in over 11,000
-        deaths.
-      </p>
-    </introduction>
-
-    <subsection xml:id="ss-ebola-two-systems">
-      <title>Two systems, neither reliable on its own</title>
-
-      <p>
-        Owada et al.
-        (2016) describe a national data management system built from two
-        parallel tools that were never properly reconciled with each other: The
-        Epi Info VHF line list database, and an Excel-based line list.
-      </p>
-
-      <p>
-        Every case was meant to be recorded on a paper "case investigation form"
-        (CIF).
-        This was to be filled in in the field, and then subsequently entered
-        into the <term>Epi Info VHF line
-        list database</term>, a tool
-        built by the US Centers for Disease Control specifically for outbreak
-        case and contact-tracing data.
-        In principle, it supported multiple people entering data at once and
-        merging district databases into a national one.
-        In practice, most district data managers were not experienced users of
-        the software, duplicate records were genuinely difficult to detect and
-        merge once created, and CIFs routinely arrived late at the district
-        response centres.
-        This meant the VHF database was never fully up to date, even late in the
-        outbreak.
-      </p>
-
-      <p>
-        To add, laboratory results and case investigation data were often
-        entered <em>independently</em> of each other instead of the lab result
-        being added to the existing associated case record.
-        This meant that the same case could end up as two separate database
-        entries, with no link to combine them together.
-      </p>
-
-      <p>
-        As well as the Epi Info database, district teams also kept a second,
-        entirely separate <term>Excel-based line list</term>.
-        This was built mainly from laboratory sample results and contained a
-        subset of the CIF variables like age, sex, location, and the dates a
-        sample was collected, received, and tested.
-        The district teams found that this was quicker to produce reports and
-        visualise the situation.
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-ebola-collection">
-      <title>Incomplete at the source</title>
-
-      <p>
-        Even when the systems worked as designed, the data was often incomplete.
-        Many CIF records had no date of onset, sex, age, and/or residence.
-        These are all gaps that the authors attribute to inadequate training and
-        supervision of surveillance officers under outbreak conditions.
-      </p>
-
-      <p>
-        In addition, the number of deaths from EVD were hard to pin down.
-        Confirming a death was EVD-related required a post-mortem mouth swab,
-        which was often not taken in areas that continued traditional burial
-        practices.
-        This meant that the count of <em>confirmed</em> EVD deaths likely
-        understated the true number.
-        In the other direction, before the outbreak, Sierra Leone was already
-        dealing with malaria severe enough to account for roughly 38% of
-        hospital admissions and about 30% of under-five deaths.
-        Importantly, malaria shares clinical features with EVD.
-        That overlap plausibly delayed recognition of genuine EVD cases, and
-        risked malaria deaths being misclassified as EVD deaths.
-        The same underlying data problem of incomplete, hard-to-verify records
-        pushed the death count in both directions at once, for different
-        reasons, in different places.
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-ebola-transmission">
-      <title>Lost between the form and the file</title>
-
-      <p>
-        The intended process was that two copies of the original CIF would be
-        produced for every death, and three copies for every suspected living
-        case: one to accompany the sample to the laboratory, one to the district
-        response centre, and for suspected cases, one to stay with the patient.
-        In the early period of the outbreak this process did not function
-        effectively.
-        Reporting of deaths from holding centres, community care centres and
-        treatment centres had no clear, structured process until daily phone
-        calls were later introduced, and burial teams, treatment centres, and
-        laboratories used inconsistent definitions when counting deaths in the
-        first place.
-        A meaningful amount of information was simply never transmitted anywhere
-        it could be used.
-      </p>
-
-      <p>
-        What did arrive still had to be compiled, and there was no consolidated
-        database that captured and linked every data source in a structured way.
-        Each district response centre had adopted its own method for recording
-        cases, and inconsistency in the Excel line-list format across districts
-        caused ongoing problems merging and aggregating cases into national
-        totals.
-        In the authors' own words,
-        <q>much of the data has never found its way into any structured
-        database and may never be recoverable.</q>
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-ebola-cfr">
-      <title>A number that was biased whichever way you calculated it</title>
-
-      <p>
-        The clearest illustration of what this cost is the
-        <term>case fatality rate</term> (CFR).
-        CFR is the confirmed deaths divided by confirmed cases.
-        This basic number in an outbreak helps track both how dangerous the
-        disease is, and how contained it is.
-      </p>
-
-      <p>
-        Undercounting deaths means that the CFR calculation was biased downward,
-        and the severity of the situation is underestimated.
-        Further, if you restrict the calculation to cases with a known final
-        outcome (alive or dead), then a new bias is introduced: <q>alive</q>
-        could only be recorded once a patient's hospitalisation had fully
-        concluded, while a death could be recorded as soon as it happened.
-        Cases still awaiting an outcome were therefore more likely, at any given
-        moment, to eventually resolve as deaths than the data so far suggested,
-        which biases <em>this</em> version of the CFR upward instead.
-        Neither calculation was wrong in the sense of containing an arithmetic
-        error, but both were systematically biased, in opposite directions, by
-        exactly the same underlying data problems.
-      </p>
-
-      <insight xml:id="insight-ebola-cfr-lesson">
-        <title>No clean number was hiding underneath</title>
-
-        <p>
-          There was no clean version of this number sitting underneath the messy
-          data.
-          The data management failures described above added noise around a true
-          value, but also changed which direction the bias in the headline
-          statistic ran.
-          The system meant to hold the full picture could not be trusted to give
-          one, so analysts instead used laboratory data for day-to-day situation
-          reports for the rest of the outbreak.
-        </p>
-      </insight>
-
-      <p>
-        The authors are explicit that this was never fully resolved: a complete
-        cleaning and reconciliation of all case data was never finalised.
-        Even at the end of the outbreak, a large number of suspected cases
-        remained permanently unclassified - neither confirmed as EVD nor ruled
-        out.
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-ebola-clinical">
-      <title>The same failure, one level down</title>
-
-      <p>
-        Roshania et al.
-        (2016) tell a parallel story from inside the treatment centres
-        themselves.
-        International Medical Corps ran five Ebola Treatment Units across
+        The International Medical Corps ran five Ebola Treatment Units across
         Liberia and Sierra Leone, treating more than 2,500 patients and amassing
         over 25,000 pages of clinical, epidemiological, and operational data
         over the course of the epidemic.
+        One goal of collecting the data was to better inform the response to
+        future epidemics.
+        What they found instead was that even a single, well-resourced
+        organisation running its own units under its own protocols could not
+        keep its data consistent (Roshania et al., 2016).
+      </p>
+    </introduction>
+
+    <subsection xml:id="ss-ebola-collection">
+      <title>Getting the data out</title>
+
+      <p>
+        Data on daily symptoms and treatment was recorded at the patient's
+        bedside inside the high-risk zone, where clinicians wore full protective
+        equipment (PPE) throughout.
+        Standard practice between patients was to wash gloved hands with
+        chlorine solution without drying them, which gradually soaked into the
+        paper and made forms increasingly difficult to read.
+        And since any paper in the high-risk zone could become contaminated,
+        none of it could safely come back out.
       </p>
 
       <p>
-        Even a single, well-resourced organisation running its own units under
-        its own protocols could not keep that data consistent.
-        <ul>
-          <li>
-            <p>
-              Data-entry was not consistent.
-              It varied between treatment units and, within a treatment unit.
-              This made it difficult to track the severity of the epidemic.
-              More patients meant more data to enter, and staff availability did
-              not scale up to match.
-              The moment data quality was most likely to slip was at the peak of
-              the outbreak <mdash/> exactly the moment when accurate data
-              mattered most.
-            </p>
-          </li>
-
-          <li>
-            <p>
-              Paper forms were filled out inside the high-risk treatment zone.
-              However, these forms physically degraded from repeated chlorine
-              disinfection.
-              Getting the data out safely meant reading forms through a fence
-              and copying them by hand, photographing them across a barrier, or
-              sending someone in full protective equipment purely to photograph
-              paperwork with a waterproof camera.
-              Every additional step introduced opportunities for transcription
-              errors, typos, missing values, or misread information.
-              This gives an additional challenge of ensuring that the data
-              remained accurate as it moved from the original form into a usable
-              dataset.
-              Small errors introduced during the transfer could easily become
-              part of the analysis and ultimately affect the decisions made from
-              the data.
-            </p>
-          </li>
-
-          <li>
-            <p>
-              Some variables, such as recent bush meat consumption or travel
-              history, were recorded in some forms and not others, making a
-              combined dataset impossible without deciding what to do about the
-              gap.
-            </p>
-          </li>
-
-          <li>
-            <p>
-              The same clinical sign was written down under different names in
-              different places ( <q>red injected eyes,</q>
-              <q>conjunctivitis,</q> <q>hemorrhagic eyes</q> ) and had to be
-              manually recoded into a single consistent variable before it meant
-              anything as data.
-            </p>
-          </li>
-        </ul>
+        To extract the data, staff had three options: read values across the
+        fence to a colleague who copied them down on the other side; photograph
+        the forms from across the barrier; or send someone back into the zone in
+        full PPE solely to photograph paperwork with a waterproof camera that
+        could be decontaminated.
+        The result was degraded forms that were hard to read in the first place,
+        followed by a copying step that introduced further opportunities for
+        error.
+        Each of these methods was error-prone in its own way.
+        Numbers could be misheard across the fence, images could be blurred, and
+        values could be skipped in transcription.
+        Any error that made it through undetected became part of the dataset and
+        hence the analysis.
       </p>
 
       <p>
-        An initial quality audit was performed where a random sample of patient records
-        was compared field by field against the original scanned charts. The audit 
-        found error rates high enough that the organisation had to re-enter
-        large sections of the dataset by hand.
-        Even then, resources were limited enough that a choice had to be made
-        about what to re-enter: triage data was redone for every patient, but
-        the more detailed daily rounding and treatment data was only redone for
-        patients confirmed EVD-positive.
+        The organisation took steps to limit these errors, for example, by using
+        data validation settings in Excel and conducting audits.
+        An initial quality audit compared a random sample of patient records
+        field by field against the original scanned charts, and found error
+        rates high enough that large sections of the dataset had to be
+        re-entered by hand.
+        Resources were too limited to redo everything: triage data was
+        re-entered for all patients, but the more detailed daily treatment data
+        was only re-entered for those confirmed Ebola-positive.
         After that effort, they reached roughly 99% accuracy.
-        Getting there took a dedicated data-cleaning team working
-        <em>after the fact</em>, months later, on data collected under some of
-        the most dangerous conditions imaginable.
       </p>
 
       <p>
-        The organisation's own retrospective judgement is blunt:
-        <q>much
-        time and effort could have been saved through closer oversight and
-        real-time quality assurance assessments in the field.</q>
-        The cleaning was not the problem.
-        Doing all of it afterward, once the epidemic had already moved on, was.
+        The issue is that this cleaning happened months after the fact, long
+        after the patients had been treated and the outbreak had moved on.
+        During the epidemic itself, when decisions about where to send resources
+        and how to respond were being made in real time, the data being used to
+        inform those decisions was the uncleaned version.
+        The organisation's own assessment was direct: much time and effort could
+        have been saved through closer oversight and real-time quality checks in
+        the field.
+        Cleaning after the fact is better than not cleaning at all.
+        But it is not the same as getting it right the first time.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-ebola-inconsistency">
+      <title>Inconsistency across treatment units</title>
+
+      <p>
+        Some variables, such as recent bush meat consumption or travel history,
+        were recorded at one unit but not another.
+        When the time came to combine the datasets, a decision had to be made
+        about what to do with those gaps.
+        This is a <term>missing data</term> problem: information that should
+        exist does not, and any analysis has to either work around it or make
+        assumptions about it.
+        There is a difference between a patient who was not asked about bush
+        meat consumption and one who was asked and said no.
+        This problem of Missing Data is covered in more detail in
+        <xref ref="ch-handling-missing-values"/>.
       </p>
 
-      <insight xml:id="insight-ebola-lesson">
+      <p>
+        Other variables were recorded inconsistently.
+        For example, <q>red injected eyes</q>, <q>conjunctivitis</q>, and
+        <q>hemorrhagic eyes</q> all referred to the same symptom.
+        Before any analysis could be done, these had to be manually
+        <term>recoded</term> into a single consistent variable.
+        Without that recoding, a count of patients with eye symptoms would have
+        been wrong because the same information had been recorded three
+        different ways.
+        This is an <term>inconsistent values</term> problem: the data exists,
+        but cannot be used until it has been standardised.
+      </p>
+
+      <p>
+        Data entry quality also varied over time within the same unit, depending
+        on how severe the outbreak was and how many staff were available.
+        More patients meant more data to enter, and staffing did not scale to
+        match.
+        The moment data quality was most likely to slip was at the peak of the
+        outbreak, exactly the moment when accurate data mattered most.
+      </p>
+
+      <p>
+        These are all examples of problems that <term>data cleaning</term>
+        addresses.
+        Data cleaning is the process of finding and fixing problems in a dataset
+        before analysis: standardising inconsistent values, handling missing
+        data, correcting errors introduced during collection or transcription,
+        and ensuring that data from different sources can be combined reliably.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-ebola-consequences">
+      <title>What the inconsistency cost</title>
+
+      <p>
+        Each treatment unit collected data independently, but some questions
+        could only be answered by looking across all five units together.
+        Out of everyone admitted with Ebola, what fraction died?
+        If a person was identified as a contact of a patient at one unit, did
+        they later show up as a patient at another?
+        These are exactly the questions an epidemic response needs to answer
+        quickly, and inconsistent data made them slow and unreliable to answer.
+      </p>
+
+      <p>
+        The organisation's own retrospective assessment is direct:
+        <q>much time and effort could have been saved through closer 
+    oversight and real-time quality assurance assessments in the 
+    field.</q>
+      </p>
+
+      <insight xml:id="insight-ebola-cleaning">
         <title>Cleaning was not optional overhead here</title>
 
         <p>
-          In both accounts, the failure to standardise, deduplicate, and
-          consolidate case data was not a data-management inconvenience sitting
-          alongside the real work of fighting the epidemic.
-          It <em>was</em> the epidemic response, failing at one of its most
-          basic tasks: knowing, accurately, what was happening.
-          When you cannot calculate a case fatality rate or reliably merge two
-          districts' records, you cannot see the outbreak clearly enough to
-          fight it well.
+          The problems of inconsistent variable names, missing values,
+          incompatible formats, and errors introduced during transcription are
+          exactly the kinds of problems that data cleaning addresses.
+          They are easy to dismiss as technical nuisances when the stakes are
+          low, but they can affect the outcome of the data in many ways.
+          In the Ebola case, messy data meant not knowing reliably what fraction
+          of patients were surviving, not being able to track whether contacts
+          in one area were becoming cases in another, and not being able to see
+          the epidemic clearly enough to respond to it well.
         </p>
       </insight>
 
       <p>
-        <term>Sources:</term> Owada, K., Eckmanns, T., Kamara, K.O.B.
-        and Olu, O.O.
-        (2016).
-        <q>Epidemiological Data Management during an
-        Outbreak of Ebola Virus Disease: Key Issues and Observations from
-        Sierra Leone.</q>
-        <em>Frontiers in Public Health</em>, 4, 163.
-        Roshania, R.
+        <term>Source:</term> Roshania, R.
         et al.
         (2016).
-        <q>Successful Implementation of a Multicountry Clinical Surveillance
-        and Data Collection System for Ebola Virus Disease in West Africa:
-        Findings and Lessons Learned.</q>
-        <em>Global Health: Science and
-        Practice</em>, 4(3), 394 <ndash/>
-        409.
+        <q>Successful Implementation of a Multicountry Clinical 
+    Surveillance and Data Collection System for Ebola Virus Disease 
+    in West Africa: Findings and Lessons Learned.</q>
+        <em>Global Health: Science and Practice</em>, 4(3), 394 <ndash/> 409.
       </p>
     </subsection>
   </section>
@@ -372,7 +233,8 @@
       <p>
         The scale is nowhere near comparable, but the underlying mistake in the
         Ebola data is deciding, without quite deciding, what anomalies in the
-        data actually means. This shows up constantly at far smaller scale.
+        data actually means.
+        This shows up constantly at far smaller scale.
         Before you can ask a question of a dataset, you need to know whether the
         data is actually ready to be asked.
         The following exercise asks you to do exactly that.
