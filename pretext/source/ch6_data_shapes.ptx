@@ -2402,7 +2402,7 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           Propose one concrete rule Sierra Leone's district response centres
           could have agreed to in advance <mdash/> about column names, row
           structure, or file format <mdash/> that would have prevented the
-          merging problem described in <xref ref="ss-ebola-transmission"/>.
+          merging problem described in <xref ref="ss-ebola-two-systems"/>.
         </p>
       </statement>
     </exercise>
