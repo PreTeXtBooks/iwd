@@ -1,68 +1,606 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <chapter xml:id="ch-intro" xmlns:xi="http://www.w3.org/2001/XInclude">
-  <title>Introduction</title>
+  <title>Starting with Data</title>
 
-  <p>
-    This book is a PreTeXt version. This is the skeleton to be filled in.
-    Below are examples with an image, a table, R code, and a STACK question.
+  <introduction>
+    <p>
+      We start this chapter - and book therefore - with an exercise.
+      It's a different start to what may usually be expected, but there's good
+      reasons for it.
+      We haven't introduced any techniques, and so we are going purely off what
+      we already know about data (which may be little, or may be surprising).
+      Let's just try it out, and see what can we do with a dataset by looking at
+      it carefully and without instruction.
+      The remainder of the chapter then introduces the structure of the book,
+      and relates the exercise to the chapters that follow.
+    </p>
+  </introduction>
 
-    Introduce Flamingos data here. 
-  </p>
+  <section xml:id="sec-first-exploration">
+    <title>A First Exploration</title>
 
-  <p>
-     <xref ref = "fig-placeholder"/> gives an example image, and <xref ref =
-     "table-placeholder"/> shows an example table.
-  </p>
-  
-  <!-- Example Image -->
-  <figure xml:id="fig-placeholder">
-    <caption>Sample Caption</caption>
-    <image source="images/placeholder.jpeg" width="50%"/>
-    <description>Sample description (in case image does not render)</description>
-  </figure>
+    <subsection xml:id="ss-the-data">
+      <title>The dataset</title>
 
-  <!-- Example Table -->
-  <table xml:id="table-placeholder">
-    <title>Sample Table</title>
-    <tabular halign="left">
-      <row header="yes">
-        <cell>Column 1</cell>
-        <cell>Column 2</cell>
-        <cell>Column 3</cell>
-      </row>
-      <row>
-        <cell>Value 1</cell>
-        <cell>Value 2</cell>
-        <cell>Value 3</cell>
-      </row>
-    </tabular>
-  </table>
+      <p>
+        Most of the data in this book are real data, but we start with some
+        simulated data.
+        But, let's start with some background to this simulated data.
+        Between 2021 and 2023, measurements were recorded from flamingos at
+        three lakes in Kenya's Rift Valley: Lake Bogoria, Lake Elementaita, and
+        Lake Nakuru.
+        The dataset <c>kenya_flamingos</c> contains one row per bird, with the
+        columns described in <xref ref="table-flamingo-columns"/>.
+        You can access the data in R through the <c>statsdata</c> package
+      </p>
 
-  <!-- Example R Code -->
-  <program language="r">
-    <input>
-      # Sample R code
-      x &lt;- c(1, 2, 3, 4, 5)
-      mean(x)
-    </input>
-  </program>
+      <program language="r">
+        <code>
+        library(pak) # you may need to install this if you have not yet, with install.packages("pak")
 
-  <pre>
-    ## [1] 3
-  </pre>
+        pak::pak("PreTeXtBooks/statsdata")
+        library(statsdata)
 
-  <!-- Example STACK Question -->
-  <p>The following illustrates embedding a STACK question.</p>
-  <exercise>
-    <title>STACK integration question</title>
+        data(kenya_flamingos)
+        </code>
+      </program>
+
+      <table xml:id="table-flamingo-columns">
+        <title>Columns in <c>kenya_flamingos.csv</c></title>
+
+        <tabular halign="left">
+          <col halign="left" width="25%"/>
+          <col halign="left" width="75%"/>
+          <row header="yes" bottom="minor">
+            <cell>Column</cell>
+            <cell>Description</cell>
+          </row>
+
+          <row>
+            <cell><c>lake</c></cell>
+            <cell>Lake at which the bird was recorded</cell>
+          </row>
+
+          <row>
+            <cell><c>species</c></cell>
+            <cell>Greater Flamingo or Lesser Flamingo</cell>
+          </row>
+
+          <row>
+            <cell><c>bill_length_mm</c></cell>
+            <cell>Bill length, in millimetres</cell>
+          </row>
+
+          <row>
+            <cell><c>bill_depth_mm</c></cell>
+            <cell>Bill depth, in millimetres</cell>
+          </row>
+
+          <row>
+            <cell><c>leg_length_mm</c></cell>
+            <cell>Leg length, in millimetres</cell>
+          </row>
+
+          <row>
+            <cell><c>body_mass_g</c></cell>
+            <cell>Body mass, in grams</cell>
+          </row>
+
+          <row>
+            <cell><c>sex</c></cell>
+            <cell>Recorded sex of the bird</cell>
+          </row>
+
+          <row>
+            <cell><c>year</c></cell>
+            <cell>Year of measurement</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>
+        The dataset is small enough to be examined in a spreadsheet, in R, or on
+        paper.
+        The choice of tool does not affect the exercise, it is entirely up to
+        you.
+      </p>
+    </subsection>
+
+    <subsection xml:id="subsec-first-exploration">
+      <title>Thirty minutes with the data</title>
+
+      <p>
+        Examine the flamingo dataset for thirty minutes and record three
+        observations that you got from the data.
+        These can be any three things that you can gleam from the data - it can
+        be as simple or complex as you like: the number of rows, the number of
+        missing values, a graph or summary, frequency of birds in each lake or
+        species.
+        The three things are not important.
+        They don't even need to be correct!
+        They just need to be three things you can see from the data.
+      </p>
+
+      <p>
+        Record the three observations before reading the discussion that
+        follows.
+        The discussion lists observations made by other readers, and reading it
+        first removes the purpose of the exercise.
+      </p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-results-ish">
+    <title>What the Data Showed</title>
+
     <introduction>
       <p>
-        A test question. (2025-08-15: you may need to ask for a <q>new</q> question 
-        to make this render.)
+        This section is the other half of the exercise.
+        Having spent thirty minutes with the flamingo data and written down
+        three observations, you can now compare what you found with what other
+        readers found.
+        The point is not to check your answers against a correct list; there is
+        no correct list.
+        The point is to see how much a dataset gives up to someone who simply
+        looks at it, and to notice that almost every observation raises a
+        further question that looking alone cannot settle.
+        Those further questions are what the rest of the book is about.
       </p>
     </introduction>
-    <!-- A @label is required, becomes a filename in output -->
-    <stack label="stack-integration" source="stack/01_integration_with_feedback.xml"/>
-  </exercise>
 
+    <subsection xml:id="what-did-others-find">
+      <title>What did others find?</title>
+
+      <introduction>
+        <p>
+          There are many different things you might have noticed while exploring
+          the data.
+          Let us know on the Discussion GitHub page what you found.
+          Here are some examples.
+          If you did not find any of these things then that does not matter.
+          This book looks at how to do all of these explorations!
+        </p>
+      </introduction>
+
+      <subsubsection>
+        <title>How much data?</title>
+
+        <p>
+          There are eight columns and 344 rows in the data.
+        </p>
+
+        <program language="r">
+          <code>
+data("kenya_flamingos")
+
+View(kenya_flamingos)
+          </code>
+        </program>
+      </subsubsection>
+
+      <subsubsection>
+        <title>What about bill depth?</title>
+
+        <p>
+          Bill depth varies from 18.10 mm to 33.90 mm.
+          There are four missing values.
+        </p>
+
+        <program language="r">
+          <code>
+summary(kenya_flamingos$bill_depth_mm)
+          </code>
+        </program>
+
+        <p>
+          We can see several features of the data from this simple summary: the
+          smallest and largest values, some values in between, the mean, and the
+          number of missing values.
+        </p>
+      </subsubsection>
+
+      <subsubsection>
+        <title>How many of each species?</title>
+
+        <p>
+          There are two species in the data: Greater Flamingos and Lesser
+          Flamingos.
+          Lesser Flamingos outnumber Greater Flamingos by a substantial margin.
+        </p>
+
+        <program language="r">
+          <code>
+table(kenya_flamingos$species)
+          </code>
+        </program>
+
+        <p>
+          This gives us:
+        </p>
+        <pre>
+Greater Flamingo  Lesser Flamingo
+             66              278
+        </pre>
+        <p>
+          But the counts reflect which birds were measured, not which birds were
+          present.
+          Perhaps there happened to be more Lesser Flamingos present on the day
+          the data were collected.
+        </p>
+      </subsubsection>
+
+      <subsubsection>
+        <title>Comparing body mass between species</title>
+
+        <p>
+          We can also compare the body mass of the two species.
+          One simple way to do this is to calculate the average body mass for
+          each species.
+        </p>
+
+        <program language="r">
+          <code>
+library(dplyr)
+
+kenya_flamingos %&gt;%
+  group_by(species) %&gt;%
+  summarise(mean(body_mass_g, na.rm = TRUE))
+          </code>
+        </program>
+        <pre>
+# A tibble: 2 x 2
+  species           mean(body_mass_g, na.rm = TRUE)
+  &lt;chr&gt;                              &lt;dbl&gt;
+1 Greater Flamingo                    3120
+2 Lesser Flamingo                     1689
+        </pre>
+        <p>
+          Greater Flamingos are heavier than Lesser Flamingos by roughly a
+          factor of two.
+        </p>
+
+        <p>
+          The difference is large enough that any statement about
+          <q>flamingos</q> in general will depend heavily on the mix of species
+          in the data.
+        </p>
+      </subsubsection>
+
+      <subsubsection>
+        <title>Sorting by sex</title>
+
+        <p>
+          There are 170 females and 167 males in the data, but seven rows have
+          no recorded sex.
+        </p>
+
+        <program language="r">
+          <code>
+table(kenya_flamingos$sex)
+          </code>
+        </program>
+        <pre>
+female   male
+    170    167
+        </pre>
+        <p>
+          Flamingos are difficult to sex from external appearance, so this is a
+          plausible limitation of the data collection rather than an error.
+          Any comparison between male and female birds will silently exclude
+          these rows if the missing values are not dealt with explicitly.
+        </p>
+      </subsubsection>
+
+      <subsubsection>
+        <title>Counting rows by lake</title>
+
+        <p>
+          The three lakes are not equally represented in the data.
+        </p>
+
+        <program language="r">
+          <code>
+table(kenya_flamingos$lake)
+          </code>
+        </program>
+        <pre>
+Bogoria Elementaita      Nakuru
+    124          68         152
+        </pre>
+        <p>
+          There are 124 measurements from Bogoria, 68 from Elementaita, and 152
+          from Nakuru.
+          This may reflect differences in the flamingo populations, or
+          differences in how much survey effort was directed at each lake, or
+          something else.
+        </p>
+      </subsubsection>
+
+      <subsubsection>
+        <title>Plotting bill length against body mass</title>
+
+        <p>
+          We can also look at two variables together.
+          For example, what happens to body mass as bill length increases?
+        </p>
+
+        <program language="r">
+          <code>
+plot(kenya_flamingos$bill_length_mm,
+     kenya_flamingos$body_mass_g)
+          </code>
+        </program>
+
+        <p>
+          We could also use <c>ggplot2</c> to make the same plot.
+        </p>
+
+        <program language="r">
+          <code>
+library(ggplot2)
+
+ggplot(kenya_flamingos,
+       aes(x = bill_length_mm, y = body_mass_g)) +
+  geom_point()
+          </code>
+        </program>
+
+        <p>
+          We might then add information about species to the plot.
+        </p>
+
+        <program language="r">
+          <code>
+ggplot(kenya_flamingos,
+       aes(x = bill_length_mm,
+           y = body_mass_g,
+           colour = species)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+          </code>
+        </program>
+
+        <p>
+          A clear positive relationship appears: birds with longer bills tend to
+          be heavier.
+        </p>
+
+        <p>
+          We can also see that Greater Flamingos tend to have both a higher body
+          mass and a longer bill than Lesser Flamingos.
+        </p>
+      </subsubsection>
+
+      <subsubsection>
+        <title>And there is much more you could find</title>
+
+        <p>
+          You might have noticed things that aren't mentioned here at all.
+          For example:
+          <ul>
+            <li>Do males and females differ in body mass?</li>
+            <li>Does bill length differ between the two species?</li>
+            <li>Are the flamingos at different lakes different sizes?</li>
+            <li>Is there a relationship between bill depth and bill length?</li>
+            <li>Are there any unusually large or small flamingos?</li>
+            <li>
+              Are missing values concentrated in particular variables or groups?
+            </li>
+
+            <li>Does the balance of species differ between the three lakes?</li>
+            <li>
+              Does the relationship between bill length and body mass look the
+              same for both species?
+            </li>
+
+            <li>Can you identify individual observations that look unusual?</li>
+            <li>What questions can't this dataset answer?</li>
+          </ul>
+        </p>
+
+        <p>
+          You don't need to have found any particular one of these things.
+          The purpose of the activity was to explore the data and see what
+          questions you could ask of it.
+        </p>
+
+        <p>
+          These are just some of the things people noticed when they explored
+          the same data.
+          <em>What did you notice?</em>
+        </p>
+      </subsubsection>
+    </subsection>
+
+    <subsection xml:id="ss-what-the-exercise-covered">
+      <title>What the exercise covered</title>
+
+      <p>
+        The observations available in this dataset correspond closely to the
+        topics of the chapters that follow.
+      </p>
+
+      <p>
+        Methods to explore the data, including techniques outlined in the R code
+        in <xref ref="what-did-others-find"/> are covered in
+        <xref ref="ch-exploring-data"/>.
+        Missing values in the <c>sex</c> column, and the question of what to do
+        about them, is the subject of <xref ref="ch-cleaning-recoding"/> and
+        <xref ref="ch-handling-missing-values"/>.
+        Comparisons between species, lakes, or years depend on treating those
+        variables as categories, which is the subject of
+        <xref ref="ch-handling-factors"/>.
+        The bill length and body mass relationship, which holds across the whole
+        dataset but not within each species, is an instance of the problem
+        examined in <xref ref="ch-multilevel-data"/>.
+        The question of how spread out a measurement is, rather than simply what
+        its average value is, is the subject of <xref ref="ch-variability"/>,
+        and accounting for those differences is the subject of
+        <xref ref="ch-accounting-variability"/>.
+        And the question of whether unequal counts across lakes reflect the
+        population or the survey is a question about what the data is capable of
+        answering, which arises in every chapter of this book.
+      </p>
+
+      <p>
+        The exercise did not require any of the techniques introduced in those
+        chapters.
+        What it required was attention, and a willingness to ask whether an
+        apparent pattern is what it appears to be.
+        The techniques that follow are tools for answering that question; they
+        are not a substitute for asking it.
+        (So: Go on, be honest.
+        Did you read ahead?
+        It's not too late to still explore the data using your own methods and
+        approaches for 30 minutes).
+      </p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-about-this-book">
+    <title>About This Book</title>
+
+    <introduction>
+      <p>
+        This book is an introduction to statistical computing with R.
+        Its subject is the work that has to happen before any statistical result
+        can be trusted: getting data into a usable shape, understanding how it
+        was collected, deciding what to do about the parts that are missing or
+        miscoded, and recognising when an apparent pattern is an artefact of the
+        structure of the data rather than a feature of the world.
+      </p>
+
+      <p>
+        It is written for readers who are beginning to work with real data:
+        students meeting statistics for the first time in a computational
+        setting, and researchers or practitioners who have data to analyse and
+        want to do it well.
+        The examples are drawn from real situations, many of them from Africa
+        and many of them cases where the data was handled badly and the
+        consequences were serious.
+      </p>
+
+      <p>
+        No prior experience of R is assumed, and no mathematics beyond
+        arithmetic is required.
+        What is assumed is a willingness to run code, look at the output, and
+        ask whether it means what it appears to mean.
+        If you have used R before, the early chapters will still be worth
+        reading for the way they treat the data rather than the syntax.
+      </p>
+    </introduction>
+
+    <subsection xml:id="ss-structure">
+      <title>Structure</title>
+
+      <p>
+        The chapters are ordered so that each one deals with a problem raised by
+        the one before it.
+      </p>
+
+      <p>
+        <xref ref="ch-multilevel-data"/> begins with data that has structure:
+        individuals belonging to groups, where the group determines both an
+        individual's outcome and how common that individual is in the data.
+        This is where the most persuasive wrong conclusions come from, and it is
+        worth meeting early.
+        <xref ref="ch-exploring-data"/> covers the first thing to do with any
+        dataset: summarising it, tabulating it, and plotting it well enough to
+        know what you are holding.
+        <xref ref="ch-cleaning-recoding"/> deals with data that is not yet ready
+        to be asked questions of: inconsistent categories, implausible values,
+        and entries that were recorded under several different names.
+      </p>
+
+      <p>
+        <xref ref="ch-visualising-multidimensional-data"/> takes up the problem
+        of showing several variables at once, where a table contains the answer
+        but cannot display it.
+        <xref ref="ch-data-shapes"/> is about the arrangement of the data
+        itself, and how the same information laid out differently makes some
+        questions easy and others impossible.
+        <xref ref="ch-handling-factors"/> covers categorical variables: how R
+        stores them, how their levels are ordered, and how much depends on
+        decisions about which categories exist at all.
+        <xref ref="ch-handling-missing-values"/> asks why values are missing,
+        and shows that the answer changes what you are entitled to do about
+        them.
+      </p>
+
+      <p>
+        The final two chapters turn from the value of a measurement to its
+        spread.
+        <xref ref="ch-variability"/> introduces variability, why it matters at
+        least as much as the average, and how to measure it.
+        <xref ref="ch-accounting-variability"/> then shows how to separate
+        variability that is explained by the structure of the data from
+        variability that is not.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-chapter-format">
+      <title>Chapter format</title>
+
+      <p>
+        Most chapters follow a common structure.
+        Each opens with an account of a situation in which the topic of the
+        chapter mattered in practice, frequently one in which it was handled
+        badly.
+        The chapter then develops the relevant ideas using data, with
+        accompanying R code.
+        Exercises appear at the end of each chapter.
+      </p>
+
+      <p>
+        The opening accounts are not incidental.
+        Statistical techniques are straightforward to apply and straightforward
+        to misapply, and the distinction between the two is usually a matter of
+        judgement rather than method.
+        The accounts are included to develop that judgement.
+      </p>
+
+      <p>
+        To follow the code you will need R, available from
+        <url href="https://cran.r-project.org/">cran.r-project.org</url>, and we
+        recommend also installing RStudio from
+        <url href="https://posit.co/download/rstudio-desktop/">posit.co</url>,
+        which provides a more comfortable environment for writing and running R
+        code.
+        Both are free.
+      </p>
+
+      <p>
+        The datasets used in this book are distributed in the
+        <c>statsdata</c> package, which is installed from GitHub rather than
+        from CRAN:
+      </p>
+
+      <program language="r">
+        <code>
+install.packages("pak") # only needed once
+
+pak::pak("PreTeXtBooks/statsdata")
+library(statsdata)
+        </code>
+      </program>
+
+      <p>
+        Each dataset is then available by name, as with
+        <c>data(kenya_flamingos)</c> earlier in this chapter.
+        A few examples use data downloaded directly from an external source
+        instead; where that is the case, the chapter gives the link and the
+        steps needed to read the file into R.
+      </p>
+
+      <p>
+        Some chapters also include interactive questions, which are answered in
+        the browser in the online version of the book.
+        These check understanding rather than recall, and usually ask you to
+        work something out from a dataset rather than to select a definition.
+        In the printed and PDF versions the same questions appear as ordinary
+        exercises.
+      </p>
+    </subsection>
+  </section>
 </chapter>

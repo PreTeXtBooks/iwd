@@ -1,360 +1,337 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- ================================================================= -->
-<!--  Chapter 9: Understanding Variability                              -->
+<!--  Chapter 10: Accounting for Variability                              -->
 <!-- ================================================================= -->
-<chapter xml:id="ch-variability" xmlns:xi="http://www.w3.org/2001/XInclude">
-    <title>Understanding Variability</title>
+<chapter xml:id="ch-accounting-variability" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>Accounting for Variability</title>
 
-    <introduction xml:id="intro-ch10-variability">
-        <p>
-            In <xref ref="ch-variability"/>, we measured variability — how
-            spread out values are around a centre, and how to put a number on
-            that spread.
-            We saw that life expectancy across African countries had a standard
-            deviation of around 9.6 years in 2007, that Rwanda's collapse in
-            1992 produced a squared distance from the mean so large it dominated
-            the variance for that year, and that the IQR is more robust to such
-            extremes than the standard deviation.
-            Those are all answers to the question: <em>how much</em> does this
-            vary?
-        </p>
+  <introduction xml:id="intro-ch10-variability">
+    <p>
+      We looked at observing and measuring variability in
+      <xref ref="ch-variability"/>; for example, how spread out values are
+      around a centre, and how to put a number on that spread.
+      We saw that life expectancy across African countries had a standard
+      deviation of around 9.6 years in 2007, that Rwanda's collapse in 1992
+      produced a squared distance from the mean so large it dominated the
+      variance for that year, and that the IQR is more robust to such extremes
+      than the standard deviation.
+      Those are all answers to the question: <em>how much</em> does this vary?
+    </p>
 
-        <p>
-            This chapter asks a different question: <em>why</em> does it vary?
-            Or more precisely — what portion of the variation can we account
-            for, and what portion remains unexplained?
-            This is the distinction between the three types of variability
-            introduced in <xref ref="sec-accounting-journeys"/>: accounted-for,
-            unaccounted-for, and natural.
-            Measuring tells you the size of the spread.
-            Accounting tells you where it comes from.
-        </p>
+    <p>
+      This chapter looks at <em>why</em> it varies.
+      Or more precisely, what portion of the variation can be accounted for, and
+      what portion remains unaccounted for.
+      This is the distinction between the three types of variability introduced
+      in <xref ref="sec-accounting-journeys"/>: accounted-for, unaccounted-for,
+      and natural.
+      Measuring tells you the size of the spread, while accounting for it tells
+      you where it comes from.
+    </p>
+  </introduction>
+
+  <section xml:id="sec-accounting-journeys">
+    <title>The Same Journey, Every Day Different</title>
+
+    <introduction>
+      <p>
+        In August 2026, on a Friday evening, I was leaving Nairobi's CBD to
+        catch a late flight home to London.
+        I had a flight at 11:40pm and ordered an Uber around 7:30pm.
+        The first driver appeared, then cancelled while I was outside looking
+        for them — I had lost wifi in the chaos of the streets and could not
+        track them through the app.
+        The same thing happened with a second driver.
+        When I finally got wifi, the second driver agreed to pick me up from a
+        hotel across the road, but had to turn around first because of the
+        one-way street.
+        I waited twenty minutes on that pavement, surrounded by cars, and could
+        not find them anywhere.
+        It was completely gridlocked, and he was still turning around.
+      </p>
+
+      <p>
+        I eventually walked through the traffic hoping to find wifi and order a
+        new driver somewhere away from the worst of the gridlock.
+        A worker outside a café noticed me standing on the pavement, clearly
+        lost and increasingly frantic, and insisted I come in.
+        She sat me down, connected me to the wifi, and gave me a moment to
+        think.
+        Without that kindness I am not sure what I would have done.
+        I caught the flight.
+      </p>
+
+      <p>
+        The app said the third taxi was ten minutes away.
+        It took forty-five.
+        The app had estimated ten minutes — and I had believed it, because I had
+        no reason not to.
+        I sat watching the little car barely move, block after block, as the
+        minutes ticked by and my flight window got smaller.
+      </p>
+
+      <p>
+        Ask someone from Nairobi what happened, and they will tell you
+        immediately: it was Friday evening, in the CBD, at 7:30pm.
+        That is a journey you plan hours around, or you do not make it.
+        The traffic leaving the central business district on a Friday evening is
+        not unpredictable.
+        It is entirely predictable.
+        It is just that I did not know to predict it.
+      </p>
+
+      <p>
+        In the previous chapter, we measured variability — how spread out values
+        are, and how to summarise that spread in a single number.
+        But measuring variability and understanding it are two different things.
+        My taxi journey was not just variable.
+        It was variable for reasons — some of which I should have known, some of
+        which I could not have known, and some of which were simply random.
+        This chapter is about separating those three things.
+      </p>
+
+      <p>
+        Imagine you had no information at all about how long a boda-boda ride
+        across Nairobi would take.
+        No knowledge of rush hour, no sense of which roads are usually busy, no
+        awareness that Fridays are worse than Tuesdays.
+        Every day, you would treat each journey as if it were identical to every
+        other — and you would be wrong, repeatedly, in ways that cost you time,
+        money, and patience.
+        You would book the same amount of time for a 7am ride and a 5pm ride.
+        You would be surprised, every single Friday afternoon, by the traffic.
+        You would have no way to plan.
+      </p>
+
+      <p>
+        Now imagine you know one thing: rush hour is slower.
+        Suddenly you can plan.
+        You leave earlier on the days that matter, and book less time for the
+        quiet morning run.
+        You may still be wrong sometimes — you cannot know about the accident on
+        Ngong Road, or the blocked junction in town — but you are systematically
+        less wrong than before.
+        Knowing even one source of variation and accounting for it makes your
+        predictions better.
+        My mistake on that Friday evening was not unavoidable.
+        It was a failure to account for something that was entirely knowable.
+      </p>
+
+      <p>
+        This is what statisticians mean by the three types of variability.
+        Some variation is <term>accounted-for variability</term>: you know what
+        causes it, you have measured it, and you can use it to make better
+        predictions.
+        Time of day is exactly this — once you know it is 5pm on a Friday in
+        Nairobi's CBD, you already know something useful about the journey
+        ahead.
+        Some variation is <term>unaccounted-for variability</term>: other things
+        affect the journey — accidents, roadworks, the school term starting —
+        but you have not measured them and cannot include them in your
+        predictions.
+        They are real causes of variation, making your predictions less reliable
+        even when you have accounted for everything else you can.
+        And some variation is just <term>natural variability</term>: the
+        boda-boda rider caught a green light, or took a slightly different line
+        through the roundabout.
+        No amount of information would have predicted it.
+        It simply happened.
+      </p>
+
+      <p>
+        The problem is not the natural variability — any honest prediction has
+        to live with it.
+        The problem is mistaking unaccounted-for variation for natural
+        variation.
+        If you assume that everything you cannot account for is just noise, you
+        will underestimate how wrong your predictions can be, and you will miss
+        the fact that some of that wrongness has a cause that could, in
+        principle, be found and understood.
+        A boda-boda rider who thinks the variation in their journey times is
+        just random bad luck will never think to check whether there is a
+        pattern — whether certain roads are systematically worse, whether the
+        school term changes things, whether the weather is a factor.
+        Those patterns are real.
+        Mistaking them for noise means never looking for them.
+      </p>
     </introduction>
 
-    <section xml:id="sec-accounting-journeys">
-        <title>The Same Journey, Every Day Different</title>
+    <subsection xml:id="subsec-accounting-traffic">
+      <title>Accounting for Traffic Variation in Nairobi</title>
 
-        <introduction>
+      <p>
+        The visualisations by TomTom displayed in Ch9 make the three types of
+        variability visible in a way that numbers alone cannot.
+      </p>
+
+      <p>
+        Recall <xref ref="fig-tomtom-heatmap-week"/> which shows travel time
+        across every hour of every day of the week, averaged across 2025.
+        Each cell represents one two-hour slot on one day of the week; darker
+        red means longer journey times, lighter pink means shorter.
+        The pattern is immediately visible: weekday mornings and evenings are
+        dark, weekend days are lighter, and the middle of the night is the
+        lightest of all.
+        This is <term>accounted-for variability</term> made visible: the
+        variation that follows a predictable pattern, week after week, and that
+        anyone who knows Nairobi already carries in their head.
+        If I had looked at this chart before ordering my Uber on that Friday
+        evening in August, I would have seen immediately that 7:30pm on a Friday
+        is one of the darker cells on the whole grid.
+      </p>
+
+      <p>
+        <xref ref="fig-tomtom-map-morning"/> and
+        <xref ref="fig-tomtom-map-evening"/> show where in Nairobi that
+        congestion falls during the morning and evening rush hours — not just
+        when, but where.
+        Yellow hexagons indicate moderate congestion; orange and red indicate
+        heavier delays.
+        The CBD and the main arterial roads radiating outward from it are
+        visibly darker than the outer suburbs.
+        During the morning rush, the congestion concentrates in the city centre
+        as commuters flow in; during the evening rush, it spreads more broadly
+        as people try to get home.
+        This spatial pattern is also displaying
+        <term>accounted-for variability</term> — predictable, measurable, and
+        useful for planning.
+      </p>
+
+      <p>
+        But even knowing the time of day and the location is not enough to
+        predict any specific journey perfectly.
+        The fourth image illustrates why.
+        This is a screenshot I have just taken showing live congestion in
+        Nairobi right now <fn>25th August 2026, 18:48 EAT</fn>, against the
+        usual congestion level for the same time slot.
+        The orange line is what is happening right now, the dotted yellow line
+        is what typically happens at this time.
+        On Monday morning, live congestion spiked to nearly 90 percent, well
+        above the usual level of around 65 percent at that hour.
+        On Tuesday afternoon, at the time this image was captured, live
+        congestion was running at over 100 percent, higher than the typical
+        level, and still climbing.
+        Something was making that particular day worse than a typical Tuesday.
+        Perhaps an accident, or roadworks, or nothing identifiable at all.
+      </p>
+
+      <p>
+        This is <term>unaccounted-for variability</term> in action.
+        TomTom's usual congestion line represents what the accounted-for
+        variability predicts, the pattern that repeats week after week.
+        The gap between that line and the live reading is the part that the
+        pattern cannot account for.
+        Some of that gap has a cause, something happened on that road on that
+        day that pushed congestion above its normal level.
+        And some of it is just <term>natural variability</term>: small
+        fluctuations that remain even after everything predictable has been
+        accounted for.
+        The chart shows all three types of variability at once: the repeating
+        pattern (accounted for), the unexplained spike above it (unaccounted
+        for), and the jagged noise around both lines (natural).
+      </p>
+
+      <p>
+        <xref ref="fig-tomtom-live-congestion"/> displays a live congestion
+        chart from TomTom.
+        This makes all three types of variability visible in a single image.
+        The dotted yellow line shows the usual congestion level for each time
+        slot — the pattern that repeats week after week, the part that is
+        accounted for.
+        The orange line shows what actually happened on a particular Monday and
+        Tuesday.
+        The gap between the two lines is the part the usual pattern could not
+        predict: something happened on those specific days that pushed
+        congestion above its normal level.
+        An accident, perhaps.
+        A road closure.
+        Something real, but unaccounted for.
+        And the jagged noise around both lines — the small moment-to-moment
+        fluctuations — is natural variability: irreducible randomness that would
+        remain even if we knew everything measurable.
+      </p>
+
+      <figure xml:id="fig-tomtom-live-congestion">
+        <caption>
+          Live versus usual congestion level in Nairobi across Monday and
+          Tuesday, with live speed shown below.
+          The orange line shows actual congestion; the dotted yellow line shows
+          the typical level for that time slot.
+          The gap between the two lines represents variation that the usual
+          pattern does not predict — unaccounted-for and natural variability.
+          Source: TomTom Traffic Index, captured August 2026.
+        </caption>
+
+        <image source="images/ch9_tomtom_live_congestion.png" width="100%">
+          <description>
             <p>
-                In August 2026, on a Friday evening, I was leaving Nairobi's CBD
-                to catch a late flight home to London.
-                I had a flight at 11:40pm and ordered an Uber around 7:30pm.
-                The first driver appeared, then cancelled while I was outside
-                looking for them — I had lost wifi in the chaos of the streets
-                and could not track them through the app.
-                The same thing happened with a second driver.
-                When I finally got wifi, the second driver agreed to pick me up
-                from a hotel across the road, but had to turn around first
-                because of the one-way street.
-                I waited twenty minutes on that pavement, surrounded by cars,
-                and could not find them anywhere.
+              A line chart showing congestion level as a percentage on the
+              y-axis and time across Monday and Tuesday on the x-axis.
+              An orange solid line shows live congestion and a dotted yellow
+              line shows the usual congestion level.
+              Both lines show peaks around 8am and 5pm on each day.
+              On Monday afternoon, the orange live line spikes to nearly 90
+              percent, substantially above the yellow usual line of around 65
+              percent.
+              On Tuesday afternoon, the live line reaches over 100 percent and
+              continues rising at the right edge of the chart, labelled NOW,
+              again running above the usual level.
+              Below the congestion chart, a bar chart shows live speed in km/h,
+              with speeds dropping to around 10 km/h at peak congestion periods.
             </p>
+          </description>
+        </image>
+      </figure>
 
-            <p>
-                I eventually walked through the traffic hoping to find wifi and
-                order a new driver somewhere away from the worst of the
-                gridlock.
-                A worker outside a café noticed me standing on the pavement,
-                clearly lost and increasingly frantic, and insisted I come in.
-                She sat me down, connected me to the wifi, and gave me a moment
-                to think.
-                Without that kindness I am not sure what I would have done.
-                I caught the flight.
-            </p>
+      <p>
+        Similar patterns have been documented in Kampala, Uganda, where analysis
+        of close to a million boda-boda trips found significant variation in
+        travel speed across different periods of the day.
+        The accounted-for variation — the time-of-day pattern — was strong and
+        consistent.
+        But within any given time slot, individual trips still varied,
+        reflecting the unaccounted-for and natural variability that no amount of
+        time-of-day information could eliminate (Saddier, 2025).
+      </p>
 
-            <p>
-                The app said the third taxi was ten minutes away.
-                It took forty-five.
-                The app had estimated ten minutes — and I had believed it,
-                because I had no reason not to.
-                I sat watching the little car barely move, block after block, as
-                the minutes ticked by and my flight window got smaller.
-            </p>
-
-            <p>
-                Ask someone from Nairobi what happened, and they will tell you
-                immediately: it was Friday evening, in the CBD, at 7:30pm.
-                That is a journey you plan hours around, or you do not make it.
-                The traffic leaving the central business district on a Friday
-                evening is not unpredictable.
-                It is entirely predictable.
-                It is just that I did not know to predict it.
-            </p>
-
-            <p>
-                In the previous chapter, we measured variability — how spread
-                out values are, and how to summarise that spread in a single
-                number.
-                But measuring variability and understanding it are two different
-                things.
-                My taxi journey was not just variable.
-                It was variable for reasons — some of which I should have known,
-                some of which I could not have known, and some of which were
-                simply random.
-                This chapter is about separating those three things.
-            </p>
-
-            <p>
-                Imagine you had no information at all about how long a boda-boda
-                ride across Nairobi would take.
-                No knowledge of rush hour, no sense of which roads are usually
-                busy, no awareness that Fridays are worse than Tuesdays.
-                Every day, you would treat each journey as if it were identical
-                to every other — and you would be wrong, repeatedly, in ways
-                that cost you time, money, and patience.
-                You would book the same amount of time for a 7am ride and a 5pm
-                ride.
-                You would be surprised, every single Friday afternoon, by the
-                traffic.
-                You would have no way to plan.
-            </p>
-
-            <p>
-                Now imagine you know one thing: rush hour is slower.
-                Suddenly you can plan.
-                You leave earlier on the days that matter, and book less time
-                for the quiet morning run.
-                You may still be wrong sometimes — you cannot know about the
-                accident on Ngong Road, or the blocked junction in town — but
-                you are systematically less wrong than before.
-                Knowing even one source of variation and accounting for it makes
-                your predictions better.
-                My mistake on that Friday evening was not unavoidable.
-                It was a failure to account for something that was entirely
-                knowable.
-            </p>
-
-            <p>
-                This is what statisticians mean by the three types of
-                variability.
-                Some variation is <term>accounted-for variability</term>: you
-                know what causes it, you have measured it, and you can use it to
-                make better predictions.
-                Time of day is exactly this — once you know it is 5pm on a
-                Friday in Nairobi's CBD, you already know something useful about
-                the journey ahead.
-                Some variation is <term>unaccounted-for variability</term>:
-                other things affect the journey — accidents, roadworks, the
-                school term starting — but you have not measured them and cannot
-                include them in your predictions.
-                They are real causes of variation, making your predictions less
-                reliable even when you have accounted for everything else you
-                can.
-                And some variation is just <term>natural variability</term>: the
-                boda-boda rider caught a green light, or took a slightly
-                different line through the roundabout.
-                No amount of information would have predicted it.
-                It simply happened.
-            </p>
-
-            <p>
-                The problem is not the natural variability — any honest
-                prediction has to live with it.
-                The problem is mistaking unaccounted-for variation for natural
-                variation.
-                If you assume that everything you cannot account for is just
-                noise, you will underestimate how wrong your predictions can be,
-                and you will miss the fact that some of that wrongness has a
-                cause that could, in principle, be found and understood.
-                A boda-boda rider who thinks the variation in their journey
-                times is just random bad luck will never think to check whether
-                there is a pattern — whether certain roads are systematically
-                worse, whether the school term changes things, whether the
-                weather is a factor.
-                Those patterns are real.
-                Mistaking them for noise means never looking for them.
-            </p>
-        </introduction>
-
-        <subsection xml:id="subsec-accounting-traffic">
-            <title>Accounting for Traffic Variation in Nairobi</title>
-
-            <p>
-                The visualisations by TomTom displayed in Ch9 make the three
-                types of variability visible in a way that numbers alone cannot.
-            </p>
-
-            <p>
-                Recall <xref ref="fig-tomtom-heatmap-week"/> which shows travel
-                time across every hour of every day of the week, averaged across
-                2025.
-                Each cell represents one two-hour slot on one day of the week;
-                darker red means longer journey times, lighter pink means
-                shorter.
-                The pattern is immediately visible: weekday mornings and
-                evenings are dark, weekend days are lighter, and the middle of
-                the night is the lightest of all.
-                This is <term>accounted-for variability</term> made visible: the
-                variation that follows a predictable pattern, week after week,
-                and that anyone who knows Nairobi already carries in their head.
-                If I had looked at this chart before ordering my Uber on that
-                Friday evening in August, I would have seen immediately that
-                7:30pm on a Friday is one of the darker cells on the whole grid.
-            </p>
-
-            <p>
-                <xref ref="fig-tomtom-map-morning"/> and
-                <xref ref="fig-tomtom-map-evening"/> show where in Nairobi that
-                congestion falls during the morning and evening rush hours — not
-                just when, but where.
-                Yellow hexagons indicate moderate congestion; orange and red
-                indicate heavier delays.
-                The CBD and the main arterial roads radiating outward from it
-                are visibly darker than the outer suburbs.
-                During the morning rush, the congestion concentrates in the city
-                centre as commuters flow in; during the evening rush, it spreads
-                more broadly as people try to get home.
-                This spatial pattern is also displaying
-                <term>accounted-for variability</term> — predictable,
-                measurable, and useful for planning.
-            </p>
-
-            <p>
-                But even knowing the time of day and the location is not enough
-                to predict any specific journey perfectly.
-                The fourth image illustrates why.
-                This is a screenshot I have just taken showing live congestion
-                in Nairobi right now <fn>25th August 2026, 18:48 EAT</fn>,
-                against the usual congestion level for the same time slot.
-                The orange line is what is happening right now, the dotted
-                yellow line is what typically happens at this time.
-                On Monday morning, live congestion spiked to nearly 90 percent,
-                well above the usual level of around 65 percent at that hour.
-                On Tuesday afternoon, at the time this image was captured, live
-                congestion was running at over 100 percent, higher than the
-                typical level, and still climbing.
-                Something was making that particular day worse than a typical
-                Tuesday.
-                Perhaps an accident, or roadworks, or nothing identifiable at
-                all.
-            </p>
-
-            <p>
-                This is <term>unaccounted-for variability</term> in action.
-                TomTom's usual congestion line represents what the accounted-for
-                variability predicts, the pattern that repeats week after week.
-                The gap between that line and the live reading is the part that
-                the pattern cannot account for.
-                Some of that gap has a cause, something happened on that road on
-                that day that pushed congestion above its normal level.
-                And some of it is just <term>natural variability</term>: small
-                fluctuations that remain even after everything predictable has
-                been accounted for.
-                The chart shows all three types of variability at once: the
-                repeating pattern (accounted for), the unexplained spike above
-                it (unaccounted for), and the jagged noise around both lines
-                (natural).
-            </p>
-
-            <p>
-                <xref ref="fig-tomtom-live-congestion"/> displays a live
-                congestion chart from TomTom.
-                This makes all three types of variability visible in a single
-                image.
-                The dotted yellow line shows the usual congestion level for each
-                time slot — the pattern that repeats week after week, the part
-                that is accounted for.
-                The orange line shows what actually happened on a particular
-                Monday and Tuesday.
-                The gap between the two lines is the part the usual pattern
-                could not predict: something happened on those specific days
-                that pushed congestion above its normal level.
-                An accident, perhaps.
-                A road closure.
-                Something real, but unaccounted for.
-                And the jagged noise around both lines — the small
-                moment-to-moment fluctuations — is natural variability:
-                irreducible randomness that would remain even if we knew
-                everything measurable.
-            </p>
-
-            <figure xml:id="fig-tomtom-live-congestion">
-                <caption>
-                    Live versus usual congestion level in Nairobi across Monday
-                    and Tuesday, with live speed shown below.
-                    The orange line shows actual congestion; the dotted yellow
-                    line shows the typical level for that time slot.
-                    The gap between the two lines represents variation that the
-                    usual pattern does not predict — unaccounted-for and natural
-                    variability.
-                    Source: TomTom Traffic Index, captured August 2026.
-                </caption>
-
-                <image source="images/ch9_tomtom_live_congestion.png" width="100%">
-                    <description>
-                        <p>
-                            A line chart showing congestion level as a
-                            percentage on the y-axis and time across Monday and
-                            Tuesday on the x-axis.
-                            An orange solid line shows live congestion and a
-                            dotted yellow line shows the usual congestion level.
-                            Both lines show peaks around 8am and 5pm on each
-                            day.
-                            On Monday afternoon, the orange live line spikes to
-                            nearly 90 percent, substantially above the yellow
-                            usual line of around 65 percent.
-                            On Tuesday afternoon, the live line reaches over 100
-                            percent and continues rising at the right edge of
-                            the chart, labelled NOW, again running above the
-                            usual level.
-                            Below the congestion chart, a bar chart shows live
-                            speed in km/h, with speeds dropping to around 10
-                            km/h at peak congestion periods.
-                        </p>
-                    </description>
-                </image>
-            </figure>
-
-            <p>
-                Similar patterns have been documented in Kampala, Uganda, where
-                analysis of close to a million boda-boda trips found significant
-                variation in travel speed across different periods of the day.
-                The accounted-for variation — the time-of-day pattern — was
-                strong and consistent.
-                But within any given time slot, individual trips still varied,
-                reflecting the unaccounted-for and natural variability that no
-                amount of time-of-day information could eliminate (Saddier,
-                2025).
-            </p>
-
-            <p>
-                <term>Sources:</term> TomTom Traffic Index 2025.
-                Nairobi city profile.
-                Available at:
-                <url href="https://www.tomtom.com/traffic-index/city/nairobi/" visual="tomtom.com/traffic-index/city/nairobi"/>.
-                Saddier, S.
-                (2025).
-                <q>Are motorcycle taxis competing with 
+      <p>
+        <term>Sources:</term> TomTom Traffic Index 2025.
+        Nairobi city profile.
+        Available at:
+        <url href="https://www.tomtom.com/traffic-index/city/nairobi/" visual="tomtom.com/traffic-index/city/nairobi"/>.
+        Saddier, S.
+        (2025).
+        <q>Are motorcycle taxis competing with 
       collective public transport?</q>
-                <em>Research in Transportation Economics</em>, 111, 101562.
-                <url href="https://doi.org/10.1016/j.retrec.2025.101562"/>.
-            </p>
-        </subsection>
-    </section>
+        <em>Research in Transportation Economics</em>, 111, 101562.
+        <url href="https://doi.org/10.1016/j.retrec.2025.101562"/>.
+      </p>
+    </subsection>
+  </section>
 
-    <section xml:id="sec-ch9-variability-illustration">
-        <title>Illustration of Variability</title>
+  <section xml:id="sec-ch9-variability-illustration">
+    <title>Illustration of Variability</title>
 
-        <p>
-            Before measuring variability, it helps to see what the different
-            types actually look like.
-            We can build them up from scratch, starting with a dataset that has
-            no variability at all.
-        </p>
+    <p>
+      Before measuring variability, it helps to see what the different types
+      actually look like.
+      We can build them up from scratch, starting with a dataset that has no
+      variability at all.
+    </p>
 
-        <paragraphs>
-            <title>No variability</title>
+    <paragraphs>
+      <title>No variability</title>
 
-            <p>
-                If <m>y</m> is always the same value regardless of anything
-                else, there is nothing to explain and nothing to measure.
-                Every point sits on a flat horizontal line.
-            </p>
-        </paragraphs>
+      <p>
+        If <m>y</m> is always the same value regardless of anything else, there
+        is nothing to explain and nothing to measure.
+        Every point sits on a flat horizontal line.
+      </p>
+    </paragraphs>
 
-        <program language="r">
-            <code>
+    <program language="r">
+      <code>
       x &lt;- 1:10
       y &lt;- rep(1, 10)
       df0 &lt;- data.frame(x, y)
@@ -365,44 +342,43 @@
         labs(title = "No variability: y is always 1",
              y = "y", x = "x") +
         theme_bw()
-            </code>
-        </program>
+      </code>
+    </program>
 
-        <figure xml:id="fig-ch9-no-variability">
-            <caption>
-                No variability.
-                <m>y = 1</m> regardless of <m>x</m>.
-                There is nothing to account for, and nothing to measure.
-            </caption>
+    <figure xml:id="fig-ch9-no-variability">
+      <caption>
+        No variability.
+        <m>y = 1</m> regardless of <m>x</m>.
+        There is nothing to account for, and nothing to measure.
+      </caption>
 
-            <image source="images/ch9_no_variability.png" width="70%">
-                <description>
-                    <p>
-                        A scatter plot with x on the horizontal axis and y on
-                        the vertical axis.
-                        All ten points sit at exactly y = 1, connected by a flat
-                        horizontal line.
-                        There is no spread in the y values at all.
-                    </p>
-                </description>
-            </image>
-        </figure>
+      <image source="images/ch9_no_variability.png" width="70%">
+        <description>
+          <p>
+            A scatter plot with x on the horizontal axis and y on the vertical
+            axis.
+            All ten points sit at exactly y = 1, connected by a flat horizontal
+            line.
+            There is no spread in the y values at all.
+          </p>
+        </description>
+      </image>
+    </figure>
 
-        <paragraphs>
-            <title>Accounted-for variability only</title>
+    <paragraphs>
+      <title>Accounted-for variability only</title>
 
-            <p>
-                Now let <m>y = x</m>.
-                There is variability in <m>y</m> — the values change — but all
-                of it is accounted for by <m>x</m>.
-                As <m>x</m> increases, <m>y</m> increases by exactly the same
-                amount.
-                No randomness, no surprises.
-            </p>
-        </paragraphs>
+      <p>
+        Now let <m>y = x</m>.
+        There is variability in <m>y</m> — the values change — but all of it is
+        accounted for by <m>x</m>.
+        As <m>x</m> increases, <m>y</m> increases by exactly the same amount.
+        No randomness, no surprises.
+      </p>
+    </paragraphs>
 
-        <program language="r">
-            <code>
+    <program language="r">
+      <code>
       x &lt;- 1:10
       y &lt;- x
       df1 &lt;- data.frame(x, y)
@@ -413,45 +389,43 @@
         labs(title = "Accounted for variability only: y = x",
              y = "y", x = "x") +
         theme_bw()
-            </code>
-        </program>
+      </code>
+    </program>
 
-        <figure xml:id="fig-ch9-explained-only">
-            <caption>
-                Accounted for variability only.
-                <m>y = x</m>: all variability in <m>y</m> is accounted for by
-                <m>x</m>.
-            </caption>
+    <figure xml:id="fig-ch9-explained-only">
+      <caption>
+        Accounted for variability only.
+        <m>y = x</m>: all variability in <m>y</m> is accounted for by <m>x</m>.
+      </caption>
 
-            <image source="images/ch9_explained_only.png" width="70%">
-                <description>
-                    <p>
-                        A scatter plot where all ten points fall exactly on a
-                        straight diagonal line from the lower left to the upper
-                        right.
-                        There is no scatter around the line.
-                    </p>
-                </description>
-            </image>
-        </figure>
+      <image source="images/ch9_explained_only.png" width="70%">
+        <description>
+          <p>
+            A scatter plot where all ten points fall exactly on a straight
+            diagonal line from the lower left to the upper right.
+            There is no scatter around the line.
+          </p>
+        </description>
+      </image>
+    </figure>
 
-        <paragraphs>
-            <title>Accounted for and natural variability</title>
+    <paragraphs>
+      <title>Accounted for and natural variability</title>
 
-            <p>
-                Now add some random noise.
-                The relationship between <m>x</m> and <m>y</m> is still there.
-                <m>y</m> still tends to increase with <m>x</m>, but the points
-                no longer fall exactly on the line.
-                Some additional randomness is pushing them above or below where
-                the line would predict.
-                This is natural variability: noise that remains even after
-                <m>x</m> is accounted for.
-            </p>
-        </paragraphs>
+      <p>
+        Now add some random noise.
+        The relationship between <m>x</m> and <m>y</m> is still there.
+        <m>y</m> still tends to increase with <m>x</m>, but the points no longer
+        fall exactly on the line.
+        Some additional randomness is pushing them above or below where the line
+        would predict.
+        This is natural variability: noise that remains even after <m>x</m> is
+        accounted for.
+      </p>
+    </paragraphs>
 
-        <program language="r">
-            <code>
+    <program language="r">
+      <code>
       x &lt;- 1:10
       y &lt;- x + rnorm(10)
       df2 &lt;- data.frame(x, y)
@@ -464,51 +438,48 @@
              subtitle = "Dashed line shows y = x",
              y = "y", x = "x") +
         theme_bw()
-            </code>
-        </program>
+      </code>
+    </program>
 
-        <figure xml:id="fig-ch9-explained-natural">
-            <caption>
-                Explained and natural variability.
-                <m>y = x + \varepsilon</m>: points scatter around the line
-                <m>y = x</m> (shown dashed) due to random noise.
-                The trend is still visible but no longer perfect.
-            </caption>
+    <figure xml:id="fig-ch9-explained-natural">
+      <caption>
+        Explained and natural variability.
+        <m>y = x + \varepsilon</m>: points scatter around the line <m>y = x</m>
+        (shown dashed) due to random noise.
+        The trend is still visible but no longer perfect.
+      </caption>
 
-            <image source="images/ch9_explained_natural.png" width="70%">
-                <description>
-                    <p>
-                        A scatter plot where the ten points are scattered around
-                        a dashed diagonal line representing y = x.
-                        Some points are above the line and some below, with no
-                        obvious pattern to the deviations.
-                        The overall upward trend is still visible.
-                    </p>
-                </description>
-            </image>
-        </figure>
+      <image source="images/ch9_explained_natural.png" width="70%">
+        <description>
+          <p>
+            A scatter plot where the ten points are scattered around a dashed
+            diagonal line representing y = x.
+            Some points are above the line and some below, with no obvious
+            pattern to the deviations.
+            The overall upward trend is still visible.
+          </p>
+        </description>
+      </image>
+    </figure>
 
-        <paragraphs>
-            <title>
-                Accounted for, unaccounted-for, and natural variability
-            </title>
+    <paragraphs>
+      <title>Accounted for, unaccounted-for, and natural variability</title>
 
-            <p>
-                Finally, introduce a second variable <m>z</m> that also
-                influences <m>y</m>, but which we do not have in our dataset.
-                In the code below, <m>z</m> takes the value 1 for the first five
-                observations and 10 for the last five.
-                We can see the effect it has: the points no longer scatter
-                evenly around the line, but jump up noticeably in the second
-                half.
-                But if we did not know <m>z</m> existed, we would have no way to
-                explain that jump.
-                It would simply look like unusually large random variation.
-            </p>
-        </paragraphs>
+      <p>
+        Finally, introduce a second variable <m>z</m> that also influences
+        <m>y</m>, but which we do not have in our dataset.
+        In the code below, <m>z</m> takes the value 1 for the first five
+        observations and 10 for the last five.
+        We can see the effect it has: the points no longer scatter evenly around
+        the line, but jump up noticeably in the second half.
+        But if we did not know <m>z</m> existed, we would have no way to explain
+        that jump.
+        It would simply look like unusually large random variation.
+      </p>
+    </paragraphs>
 
-        <program language="r">
-            <code>
+    <program language="r">
+      <code>
       x  &lt;- 1:10
       z  &lt;- c(rep(1, 5), rep(10, 5))  # hidden variable
       y  &lt;- x + z + rnorm(10)
@@ -522,226 +493,213 @@
              subtitle = "The line fits poorly because z is not in the data",
              y = "y", x = "x") +
         theme_bw()
-            </code>
-        </program>
+      </code>
+    </program>
 
-        <figure xml:id="fig-ch9-all-variability">
-            <caption>
-                Accounted for, unaccounted for, and natural variability.
-                <m>y = x + z + \varepsilon</m>, but <m>z</m> is not in the data.
-                The line of best fit through <m>x</m> alone fits poorly — the
-                points in the second half jump above the line because of
-                <m>z</m>, which we cannot see.
-            </caption>
+    <figure xml:id="fig-ch9-all-variability">
+      <caption>
+        Accounted for, unaccounted for, and natural variability.
+        <m>y = x + z + \varepsilon</m>, but <m>z</m> is not in the data.
+        The line of best fit through <m>x</m> alone fits poorly — the points in
+        the second half jump above the line because of <m>z</m>, which we cannot
+        see.
+      </caption>
 
-            <image source="images/ch9_all_variability.png" width="70%">
-                <description>
-                    <p>
-                        A scatter plot where the first five points scatter
-                        around the lower part of a fitted line and the last five
-                        points scatter around a noticeably higher position.
-                        The fitted line is a poor summary of the data because it
-                        cannot account for the jump caused by the hidden
-                        variable z.
-                        The residuals are large and systematically patterned
-                        rather than randomly scattered.
-                    </p>
-                </description>
-            </image>
-        </figure>
+      <image source="images/ch9_all_variability.png" width="70%">
+        <description>
+          <p>
+            A scatter plot where the first five points scatter around the lower
+            part of a fitted line and the last five points scatter around a
+            noticeably higher position.
+            The fitted line is a poor summary of the data because it cannot
+            account for the jump caused by the hidden variable z.
+            The residuals are large and systematically patterned rather than
+            randomly scattered.
+          </p>
+        </description>
+      </image>
+    </figure>
 
+    <p>
+      This last scenario is the most realistic.
+      In the real world, we never have all the variables.
+      There will always be something we have not measured that is influencing
+      the outcome.
+      The question is how much of the variability we can account for with what
+      we do have — and how honest we are about what remains unaccounted for.
+      The Nairobi traffic data is exactly this: time of day accounts for some of
+      the variability in journey time, but unknown events (accidents, roadworks,
+      broken-down matatus) account for more, and pure randomness accounts for
+      the rest.
+    </p>
+  </section>
+
+  <section xml:id="sec-ch10-stack">
+    <title>Variability STACK Question</title>
+
+    <p>
+      TODO: Insert STACK question on variability here.
+    </p>
+  </section>
+
+  <section xml:id="sec-accounting-variability-r">
+    <title>Accounting for Variability in R</title>
+
+    <insight xml:id="insight-boxplot-variability-types">
+      # this goes into Ch10 I think
+      <title>Two kinds of variability in one chart</title>
+
+      <p>
+        The chart in <xref ref="fig-ch9-africa-boxplot-years"/> shows two
+        distinct kinds of variability at the same time, and it is worth
+        separating them.
+      </p>
+
+      <p>
+        The first is
+        <term>variability across countries within a single 
+  year</term>, shown
+        by the height of each box.
+        In any given year, some African countries have life expectancies well
+        above the median and some well below.
+        What drives this?
+        Some of it could in principle be accounted for — if we had data on each
+        country's wealth, access to healthcare, sanitation infrastructure, or
+        disease burden, we could account for some of why one country sits above
+        the box and another sits below it.
+        The gapminder dataset gives us GDP per capita as a rough proxy for some
+        of those things, but not all.
+        Some drivers are harder to capture in data at all, and would hence be
+        unaccounted for: governance quality, geography, the strength of public
+        health systems, the legacy of particular conflicts.
+        And some of the remaining variation between countries is simply natural:
+        even two countries that look identical on every variable we can measure
+        will not have exactly the same life expectancy.
+      </p>
+
+      <p>
+        The second is <term>variability across years within Kenya</term>,
+        illustrated by the rise and fall of the teal line.
+        Kenya's life expectancy in 1952 was around 42 years; by 1987 it had
+        risen to nearly 60; by 2002 it had fallen back to around 51, before
+        recovering again.
+        Again, some of it could in principle be accounted for.
+        If we had data on improvements in medicine, sanitation, and nutrition
+        over time, or on the spread of the HIV/AIDS epidemic, we could account
+        for much of the rise and the subsequent dip.
+        But we do not have those variables here.
+        Some drivers are harder to capture in data at all: droughts, political
+        instability, specific health policy decisions in particular years.
+        These all affected Kenyan life expectancy but are rarely available as
+        measured variables.
+        And some is natural: even in a stable period, life expectancy fluctuates
+        slightly from year to year for reasons no dataset would ever fully
+        capture.
+      </p>
+
+      <p>
+        You might notice that year is in our dataset, and we can see that life
+        expectancy in Kenya changes depending on year.
+        So does year account for the variability in Kenya's life expectancy over
+        time?
+        In a narrow sense, yes: if you know the year, you can predict roughly
+        where Kenya's life expectancy will sit.
+        But there is an important distinction between
+        <term>accounting for</term> variability and <term>explaining</term> it.
+        Year accounts for the pattern — it tells you when things changed.
+        It does not explain why.
+        The actual causes of the rise (improvements in medicine, sanitation, and
+        nutrition) and the dip (the HIV/AIDS epidemic) are not in this dataset.
+        Year is acting as a proxy for all of them combined.
+        Accounting for variability means being able to predict or describe a
+        pattern; explaining it means knowing what actually drove it.
+        The two are not the same, and confusing them is one of the most common
+        mistakes in data analysis.
+      </p>
+    </insight>
+
+    <p>
+      fig-ch9-least-squares-comparison -- The reduction in square area from left
+      to right is the reduction in unaccounted-for variability.
+    </p>
+
+    <p>
+      about the gif -- The size of the squares (residuals) from this process are
+      themselves a measure of variability: they represent everything in the
+      outcome that the line cannot explain.
+      A small total squared error means the line accounts for most of #
+      discussing accounting for variability goes in Ch10.
+      Just measuring it here, so we can call this back and discuss this in that
+      context in ch10 the variability; a large total squared error means much of
+      the variability is still unaccounted for.
+    </p>
+  </section>
+  <exercises xml:id="exercises-ch10">
+    <title>Exercises</title>
+
+    <exercise xml:id="ex-variability-types">
+      <statement>
         <p>
-            This last scenario is the most realistic.
-            In the real world, we never have all the variables.
-            There will always be something we have not measured that is
-            influencing the outcome.
-            The question is how much of the variability we can account for with
-            what we do have — and how honest we are about what remains
-            unaccounted for.
-            The Nairobi traffic data is exactly this: time of day accounts for
-            some of the variability in journey time, but unknown events
-            (accidents, roadworks, broken-down matatus) account for more, and
-            pure randomness accounts for the rest.
-        </p>
-    </section>
-
-    <section xml:id="sec-ch10-stack">
-        <title>Variability STACK Question</title>
-
-        <p>
-            TODO: Insert STACK question on variability here.
-        </p>
-    </section>
-
-    <section xml:id="sec-accounting-variability-r">
-        <title>Accounting for Variability in R</title>
-
-        <insight xml:id="insight-boxplot-variability-types">
-            # this goes into Ch10 I think
-            <title>Two kinds of variability in one chart</title>
-
-            <p>
-                The chart in <xref ref="fig-ch9-africa-boxplot-years"/> shows
-                two distinct kinds of variability at the same time, and it is
-                worth separating them.
-            </p>
-
-            <p>
-                The first is
-                <term>variability across countries within a single 
-  year</term>,
-                shown by the height of each box.
-                In any given year, some African countries have life expectancies
-                well above the median and some well below.
-                What drives this?
-                Some of it could in principle be accounted for — if we had data
-                on each country's wealth, access to healthcare, sanitation
-                infrastructure, or disease burden, we could account for some of
-                why one country sits above the box and another sits below it.
-                The gapminder dataset gives us GDP per capita as a rough proxy
-                for some of those things, but not all.
-                Some drivers are harder to capture in data at all, and would
-                hence be unaccounted for: governance quality, geography, the
-                strength of public health systems, the legacy of particular
-                conflicts.
-                And some of the remaining variation between countries is simply
-                natural: even two countries that look identical on every
-                variable we can measure will not have exactly the same life
-                expectancy.
-            </p>
-
-            <p>
-                The second is
-                <term>variability across years within Kenya</term>, illustrated
-                by the rise and fall of the teal line.
-                Kenya's life expectancy in 1952 was around 42 years; by 1987 it
-                had risen to nearly 60; by 2002 it had fallen back to around 51,
-                before recovering again.
-                Again, some of it could in principle be accounted for.
-                If we had data on improvements in medicine, sanitation, and
-                nutrition over time, or on the spread of the HIV/AIDS epidemic,
-                we could account for much of the rise and the subsequent dip.
-                But we do not have those variables here.
-                Some drivers are harder to capture in data at all: droughts,
-                political instability, specific health policy decisions in
-                particular years.
-                These all affected Kenyan life expectancy but are rarely
-                available as measured variables.
-                And some is natural: even in a stable period, life expectancy
-                fluctuates slightly from year to year for reasons no dataset
-                would ever fully capture.
-            </p>
-
-            <p>
-                You might notice that year is in our dataset, and we can see
-                that life expectancy in Kenya changes depending on year.
-                So does year account for the variability in Kenya's life
-                expectancy over time?
-                In a narrow sense, yes: if you know the year, you can predict
-                roughly where Kenya's life expectancy will sit.
-                But there is an important distinction between
-                <term>accounting for</term> variability and
-                <term>explaining</term> it.
-                Year accounts for the pattern — it tells you when things
-                changed.
-                It does not explain why.
-                The actual causes of the rise (improvements in medicine,
-                sanitation, and nutrition) and the dip (the HIV/AIDS epidemic)
-                are not in this dataset.
-                Year is acting as a proxy for all of them combined.
-                Accounting for variability means being able to predict or
-                describe a pattern; explaining it means knowing what actually
-                drove it.
-                The two are not the same, and confusing them is one of the most
-                common mistakes in data analysis.
-            </p>
-        </insight>
-
-        <p>
-            fig-ch9-least-squares-comparison -- The reduction in square area
-            from left to right is the reduction in unaccounted-for variability.
+          For each of the following situations, identify which type of
+          variability is being described (accounted-for, unaccounted-for, or
+          natural) and briefly explain your reasoning.
         </p>
 
-         <p>
-            about the gif -- 
-                The size of the squares (residuals) from this process are
-                themselves a measure of variability: they represent everything
-                in the outcome that the line cannot explain.
-                A small total squared error means the line accounts for most of
-                # discussing accounting for variability goes in Ch10.
-                Just measuring it here, so we can call this back and discuss
-                this in that context in ch10 the variability; a large total
-                squared error means much of the variability is still unaccounted
-                for.
+        <ol>
+          <li>
+            <p>
+              Matatu journey times in Nairobi are consistently longer on Friday
+              evenings than on Tuesday mornings.
             </p>
-    </section>
-    <exercises xml:id="exercises-ch10">
-        <title>Exercises</title>
+          </li>
 
-        <exercise xml:id="ex-variability-types">
-            <statement>
-                <p>
-                    For each of the following situations, identify which type of
-                    variability is being described (accounted-for,
-                    unaccounted-for, or natural) and briefly explain your
-                    reasoning.
-                </p>
+          <li>
+            <p>
+              Two students take the same boda-boda route on the same Tuesday
+              morning and arrive at slightly different times, even though
+              nothing unusual happened on either journey.
+            </p>
+          </li>
 
-                <ol>
-                    <li>
-                        <p>
-                            Matatu journey times in Nairobi are consistently
-                            longer on Friday evenings than on Tuesday mornings.
-                        </p>
-                    </li>
+          <li>
+            <p>
+              Life expectancy in several southern African countries dropped
+              sharply in the 1990s due to the HIV/AIDS epidemic, but this
+              variable was not included in the dataset being analysed.
+            </p>
+          </li>
 
-                    <li>
-                        <p>
-                            Two students take the same boda-boda route on the
-                            same Tuesday morning and arrive at slightly
-                            different times, even though nothing unusual
-                            happened on either journey.
-                        </p>
-                    </li>
+          <li>
+            <p>
+              A farmer's crop yield varies from year to year.
+              The analyst has data on rainfall but not on soil quality, which
+              also affects yield.
+            </p>
+          </li>
+        </ol>
+      </statement>
+    </exercise>
+  </exercises>
 
-                    <li>
-                        <p>
-                            Life expectancy in several southern African
-                            countries dropped sharply in the 1990s due to the
-                            HIV/AIDS epidemic, but this variable was not
-                            included in the dataset being analysed.
-                        </p>
-                    </li>
-
-                    <li>
-                        <p>
-                            A farmer's crop yield varies from year to year.
-                            The analyst has data on rainfall but not on soil
-                            quality, which also affects yield.
-                        </p>
-                    </li>
-                </ol>
-            </statement>
-        </exercise>
-    </exercises>
   <section xml:id="sec-accounting-africa">
     <title>Accounting for Variability in African Life Expectancy</title>
 
     <introduction>
       <p>
-        In <xref ref="ch-variability"/>, we saw that the standard 
-        deviation of life expectancy across African countries nearly 
-        doubled between 1952 and 2007, and that specific events — 
-        Rwanda in 1992, the HIV/AIDS epidemic in southern Africa from 
-        the mid-1990s — drove sharp spikes in the variance. Those 
-        observations described the variation. This section asks what 
-        accounts for it.
+        In <xref ref="ch-variability"/>, we saw that the standard deviation of
+        life expectancy across African countries nearly doubled between 1952 and
+        2007, and that specific events — Rwanda in 1992, the HIV/AIDS epidemic
+        in southern Africa from the mid-1990s — drove sharp spikes in the
+        variance.
+        Those observations described the variation.
+        This section asks what accounts for it.
       </p>
+
       <p>
-        We will work with the same Africa data from the 
-        <c>gapminder</c> package, and the same four highlighted 
-        countries — Botswana, Kenya, Libya, and Swaziland. But instead 
-        of asking how large the squares are, we will ask what makes 
+        We will work with the same Africa data from the <c>gapminder</c>
+        package, and the same four highlighted countries — Botswana, Kenya,
+        Libya, and Swaziland.
+        But instead of asking how large the squares are, we will ask what makes
         them large or small.
       </p>
     </introduction>
@@ -750,23 +708,25 @@
       <title>Year as a source of variability</title>
 
       <p>
-        The simplest structure in this data is time. Life expectancy 
-        changes year by year — generally upward, with some setbacks. 
-        If we fit a line through Kenya's life expectancy over time, 
-        as we did with the least squares visualisation in 
-        <xref ref="ss-least-squares"/>, the line accounts for some 
-        of the variability in the data. The squares around the line 
-        — the residuals — are what the line cannot account for.
+        The simplest structure in this data is time.
+        Life expectancy changes year by year — generally upward, with some
+        setbacks.
+        If we fit a line through Kenya's life expectancy over time, as we did
+        with the least squares visualisation in <xref ref="ss-least-squares"/>,
+        the line accounts for some of the variability in the data.
+        The squares around the line — the residuals — are what the line cannot
+        account for.
       </p>
 
       <p>
-        But as we noted in <xref ref="ch-variability"/>, year is not 
-        really an explanation. It is a label for when the observation 
-        happened. The actual causes of the rise — improvements in 
-        medicine, sanitation, and nutrition — and the cause of the 
-        dip — the HIV/AIDS epidemic — are not directly in the dataset. 
-        Year is acting as a proxy for all of them combined. It accounts 
-        for the pattern, but does not explain it.
+        But as we noted in <xref ref="ch-variability"/>, year is not really an
+        explanation.
+        It is a label for when the observation happened.
+        The actual causes of the rise — improvements in medicine, sanitation,
+        and nutrition — and the cause of the dip — the HIV/AIDS epidemic — are
+        not directly in the dataset.
+        Year is acting as a proxy for all of them combined.
+        It accounts for the pattern, but does not explain it.
       </p>
 
       <program language="r">
@@ -784,15 +744,15 @@
       </program>
 
       <p>
-        The R-squared value of 0.89 means that year accounts for 
-        roughly 89% of the variation in Kenya's life expectancy over 
-        this period. The remaining 11% — the residuals around the 
-        line — is variability that year alone cannot account for. Some 
-        of that 11% is unaccounted-for variability with real causes 
-        (droughts, policy decisions, specific health interventions that 
-        happened in particular years). Some of it is natural variability 
-        — small year-to-year fluctuations that no variable would fully 
-        capture.
+        The R-squared value of 0.89 means that year accounts for roughly 89% of
+        the variation in Kenya's life expectancy over this period.
+        The remaining 11% — the residuals around the line — is variability that
+        year alone cannot account for.
+        Some of that 11% is unaccounted-for variability with real causes
+        (droughts, policy decisions, specific health interventions that happened
+        in particular years).
+        Some of it is natural variability — small year-to-year fluctuations that
+        no variable would fully capture.
       </p>
     </subsection>
 
@@ -800,18 +760,18 @@
       <title>Country as a source of variability</title>
 
       <p>
-        Now consider the variation across countries within a single 
-        year. In 2007, the standard deviation of life expectancy across 
-        all 52 African countries was 9.63 years. Where does that spread 
-        come from?
+        Now consider the variation across countries within a single year.
+        In 2007, the standard deviation of life expectancy across all 52 African
+        countries was 9.63 years.
+        Where does that spread come from?
       </p>
 
       <p>
-        One variable available to us is GDP per capita. Wealthier 
-        countries tend to have better healthcare systems, better 
-        nutrition, and longer life expectancies. If we use GDP per 
-        capita to account for some of the cross-country variation, how 
-        much does it explain?
+        One variable available to us is GDP per capita.
+        Wealthier countries tend to have better healthcare systems, better
+        nutrition, and longer life expectancies.
+        If we use GDP per capita to account for some of the cross-country
+        variation, how much does it explain?
       </p>
 
       <program language="r">
@@ -826,25 +786,25 @@
       </program>
 
       <p>
-        GDP per capita accounts for only about 21% of the variation in 
-        life expectancy across African countries in 2007. That is 
-        meaningful — richer countries do tend to have longer life 
-        expectancies — but most of the spread remains unaccounted for. 
-        The remaining 79% reflects differences between countries that 
-        GDP does not capture: governance, geography, disease burden, 
-        the particular history of the HIV/AIDS epidemic in some 
-        countries and not others. These are real causes of variation 
-        — unaccounted-for variability — not random noise.
+        GDP per capita accounts for only about 21% of the variation in life
+        expectancy across African countries in 2007.
+        That is meaningful — richer countries do tend to have longer life
+        expectancies — but most of the spread remains unaccounted for.
+        The remaining 79% reflects differences between countries that GDP does
+        not capture: governance, geography, disease burden, the particular
+        history of the HIV/AIDS epidemic in some countries and not others.
+        These are real causes of variation — unaccounted-for variability — not
+        random noise.
       </p>
 
       <p>
-        We can see this directly by looking at the residuals. Countries 
-        like Swaziland and Botswana sit far below what their GDP per 
-        capita would predict — their life expectancies were pulled down 
-        by HIV/AIDS in ways that GDP alone cannot account for. And Libya 
-        sits well above what its GDP would predict — it benefited from 
-        oil revenues being invested in public health in ways not 
-        captured by a simple GDP figure.
+        We can see this directly by looking at the residuals.
+        Countries like Swaziland and Botswana sit far below what their GDP per
+        capita would predict — their life expectancies were pulled down by
+        HIV/AIDS in ways that GDP alone cannot account for.
+        And Libya sits well above what its GDP would predict — it benefited from
+        oil revenues being invested in public health in ways not captured by a
+        simple GDP figure.
       </p>
 
       <program language="r">
@@ -875,70 +835,72 @@
       </program>
 
       <p>
-        The five countries with the largest negative residuals are all 
-        among the most severely affected by HIV/AIDS. Their life 
-        expectancies are 5 to 13 years lower than GDP per capita alone 
-        would predict. That gap is unaccounted-for variability — real, 
-        caused, and important — that a model using only GDP cannot see.
+        The five countries with the largest negative residuals are all among the
+        most severely affected by HIV/AIDS.
+        Their life expectancies are 5 to 13 years lower than GDP per capita
+        alone would predict.
+        That gap is unaccounted-for variability — real, caused, and important —
+        that a model using only GDP cannot see.
       </p>
-
     </subsection>
 
     <insight xml:id="insight-accounting-residuals">
       <title>Residuals are unaccounted-for variability</title>
+
       <p>
-        In <xref ref="ss-least-squares"/>, we introduced residuals as 
-        the distances between observed values and a fitted line. Now we 
-        can name what they represent: they are the variability in the 
-        outcome that the variables in the model cannot account for. 
-        Large residuals do not necessarily mean the model is wrong — 
-        they mean there is something real affecting the outcome that 
-        the model has not measured. Swaziland's residual of −13.2 
-        years is not noise. It is the HIV/AIDS epidemic, unmeasured.
+        In <xref ref="ss-least-squares"/>, we introduced residuals as the
+        distances between observed values and a fitted line.
+        Now we can name what they represent: they are the variability in the
+        outcome that the variables in the model cannot account for.
+        Large residuals do not necessarily mean the model is wrong — they mean
+        there is something real affecting the outcome that the model has not
+        measured.
+        Swaziland's residual of −13.2 years is not noise.
+        It is the HIV/AIDS epidemic, unmeasured.
       </p>
     </insight>
-
   </section>
-
   <!-- ============================================================ -->
   <!-- SECTION 3: Partitioning variability — the ANOVA idea        -->
   <!-- ============================================================ -->
-
   <section xml:id="sec-anova-descriptive">
     <title>Partitioning Variability</title>
 
     <introduction>
       <p>
-        So far we have thought about accounting for variability one 
-        variable at a time. But there is a more systematic framework 
-        for doing this: partitioning the total variability in an outcome 
-        into the part that a set of variables accounts for, and the part 
-        that remains. This framework is the foundation of what 
-        statisticians call <term>analysis of variance</term>, or 
-        <term>ANOVA</term> — though we will use it here purely as a way 
-        of describing and measuring how variability is distributed, not 
-        as a hypothesis test.
+        So far we have thought about accounting for variability one variable at
+        a time.
+        But there is a more systematic framework for doing this: partitioning
+        the total variability in an outcome into the part that a set of
+        variables accounts for, and the part that remains.
+        This framework is the foundation of what statisticians call
+        <term>analysis of variance</term>, or <term>ANOVA</term> — though we
+        will use it here purely as a way of describing and measuring how
+        variability is distributed, not as a hypothesis test.
       </p>
     </introduction>
 
     <subsection xml:id="ss-anova-total">
-      <title>Total variability, explained variability, residual variability</title>
+      <title>
+        Total variability, explained variability, residual variability
+      </title>
 
       <p>
-        Return to the variance squares from 
-        <xref ref="fig-ch9-variance-squares"/>. The total area of all 
-        those squares — added up — is proportional to the total variance 
-        in the outcome. That is the total variability we are trying to 
-        account for.
+        Return to the variance squares from
+        <xref ref="fig-ch9-variance-squares"/>.
+        The total area of all those squares — added up — is proportional to the
+        total variance in the outcome.
+        That is the total variability we are trying to account for.
       </p>
 
       <p>
-        When we fit a line — say, GDP per capita predicting life 
-        expectancy — we are trying to reduce that total area. The line 
-        moves through the data, and for each country, the square around 
-        the line (the residual square) is smaller than the square around 
-        the overall mean, if the line fits well. The reduction in total 
-        square area is what the variable <em>accounts for</em>.
+        When we fit a line — say, GDP per capita predicting life expectancy — we
+        are trying to reduce that total area.
+        The line moves through the data, and for each country, the square around
+        the line (the residual square) is smaller than the square around the
+        overall mean, if the line fits well.
+        The reduction in total square area is what the variable
+        <em>accounts for</em>.
       </p>
 
       <p>
@@ -964,21 +926,21 @@
       </program>
 
       <p>
-        The fraction of total variability accounted for by GDP per 
-        capita is 0.214 — the same R-squared we saw earlier, now 
-        expressed as a ratio of sums of squares. GDP accounts for 
-        about 21% of the total squared variation in life expectancy 
-        across African countries in 2007. The remaining 79% — the 
-        residual sum of squares — is the variability that GDP cannot 
-        account for.
+        The fraction of total variability accounted for by GDP per capita is
+        0.214 — the same R-squared we saw earlier, now expressed as a ratio of
+        sums of squares.
+        GDP accounts for about 21% of the total squared variation in life
+        expectancy across African countries in 2007.
+        The remaining 79% — the residual sum of squares — is the variability
+        that GDP cannot account for.
       </p>
 
       <p>
-        We can visualise this partitioning directly. The total squares 
-        (from the mean) can be split into two parts for each country: 
-        the part accounted for by the line (the distance from the mean 
-        to the fitted value), and the part not accounted for (the 
-        residual, from the fitted value to the observed point).
+        We can visualise this partitioning directly.
+        The total squares (from the mean) can be split into two parts for each
+        country: the part accounted for by the line (the distance from the mean
+        to the fitted value), and the part not accounted for (the residual, from
+        the fitted value to the observed point).
       </p>
 
       <program language="r">
@@ -1012,42 +974,44 @@
 
       <figure xml:id="fig-ch10-partitioned-variability">
         <caption>
-          Partitioned variability in African life expectancy, 2007. 
-          For each country, the dark teal segment shows the variability 
-          accounted for by GDP per capita (the distance from the overall 
-          mean to the fitted value). The orange segment shows the 
-          residual — the variability that GDP cannot account for. 
-          Countries where the orange segment dominates (Swaziland, 
-          Mozambique, Zambia) are those where HIV/AIDS pulled life 
-          expectancy far below what GDP would predict.
+          Partitioned variability in African life expectancy, 2007.
+          For each country, the dark teal segment shows the variability
+          accounted for by GDP per capita (the distance from the overall mean to
+          the fitted value).
+          The orange segment shows the residual — the variability that GDP
+          cannot account for.
+          Countries where the orange segment dominates (Swaziland, Mozambique,
+          Zambia) are those where HIV/AIDS pulled life expectancy far below what
+          GDP would predict.
         </caption>
+
         <image source="images/ch10_partitioned_variability.png" width="100%">
           <description>
             <p>
-              TODO: A horizontal bar chart with country names on the 
-              y-axis and life expectancy on the x-axis. Each country 
-              has two segments: a dark teal segment showing the 
-              distance from the overall mean to the GDP-predicted value, 
-              and an orange segment showing the residual from the 
-              predicted value to the observed value. A dashed vertical 
-              line marks the overall mean. Countries in southern Africa 
-              (Swaziland, Mozambique, Zambia, Zimbabwe, Botswana) have 
-              large orange segments below the teal, reflecting large 
-              negative residuals from the HIV/AIDS epidemic.
+              TODO: A horizontal bar chart with country names on the y-axis and
+              life expectancy on the x-axis.
+              Each country has two segments: a dark teal segment showing the
+              distance from the overall mean to the GDP-predicted value, and an
+              orange segment showing the residual from the predicted value to
+              the observed value.
+              A dashed vertical line marks the overall mean.
+              Countries in southern Africa (Swaziland, Mozambique, Zambia,
+              Zimbabwe, Botswana) have large orange segments below the teal,
+              reflecting large negative residuals from the HIV/AIDS epidemic.
             </p>
           </description>
         </image>
       </figure>
-
     </subsection>
 
     <subsection xml:id="ss-anova-table">
       <title>The ANOVA table as a summary of partitioned variability</title>
 
       <p>
-        The partitioning we just computed — total sum of squares, 
-        explained sum of squares, residual sum of squares — is usually 
-        presented as an <term>ANOVA table</term>. In R:
+        The partitioning we just computed — total sum of squares, explained sum
+        of squares, residual sum of squares — is usually presented as an
+        <term>ANOVA table</term>.
+        In R:
       </p>
 
       <program language="r">
@@ -1075,16 +1039,19 @@
           <cell>Sum of squares</cell>
           <cell>What it represents</cell>
         </row>
+
         <row>
           <cell><c>gdpPercap</c></cell>
           <cell>966.1</cell>
           <cell>Variability accounted for by GDP per capita</cell>
         </row>
+
         <row>
           <cell>Residuals</cell>
           <cell>3561.5</cell>
           <cell>Variability not accounted for — the residuals</cell>
         </row>
+
         <row bottom="minor">
           <cell>Total</cell>
           <cell>4527.6</cell>
@@ -1093,40 +1060,40 @@
       </tabular>
 
       <p>
-        GDP per capita accounts for 966.1 out of 4527.6 total units of 
-        squared variability — about 21%. The remaining 3561.5 is 
-        unaccounted for. That 3561.5 includes everything we saw in 
-        <xref ref="ch-variability"/>: the HIV/AIDS epidemic in southern 
-        Africa, the particular history of individual countries, and the 
-        irreducible natural variability that would remain even if we 
-        had measured everything measurable.
+        GDP per capita accounts for 966.1 out of 4527.6 total units of squared
+        variability — about 21%.
+        The remaining 3561.5 is unaccounted for.
+        That 3561.5 includes everything we saw in <xref ref="ch-variability"/>:
+        the HIV/AIDS epidemic in southern Africa, the particular history of
+        individual countries, and the irreducible natural variability that would
+        remain even if we had measured everything measurable.
       </p>
 
       <p>
-        We are not using the F-value or p-value in this chapter — those 
-        are for hypothesis testing, which comes later. What matters here 
-        is the partition itself: how much of the total variation does 
-        each variable account for, and how much is left over.
+        We are not using the F-value or p-value in this chapter — those are for
+        hypothesis testing, which comes later.
+        What matters here is the partition itself: how much of the total
+        variation does each variable account for, and how much is left over.
       </p>
-
     </subsection>
 
     <subsection xml:id="ss-anova-group">
       <title>Accounting for variability with a grouping variable</title>
 
       <p>
-        GDP per capita is a continuous variable. But we can also account 
-        for variability using a grouping variable — a factor. Continent 
-        is an obvious candidate: do African countries cluster by 
-        sub-region in ways that account for some of the variation in 
-        life expectancy?
+        GDP per capita is a continuous variable.
+        But we can also account for variability using a grouping variable — a
+        factor.
+        Continent is an obvious candidate: do African countries cluster by
+        sub-region in ways that account for some of the variation in life
+        expectancy?
       </p>
 
       <p>
-        We do not have sub-region in the gapminder data, but we can 
-        illustrate the principle using the full gapminder dataset across 
-        all continents, asking how much of the variation in life 
-        expectancy is accounted for by which continent a country is in:
+        We do not have sub-region in the gapminder data, but we can illustrate
+        the principle using the full gapminder dataset across all continents,
+        asking how much of the variation in life expectancy is accounted for by
+        which continent a country is in:
       </p>
 
       <program language="r">
@@ -1150,100 +1117,98 @@
       </program>
 
       <p>
-        Continent accounts for about 71% of the variation in life 
-        expectancy across all countries in 2007. Knowing which 
-        continent a country is on tells you a great deal about how 
-        long its people can expect to live — far more than GDP per 
-        capita alone told us for African countries. The remaining 29% 
-        is the within-continent variation: the spread among countries 
-        that share a continent but differ in life expectancy for other 
+        Continent accounts for about 71% of the variation in life expectancy
+        across all countries in 2007.
+        Knowing which continent a country is on tells you a great deal about how
+        long its people can expect to live — far more than GDP per capita alone
+        told us for African countries.
+        The remaining 29% is the within-continent variation: the spread among
+        countries that share a continent but differ in life expectancy for other
         reasons.
       </p>
 
       <p>
-        This is exactly the kind of partition that matters for the 
-        boxplot we saw in <xref ref="fig-ch9-africa-boxplot-years"/>. 
-        The height of each box — the IQR — is within-group variability: 
-        the spread among African countries in a given year, after 
-        accounting for the fact that they are all in Africa. The 
-        position of the box — where it sits on the y-axis — is 
-        between-group variability: the difference between the African 
-        average and the global average. ANOVA is the tool for 
-        partitioning those two components formally.
+        This is exactly the kind of partition that matters for the boxplot we
+        saw in <xref ref="fig-ch9-africa-boxplot-years"/>.
+        The height of each box — the IQR — is within-group variability: the
+        spread among African countries in a given year, after accounting for the
+        fact that they are all in Africa.
+        The position of the box — where it sits on the y-axis — is between-group
+        variability: the difference between the African average and the global
+        average.
+        ANOVA is the tool for partitioning those two components formally.
       </p>
-
     </subsection>
-
   </section>
-
   <!-- ============================================================ -->
   <!-- SECTION 4: Variability types revisited                       -->
   <!-- ============================================================ -->
-
   <section xml:id="sec-variability-types-revisited">
     <title>The Three Types, Revisited</title>
 
     <p>
-      We can now return to the three types of variability from 
-      <xref ref="sec-accounting-journeys"/> with the tools to be 
-      precise about them.
+      We can now return to the three types of variability from
+      <xref ref="sec-accounting-journeys"/> with the tools to be precise about
+      them.
     </p>
 
     <p>
-      <term>Accounted-for variability</term> is the part of the total 
-      sum of squares explained by the variables in the model — the dark 
-      teal segments in <xref ref="fig-ch10-partitioned-variability"/>. 
-      For the Africa data in 2007, GDP per capita accounts for 966.1 
-      units of the total variability. Year accounts for most of the 
-      trend in Kenya's life expectancy over time.
+      <term>Accounted-for variability</term> is the part of the total sum of
+      squares explained by the variables in the model — the dark teal segments
+      in <xref ref="fig-ch10-partitioned-variability"/>.
+      For the Africa data in 2007, GDP per capita accounts for 966.1 units of
+      the total variability.
+      Year accounts for most of the trend in Kenya's life expectancy over time.
     </p>
 
     <p>
-      <term>Unaccounted-for variability</term> is the part of the 
-      residual sum of squares that has real causes — the HIV/AIDS 
-      epidemic pulling Swaziland's residual to −13 years, the genocide 
-      pulling Rwanda's residual to −29 years in 1992 — but those causes 
-      are not variables we have in the dataset. This is the part of the 
-      orange segments in the figure that we could, in principle, reduce 
-      by measuring more things. It is not random. It just has not been 
-      measured.
+      <term>Unaccounted-for variability</term> is the part of the residual sum
+      of squares that has real causes — the HIV/AIDS epidemic pulling
+      Swaziland's residual to −13 years, the genocide pulling Rwanda's residual
+      to −29 years in 1992 — but those causes are not variables we have in the
+      dataset.
+      This is the part of the orange segments in the figure that we could, in
+      principle, reduce by measuring more things.
+      It is not random.
+      It just has not been measured.
     </p>
 
     <p>
-      <term>Natural variability</term> is the irreducible part of the 
-      residual — the variation that would remain even if we had measured 
-      everything measurable. It is the noise in the system: year-to-year 
-      fluctuations in Kenya's life expectancy that cannot be attributed 
-      to any identifiable cause. In practice, it is impossible to 
-      separate natural variability from unaccounted-for variability 
-      precisely — both live in the residuals. The distinction is 
-      conceptual: some of what remains in the residuals has a cause 
-      we have not found; some of it is genuinely random.
+      <term>Natural variability</term> is the irreducible part of the residual —
+      the variation that would remain even if we had measured everything
+      measurable.
+      It is the noise in the system: year-to-year fluctuations in Kenya's life
+      expectancy that cannot be attributed to any identifiable cause.
+      In practice, it is impossible to separate natural variability from
+      unaccounted-for variability precisely — both live in the residuals.
+      The distinction is conceptual: some of what remains in the residuals has a
+      cause we have not found; some of it is genuinely random.
     </p>
 
     <insight xml:id="insight-anova-three-types">
-      <title>ANOVA partitions the total — but cannot separate 
-      unaccounted-for from natural variability</title>
+      <title>
+        ANOVA partitions the total — but cannot separate unaccounted-for from
+        natural variability
+      </title>
+
       <p>
-        The ANOVA table splits the total sum of squares into two parts: 
-        what the model accounts for, and what it does not. But it 
-        cannot tell you how much of the residual is unaccounted-for 
-        variability with real unmeasured causes, and how much is 
-        genuine random noise. That distinction requires domain knowledge 
-        — understanding what else might be driving the outcome — not 
-        just statistical tools. Rwanda in 1992 is in the residual of 
-        any model that does not include a variable for genocide. The 
-        statistics show the residual is large. Only history tells you 
-        why.
+        The ANOVA table splits the total sum of squares into two parts: what the
+        model accounts for, and what it does not.
+        But it cannot tell you how much of the residual is unaccounted-for
+        variability with real unmeasured causes, and how much is genuine random
+        noise.
+        That distinction requires domain knowledge — understanding what else
+        might be driving the outcome — not just statistical tools.
+        Rwanda in 1992 is in the residual of any model that does not include a
+        variable for genocide.
+        The statistics show the residual is large.
+        Only history tells you why.
       </p>
     </insight>
-
   </section>
-
   <!-- ============================================================ -->
   <!-- EXERCISES                                                    -->
   <!-- ============================================================ -->
-
   <exercises xml:id="exercises-ch10">
     <title>Exercises</title>
 
@@ -1252,27 +1217,31 @@
         <p>
           Using the <c>gapminder</c> dataset filtered to 2007:
         </p>
+
         <ol>
           <li>
             <p>
-              Fit a linear model predicting life expectancy from GDP 
-              per capita for African countries only. What is the 
-              R-squared? How much variability does GDP account for?
+              Fit a linear model predicting life expectancy from GDP per capita
+              for African countries only.
+              What is the R-squared?
+              How much variability does GDP account for?
             </p>
           </li>
+
           <li>
             <p>
-              Now fit the same model for Asian countries only. Is 
-              the R-squared higher or lower than for Africa? What 
-              might explain the difference?
+              Now fit the same model for Asian countries only.
+              Is the R-squared higher or lower than for Africa?
+              What might explain the difference?
             </p>
           </li>
+
           <li>
             <p>
-              Which five countries have the largest positive residuals 
-              in the African model? Which five have the largest 
-              negative residuals? What do the negative residuals have 
-              in common?
+              Which five countries have the largest positive residuals in the
+              African model?
+              Which five have the largest negative residuals?
+              What do the negative residuals have in common?
             </p>
           </li>
         </ol>
@@ -1282,27 +1251,31 @@
     <exercise xml:id="ex-accounting-continent">
       <statement>
         <p>
-          Using the full <c>gapminder</c> dataset for 2007, fit a 
-          model predicting life expectancy from continent.
+          Using the full <c>gapminder</c> dataset for 2007, fit a model
+          predicting life expectancy from continent.
         </p>
+
         <ol>
           <li>
             <p>
-              Produce the ANOVA table. How much of the total 
-              variability does continent account for?
+              Produce the ANOVA table.
+              How much of the total variability does continent account for?
             </p>
           </li>
+
           <li>
             <p>
-              Now add GDP per capita to the model alongside continent. 
-              Does adding GDP account for additional variability 
-              beyond what continent already explains? How much?
+              Now add GDP per capita to the model alongside continent.
+              Does adding GDP account for additional variability beyond what
+              continent already explains?
+              How much?
             </p>
           </li>
+
           <li>
             <p>
-              In your own words, explain what the residual sum of 
-              squares represents in each model.
+              In your own words, explain what the residual sum of squares
+              represents in each model.
             </p>
           </li>
         </ol>
@@ -1312,30 +1285,33 @@
     <exercise xml:id="ex-accounting-kenya">
       <statement>
         <p>
-          Filter the gapminder data to Kenya only and fit a linear 
-          model predicting life expectancy from year.
+          Filter the gapminder data to Kenya only and fit a linear model
+          predicting life expectancy from year.
         </p>
+
         <ol>
           <li>
             <p>
-              What is the R-squared? What does it tell you about how 
-              much of Kenya's life expectancy variation is accounted 
-              for by the passage of time?
+              What is the R-squared?
+              What does it tell you about how much of Kenya's life expectancy
+              variation is accounted for by the passage of time?
             </p>
           </li>
+
           <li>
             <p>
-              Plot the residuals over time. Is there a pattern, or 
-              do they look random? What does any pattern suggest about 
-              unaccounted-for variability?
+              Plot the residuals over time.
+              Is there a pattern, or do they look random?
+              What does any pattern suggest about unaccounted-for variability?
             </p>
           </li>
+
           <li>
             <p>
-              Which year has the largest negative residual? What 
-              historical event explains it? Is this unaccounted-for 
-              variability or natural variability — and how do you 
-              know?
+              Which year has the largest negative residual?
+              What historical event explains it?
+              Is this unaccounted-for variability or natural variability — and
+              how do you know?
             </p>
           </li>
         </ol>
@@ -1345,38 +1321,39 @@
     <exercise xml:id="ex-accounting-three-types">
       <statement>
         <p>
-          For each of the following situations, say which type of 
-          variability is being described — accounted-for, 
-          unaccounted-for, or natural — and explain your reasoning.
+          For each of the following situations, say which type of variability is
+          being described — accounted-for, unaccounted-for, or natural — and
+          explain your reasoning.
         </p>
+
         <ol>
           <li>
             <p>
-              A model predicting crop yield from rainfall accounts 
-              for 65% of the variation in yield across farms. The 
-              remaining 35% includes differences in soil quality that 
-              were not measured.
+              A model predicting crop yield from rainfall accounts for 65% of
+              the variation in yield across farms.
+              The remaining 35% includes differences in soil quality that were
+              not measured.
             </p>
           </li>
+
           <li>
             <p>
-              After accounting for soil quality and rainfall, a small 
-              amount of variation in crop yield remains that cannot 
-              be attributed to any identifiable factor.
+              After accounting for soil quality and rainfall, a small amount of
+              variation in crop yield remains that cannot be attributed to any
+              identifiable factor.
             </p>
           </li>
+
           <li>
             <p>
-              A model predicting Nairobi commute times using time of 
-              day accounts for 40% of the variation. A specific 
-              Friday's commutes were longer than usual because of an 
+              A model predicting Nairobi commute times using time of day
+              accounts for 40% of the variation.
+              A specific Friday's commutes were longer than usual because of an
               accident on Ngong Road that was not recorded anywhere.
             </p>
           </li>
         </ol>
       </statement>
     </exercise>
-
   </exercises>
-
 </chapter>
