@@ -34,7 +34,27 @@ jobs:
       
       - name: Install PreTeXt CLI
         run: |
-          pip install pretext
+          pip install -r pretext/requirements.txt
+
+      - name: Seed Runestone services cache fallback
+        run: |
+          CACHE_DIR="$(python3 -c 'from pretext import resources; print(resources.resource_base_path() / "rs_cache")')"
+          mkdir -p "$CACHE_DIR"
+          cat > "$CACHE_DIR/rs_services.xml" <<'EOF'
+          <all>
+            <js>
+              <item>runtime.bundle.js</item>
+              <item>runtime-libs.bundle.js</item>
+              <item>runestone.bundle.js</item>
+            </js>
+            <css>
+              <item>runtime-libs.css</item>
+              <item>runestone.css</item>
+            </css>
+            <cdn-url>https://runestone.academy/cdn/runestone/latest/</cdn-url>
+            <version>latest</version>
+          </all>
+          EOF
           
       - name: Install ImageMagick for image conversion
         run: |
