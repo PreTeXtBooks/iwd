@@ -38,21 +38,21 @@ jobs:
 
       - name: Seed Runestone services cache fallback
         run: |
+          RUNESTONE_VERSION="8.2.10"
+          RUNESTONE_CDN_URL="https://runestone.academy/cdn/runestone/${RUNESTONE_VERSION}/"
           CACHE_DIR="$(python3 -c 'from pretext import resources; print(resources.resource_base_path() / "rs_cache")')"
           mkdir -p "$CACHE_DIR"
-          cat > "$CACHE_DIR/rs_services.xml" <<'EOF'
+          cat > "$CACHE_DIR/rs_services.xml" <<EOF
           <all>
             <js>
-              <item>runtime.bundle.js</item>
-              <item>runtime-libs.bundle.js</item>
-              <item>runestone.bundle.js</item>
+              <item>prefix-runtime.e3f9706509fcf6f7.bundle.js</item>
+              <item>prefix-runestone.c5ba0ffa5f963084.bundle.js</item>
             </js>
             <css>
-              <item>runtime-libs.css</item>
-              <item>runestone.css</item>
+              <item>prefix-runestone.efe427683fc41f98.css</item>
             </css>
-            <cdn-url>https://runestone.academy/cdn/runestone/latest/</cdn-url>
-            <version>latest</version>
+            <cdn-url>${RUNESTONE_CDN_URL}</cdn-url>
+            <version>${RUNESTONE_VERSION}</version>
           </all>
           EOF
           
