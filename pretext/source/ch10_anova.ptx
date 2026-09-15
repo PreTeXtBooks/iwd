@@ -228,7 +228,7 @@
         fluctuations that remain even after everything predictable has been
         accounted for.
         The chart shows all three types of variability at once: the repeating
-        pattern (accounted for), the unexplained spike above it (unaccounted
+        pattern (accounted for), the unaccounted for spike above it (unaccounted
         for), and the jagged noise around both lines (natural).
       </p>
 
@@ -392,13 +392,13 @@
       </code>
     </program>
 
-    <figure xml:id="fig-ch9-explained-only">
+    <figure xml:id="fig-ch9-accounted for-only">
       <caption>
         Accounted for variability only.
         <m>y = x</m>: all variability in <m>y</m> is accounted for by <m>x</m>.
       </caption>
 
-      <image source="images/ch9_explained_only.png" width="70%">
+      <image source="images/ch9_accounted for_only.png" width="70%">
         <description>
           <p>
             A scatter plot where all ten points fall exactly on a straight
@@ -441,15 +441,15 @@
       </code>
     </program>
 
-    <figure xml:id="fig-ch9-explained-natural">
+    <figure xml:id="fig-ch9-accounted for-natural">
       <caption>
-        Explained and natural variability.
+        accounted for and natural variability.
         <m>y = x + \varepsilon</m>: points scatter around the line <m>y = x</m>
         (shown dashed) due to random noise.
         The trend is still visible but no longer perfect.
       </caption>
 
-      <image source="images/ch9_explained_natural.png" width="70%">
+      <image source="images/ch9_accounted for_natural.png" width="70%">
         <description>
           <p>
             A scatter plot where the ten points are scattered around a dashed
@@ -542,11 +542,615 @@
     </p>
   </section>
 
-  <section xml:id="sec-accounting-variability-r">
-    <title>Accounting for Variability in R</title>
+  <section xml:id="sec-anova-r">
+    <title>Accounting for Variability in R: ANOVA Tables</title>
+
+    <introduction>
+      <p>
+        In <xref ref="ch-variability"/> we looked at how spread out life
+        expectancy is across countries and over time, and explored how to put a
+        number on that spread.
+        This section asks the next question: how much of that variability can we
+        account for, and with what?
+        The tool for answering this is the <term>ANOVA table</term>.
+        This can split the total variability in an outcome into the part that a
+        variable accounts for, and the part that remains.
+      </p>
+
+      <p>
+        We use the same Gapminder data from <xref ref="sec-gapminder"/>.
+        Load it if you have not already:
+      </p>
+
+      <program language="r">
+        <code>
+        library(gapminder)
+        library(ggplot2)
+        library(dplyr)
+
+        data(gapminder)
+        head(gapminder)
+        </code>
+      </program>
+    </introduction>
+
+    <subsection xml:id="ss-anova-gdp">
+      <title>A numerical variable: GDP per capita</title>
+
+      <p>
+        We start with a simple question: how much of the variation in life
+        expectancy across countries and years can be accounted for by GDP per
+        capita?
+        Wealthier countries tend to have longer life expectancies, but how much
+        of the total spread does that relationship actually account for?
+      </p>
+
+      <program language="r">
+        <code>
+        mod &lt;- lm(lifeExp ~ gdpPercap, data = gapminder)
+        anova(mod)
+        #&gt; Analysis of Variance Table
+        #&gt;
+        #&gt; Response: lifeExp
+        #&gt;            Df  Sum Sq Mean Sq F value    Pr(&gt;F)
+        #&gt; gdpPercap   1   96813   96813  879.58 &lt;2.2e-16 ***
+        #&gt; Residuals 1702  187335     110
+        #&gt; Total     1703  284148     167
+        </code>
+      </program>
+
+      <p>
+        The ANOVA table partitions the total variability in life expectancy into
+        two rows.
+        The first row is the variability that GDP per capita accounts for:
+        96,813 units of squared variation.
+        The second row is the variability left over after accounting for GDP:
+        187,335 units.
+        The total is 96,813 + 187,335 = 284,148.
+      </p>
+
+      <p>
+        The fraction accounted for is:
+      </p>
+
+      <program language="r">
+        <code>
+        96813 / (96813 + 187335)
+        #&gt; [1] 0.341
+        </code>
+      </program>
+
+      <p>
+        GDP per capita accounts for 34.1% of the variability in life expectancy.
+        That is already substantial: knowing a country's wealth tells you
+        something real about how long its people live.
+        But recall from <xref ref="sec-gapminder"/>, shown in
+        <xref ref="fig-ch10-gdp-raw"/> that the relationship between GDP and
+        life expectancy is not linear, it curves, and a log scale makes it much
+        cleaner.
+        Let us apply that transformation before continuing:
+      </p>
+
+      <program language="r">
+        <code>
+        ggplot(gapminder, aes(x = gdpPercap, y = lifeExp)) +
+          geom_point(colour = "#636363") +
+          labs(x = "GDP per capita", y = "Life expectancy (years)") +
+          theme_bw()
+        </code>
+      </program>
+
+      <figure xml:id="fig-ch10-gdp-raw">
+        <caption>
+          Life expectancy against GDP per capita, untransformed.
+          The relationship is clearly curved, with a cluster of countries
+          compressed at the low end of the x-axis.
+        </caption>
+
+        <image source="images/ch10_gdp_raw.png" width="80%">
+          <description>
+            <p>
+              A scatter plot with GDP per capita on the x-axis and life
+              expectancy in years on the y-axis.
+              Most points are clustered toward the left of the x-axis, with a
+              long tail of wealthier countries stretching to the right.
+              The relationship is strongly curved rather than linear.
+            </p>
+          </description>
+        </image>
+      </figure>
+
+      <program language="r">
+        <code>
+        gapminder &lt;- gapminder %&gt;%
+          mutate(log_gdpPercap = log(gdpPercap))
+
+        mod &lt;- lm(lifeExp ~ log_gdpPercap, data = gapminder)
+        anova(mod)
+        #&gt; Analysis of Variance Table
+        #&gt;
+        #&gt; Response: lifeExp
+        #&gt;               Df  Sum Sq Mean Sq F value    Pr(&gt;F)
+        #&gt; log_gdpPercap  1  185335  185335  3192.3 &lt;2.2e-16 ***
+        #&gt; Residuals   1702   98814      58
+        </code>
+      </program>
+
+      <p>
+        With the log transformation, GDP per capita now accounts for 185,335 out
+        of 284,149 total units of variability:
+      </p>
+
+      <program language="r">
+        <code>
+        185335 / 284149
+        #&gt; [1] 0.652
+        </code>
+      </program>
+
+      <p>
+        65.2% of the variability in life expectancy is accounted for by log GDP
+        per capita.
+        That is a striking number: Simply knowing how wealthy a country is, on a
+        log scale, accounts for nearly two thirds of the variation in how long
+        its people live, across all countries and all years in the dataset.
+      </p>
+
+      <p>
+        The three plots below make this partition visible.
+        The first shows the <term>total sum of squares</term>: the orange
+        segments are the distances from each country's life expectancy to the
+        overall mean (the horizontal line).
+        This is all the variability we are trying to account for.
+      </p>
+
+      <figure xml:id="fig-ch10-total-ss">
+        <caption>
+          Total sum of squares.
+          Each orange segment shows the distance from one country-year's life
+          expectancy to the overall mean.
+          The sum of all squared segment lengths is 284,149.
+        </caption>
+
+        <image source="images/ch10_total_ss.png" width="80%">
+          <description>
+            <p>
+              A scatter plot with log GDP per capita on the x-axis and life
+              expectancy on the y-axis.
+              A horizontal black line runs across at the mean life expectancy.
+              Orange vertical segments connect each point to that line.
+              Segments are longer for points far from the mean — very low and
+              very high life expectancies.
+            </p>
+          </description>
+        </image>
+      </figure>
+
+      <p>
+        The second plot shows the <term>accounted-for sum of squares</term>: the
+        distances from the fitted line to the overall mean, measured at each
+        data point.
+        This is the variability that log GDP per capita accounts for.
+        The reduction in spread achieved by using the line rather than the mean.
+      </p>
+
+      <figure xml:id="fig-ch10-accounted for-ss">
+        <caption>
+          Accounted-for sum of squares.
+          Each orange segment shows the distance from one country-year's life
+          expectancy to the fitted line.
+          The sum of squared segment lengths is 185,335 — the variability that
+          log GDP per capita accounts for.
+        </caption>
+
+        <image source="images/ch10_accounted for_ss.png" width="80%">
+          <description>
+            <p>
+              The same scatter plot with a fitted regression line.
+              Orange segments now connect each point to the line of best fit
+              rather than the horizontal mean.
+              The segments are shorter overall than in the total SS plot,
+              reflecting that the line fits better than the mean.
+            </p>
+          </description>
+        </image>
+      </figure>
+
+      <p>
+        The third plot shows the <term>residual sum of squares</term>: the
+        leftover (residual) sums of squares.
+        This gives the distances for each point from the line of best fit to the
+        overall mean.
+        These are the residuals — the variability that log GDP per capita cannot
+        account for.
+      </p>
+
+      <program language="r">
+        <code>
+        ggplot(gapminder, aes(x = log_gdpPercap, y = lifeExp)) +
+          geom_segment(
+            aes(xend = log_gdpPercap,
+                yend = predict(lm(lifeExp ~ log_gdpPercap, 
+                                  data = gapminder))),
+            colour = "orange", alpha = 0.5) +
+          geom_point(colour = "#636363") +
+          geom_smooth(se = FALSE, method = "lm", colour = "black") +
+          labs(title = "Residual sum of squares",
+               subtitle = "Orange: distance from each point to the line of best fit",
+               x = "Log GDP per capita",
+               y = "Life expectancy (years)") +
+          theme_bw()
+        </code>
+      </program>
+
+      <figure xml:id="fig-ch10-residual-ss">
+        <caption>
+          Residual sum of squares.
+          Each orange segment shows the distance from the fitted line to the
+          overall mean, at each data point's x value.
+          The sum of all squared segment lengths is 98,814: the variability that
+          log GDP per capita cannot account for.
+          Total SS = accounted for SS + Residual SS: 284,149 = 185,335 + 98,814.
+        </caption>
+
+        <image source="images/ch10_residual_ss.png" width="80%">
+          <description>
+            <p>
+              The same scatter plot with both the fitted line and the horizontal
+              mean line.
+              Orange segments connect the fitted line to the mean line at each x
+              value.
+              Where the fitted line is well above or below the mean, the
+              segments are long.
+              Where the fitted line crosses or is close to the mean, the
+              segments are short.
+            </p>
+          </description>
+        </image>
+      </figure>
+
+      <p>
+        The three sum of squares are related by a simple identity: Total SS =
+        Accounted for SS + Residual SS (284,149 = 185,335 + 98,814).
+        The ANOVA table reports exactly these three values, and the fraction
+        accounted for by the variable is 65.2%.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-anova-continent">
+      <title>A categorical variable: continent</title>
+
+      <p>
+        The same framework applies when the explanatory variable is categorical
+        rather than numerical.
+        Instead of a line of best fit, we now fit a separate mean for each
+        continent.
+        How much of the variability in life expectancy is accounted for by
+        simply knowing which continent a country is on?
+      </p>
+
+      <program language="r">
+        <code>
+        mod_continent &lt;- lm(lifeExp ~ continent, data = gapminder)
+        anova(mod_continent)
+        #&gt; Analysis of Variance Table
+        #&gt;
+        #&gt; Response: lifeExp
+        #&gt;            Df  Sum Sq Mean Sq F value    Pr(&gt;F)
+        #&gt; continent   4  139343   34836  408.73 &lt;2.2e-16 ***
+        #&gt; Residuals 1699  144805      85
+        #&gt; Total     1703  284149
+
+        139343 / 284149
+        #&gt; [1] 0.490
+        </code>
+      </program>
+
+      <p>
+        Continent alone accounts for 49.0% of the variability in life
+        expectancy.
+        The degrees of freedom for continent is 4 because there are five
+        continents, and fitting a separate mean for each uses four degrees of
+        freedom (the fifth is determined once the other four are fixed).
+      </p>
+
+      <p>
+        The plots below show the same three components as before, now for the
+        continent model.
+        Instead of a single line of best fit, the horizontal segments in each
+        plot represent the continent mean: a separate value for each group.
+      </p>
+
+      <figure xml:id="fig-ch10-continent-accounted-for">
+        <caption>
+          Accounted for sum of squares for the continent model.
+          Each orange segment shows the distance from a country-year's continent
+          mean (short horizontal line) to their life expectancy point.
+        </caption>
+
+        <image source="images/ch10_continent_accountedfor.png" width="90%">
+          <description>
+            <p>
+              A jittered dot plot with one column per continent.
+              Short horizontal segments mark each continent's mean life
+              expectancy.
+              Orange vertical segments connect the continent mean to the life
+              expectancy for each point.
+            </p>
+          </description>
+        </image>
+      </figure>
+
+      <figure xml:id="fig-ch10-continent-total">
+        <caption>
+          Total sum of squares for the continent model.
+          Each orange segment shows the distance from a country-year's life
+          expectancy to the overall mean (horizontal line).
+          Africa tends to have its mean life expectancy far below the global
+          mean, and Oceania far above.
+        </caption>
+
+        <image source="images/ch10_continent_total.png" width="90%">
+          <description>
+            <p>
+              A jittered dot plot with one column per continent.
+              A single horizontal line marks the overall mean life expectancy.
+              Orange vertical segments connect each life expectancy point to the
+              overall mean for each point.
+              Africa's column generally sits well below the overall mean;
+              Oceania sits well above it.
+            </p>
+          </description>
+        </image>
+      </figure>
+
+      <figure xml:id="fig-ch10-continent-unaccounted-for">
+        <caption>
+          Unaccounted for sum of squares for the continent model.
+          Each orange segment shows the distance from a country-year's continent
+          mean (short horizontal line) to the overall mean (long horizontal
+          line).
+          Continents whose mean life expectancy is far from the global mean —
+          Africa below, Oceania above — contribute the most to the SS.
+        </caption>
+
+        <image source="images/ch10_continent_unaccountedfor.png" width="90%">
+          <description>
+            <p>
+              A jittered dot plot with one column per continent.
+              Short horizontal segments mark each continent's mean life
+              expectancy.
+              A long horizontal line marks the overall mean.
+              Orange vertical segments connect the continent mean to the overall
+              mean for each point.
+              Africa's column sits well below the overall mean; Oceania and
+              Europe sit well above it.
+            </p>
+          </description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="ss-anova-combined">
+      <title>Combining variables</title>
+
+      <p>
+        Both log GDP per capita and continent account for substantial fractions
+        of the variability in life expectancy.
+        But how much do they account for together?
+        We can add both to the same model:
+      </p>
+
+      <program language="r">
+        <code>
+        mod_combined &lt;- lm(lifeExp ~ continent + log_gdpPercap, 
+                           data = gapminder)
+        anova(mod_combined)
+        #&gt; Analysis of Variance Table
+        #&gt;
+        #&gt; Response: lifeExp
+        #&gt;               Df  Sum Sq Mean Sq  F value    Pr(&gt;F)
+        #&gt; continent      4  139343   34836   703.24 &lt;2.2e-16 ***
+        #&gt; log_gdpPercap  1   60693   60693  1225.22 &lt;2.2e-16 ***
+        #&gt; Residuals   1698   84113      50
+
+        (139343 + 60693) / 284149
+        #&gt; [1] 0.704
+        </code>
+      </program>
+
+      <p>
+        Together, continent and log GDP per capita account for 70.4% of the
+        variability in life expectancy.
+        Notice that log GDP per capita's sum of squares has dropped from 185,335
+        (when it was the only variable) to 60,693 (when continent is already in
+        the model).
+        This is because continent and GDP are related — richer continents tend
+        to have higher GDP — so some of the variability that log GDP appeared to
+        account for on its own was actually shared with continent.
+        Once continent is accounted for first, log GDP accounts for less
+        additional variability.
+        The same would happen if we entered log GDP first and then continent.
+        However, regardless of order, the two variables together account for the
+        same total variability.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-anova-more">
+      <title>Adding more variables</title>
+
+      <p>
+        How far can we push this?
+        Let us add country, year, and population to the model.
+        Country is more specific than continent — knowing which country a row
+        belongs to tells you more than knowing which continent — so it replaces
+        continent in the model.
+      </p>
+
+      <program language="r">
+        <code>
+        mod_full &lt;- lm(lifeExp ~ log_gdpPercap + country + year + pop,
+                       data = gapminder)
+        anova(mod_full)
+        #&gt; Analysis of Variance Table
+        #&gt;
+        #&gt; Response: lifeExp
+        #&gt;               Df  Sum Sq Mean Sq   F value    Pr(&gt;F)
+        #&gt; log_gdpPercap  1  185335  185335 15165.874 &lt;2.2e-16 ***
+        #&gt; country       141   55179     391    32.023 &lt;2.2e-16 ***
+        #&gt; year           1   24205   24205  1980.712 &lt;2.2e-16 ***
+        #&gt; pop            1     378     378    30.923 3.154e-08 ***
+        #&gt; Residuals   1559   19052      12
+
+        (185335 + 55179 + 24205 + 378) / 284149
+        #&gt; [1] 0.933
+        </code>
+      </program>
+
+      <p>
+        Log GDP per capita, country, year, and population together account for
+        93.3% of the variability in life expectancy.
+        The remaining 6.7% (19,052 units of variability) sits in the residuals.
+        Some of that is unaccounted-for variability with real causes: specific
+        events in specific countries in specific years that none of these four
+        variables can capture.
+        Some is natural variability — the irreducible noise that would remain
+        even if we had measured everything measurable.
+        The ANOVA table cannot separate these two.
+        That distinction requires domain knowledge; for example, knowing that
+        Rwanda in 1992 is not noise but history, from our data explorations and
+        visualisations.
+      </p>
+
+      <insight xml:id="insight-anova-residual">
+        <title>The residual is not just noise</title>
+
+        <p>
+          The residual sum of squares is what remains after the named variables
+          have accounted for what they can.
+          It is tempting to call this noise and move on, but the residual
+          contains two very different things: genuine random variation that no
+          variable would ever account for, and real variation caused by things that
+          were not measured or not included.
+          Rwanda's life expectancy in 1992 sits in the residual of any model
+          that does not include a variable for genocide.
+          The ANOVA table reports its squared distance from the fitted value as
+          part of the 19,052.
+          Only context tells you that it is not noise.
+        </p>
+      </insight>
+
+      <p>
+        The ANOVA table shows that population accounts for 378 units of
+        variability in life expectancy.
+        But does a country having a larger population cause its people to live
+        longer?
+        Almost certainly not.
+        Population is associated with life expectancy in this dataset — perhaps
+        because larger populations tend to be in countries that have urbanised
+        and developed more — but that association is not a causal mechanism.
+        The same is true of year: life expectancy in Kenya changes as year
+        increases, and year accounts for a large fraction of that variability.
+        But the year ticking over from 1987 to 1992 did not cause life
+        expectancy to fall. Other factors, such as the HIV/AIDS epidemic, did.
+        Year is a proxy for all the things that changed over time (medicine,
+        sanitation, nutrition, disease) none of which are in this dataset.
+      </p>
+
+      <p>
+        This is the distinction between <term>accounting for</term> variability
+        and <term>explaining</term> it.
+        A variable accounts for variability when knowing its value lets you
+        predict the outcome better — when it reduces the residual sum of
+        squares.
+        It explains variability when it is part of the actual causal mechanism
+        driving the outcome.
+        Year and population account for variability in life expectancy.
+        They do not explain it.
+        The ANOVA table cannot tell you which is which.
+        That requires knowing something about the world beyond the data.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-anova-table-reading">
+      <title>Reading the ANOVA table</title>
+
+      <p>
+        The ANOVA table has five columns.
+        The first three — <c>Df</c>, <c>Sum Sq</c>, and <c>Mean Sq</c> —
+        describe the partition of variability.
+        Then <c>F value</c> helps show how much larger the variability accounted
+        for by the variable is compared to the residual.
+        <c>Pr(&gt;F)</c> can be completely ignored in this book.
+        For the purposes of this chapter, focus on the first three.
+      </p>
+
+      <tabular halign="left">
+        <col halign="left" width="20%"/>
+        <col halign="left" width="80%"/>
+        <row header="yes" bottom="minor">
+          <cell>Column</cell>
+          <cell>What it means</cell>
+        </row>
+
+        <row>
+          <cell><c>Df</c></cell>
+          <cell>
+            Degrees of freedom.
+            For a numerical variable, always 1.
+            For a categorical variable with <m>k</m> levels, always
+            <m>k - 1</m>.
+            For residuals, total rows minus the number of parameters fitted.
+          </cell>
+        </row>
+
+        <row>
+          <cell><c>Sum Sq</c></cell>
+          <cell>
+            Sum of squares — the total squared variation accounted for by this
+            variable, or left in the residual.
+          </cell>
+        </row>
+
+        <row>
+          <cell><c>Mean Sq</c></cell>
+          <cell>
+            Mean square — Sum Sq divided by Df.
+            The average squared variation per degree of freedom.
+          </cell>
+        </row>
+
+        <row>
+          <cell><c>F value</c></cell>
+          <cell>
+            The ratio of the variable's Mean Sq to the residual Mean Sq.
+            Large values indicate the variable accounts for substantially more
+            variability than the residual.
+          </cell>
+        </row>
+      </tabular>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-accounting-callbacks">
+    <title>Connecting Back to Chapter 9</title>
+
+    <p>
+      In <xref ref="ch-variability"/> we introduced several ways of measuring
+      variability without yet asking what causes it.
+      Now that we have the language of accounted-for, unaccounted-for, and
+      natural variability, it is worth revisiting three things from that chapter
+      with fresh eyes.
+    </p>
+
+    <p>
+      First, the boxplot of African life expectancy over time (
+      <xref ref="fig-ch9-africa-boxplot-years"/> ).
+      That chart showed two distinct kinds of variability simultaneously, and we
+      can now name them properly.
+    </p>
 
     <insight xml:id="insight-boxplot-variability-types">
-      # this goes into Ch10 I think
       <title>Two kinds of variability in one chart</title>
 
       <p>
@@ -596,44 +1200,31 @@
         slightly from year to year for reasons no dataset would ever fully
         capture.
       </p>
-
-      <p>
-        You might notice that year is in our dataset, and we can see that life
-        expectancy in Kenya changes depending on year.
-        So does year account for the variability in Kenya's life expectancy over
-        time?
-        In a narrow sense, yes: if you know the year, you can predict roughly
-        where Kenya's life expectancy will sit.
-        But there is an important distinction between
-        <term>accounting for</term> variability and <term>explaining</term> it.
-        Year accounts for the pattern — it tells you when things changed.
-        It does not explain why.
-        The actual causes of the rise (improvements in medicine, sanitation, and
-        nutrition) and the dip (the HIV/AIDS epidemic) are not in this dataset.
-        Year is acting as a proxy for all of them combined.
-        Accounting for variability means being able to predict or describe a
-        pattern; explaining it means knowing what actually drove it.
-        The two are not the same, and confusing them is one of the most common
-        mistakes in data analysis.
-      </p>
     </insight>
 
     <p>
-      fig-ch9-least-squares-comparison -- The reduction in square area from left
-      to right is the reduction in unaccounted-for variability.
+      Second, the least squares comparison (
+      <xref ref="fig-ch9-least-squares-comparison"/> ).
+      The reduction in square area from left to right — from the flat line to
+      the line of best fit — is exactly what the ANOVA table's accounted for sum
+      of squares measures.
+      The flat line at the mean is the world with nothing accounted for: total
+      SS only.
+      The line of best fit reduces that area by the accounted for SS, leaving
+      the residual SS in the smaller squares that remain.
     </p>
 
     <p>
-      about the gif -- The size of the squares (residuals) from this process are
-      themselves a measure of variability: they represent everything in the
-      outcome that the line cannot explain.
-      A small total squared error means the line accounts for most of #
-      discussing accounting for variability goes in Ch10.
-      Just measuring it here, so we can call this back and discuss this in that
-      context in ch10 the variability; a large total squared error means much of
-      the variability is still unaccounted for.
+      Third, the animation ( <xref ref="fig-ch9-least-squares-animation"/> ).
+      The squares shrinking as the line rotates from horizontal to its best
+      position are the residuals — the variability the line cannot account for.
+      A small total squared error at the end of the animation means the line
+      accounts for most of the variability; a large one means much of the
+      variability is still unaccounted for.
+      The ANOVA table puts a number on exactly that.
     </p>
   </section>
+
   <exercises xml:id="exercises-ch10">
     <title>Exercises</title>
 
@@ -679,539 +1270,6 @@
         </ol>
       </statement>
     </exercise>
-  </exercises>
-
-  <section xml:id="sec-accounting-africa">
-    <title>Accounting for Variability in African Life Expectancy</title>
-
-    <introduction>
-      <p>
-        In <xref ref="ch-variability"/>, we saw that the standard deviation of
-        life expectancy across African countries nearly doubled between 1952 and
-        2007, and that specific events — Rwanda in 1992, the HIV/AIDS epidemic
-        in southern Africa from the mid-1990s — drove sharp spikes in the
-        variance.
-        Those observations described the variation.
-        This section asks what accounts for it.
-      </p>
-
-      <p>
-        We will work with the same Africa data from the <c>gapminder</c>
-        package, and the same four highlighted countries — Botswana, Kenya,
-        Libya, and Swaziland.
-        But instead of asking how large the squares are, we will ask what makes
-        them large or small.
-      </p>
-    </introduction>
-
-    <subsection xml:id="ss-accounting-year">
-      <title>Year as a source of variability</title>
-
-      <p>
-        The simplest structure in this data is time.
-        Life expectancy changes year by year — generally upward, with some
-        setbacks.
-        If we fit a line through Kenya's life expectancy over time, as we did
-        with the least squares visualisation in <xref ref="ss-least-squares"/>,
-        the line accounts for some of the variability in the data.
-        The squares around the line — the residuals — are what the line cannot
-        account for.
-      </p>
-
-      <p>
-        But as we noted in <xref ref="ch-variability"/>, year is not really an
-        explanation.
-        It is a label for when the observation happened.
-        The actual causes of the rise — improvements in medicine, sanitation,
-        and nutrition — and the cause of the dip — the HIV/AIDS epidemic — are
-        not directly in the dataset.
-        Year is acting as a proxy for all of them combined.
-        It accounts for the pattern, but does not explain it.
-      </p>
-
-      <program language="r">
-        <code>
-          kenya &lt;- gapminder %&gt;%
-            filter(country == "Kenya")
-
-          # Fit a line through Kenya's life expectancy over time
-          model_kenya &lt;- lm(lifeExp ~ year, data = kenya)
-
-          # How much of the variation does year account for?
-          summary(model_kenya)$r.squared
-          #&gt; [1] 0.8878
-        </code>
-      </program>
-
-      <p>
-        The R-squared value of 0.89 means that year accounts for roughly 89% of
-        the variation in Kenya's life expectancy over this period.
-        The remaining 11% — the residuals around the line — is variability that
-        year alone cannot account for.
-        Some of that 11% is unaccounted-for variability with real causes
-        (droughts, policy decisions, specific health interventions that happened
-        in particular years).
-        Some of it is natural variability — small year-to-year fluctuations that
-        no variable would fully capture.
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-accounting-country">
-      <title>Country as a source of variability</title>
-
-      <p>
-        Now consider the variation across countries within a single year.
-        In 2007, the standard deviation of life expectancy across all 52 African
-        countries was 9.63 years.
-        Where does that spread come from?
-      </p>
-
-      <p>
-        One variable available to us is GDP per capita.
-        Wealthier countries tend to have better healthcare systems, better
-        nutrition, and longer life expectancies.
-        If we use GDP per capita to account for some of the cross-country
-        variation, how much does it explain?
-      </p>
-
-      <program language="r">
-        <code>
-          africa_2007 &lt;- gapminder %&gt;%
-            filter(continent == "Africa", year == 2007)
-
-          model_gdp &lt;- lm(lifeExp ~ gdpPercap, data = africa_2007)
-          summary(model_gdp)$r.squared
-          #&gt; [1] 0.2137
-        </code>
-      </program>
-
-      <p>
-        GDP per capita accounts for only about 21% of the variation in life
-        expectancy across African countries in 2007.
-        That is meaningful — richer countries do tend to have longer life
-        expectancies — but most of the spread remains unaccounted for.
-        The remaining 79% reflects differences between countries that GDP does
-        not capture: governance, geography, disease burden, the particular
-        history of the HIV/AIDS epidemic in some countries and not others.
-        These are real causes of variation — unaccounted-for variability — not
-        random noise.
-      </p>
-
-      <p>
-        We can see this directly by looking at the residuals.
-        Countries like Swaziland and Botswana sit far below what their GDP per
-        capita would predict — their life expectancies were pulled down by
-        HIV/AIDS in ways that GDP alone cannot account for.
-        And Libya sits well above what its GDP would predict — it benefited from
-        oil revenues being invested in public health in ways not captured by a
-        simple GDP figure.
-      </p>
-
-      <program language="r">
-        <code>
-          library(dplyr)
-          library(ggplot2)
-
-          africa_2007 &lt;- africa_2007 %&gt;%
-            mutate(
-              fitted   = fitted(model_gdp),
-              residual = residuals(model_gdp)
-            )
-
-          # Which countries have the largest residuals?
-          africa_2007 %&gt;%
-            select(country, lifeExp, fitted, residual) %&gt;%
-            arrange(residual) %&gt;%
-            head(5)
-          #&gt; # A tibble: 5 x 4
-          #&gt;   country   lifeExp fitted residual
-          #&gt;   &lt;fct&gt;       &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;
-          #&gt; 1 Swaziland    39.6   52.8    -13.2
-          #&gt; 2 Mozambique   42.1   50.2    -8.1
-          #&gt; 3 Zambia       42.4   51.1    -8.7
-          #&gt; 4 Zimbabwe     43.5   51.4    -7.9
-          #&gt; 5 Botswana     50.7   55.4    -4.7
-        </code>
-      </program>
-
-      <p>
-        The five countries with the largest negative residuals are all among the
-        most severely affected by HIV/AIDS.
-        Their life expectancies are 5 to 13 years lower than GDP per capita
-        alone would predict.
-        That gap is unaccounted-for variability — real, caused, and important —
-        that a model using only GDP cannot see.
-      </p>
-    </subsection>
-
-    <insight xml:id="insight-accounting-residuals">
-      <title>Residuals are unaccounted-for variability</title>
-
-      <p>
-        In <xref ref="ss-least-squares"/>, we introduced residuals as the
-        distances between observed values and a fitted line.
-        Now we can name what they represent: they are the variability in the
-        outcome that the variables in the model cannot account for.
-        Large residuals do not necessarily mean the model is wrong — they mean
-        there is something real affecting the outcome that the model has not
-        measured.
-        Swaziland's residual of −13.2 years is not noise.
-        It is the HIV/AIDS epidemic, unmeasured.
-      </p>
-    </insight>
-  </section>
-  <!-- ============================================================ -->
-  <!-- SECTION 3: Partitioning variability — the ANOVA idea        -->
-  <!-- ============================================================ -->
-  <section xml:id="sec-anova-descriptive">
-    <title>Partitioning Variability</title>
-
-    <introduction>
-      <p>
-        So far we have thought about accounting for variability one variable at
-        a time.
-        But there is a more systematic framework for doing this: partitioning
-        the total variability in an outcome into the part that a set of
-        variables accounts for, and the part that remains.
-        This framework is the foundation of what statisticians call
-        <term>analysis of variance</term>, or <term>ANOVA</term> — though we
-        will use it here purely as a way of describing and measuring how
-        variability is distributed, not as a hypothesis test.
-      </p>
-    </introduction>
-
-    <subsection xml:id="ss-anova-total">
-      <title>
-        Total variability, explained variability, residual variability
-      </title>
-
-      <p>
-        Return to the variance squares from
-        <xref ref="fig-ch9-variance-squares"/>.
-        The total area of all those squares — added up — is proportional to the
-        total variance in the outcome.
-        That is the total variability we are trying to account for.
-      </p>
-
-      <p>
-        When we fit a line — say, GDP per capita predicting life expectancy — we
-        are trying to reduce that total area.
-        The line moves through the data, and for each country, the square around
-        the line (the residual square) is smaller than the square around the
-        overall mean, if the line fits well.
-        The reduction in total square area is what the variable
-        <em>accounts for</em>.
-      </p>
-
-      <p>
-        We can put numbers on this:
-      </p>
-
-      <program language="r">
-        <code>
-          # Total sum of squares (variability around the mean)
-          SS_total &lt;- sum((africa_2007$lifeExp - 
-                           mean(africa_2007$lifeExp))^2)
-
-          # Residual sum of squares (variability around the line)
-          SS_residual &lt;- sum(residuals(model_gdp)^2)
-
-          # Explained sum of squares (what the model accounts for)
-          SS_explained &lt;- SS_total - SS_residual
-
-          # What fraction does GDP account for?
-          SS_explained / SS_total
-          #&gt; [1] 0.2137
-        </code>
-      </program>
-
-      <p>
-        The fraction of total variability accounted for by GDP per capita is
-        0.214 — the same R-squared we saw earlier, now expressed as a ratio of
-        sums of squares.
-        GDP accounts for about 21% of the total squared variation in life
-        expectancy across African countries in 2007.
-        The remaining 79% — the residual sum of squares — is the variability
-        that GDP cannot account for.
-      </p>
-
-      <p>
-        We can visualise this partitioning directly.
-        The total squares (from the mean) can be split into two parts for each
-        country: the part accounted for by the line (the distance from the mean
-        to the fitted value), and the part not accounted for (the residual, from
-        the fitted value to the observed point).
-      </p>
-
-      <program language="r">
-        <code>
-          ggplot(africa_2007, 
-                 aes(x = reorder(country, lifeExp), y = lifeExp)) +
-            # Residual segments (unaccounted-for)
-            geom_segment(aes(xend = reorder(country, lifeExp),
-                             y    = fitted,
-                             yend = lifeExp),
-                         colour = "#F37021", linewidth = 0.8) +
-            # Explained segments (accounted-for by GDP)
-            geom_segment(aes(xend = reorder(country, lifeExp),
-                             y    = mean(lifeExp),
-                             yend = fitted),
-                         colour = "#44575E", linewidth = 0.8) +
-            geom_hline(yintercept = mean(africa_2007$lifeExp),
-                       linetype = "dashed", colour = "grey50") +
-            geom_point(size = 2, colour = "#44575E") +
-            coord_flip() +
-            labs(
-              title    = "Partitioning variability in African life expectancy, 2007",
-              subtitle = "Dark teal: accounted for by GDP. Orange: residual (unaccounted for).",
-              x        = NULL,
-              y        = "Life expectancy (years)"
-            ) +
-            theme_bw() +
-            theme(axis.text.y = element_text(size = 7))
-        </code>
-      </program>
-
-      <figure xml:id="fig-ch10-partitioned-variability">
-        <caption>
-          Partitioned variability in African life expectancy, 2007.
-          For each country, the dark teal segment shows the variability
-          accounted for by GDP per capita (the distance from the overall mean to
-          the fitted value).
-          The orange segment shows the residual — the variability that GDP
-          cannot account for.
-          Countries where the orange segment dominates (Swaziland, Mozambique,
-          Zambia) are those where HIV/AIDS pulled life expectancy far below what
-          GDP would predict.
-        </caption>
-
-        <image source="images/ch10_partitioned_variability.png" width="100%">
-          <description>
-            <p>
-              TODO: A horizontal bar chart with country names on the y-axis and
-              life expectancy on the x-axis.
-              Each country has two segments: a dark teal segment showing the
-              distance from the overall mean to the GDP-predicted value, and an
-              orange segment showing the residual from the predicted value to
-              the observed value.
-              A dashed vertical line marks the overall mean.
-              Countries in southern Africa (Swaziland, Mozambique, Zambia,
-              Zimbabwe, Botswana) have large orange segments below the teal,
-              reflecting large negative residuals from the HIV/AIDS epidemic.
-            </p>
-          </description>
-        </image>
-      </figure>
-    </subsection>
-
-    <subsection xml:id="ss-anova-table">
-      <title>The ANOVA table as a summary of partitioned variability</title>
-
-      <p>
-        The partitioning we just computed — total sum of squares, explained sum
-        of squares, residual sum of squares — is usually presented as an
-        <term>ANOVA table</term>.
-        In R:
-      </p>
-
-      <program language="r">
-        <code>
-          anova(model_gdp)
-          #&gt; Analysis of Variance Table
-          #&gt;
-          #&gt; Response: lifeExp
-          #&gt;            Df  Sum Sq Mean Sq F value   Pr(&gt;F)
-          #&gt; gdpPercap   1  966.1  966.1  13.56  0.0006 ***
-          #&gt; Residuals  50 3561.5   71.2
-        </code>
-      </program>
-
-      <p>
-        Read the ANOVA table as a partition of the total variability:
-      </p>
-
-      <tabular halign="left">
-        <col halign="left" width="30%"/>
-        <col halign="left" width="35%"/>
-        <col halign="left" width="35%"/>
-        <row header="yes" bottom="minor">
-          <cell>Row</cell>
-          <cell>Sum of squares</cell>
-          <cell>What it represents</cell>
-        </row>
-
-        <row>
-          <cell><c>gdpPercap</c></cell>
-          <cell>966.1</cell>
-          <cell>Variability accounted for by GDP per capita</cell>
-        </row>
-
-        <row>
-          <cell>Residuals</cell>
-          <cell>3561.5</cell>
-          <cell>Variability not accounted for — the residuals</cell>
-        </row>
-
-        <row bottom="minor">
-          <cell>Total</cell>
-          <cell>4527.6</cell>
-          <cell>Total variability in life expectancy</cell>
-        </row>
-      </tabular>
-
-      <p>
-        GDP per capita accounts for 966.1 out of 4527.6 total units of squared
-        variability — about 21%.
-        The remaining 3561.5 is unaccounted for.
-        That 3561.5 includes everything we saw in <xref ref="ch-variability"/>:
-        the HIV/AIDS epidemic in southern Africa, the particular history of
-        individual countries, and the irreducible natural variability that would
-        remain even if we had measured everything measurable.
-      </p>
-
-      <p>
-        We are not using the F-value or p-value in this chapter — those are for
-        hypothesis testing, which comes later.
-        What matters here is the partition itself: how much of the total
-        variation does each variable account for, and how much is left over.
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-anova-group">
-      <title>Accounting for variability with a grouping variable</title>
-
-      <p>
-        GDP per capita is a continuous variable.
-        But we can also account for variability using a grouping variable — a
-        factor.
-        Continent is an obvious candidate: do African countries cluster by
-        sub-region in ways that account for some of the variation in life
-        expectancy?
-      </p>
-
-      <p>
-        We do not have sub-region in the gapminder data, but we can illustrate
-        the principle using the full gapminder dataset across all continents,
-        asking how much of the variation in life expectancy is accounted for by
-        which continent a country is in:
-      </p>
-
-      <program language="r">
-        <code>
-          world_2007 &lt;- gapminder %&gt;% filter(year == 2007)
-
-          model_continent &lt;- lm(lifeExp ~ continent, 
-                                 data = world_2007)
-
-          anova(model_continent)
-          #&gt; Analysis of Variance Table
-          #&gt;
-          #&gt; Response: lifeExp
-          #&gt;            Df  Sum Sq Mean Sq F value    Pr(&gt;F)
-          #&gt; continent   4  8780.3  2195.1  83.29 &lt;2e-16 ***
-          #&gt; Residuals  137  3612.7    26.4
-
-          summary(model_continent)$r.squared
-          #&gt; [1] 0.7086
-        </code>
-      </program>
-
-      <p>
-        Continent accounts for about 71% of the variation in life expectancy
-        across all countries in 2007.
-        Knowing which continent a country is on tells you a great deal about how
-        long its people can expect to live — far more than GDP per capita alone
-        told us for African countries.
-        The remaining 29% is the within-continent variation: the spread among
-        countries that share a continent but differ in life expectancy for other
-        reasons.
-      </p>
-
-      <p>
-        This is exactly the kind of partition that matters for the boxplot we
-        saw in <xref ref="fig-ch9-africa-boxplot-years"/>.
-        The height of each box — the IQR — is within-group variability: the
-        spread among African countries in a given year, after accounting for the
-        fact that they are all in Africa.
-        The position of the box — where it sits on the y-axis — is between-group
-        variability: the difference between the African average and the global
-        average.
-        ANOVA is the tool for partitioning those two components formally.
-      </p>
-    </subsection>
-  </section>
-  <!-- ============================================================ -->
-  <!-- SECTION 4: Variability types revisited                       -->
-  <!-- ============================================================ -->
-  <section xml:id="sec-variability-types-revisited">
-    <title>The Three Types, Revisited</title>
-
-    <p>
-      We can now return to the three types of variability from
-      <xref ref="sec-accounting-journeys"/> with the tools to be precise about
-      them.
-    </p>
-
-    <p>
-      <term>Accounted-for variability</term> is the part of the total sum of
-      squares explained by the variables in the model — the dark teal segments
-      in <xref ref="fig-ch10-partitioned-variability"/>.
-      For the Africa data in 2007, GDP per capita accounts for 966.1 units of
-      the total variability.
-      Year accounts for most of the trend in Kenya's life expectancy over time.
-    </p>
-
-    <p>
-      <term>Unaccounted-for variability</term> is the part of the residual sum
-      of squares that has real causes — the HIV/AIDS epidemic pulling
-      Swaziland's residual to −13 years, the genocide pulling Rwanda's residual
-      to −29 years in 1992 — but those causes are not variables we have in the
-      dataset.
-      This is the part of the orange segments in the figure that we could, in
-      principle, reduce by measuring more things.
-      It is not random.
-      It just has not been measured.
-    </p>
-
-    <p>
-      <term>Natural variability</term> is the irreducible part of the residual —
-      the variation that would remain even if we had measured everything
-      measurable.
-      It is the noise in the system: year-to-year fluctuations in Kenya's life
-      expectancy that cannot be attributed to any identifiable cause.
-      In practice, it is impossible to separate natural variability from
-      unaccounted-for variability precisely — both live in the residuals.
-      The distinction is conceptual: some of what remains in the residuals has a
-      cause we have not found; some of it is genuinely random.
-    </p>
-
-    <insight xml:id="insight-anova-three-types">
-      <title>
-        ANOVA partitions the total — but cannot separate unaccounted-for from
-        natural variability
-      </title>
-
-      <p>
-        The ANOVA table splits the total sum of squares into two parts: what the
-        model accounts for, and what it does not.
-        But it cannot tell you how much of the residual is unaccounted-for
-        variability with real unmeasured causes, and how much is genuine random
-        noise.
-        That distinction requires domain knowledge — understanding what else
-        might be driving the outcome — not just statistical tools.
-        Rwanda in 1992 is in the residual of any model that does not include a
-        variable for genocide.
-        The statistics show the residual is large.
-        Only history tells you why.
-      </p>
-    </insight>
-  </section>
-  <!-- ============================================================ -->
-  <!-- EXERCISES                                                    -->
-  <!-- ============================================================ -->
-  <exercises xml:id="exercises-ch10">
-    <title>Exercises</title>
-
     <exercise xml:id="ex-accounting-rsquared">
       <statement>
         <p>
@@ -1232,7 +1290,7 @@
             <p>
               Now fit the same model for Asian countries only.
               Is the R-squared higher or lower than for Africa?
-              What might explain the difference?
+              What might account for the difference?
             </p>
           </li>
 
@@ -1267,7 +1325,7 @@
             <p>
               Now add GDP per capita to the model alongside continent.
               Does adding GDP account for additional variability beyond what
-              continent already explains?
+              continent already accounts for?
               How much?
             </p>
           </li>
@@ -1309,7 +1367,7 @@
           <li>
             <p>
               Which year has the largest negative residual?
-              What historical event explains it?
+              What historical event can explain it?
               Is this unaccounted-for variability or natural variability — and
               how do you know?
             </p>
