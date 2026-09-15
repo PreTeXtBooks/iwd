@@ -15,7 +15,7 @@
   <book xml:id="book-id-here">
     <!-- The book needs a title and can have a subtitle  -->
     <title>An Introduction to Working with Data</title>
-    <subtitle>Subtitle</subtitle>
+    <subtitle>In a Kenyan Context with R</subtitle>
 
     <!-- Now we include files containing each main devision.       -->
 
