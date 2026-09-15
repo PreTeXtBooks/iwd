@@ -20,28 +20,71 @@
   <section xml:id="sec-first-exploration">
     <title>A First Exploration</title>
 
+    <introduction>
+      <p>
+        All datasets used in this book are available through the
+        <c>statsdata</c> R package.
+        Install it once with:
+      </p>
+
+      <program language="r">
+        <code>
+    # install.packages("pak")
+    pak::pak("PreTeXtBooks/statsdata")
+        </code>
+      </program>
+
+      <p>
+        Then load it at the start of your R session:
+      </p>
+
+      <program language="r">
+        <code>
+    library(statsdata)
+        </code>
+      </program>
+
+      <p>
+        The flamingo dataset used in this chapter is then available directly:
+      </p>
+
+      <program language="r">
+        <code>
+    head(kenya_flamingos)
+    #&gt; # A tibble: 6 x 8
+    #&gt;   lake    species           bill_length_mm bill_depth_mm
+    #&gt;   &lt;chr&gt;   &lt;chr&gt;                      &lt;dbl&gt;         &lt;dbl&gt;
+    #&gt; 1 Bogoria Lesser Flamingo             101.          25.9
+    #&gt; 2 Nakuru  Greater Flamingo            136.          22.5
+    #&gt; ...
+        </code>
+      </program>
+
+      <p>
+        Raw CSV files are also available for download from the package
+        repository at
+        <url href="https://github.com/PreTeXtBooks/statsdata/tree/main/data-raw" visual="github.com/PreTeXtBooks/statsdata"/>,
+        for use with other software.
+      </p>
+    </introduction>
+
     <subsection xml:id="ss-the-data">
       <title>The dataset</title>
 
       <p>
-        Most of the data in this book are real data, but we start with some
-        simulated data.
-        But, let's start with some background to this simulated data.
-        Between 2021 and 2023, measurements were recorded from flamingos at
-        three lakes in Kenya's Rift Valley: Lake Bogoria, Lake Elementaita, and
-        Lake Nakuru.
-        The dataset <c>kenya_flamingos</c> contains one row per bird, with the
-        columns described in <xref ref="table-flamingo-columns"/>.
+        Most datasets in this book are real.
+        The first is simulated, but it is grounded in something real: flamingo
+        populations at three lakes in Kenya's Rift Valley — Lake Bogoria, Lake
+        Elementaita, and Lake Nakuru.
+        The dataset <c>kenya_flamingos</c>, available through the
+        <c>statsdata</c> R package, contains one row per bird, with the columns
+        described in <xref ref="table-flamingo-columns"/>.
         You can access the data in R through the <c>statsdata</c> package
       </p>
 
       <program language="r">
         <code>
-        library(pak) # you may need to install this if you have not yet, with install.packages("pak")
-
-        pak::pak("PreTeXtBooks/statsdata")
         library(statsdata)
-
         data(kenya_flamingos)
         </code>
       </program>
@@ -114,11 +157,10 @@
         Examine the flamingo dataset for thirty minutes and record three
         observations that you got from the data.
         These can be any three things that you can gleam from the data - it can
-        be as simple or complex as you like: the number of rows, the number of
-        missing values, a graph or summary, frequency of birds in each lake or
-        species.
-        The three things are not important.
-        They don't even need to be correct!
+        be as simple or complex as you like: the number of rows, the years that
+        the simulated data is in, the number of missing values, a graph or
+        summary, frequency of birds in each lake or species, or anything else.
+        The three things are not important, and don't even need to be correct!
         They just need to be three things you can see from the data.
       </p>
 
@@ -159,7 +201,7 @@
           Let us know on the Discussion GitHub page what you found.
           Here are some examples.
           If you did not find any of these things then that does not matter.
-          This book looks at how to do all of these explorations!
+          This book looks at how to do all of these explorations.
         </p>
       </introduction>
 
@@ -173,7 +215,7 @@
         <program language="r">
           <code>
 data("kenya_flamingos")
-
+dim(kenya_flamingos)
 View(kenya_flamingos)
           </code>
         </program>
@@ -332,6 +374,19 @@ plot(kenya_flamingos$bill_length_mm,
           </code>
         </program>
 
+        <figure xml:id="fig-ch1-plot1">
+          <caption>Bill length against body mass for Kenyan flamingos.</caption>
+          <image source="images/ch1_plot1.jpeg" width="100%">
+            <description>
+              <p>
+                A scatter plot of bill length against body mass for Kenyan
+                flamingos.
+                There is a positive trend, and two clear groups.
+              </p>
+            </description>
+          </image>
+        </figure>
+
         <p>
           We could also use <c>ggplot2</c> to make the same plot.
         </p>
@@ -345,6 +400,23 @@ ggplot(kenya_flamingos,
   geom_point()
           </code>
         </program>
+
+        <figure xml:id="fig-ch1-plot2">
+          <caption>
+            Bill length against body mass for Kenyan flamingos using
+            <c>ggplot</c>.
+          </caption>
+
+          <image source="images/ch1_plot2.png" width="100%">
+            <description>
+              <p>
+                A scatter plot of bill length against body mass for Kenyan
+                flamingos.
+                There is a positive trend, and two clear groups.
+              </p>
+            </description>
+          </image>
+        </figure>
 
         <p>
           We might then add information about species to the plot.
@@ -360,6 +432,24 @@ ggplot(kenya_flamingos,
   geom_smooth(method = "lm")
           </code>
         </program>
+
+        <figure xml:id="fig-ch1-plot3">
+          <caption>
+            Bill length against body mass for Kenyan flamingos using
+            <c>ggplot</c>, with each group coloured and a line of best fit.
+          </caption>
+
+          <image source="images/ch1_plot3.png" width="100%">
+            <description>
+              <p>
+                A scatter plot of bill length against body mass for Kenyan
+                flamingos.
+                There is a positive trend, and two clear groups.
+                Each group is coloured, with a line of best fit for each group.
+              </p>
+            </description>
+          </image>
+        </figure>
 
         <p>
           A clear positive relationship appears: birds with longer bills tend to
@@ -408,7 +498,6 @@ ggplot(kenya_flamingos,
         <p>
           These are just some of the things people noticed when they explored
           the same data.
-          <em>What did you notice?</em>
         </p>
       </subsubsection>
     </subsection>
@@ -424,7 +513,8 @@ ggplot(kenya_flamingos,
       <p>
         Methods to explore the data, including techniques outlined in the R code
         in <xref ref="what-did-others-find"/> are covered in
-        <xref ref="ch-exploring-data"/>.
+        <xref ref="ch-exploring-data"/>, with more advanced visualisations
+        covered in <xref ref="ch-visualising-multidimensional-data"/>.
         Missing values in the <c>sex</c> column, and the question of what to do
         about them, is the subject of <xref ref="ch-cleaning-recoding"/> and
         <xref ref="ch-handling-missing-values"/>.
@@ -571,9 +661,8 @@ ggplot(kenya_flamingos,
       </p>
 
       <p>
-        The datasets used in this book are distributed in the
-        <c>statsdata</c> package, which is installed from GitHub rather than
-        from CRAN:
+        The datasets used in this book are distributed in the <c>statsdata</c>
+        package, which is installed from GitHub rather than from CRAN:
       </p>
 
       <program language="r">
@@ -594,12 +683,9 @@ library(statsdata)
       </p>
 
       <p>
-        Some chapters also include interactive questions, which are answered in
-        the browser in the online version of the book.
+        Some chapters also include interactive questions.
         These check understanding rather than recall, and usually ask you to
         work something out from a dataset rather than to select a definition.
-        In the printed and PDF versions the same questions appear as ordinary
-        exercises.
       </p>
     </subsection>
   </section>

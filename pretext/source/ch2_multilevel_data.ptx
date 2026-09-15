@@ -244,6 +244,48 @@
       </p>
     </subsection>
 
+    <subsection xml:id="ss-multilevel-structures">
+      <title>Multilevel Structures</title>
+
+      <p>
+        There are many examples of multilevel data structures:
+        <ul>
+          <li>
+            <p>
+              Pupils (Level 1) within classrooms (Level 2) within schools (Level
+              3).
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Repeated measurements (Level 1) within individuals (Level 2).
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Households (Level 1) within villages (Level 2) within districts
+              (Level 3).
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Employees within teams within organisations.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Patients within wards within hospitals.
+            </p>
+          </li>
+        </ul>
+        Then more here.
+      </p>
+    </subsection>
+
     <subsection xml:id="ss-kenya-relevance">
       <title>Why this matters here</title>
 
@@ -388,6 +430,738 @@
         Clinical Medicine</em>, 12(4), 1633.
       </p>
     </subsection>
+  </section>
+
+  <section xml:id="sec-mics-multilevel">
+    <title>Multilevel Data in Practice: Kenya MICS</title>
+
+    <introduction>
+      <p>
+        The Kenya Multiple Indicator Cluster Survey (MICS) is a nationally
+        representative household survey conducted by UNICEF and the Kenya
+        National Bureau of Statistics.
+        The survey, like most modern data, was designed around a multilevel
+        structure: children are nested within women, women are nested within
+        households, and households are nested within geographic clusters.
+      </p>
+
+      <p>
+        The data is freely available but requires registration.
+        To follow the R code in this section:
+        <ol>
+          <li>
+            <p>
+              Go to
+              <url href="https://mics.unicef.org/surveys" visual="mics.unicef.org/surveys"/>
+              and select Kenya.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Register for a free account and request access to the microdata.
+              Access is typically granted within a few days.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Download the dataset and place the <c>.sav</c> files in your
+              working directory.
+            </p>
+          </li>
+        </ol>
+      </p>
+
+      <p>
+        If you do not yet have access, read through this section for the
+        concepts.
+        The ideas apply to any multilevel dataset.
+      </p>
+    </introduction>
+
+    <subsection xml:id="ss-mics-files">
+      <title>Four files, four levels</title>
+
+      <p>
+        The Kenya MICS comes as four separate data files, each corresponding to
+        a different level of the hierarchy:
+      </p>
+
+      <tabular halign="left">
+        <col halign="left" width="20%"/>
+        <col halign="left" width="20%"/>
+        <col halign="right" width="15%"/>
+        <col halign="left" width="45%"/>
+        <row header="yes" bottom="minor">
+          <cell>File</cell>
+          <cell>Level</cell>
+          <cell>Rows</cell>
+          <cell>What each row represents</cell>
+        </row>
+
+        <row>
+          <cell><c>hhKE.sav</c></cell>
+          <cell>Household</cell>
+          <cell>8,993</cell>
+          <cell>One household</cell>
+        </row>
+
+        <row>
+          <cell><c>hlKE.sav</c></cell>
+          <cell>Household member</cell>
+          <cell>46,038</cell>
+          <cell>One person living in a surveyed household</cell>
+        </row>
+
+        <row>
+          <cell><c>wmKE.sav</c></cell>
+          <cell>Woman</cell>
+          <cell>10,525</cell>
+          <cell>One woman aged 15 <ndash/> 49 in a surveyed household</cell>
+        </row>
+
+        <row>
+          <cell><c>chKE.sav</c></cell>
+          <cell>Child</cell>
+          <cell>7,266</cell>
+          <cell>One child under 5 in a surveyed household</cell>
+        </row>
+      </tabular>
+
+      <p>
+        The row counts are not multiples of each other - not every household has
+        a child under five; and not every woman has children; and not every
+        household member is a woman aged 15 to 49.
+        The files represent overlapping but distinct subsets of the people in
+        the survey.
+      </p>
+
+      <p>
+        Load all four files in R using the <c>haven</c> package, which reads
+        SPSS <c>.sav</c> files:
+      </p>
+
+      <program language="r">
+        <code>
+        library(haven)
+        library(dplyr)
+
+        hh &lt;- read_sav("hhKE.sav")   # households
+        hl &lt;- read_sav("hlKE.sav")   # household members
+        wm &lt;- read_sav("wmKE.sav")   # women
+        ch &lt;- read_sav("chKE.sav")   # children under 5
+
+        # How many rows in each file?
+        nrow(hh)
+        #&gt; [1] 8993
+        nrow(hl)
+        #&gt; [1] 46038
+        nrow(wm)
+        #&gt; [1] 10525
+        nrow(ch)
+        #&gt; [1] 7266
+        </code>
+      </program>
+    </subsection>
+
+    <subsection xml:id="ss-mics-variables">
+      <title>Understanding the variable names</title>
+
+      <p>
+        Opening any of the four files, the column names are not immediately
+        informative.
+        The household file contains variables called <c>HI1</c>, <c>HI2</c>,
+        <c>HI3D</c>, <c>HI3M</c>, <c>HI3Y</c>, <c>HI10</c>, <c>HIMEM</c>, and so
+        on.
+        These names follow a coding scheme common in large household surveys:
+        short alphanumeric codes that are unambiguous and consistent across
+        countries and survey rounds, but which tell you nothing about what the
+        variable contains without consulting the documentation.
+      </p>
+
+      <p>
+        The reason for this convention is practical.
+        MICS surveys are conducted in dozens of countries, often translated into
+        multiple languages.
+        Short codes like <c>HI1</c> are language-neutral and do not change
+        between the French version and the English version of the same survey.
+        Long descriptive names would vary by language and make cross-country
+        comparisons harder to automate.
+        The cost is that the names are opaque to anyone who does not have the
+        documentation.
+      </p>
+
+      <p>
+        The Word document distributed with the Kenya MICS download provides the
+        translation.
+        <c>HI1</c> is the cluster number.
+        <c>HI2</c> is the household number within the cluster.
+        <c>HI3D</c>, <c>HI3M</c>, and <c>HI3Y</c> are the day, month, and year
+        of interview.
+        <c>HI10</c> is the result of the household interview.
+        <c>HIMEM</c> is the number of household members.
+        Refer to that document whenever an unfamiliar variable name appears.
+      </p>
+
+      <p>
+        In R, the <c>haven</c> package preserves the variable labels from the
+        <c>.sav</c> file, so you do not always need to look them up manually.
+        The labels are attached to each column and can be viewed directly:
+      </p>
+
+      <program language="r">
+        <code>
+      # See the label for one variable
+      attr(hh$HI1, "label")
+      #&gt; [1] "Cluster number"
+
+      attr(hh$HIMEM, "label")
+      #&gt; [1] "Number of household members"
+
+      # See labels for all variables at once
+      labelled::var_label(hh)
+        </code>
+      </program>
+
+      <p>
+        The screenshot below shows what this looks like when the data is opened
+        in a spreadsheet: the short variable codes appear as column headers,
+        with the descriptive labels visible in a second row beneath them.
+        In R, those labels are stored as metadata attached to each column rather
+        than as a visible row, but they are always accessible.
+      </p>
+
+      <figure xml:id="fig-mics-variable-labels">
+        <caption>
+          Variable names and labels from the Kenya MICS household file, as
+          displayed in a spreadsheet.
+          Short codes like <c>HI1</c> and <c>HIMEM</c> are the actual column
+          names; the descriptive labels below them are stored as metadata and
+          preserved by the <c>haven</c> package when the file is read into R.
+        </caption>
+
+        <image source="images/ch2_mics_variable_labels.png" width="100%">
+          <description>
+            <p>
+              A spreadsheet showing the top two rows of the Kenya MICS household
+              file.
+              The first row contains short variable codes: HI1, HI2, HI3D, HI3M,
+              HI3Y, HI10, HIMEM.
+              The second row contains descriptive labels in orange text: Cluster
+              number, Household number, Day of interview, Month of interview,
+              Year of interview, Result of household interview, Number of
+              household members.
+            </p>
+          </description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="ss-mics-linking">
+      <title>How the levels connect — and where they do not</title>
+
+      <p>
+        The files are linked by a shared household identifier, <c>HID</c>.
+        Every record in every file should be traceable back to a household in
+        <c>hhKE.sav</c>.
+        Let us check whether that is actually true.
+      </p>
+
+      <program language="r">
+        <code>
+      # How many unique households appear in each file?
+      n_distinct(hh$HID)
+      #&gt; [1] 8993
+      n_distinct(hl$HID)
+      #&gt; [1] 8989
+      n_distinct(wm$HID)
+      #&gt; [1] 7787
+      n_distinct(ch$HID)
+      #&gt; [1] 4955
+        </code>
+      </program>
+
+      <p>
+        The household file has 8,993 households.
+        The household members file has members from 8,989 of them.
+        Four households that exist in the household file have no corresponding
+        members.
+        Does this mean four households were empty?
+        We can investigate.
+      </p>
+
+      <program language="r">
+        <code>
+      # Which households are in hh but not in hl?
+      missing_hids &lt;- setdiff(hh$HID, hl$HID)
+      missing_hids
+      #&gt; [1]      18043      76075     314034    1240005
+
+      hh %&gt;%
+        filter(HID %in% missing_hids) %&gt;%
+        select(HID, HI13, HIMEM)
+        </code>
+      </program>
+
+      <p>
+        Looking at these four households reveals something interesting.
+        Two have a large number of <c>NA</c> values across their records,
+        including in the number of household members variable ( <c>HIMEM</c> ) —
+        consistent with households that were visited but where no interview was
+        completed.
+        The sex and age fields for the head of household are coded 7 and 97
+        respectively, which the data dictionary confirms are codes for missing
+        rather than real values.
+        These households may genuinely have had no members present at the time
+        of the survey.
+      </p>
+
+      <p>
+        But one of the four — household 314034 — has a non-missing value for the
+        variable indicating an eligible child under 5.
+        If there was an eligible child, there should have been a household
+        member record.
+        Let us check whether that child appears in the children's file:
+      </p>
+
+      <program language="r">
+        <code>
+      ch %&gt;% filter(HID %in% missing_hids)
+      #&gt; # A tibble: 0 x ...
+      #&gt; # ... with ... variables
+        </code>
+      </program>
+
+      <p>
+        The child does not appear in the children's file either.
+        This is a genuine inconsistency in the data: the household record says
+        there should be a child, but neither the household members file nor the
+        children's file contains any record of them.
+        Whether this reflects a recording error, a missed interview, or
+        something else is impossible to determine from the data alone.
+      </p>
+
+      <p>
+        The women's file raises a different puzzle.
+        Household 76075 is among the four with no household member records, but
+        it appears in the women's file — twice, as expected, since the household
+        record indicates two women aged 15 to 49.
+        And household 1240005, also missing from the household members file, has
+        a woman's record too.
+        A woman exists in the women's file whose household has no members:
+      </p>
+
+      <program language="r">
+        <code>
+      wm %&gt;% filter(HID %in% missing_hids)
+        </code>
+      </program>
+
+      <p>
+        This is internally inconsistent.
+        A woman must be a household member, so a woman's record without a
+        corresponding household member record is a data problem, not a genuine
+        feature of the survey.
+      </p>
+
+      <p>
+        Now check the other direction: are there women or children in the data
+        whose household ID does not appear in the household file at all?
+      </p>
+
+      <program language="r">
+        <code>
+      # Women whose HID does not appear in the household file
+      setdiff(wm$HID, hh$HID)
+      #&gt; [1] ... 183 values ...
+
+      # Children whose HID does not appear in the household file
+      setdiff(ch$HID, hh$HID)
+      #&gt; integer(0)
+        </code>
+      </program>
+
+      <p>
+        There are 183 women whose household ID does not match any household in
+        the household file.
+        The children's file, by contrast, has no such orphans — every child's
+        household ID appears in the household file.
+        The women's file has a more serious linkage problem than the children's
+        file.
+      </p>
+
+      <insight xml:id="insight-mics-orphans">
+        <title>Real multilevel data is rarely perfectly linked</title>
+
+        <p>
+          In a perfectly collected multilevel dataset, every record at every
+          level would link cleanly to exactly one record at the level above it.
+          In practice, this is almost never true.
+          Records go missing.
+          Identifiers are recorded incorrectly.
+          Interviews are partially completed.
+          The four households with no members, the woman with no household
+          record, and the 183 women with unmatched household IDs are all
+          examples of what is called <term>orphan records</term> — records that
+          cannot be linked to their parent level.
+          Finding and understanding orphan records is a normal part of working
+          with multilevel survey data, and investigating them — as we did above
+          — is more informative than simply discarding them.
+          Sometimes an orphan record reveals a coding error that can be fixed.
+          Sometimes it reveals a genuine gap in data collection.
+          Sometimes, as with household 314034, it reveals an inconsistency that
+          cannot be resolved from the data alone.
+        </p>
+      </insight>
+
+      <p>
+        The data cleaning work this kind of investigation requires is covered in
+        <xref ref="ch-cleaning-recoding"/>.
+        For now, the important point is that identifying these issues is the
+        first step — and the step that is only possible once you understand the
+        multilevel structure of the data well enough to know what
+        <q>correctly linked</q> should look like.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-mics-trace">
+      <title>Tracing one household through all four files</title>
+
+      <p>
+        A useful exercise when first encountering multilevel data is to trace
+        one unit through every level.
+        Pick one household and find every record that relates to it across all
+        four files.
+        This makes the structure concrete.
+      </p>
+
+      <p>
+        To see all four files in action, we need a household that has at least
+        one woman aged 15 to 49 and at least one child under 5.
+        The variables <c>HI12</c> and <c>HI13</c> in the household file record
+        these counts.
+        We take the first household that satisfies both conditions:
+      </p>
+
+      <program language="r">
+        <code>
+      example_hid &lt;- (hh %&gt;%
+        filter(HI12 &gt; 0 &amp; HI13 &gt; 0) %&gt;%
+        pull(HID))[1]
+
+      example_hid
+      #&gt; [1] 2078
+        </code>
+      </program>
+
+      <p>
+        Now pull every record related to household 2078 from each file:
+      </p>
+
+      <program language="r">
+        <code>
+      # Household-level record
+      hh %&gt;% filter(HID == example_hid)
+
+      # Everyone in the household
+      hl %&gt;% filter(HID == example_hid)
+      #&gt; # A tibble: 7 x ...
+      # Seven people live in this household.
+
+      # Women aged 15-49 in the household
+      wm %&gt;% filter(HID == example_hid)
+      #&gt; # A tibble: 2 x ...
+      # Two of those seven are women aged 15-49.
+
+      # Children under 5 in the household
+      ch %&gt;% filter(HID == example_hid)
+      #&gt; # A tibble: 1 x ...
+      # One child under 5.
+        </code>
+      </program>
+
+      <p>
+        Household 2078 has seven members in total.
+        Two of those seven are women aged 15 to 49, so they each have a record
+        in the women's file.
+        One is a child under 5, with a record in the children's file.
+        The remaining four household members (perhaps older children, men, or
+        elderly relatives) appear only in the household members file, nowhere
+        else.
+        We can verify their ages and sex by looking at the household members
+        file.
+        We can see from the four data sets information on household 2078:
+        <ul>
+          <li>
+            The household record: They are in Central Kenya, in the 4th wealth
+            quintile (where 5 is richest quintile), They have water piped into
+            their house, and a traditional pit latrine.
+          </li>
+
+          <li>
+            The women's record: Two women aged 18 and 25 reside in this
+            household.
+            They both have primary education level, and the 25 year old has
+            given birth, and the 18 year-old has not.
+          </li>
+
+          <li>
+            The under-5 record: One child under 5 - an 8 month old girl with
+            some vaccinations.
+            They are 7.2kg and 66cm.
+          </li>
+        </ul>
+      </p>
+
+      <p>
+        Variables measured at the household level, such as water source, wealth
+        index, or sanitation, apply to all seven members of this household
+        equally.
+        Variables measured at the woman level, such as education, or
+        reproductive history, apply only to the two women.
+        And the variables measured at the child level, such as height, weight,
+        or vaccination status, apply only to the one child.
+        To ask whether this child's nutritional status is related to the
+        mother's education and the household's wealth requires linking across
+        all three of those levels.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-mics-level-mapping">
+      <title>Mapping the levels</title>
+
+      <p>
+        Before analysing any multilevel dataset, it is worth doing a brief
+        level-mapping exercise: identifying what units exist at each level, how
+        they connect, and what variables are measured at each level.
+        For the Kenya MICS, the map looks like this:
+      </p>
+
+      <tabular halign="left">
+        <col halign="left" width="20%"/>
+        <col halign="left" width="25%"/>
+        <col halign="left" width="55%"/>
+        <row header="yes" bottom="minor">
+          <cell>Level</cell>
+          <cell>Unit</cell>
+          <cell>Example variables measured here</cell>
+        </row>
+
+        <row>
+          <cell>4 (highest)</cell>
+          <cell>Household</cell>
+          <cell>
+            Water source, Floor materials, Province, Wealth index, ...
+          </cell>
+        </row>
+
+        <row>
+          <cell>3</cell>
+          <cell>Household Members</cell>
+          <cell>Sex, Age, Education level, ...</cell>
+        </row>
+
+        <row>
+          <cell>2</cell>
+          <cell>Woman</cell>
+          <cell>
+            Age, Education, Number of children born, care during pregnancy, ...
+          </cell>
+        </row>
+
+        <row>
+          <cell>1 (lowest)</cell>
+          <cell>Child under 5</cell>
+          <cell>Age in months, Health, Vaccination history, ...</cell>
+        </row>
+      </tabular>
+
+      <p>
+        This mapping immediately raises questions that guide the analysis.
+        If the outcome of interest is a child's nutritional status, e.g.,
+        whether their height is low for their age, then the outcome lives at
+        Level 1.
+        But the potential explanations live at multiple levels: the child's own
+        age and sex (Level 1), the mother's education (Level 2), the household's
+        wealth and water source (Level 3), and whether the household is in an
+        urban or rural area (Level 4).
+        None of these levels can be ignored without potentially missing
+        something important.
+      </p>
+
+      <p>
+        The key questions to ask when mapping any multilevel dataset:
+        <ul>
+          <li>
+            <p>
+              How many units are there at each level?
+            </p>
+          </li>
+
+          <li>
+            <p>
+              What variable links each level to the one above it?
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Are group sizes roughly equal, or do some groups have many more
+              members than others?
+            </p>
+          </li>
+
+          <li>
+            <p>
+              What variables are measured at each level?
+            </p>
+          </li>
+
+          <li>
+            <p>
+              At which level does the outcome of interest live, and at which
+              levels do the potential explanatory variables live?
+            </p>
+          </li>
+        </ul>
+      </p>
+
+      <program language="r">
+        <code>
+        # How many household members per household?
+        hl %&gt;%
+          group_by(Hid) %&gt;%
+          summarise(n_members = n()) %&gt;%
+          summarise(
+            mean_size = mean(n_members),
+            min_size  = min(n_members),
+            max_size  = max(n_members)
+          )
+        #&gt; # A tibble: 1 x 3
+        #&gt;   mean_size min_size max_size
+        #&gt;       &lt;dbl&gt;    &lt;int&gt;    &lt;int&gt;
+        #&gt; 1      5.12        1       23
+
+        # How many children per household, among households
+        # with at least one child?
+        ch %&gt;%
+          group_by(Hid) %&gt;%
+          summarise(n_children = n()) %&gt;%
+          count(n_children)
+        #&gt; # A tibble: 6 x 2
+        #&gt; n_children     n
+        #&gt;      &lt;int&gt; &lt;int&gt;
+        #&gt; 1  3040
+        #&gt; 2  1579
+        #&gt; 3   286
+        #&gt; 4    42
+        #&gt; 5     6
+        #&gt; 6     2
+        </code>
+      </program>
+
+      <p>
+        Unsurprisingly, household sizes are unequal — some households have one
+        member, others many.
+        This is typical of multilevel data from household surveys, and it
+        matters for analysis: a household with eight members contributes more
+        rows to the dataset than a household with two, which can distort simple
+        summaries if the nesting is ignored.
+        Looking at the mean number of rooms within a household using the `hh`
+        data and comparing it to the `hl` data shows a slight difference:
+      </p>
+
+      <program language="r">
+        <code>
+        mean(hh$SE4, na.rm = TRUE)
+        #&gt; [1] 2.392829
+        mean(hl$SE4, na.rm = TRUE)
+        #&gt; [1] 2.507339
+        </code>
+      </program>
+
+      <p>
+        The mean number of rooms per household is slightly higher when
+        calculated from the household-level data (`hl`) compared to the
+        individual-level data (`hh`).
+        This difference arises because larger households are represented
+        multiple times in the `hl` dataset (there is one row per household
+        member there, so household data is duplicated across many rows).
+        This skews the mean when not accounting for the multilevel structure.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-mics-wrong-level">
+      <title>What goes wrong when you ignore the levels</title>
+
+      <p>
+        Suppose you want to know whether urban children are better nourished
+        than rural children.
+        The child's urban or rural status comes from their household's cluster,
+        which is a cluster-level variable.
+        The nutritional outcome is a child-level variable.
+        These live at different levels of the hierarchy.
+      </p>
+
+      <p>
+        If you ignore the levels and simply merge the cluster variable onto
+        every child row and run an analysis treating each child as an
+        independent observation, you will get an answer, but it will be
+        overconfident.
+        Children in the same cluster share a location, the same local food
+        system, the same water supply, and the same local health services.
+        They are not independent of each other.
+        Treating them as if they were means your analysis thinks it has more
+        independent information than it actually does, and confidence intervals
+        that should be wide will appear narrow.
+      </p>
+
+      <p>
+        This is the core problem that multilevel structure creates, and that
+        multilevel methods are designed to address.
+        The Berkeley admissions example from the opening of this chapter showed
+        one consequence: a conclusion that reversed completely when the group
+        structure was acknowledged.
+        The MICS data shows another: even when the conclusion does not reverse,
+        ignoring groups produces false precision.
+        Both are reasons to map the levels before beginning any analysis.
+      </p>
+    </subsection>
+  </section>
+
+  <section>
+    <title>Preparing Multilevel Data for Analysis</title>
+
+    <p>
+      Before analysing multilevel data, several preparation steps are essential:
+      <ul>
+        <li>
+          Identify and verify the linking keys: The variable(s) that uniquely
+          identify each unit and link levels (e.g., household ID, cluster ID).
+        </li>
+
+        <li>
+          Check for orphan records: Child records that have no matching
+          household record (or vice versa).
+          These often indicate data entry or merging errors.
+        </li>
+
+        <li>
+          Understand the sampling design: MICS surveys use complex multi-stage
+          cluster sampling.
+          Analysis should account for this through survey weights and
+          appropriate software (e.g., R’s survey package or R-Instat’s survey
+          functions).
+        </li>
+
+        <li>
+          Decide the analytical level: Is the unit of analysis the child, the
+          household, or the cluster?
+          This determines how variables are aggregated or disaggregated.
+        </li>
+      </ul>
+    </p>
   </section>
   <!-- ================================================================= -->
   <!--  SECTION 3: what makes data multilevel                            -->

@@ -2034,6 +2034,20 @@
         </p>
       </statement>
     </exercise>
+    <!-- R: missing values -->
+    <exercise xml:id="ex-clean-mics-linking">
+      <statement>
+        <p>
+          Recall in <xref ref="ss-mics-linking"/>, we found there 183 women
+          whose household ID did not match any household in the household file.
+          This should not be possible - all individuals in the womens data
+          should always have a corresponding household in the household file.
+          Have a go at investigating what could have gone wrong here; for
+          example, could it be a typo in the household ID?
+          Does data get cut off at a certain number of rows?
+        </p>
+      </statement>
+    </exercise>
     <!-- R: inconsistent values -->
     <exercise xml:id="ex-clean-county-names">
       <statement>
