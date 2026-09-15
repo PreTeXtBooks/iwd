@@ -432,8 +432,26 @@
     </subsection>
   </section>
 
+  <section xml:id="sec-ch2-stack">
+    <title>STACK Question Here</title>
+
+    <introduction>
+      <p>
+        Insert the STACK (Pivot Table) question here
+      </p>
+    </introduction>
+
+    <subsection xml:id="subsec-ch2-TODO">
+      <title>TODO</title>
+
+      <p>
+        TODO
+      </p>
+    </subsection>
+  </section>
+
   <section xml:id="sec-mics-multilevel">
-    <title>Multilevel Data in Practice: Kenya MICS</title>
+    <title>Multilevel Data in R: Kenya MICS</title>
 
     <introduction>
       <p>
@@ -659,7 +677,7 @@
     </subsection>
 
     <subsection xml:id="ss-mics-linking">
-      <title>How the levels connect — and where they do not</title>
+      <title>How the levels connect, and where they do not</title>
 
       <p>
         The files are linked by a shared household identifier, <c>HID</c>.
@@ -1252,7 +1270,6 @@
       </p>
     </subsection>
   </section>
-  
   <!-- ================================================================= -->
   <!--  EXERCISES                                                        -->
   <!-- ================================================================= -->
