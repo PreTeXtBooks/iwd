@@ -16,10 +16,26 @@ cache_file = cache_dir / "rs_services.xml"
 if cache_file.exists():
     try:
         root = ET.fromstring(cache_file.read_text(encoding="utf-8"))
-        version = root.findtext("version", default="")
-        cdn_url = root.findtext("cdn-url", default="")
-        js_items_existing = [item.text for item in root.findall("js/item")]
-        css_items_existing = [item.text for item in root.findall("css/item")]
+
+        def local_name(tag: str) -> str:
+            return tag.split("}", 1)[-1]
+
+        def find_first_text(element: ET.Element, name: str) -> str:
+            for child in element:
+                if local_name(child.tag) == name:
+                    return child.text or ""
+            return ""
+
+        def find_items(element: ET.Element, parent_name: str) -> list[str]:
+            for child in element:
+                if local_name(child.tag) == parent_name:
+                    return [grandchild.text or "" for grandchild in child if local_name(grandchild.tag) == "item"]
+            return []
+
+        version = find_first_text(root, "version")
+        cdn_url = find_first_text(root, "cdn-url")
+        js_items_existing = find_items(root, "js")
+        css_items_existing = find_items(root, "css")
         if (
             version == RUNESTONE_VERSION
             and cdn_url == RUNESTONE_CDN_URL
