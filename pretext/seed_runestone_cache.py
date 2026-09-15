@@ -10,11 +10,15 @@ RUNESTONE_CSS_FILES = ["prefix-runestone.efe427683fc41f98.css"]
 
 cache_dir = resources.resource_base_path() / "rs_cache"
 cache_dir.mkdir(parents=True, exist_ok=True)
+cache_file = cache_dir / "rs_services.xml"
+
+if cache_file.exists():
+    raise SystemExit(0)
 
 js_items = "\n".join(f"    <item>{name}</item>" for name in RUNESTONE_JS_FILES)
 css_items = "\n".join(f"    <item>{name}</item>" for name in RUNESTONE_CSS_FILES)
 
-(cache_dir / "rs_services.xml").write_text(
+cache_file.write_text(
     "\n".join(
         [
             "<all>",
