@@ -392,7 +392,7 @@
       </code>
     </program>
 
-    <figure xml:id="fig-ch9-accounted for-only">
+    <figure xml:id="fig-ch9-accounted-for-only">
       <caption>
         Accounted for variability only.
         <m>y = x</m>: all variability in <m>y</m> is accounted for by <m>x</m>.
@@ -441,7 +441,7 @@
       </code>
     </program>
 
-    <figure xml:id="fig-ch9-accounted for-natural">
+    <figure xml:id="fig-ch9-accounted-for-natural">
       <caption>
         accounted for and natural variability.
         <m>y = x + \varepsilon</m>: points scatter around the line <m>y = x</m>
@@ -734,7 +734,7 @@
         The reduction in spread achieved by using the line rather than the mean.
       </p>
 
-      <figure xml:id="fig-ch10-accounted for-ss">
+      <figure xml:id="fig-ch10-accounted-for-ss">
         <caption>
           Accounted-for sum of squares.
           Each orange segment shows the distance from one country-year's life
