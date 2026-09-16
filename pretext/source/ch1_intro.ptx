@@ -5,15 +5,17 @@
 
   <introduction>
     <p>
-      We start this chapter - and book therefore - with an exercise.
-      It's a different start to what may usually be expected, but there's good
-      reasons for it.
-      We haven't introduced any techniques, and so we are going purely off what
-      we already know about data (which may be little, or may be surprising).
-      Let's just try it out, and see what can we do with a dataset by looking at
-      it carefully and without instruction.
-      The remainder of the chapter then introduces the structure of the book,
-      and relates the exercise to the chapters that follow.
+      We're starting this chapter, and so the book, with an exercise.
+      That's probably not what you expect from a first chapter, but there's a
+      good reason for it.
+      We haven't introduced any techniques yet, so you'll be working purely from
+      what you already know about data, which might be a lot, or might be very
+      little.
+      Let's just try it and see what we can do with a dataset by looking at it
+      carefully and without instruction.
+      The rest of the chapter then introduces the structure of the book, and
+      comes back to the exercise to show how it connects to the chapters that
+      follow.
     </p>
   </introduction>
 
@@ -22,9 +24,8 @@
 
     <introduction>
       <p>
-        All datasets used in this book are available through the
-        <c>statsdata</c> R package.
-        Install it once with:
+        All the datasets in this book come from the <c>statsdata</c> R package.
+        You install it once:
       </p>
 
       <program language="r">
@@ -45,7 +46,8 @@
       </program>
 
       <p>
-        The flamingo dataset used in this chapter is then available directly:
+        The flamingo dataset we use in this chapter is then available from the
+        package:
       </p>
 
       <program language="r">
@@ -61,10 +63,9 @@
       </program>
 
       <p>
-        Raw CSV files are also available for download from the package
-        repository at
-        <url href="https://github.com/PreTeXtBooks/statsdata/tree/main/data-raw" visual="github.com/PreTeXtBooks/statsdata"/>,
-        for use with other software.
+        If you'd rather use other software, the raw CSV files are available to
+        download from the package repository at
+        <url href="https://github.com/PreTeXtBooks/statsdata/tree/main/data-raw" visual="github.com/PreTeXtBooks/statsdata"/>.
       </p>
     </introduction>
 
@@ -72,14 +73,14 @@
       <title>The dataset</title>
 
       <p>
-        Most datasets in this book are real.
-        The first is simulated, but it is grounded in something real: flamingo
-        populations at three lakes in Kenya's Rift Valley — Lake Bogoria, Lake
+        Most of the datasets in this book are real.
+        This first one isn't, but it's grounded in something that is: flamingo
+        populations at three lakes in Kenya's Rift Valley, Lake Bogoria, Lake
         Elementaita, and Lake Nakuru.
         The dataset <c>kenya_flamingos</c>, available through the
-        <c>statsdata</c> R package, contains one row per bird, with the columns
+        <c>statsdata</c> R package, has one row per bird, with the columns
         described in <xref ref="table-flamingo-columns"/>.
-        You can access the data in R through the <c>statsdata</c> package
+        You can access the data in R through the <c>statsdata</c> package:
       </p>
 
       <program language="r">
@@ -143,9 +144,9 @@
       </table>
 
       <p>
-        The dataset is small enough to be examined in a spreadsheet, in R, or on
-        paper.
-        The choice of tool does not affect the exercise, it is entirely up to
+        The dataset is small enough to look at in a spreadsheet, in R, or
+        printed out on paper.
+        Which one you pick doesn't matter for this exercise, it's entirely up to
         you.
       </p>
     </subsection>
@@ -154,21 +155,21 @@
       <title>Thirty minutes with the data</title>
 
       <p>
-        Examine the flamingo dataset for thirty minutes and record three
-        observations that you got from the data.
-        These can be any three things that you can gleam from the data - it can
-        be as simple or complex as you like: the number of rows, the years that
-        the simulated data is in, the number of missing values, a graph or
-        summary, frequency of birds in each lake or species, or anything else.
-        The three things are not important, and don't even need to be correct!
-        They just need to be three things you can see from the data.
+        Spend thirty minutes with the flamingo dataset and write down three
+        things you notice.
+        They can be anything you can get from the data, as simple or as
+        complicated as you like: the number of rows, the years the simulated
+        data covers, the number of missing values, a graph, a summary, how many
+        birds are at each lake or of each species, or anything else.
+        The three things aren't important, and they don't even need to be right!
+        They just need to be three things you can see in the data.
       </p>
 
       <p>
-        Record the three observations before reading the discussion that
+        Write your three observations down before you read the discussion that
         follows.
-        The discussion lists observations made by other readers, and reading it
-        first removes the purpose of the exercise.
+        The discussion lists what other readers noticed, and reading it first
+        takes away the whole point of the exercise.
       </p>
     </subsection>
   </section>
@@ -179,14 +180,13 @@
     <introduction>
       <p>
         This section is the other half of the exercise.
-        Having spent thirty minutes with the flamingo data and written down
-        three observations, you can now compare what you found with what other
+        You've spent thirty minutes with the flamingo data and written down
+        three things, so now you can compare what you found with what other
         readers found.
-        The point is not to check your answers against a correct list; there is
-        no correct list.
-        The point is to see how much a dataset gives up to someone who simply
-        looks at it, and to notice that almost every observation raises a
-        further question that looking alone cannot settle.
+        There's no correct list to check your answers against.
+        What we want you to see is how much a dataset gives up to someone who
+        simply looks at it, and how almost every observation raises a further
+        question that looking alone can't settle.
         Those further questions are what the rest of the book is about.
       </p>
     </introduction>
@@ -196,12 +196,12 @@
 
       <introduction>
         <p>
-          There are many different things you might have noticed while exploring
-          the data.
+          There are lots of different things you might have noticed while
+          exploring the data.
           Let us know on the Discussion GitHub page what you found.
           Here are some examples.
-          If you did not find any of these things then that does not matter.
-          This book looks at how to do all of these explorations.
+          If you didn't find any of these, that's fine.
+          This book is about how to do all of these explorations.
         </p>
       </introduction>
 
@@ -225,8 +225,8 @@ View(kenya_flamingos)
         <title>What about bill depth?</title>
 
         <p>
-          Bill depth varies from 18.10 mm to 33.90 mm.
-          There are four missing values.
+          Bill depth ranges from 18.10 mm to 33.90 mm, and there are four
+          missing values.
         </p>
 
         <program language="r">
@@ -236,9 +236,9 @@ summary(kenya_flamingos$bill_depth_mm)
         </program>
 
         <p>
-          We can see several features of the data from this simple summary: the
-          smallest and largest values, some values in between, the mean, and the
-          number of missing values.
+          A simple summary like this tells us quite a lot: the smallest and
+          largest values, some values in between, the mean, and how many values
+          are missing.
         </p>
       </subsubsection>
 
@@ -246,9 +246,9 @@ summary(kenya_flamingos$bill_depth_mm)
         <title>How many of each species?</title>
 
         <p>
-          There are two species in the data: Greater Flamingos and Lesser
-          Flamingos.
-          Lesser Flamingos outnumber Greater Flamingos by a substantial margin.
+          There are two species in the data, Greater Flamingos and Lesser
+          Flamingos, and Lesser Flamingos outnumber Greater Flamingos by a
+          substantial margin.
         </p>
 
         <program language="r">
@@ -265,10 +265,10 @@ Greater Flamingo  Lesser Flamingo
              66              278
         </pre>
         <p>
-          But the counts reflect which birds were measured, not which birds were
-          present.
-          Perhaps there happened to be more Lesser Flamingos present on the day
-          the data were collected.
+          But these counts tell us which birds were measured, not which birds
+          were there.
+          Maybe there just happened to be more Lesser Flamingos around on the
+          day the data was collected.
         </p>
       </subsubsection>
 
@@ -277,8 +277,8 @@ Greater Flamingo  Lesser Flamingo
 
         <p>
           We can also compare the body mass of the two species.
-          One simple way to do this is to calculate the average body mass for
-          each species.
+          One simple way to do that is to work out the average body mass for
+          each one.
         </p>
 
         <program language="r">
@@ -298,12 +298,12 @@ kenya_flamingos %&gt;%
 2 Lesser Flamingo                     1689
         </pre>
         <p>
-          Greater Flamingos are heavier than Lesser Flamingos by roughly a
+          Greater Flamingos are heavier than Lesser Flamingos, by roughly a
           factor of two.
         </p>
 
         <p>
-          The difference is large enough that any statement about
+          That difference is big enough that anything we say about
           <q>flamingos</q> in general will depend heavily on the mix of species
           in the data.
         </p>
@@ -313,7 +313,7 @@ kenya_flamingos %&gt;%
         <title>Sorting by sex</title>
 
         <p>
-          There are 170 females and 167 males in the data, but seven rows have
+          There are 170 females and 167 males in the data, and seven rows with
           no recorded sex.
         </p>
 
@@ -327,10 +327,10 @@ female   male
     170    167
         </pre>
         <p>
-          Flamingos are difficult to sex from external appearance, so this is a
-          plausible limitation of the data collection rather than an error.
-          Any comparison between male and female birds will silently exclude
-          these rows if the missing values are not dealt with explicitly.
+          Flamingos are hard to sex from how they look, so this is a plausible
+          limitation of the data collection rather than a mistake.
+          But any comparison between male and female birds will quietly drop
+          those rows unless we deal with the missing values on purpose.
         </p>
       </subsubsection>
 
@@ -338,7 +338,7 @@ female   male
         <title>Counting rows by lake</title>
 
         <p>
-          The three lakes are not equally represented in the data.
+          The three lakes aren't equally represented in the data.
         </p>
 
         <program language="r">
@@ -351,11 +351,11 @@ Bogoria Elementaita      Nakuru
     124          68         152
         </pre>
         <p>
-          There are 124 measurements from Bogoria, 68 from Elementaita, and 152
+          That's 124 measurements from Bogoria, 68 from Elementaita, and 152
           from Nakuru.
-          This may reflect differences in the flamingo populations, or
-          differences in how much survey effort was directed at each lake, or
-          something else.
+          This might reflect real differences in the flamingo populations, or
+          differences in how much survey effort went into each lake, or
+          something else entirely.
         </p>
       </subsubsection>
 
@@ -388,7 +388,7 @@ plot(kenya_flamingos$bill_length_mm,
         </figure>
 
         <p>
-          We could also use <c>ggplot2</c> to make the same plot.
+          We could make the same plot with <c>ggplot2</c>.
         </p>
 
         <program language="r">
@@ -419,7 +419,7 @@ ggplot(kenya_flamingos,
         </figure>
 
         <p>
-          We might then add information about species to the plot.
+          We might then add species to the plot.
         </p>
 
         <program language="r">
@@ -452,8 +452,8 @@ ggplot(kenya_flamingos,
         </figure>
 
         <p>
-          A clear positive relationship appears: birds with longer bills tend to
-          be heavier.
+          There's a clear positive relationship here: birds with longer bills
+          tend to be heavier.
         </p>
 
         <p>
@@ -466,7 +466,7 @@ ggplot(kenya_flamingos,
         <title>And there is much more you could find</title>
 
         <p>
-          You might have noticed things that aren't mentioned here at all.
+          You might have spotted things that aren't mentioned here at all.
           For example:
           <ul>
             <li>Do males and females differ in body mass?</li>
@@ -490,8 +490,8 @@ ggplot(kenya_flamingos,
         </p>
 
         <p>
-          You don't need to have found any particular one of these things.
-          The purpose of the activity was to explore the data and see what
+          You don't need to have found any of these in particular.
+          The point of the activity was to explore the data and see what
           questions you could ask of it.
         </p>
 
@@ -506,44 +506,42 @@ ggplot(kenya_flamingos,
       <title>What the exercise covered</title>
 
       <p>
-        The observations available in this dataset correspond closely to the
+        The things you can notice in this dataset line up closely with the
         topics of the chapters that follow.
       </p>
 
       <p>
-        Methods to explore the data, including techniques outlined in the R code
-        in <xref ref="what-did-others-find"/> are covered in
-        <xref ref="ch-exploring-data"/>, with more advanced visualisations
-        covered in <xref ref="ch-visualising-multidimensional-data"/>.
-        Missing values in the <c>sex</c> column, and the question of what to do
-        about them, is the subject of <xref ref="ch-cleaning-recoding"/> and
+        Ways to explore the data, including the techniques in the R code in
+        <xref ref="what-did-others-find"/>, are covered in
+        <xref ref="ch-exploring-data"/>, with more advanced visualisations in
+        <xref ref="ch-visualising-multidimensional-data"/>.
+        The missing values in the <c>sex</c> column, and the question of what to
+        do about them, are the subject of <xref ref="ch-cleaning-recoding"/> and
         <xref ref="ch-handling-missing-values"/>.
-        Comparisons between species, lakes, or years depend on treating those
-        variables as categories, which is the subject of
-        <xref ref="ch-handling-factors"/>.
+        Comparing species, lakes or years means treating those variables as
+        categories, which is what <xref ref="ch-handling-factors"/> is about.
         The bill length and body mass relationship, which holds across the whole
-        dataset but not within each species, is an instance of the problem
-        examined in <xref ref="ch-multilevel-data"/>.
-        The question of how spread out a measurement is, rather than simply what
-        its average value is, is the subject of <xref ref="ch-variability"/>,
-        and accounting for those differences is the subject of
+        dataset but not within each species, is an example of the problem we
+        look at in <xref ref="ch-multilevel-data"/>.
+        How spread out a measurement is, rather than just what its average value
+        is, is the subject of <xref ref="ch-variability"/>, and accounting for
+        those differences is the subject of
         <xref ref="ch-accounting-variability"/>.
-        And the question of whether unequal counts across lakes reflect the
-        population or the survey is a question about what the data is capable of
-        answering, which arises in every chapter of this book.
+        And the question of whether the unequal counts across lakes reflect the
+        population or the survey is a question about what the data can actually
+        answer, which comes up in every chapter of this book.
       </p>
 
       <p>
-        The exercise did not require any of the techniques introduced in those
-        chapters.
-        What it required was attention, and a willingness to ask whether an
-        apparent pattern is what it appears to be.
-        The techniques that follow are tools for answering that question; they
-        are not a substitute for asking it.
-        (So: Go on, be honest.
+        None of that needed the techniques introduced in those chapters.
+        What it needed was attention, and a willingness to ask whether a pattern
+        is really what it looks like.
+        The techniques that follow are tools for answering that question.
+        They're not a substitute for asking it.
+        (So, go on, be honest.
         Did you read ahead?
-        It's not too late to still explore the data using your own methods and
-        approaches for 30 minutes).
+        It's not too late to go and explore the data your own way for thirty
+        minutes.)
       </p>
     </subsection>
   </section>
@@ -554,30 +552,30 @@ ggplot(kenya_flamingos,
     <introduction>
       <p>
         This book is an introduction to statistical computing with R.
-        Its subject is the work that has to happen before any statistical result
-        can be trusted: getting data into a usable shape, understanding how it
-        was collected, deciding what to do about the parts that are missing or
-        miscoded, and recognising when an apparent pattern is an artefact of the
-        structure of the data rather than a feature of the world.
+        It's about the work that has to happen before any statistical result can
+        be trusted: getting data into a usable shape, understanding how it was
+        collected, deciding what to do about the parts that are missing or
+        miscoded, and spotting when a pattern is an artefact of how the data is
+        structured rather than something real about the world.
       </p>
 
       <p>
-        It is written for readers who are beginning to work with real data:
+        We've written it for people who are starting to work with real data:
         students meeting statistics for the first time in a computational
         setting, and researchers or practitioners who have data to analyse and
         want to do it well.
-        The examples are drawn from real situations, many of them from Africa
-        and many of them cases where the data was handled badly and the
-        consequences were serious.
+        The examples come from real situations, many of them from Africa, and
+        many of them cases where the data was handled badly and the consequences
+        were serious.
       </p>
 
       <p>
-        No prior experience of R is assumed, and no mathematics beyond
-        arithmetic is required.
-        What is assumed is a willingness to run code, look at the output, and
-        ask whether it means what it appears to mean.
-        If you have used R before, the early chapters will still be worth
-        reading for the way they treat the data rather than the syntax.
+        We don't assume you've used R before, and we don't use any mathematics
+        beyond arithmetic.
+        What we do assume is that you're willing to run code, look at the
+        output, and ask whether it means what it looks like it means.
+        If you have used R before, the early chapters are still worth reading
+        for the way they treat the data rather than the syntax.
       </p>
     </introduction>
 
@@ -591,41 +589,40 @@ ggplot(kenya_flamingos,
 
       <p>
         <xref ref="ch-multilevel-data"/> begins with data that has structure:
-        individuals belonging to groups, where the group determines both an
+        individuals belonging to groups, where the group shapes both an
         individual's outcome and how common that individual is in the data.
-        This is where the most persuasive wrong conclusions come from, and it is
+        This is where the most persuasive wrong conclusions come from, so it's
         worth meeting early.
         <xref ref="ch-exploring-data"/> covers the first thing to do with any
         dataset: summarising it, tabulating it, and plotting it well enough to
-        know what you are holding.
-        <xref ref="ch-cleaning-recoding"/> deals with data that is not yet ready
+        know what you're holding.
+        <xref ref="ch-cleaning-recoding"/> deals with data that isn't yet ready
         to be asked questions of: inconsistent categories, implausible values,
         and entries that were recorded under several different names.
       </p>
 
       <p>
         <xref ref="ch-visualising-multidimensional-data"/> takes up the problem
-        of showing several variables at once, where a table contains the answer
-        but cannot display it.
+        of showing several variables at once, where a table holds the answer but
+        can't display it.
         <xref ref="ch-data-shapes"/> is about the arrangement of the data
         itself, and how the same information laid out differently makes some
         questions easy and others impossible.
         <xref ref="ch-handling-factors"/> covers categorical variables: how R
-        stores them, how their levels are ordered, and how much depends on
+        stores them, how their levels are ordered, and how much rests on
         decisions about which categories exist at all.
         <xref ref="ch-handling-missing-values"/> asks why values are missing,
-        and shows that the answer changes what you are entitled to do about
-        them.
+        and shows that the answer changes what you're entitled to do about them.
       </p>
 
       <p>
-        The final two chapters turn from the value of a measurement to its
+        The last two chapters turn from the value of a measurement to its
         spread.
         <xref ref="ch-variability"/> introduces variability, why it matters at
         least as much as the average, and how to measure it.
         <xref ref="ch-accounting-variability"/> then shows how to separate
-        variability that is explained by the structure of the data from
-        variability that is not.
+        variability that's explained by the structure of the data from
+        variability that isn't.
       </p>
     </subsection>
 
@@ -633,36 +630,33 @@ ggplot(kenya_flamingos,
       <title>Chapter format</title>
 
       <p>
-        Most chapters follow a common structure.
-        Each opens with an account of a situation in which the topic of the
-        chapter mattered in practice, frequently one in which it was handled
-        badly.
-        The chapter then develops the relevant ideas using data, with
-        accompanying R code.
-        Exercises appear at the end of each chapter.
+        Most chapters follow the same structure.
+        Each one opens with an account of a situation where the topic of the
+        chapter mattered in practice, often one where it was handled badly.
+        The chapter then develops the ideas using data, with R code alongside.
+        Exercises come at the end of each chapter.
       </p>
 
       <p>
-        The opening accounts are not incidental.
-        Statistical techniques are straightforward to apply and straightforward
-        to misapply, and the distinction between the two is usually a matter of
-        judgement rather than method.
-        The accounts are included to develop that judgement.
+        Those opening accounts aren't decoration.
+        Statistical techniques are easy to apply and just as easy to misapply,
+        and telling the two apart is usually a matter of judgement rather than
+        method.
+        The accounts are there to build that judgement.
       </p>
 
       <p>
-        To follow the code you will need R, available from
-        <url href="https://cran.r-project.org/">cran.r-project.org</url>, and we
-        recommend also installing RStudio from
+        To follow the code you'll need R, available from
+        <url href="https://cran.r-project.org/">cran.r-project.org</url>, and
+        we'd recommend installing RStudio too, from
         <url href="https://posit.co/download/rstudio-desktop/">posit.co</url>,
-        which provides a more comfortable environment for writing and running R
-        code.
+        which gives you a more comfortable place to write and run R code.
         Both are free.
       </p>
 
       <p>
         The datasets used in this book are distributed in the <c>statsdata</c>
-        package, which is installed from GitHub rather than from CRAN:
+        package, which installs from GitHub rather than from CRAN:
       </p>
 
       <program language="r">
@@ -677,15 +671,16 @@ library(statsdata)
       <p>
         Each dataset is then available by name, as with
         <c>data(kenya_flamingos)</c> earlier in this chapter.
-        A few examples use data downloaded directly from an external source
-        instead; where that is the case, the chapter gives the link and the
-        steps needed to read the file into R.
+        A few examples use data downloaded straight from an external source
+        instead.
+        Where that happens, the chapter gives you the link and the steps needed
+        to read the file into R.
       </p>
 
       <p>
         Some chapters also include interactive questions.
         These check understanding rather than recall, and usually ask you to
-        work something out from a dataset rather than to select a definition.
+        work something out from a dataset rather than pick a definition.
       </p>
     </subsection>
   </section>
