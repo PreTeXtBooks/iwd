@@ -3,13 +3,17 @@
 <!-- ================================================================= -->
 <!--  Chapter 2: Multilevel Data                                       -->
 <!--                                                                    -->
-<!--  Conceptual chapter, no computation. The Berkeley admissions case  -->
-<!--  is real and properly citable (Bickel, Hammel & O'Connell 1975),   -->
-<!--  as is the kidney stone case (Bonovas & Piovani 2023). The Kenya   -->
-<!--  tie-in (ss-kenya-relevance) is also a real, sourced fact - KUCCPS' -->
-<!--  own affirmative action criteria - not an invented case study.    -->
-<!--  Deliberately not tied to MICS or the flamingo dataset as the     -->
-<!--  running example.                                                 -->
+<!--  Opens conceptually with Simpson's paradox, then moves into R.    -->
+<!--  The Berkeley admissions case is real and properly citable        -->
+<!--  (Bickel, Hammel & O'Connell 1975), as is the kidney stone case    -->
+<!--  (Bonovas & Piovani 2023). The Kenya tie-in (ss-kenya-relevance)  -->
+<!--  is also a real, sourced fact: KUCCPS' own affirmative action     -->
+<!--  criteria, not an invented case study.                            -->
+<!--  The R section (sec-mics-multilevel) uses the Kenya MICS files    -->
+<!--  (hh, hl, wm, ch), linked by HID, to show linking, orphan records, -->
+<!--  level mapping, and what goes wrong when levels are ignored.      -->
+<!--  Outstanding: kidney stone numbers/graphs, the STACK question,    -->
+<!--  and the "Then more here" placeholder in ss-multilevel-structures. -->
 <!-- ================================================================= -->
 <chapter xml:id="ch-multilevel-data" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Multilevel Data</title>
@@ -20,28 +24,28 @@
     </p>
 
     <p>
-      A hospital records patients — but also the wards those patients are
-      admitted to, and the hospitals those wards belong to.
-      A school survey collects responses from students — but those students sit
-      in classrooms, and those classrooms are in schools, and those schools are
-      in districts.
-      A flamingo study measures individual birds — but those birds belong to
-      flocks, and those flocks live in different lakes.
+      We start with a hospital dataset.
+      This dataset records patients, but those patients are admitted to wards,
+      and those wards belong to hospitals.
+      A school survey collects responses from students, who sit in classrooms,
+      in schools, in districts.
+      Even the flamingos from <xref ref="ch-intro"/> belong to flocks, living on
+      different lakes.
     </p>
 
     <p>
-      When data has this kind of layered structure, the structure is not just
-      background detail.
-      It changes what questions you can ask, what comparisons are valid, and
-      what conclusions you are entitled to draw.
-      Ignore it, and you can produce results that are arithmetically correct but
-      analytically wrong — as one of this chapter's examples will show rather
-      dramatically.
+      When data has this kind of layered structure, that structure really
+      matters.
+      It changes which questions you can ask, which comparisons make sense, and
+      what you're allowed to conclude.
+      Ignore it, and you can end up with results where every calculation is
+      right and the conclusion is still wrong.
+      One of the examples in this chapter shows that really dramatically.
     </p>
 
     <p>
-      This chapter is about learning to see that structure before you start
-      analysing.
+      So this chapter is about learning to spot that structure before you start
+      any analysis.
     </p>
   </introduction>
   <!-- ================================================================= -->
@@ -52,10 +56,10 @@
 
     <introduction>
       <p>
-        In the early 1970s, concern was growing about gender equality in higher
-        education in the United States.
-        Against this backdrop, an analysis of admissions data from the
-        University of California, Berkeley caught public attention.
+        In the early 1970s, people in the United States were increasingly
+        worried about gender equality in higher education.
+        Then some admissions data from the University of California, Berkeley,
+        came along that seemed to confirm those fears.
       </p>
     </introduction>
 
@@ -63,12 +67,13 @@
       <title>The numbers seemed clear</title>
 
       <p>
-        In 1973, UC Berkeley faced a lawsuit over sex bias when overall graduate
-        admissions showed 44.3% of men but only 34.6% of women were accepted
-        across the whole university, This was in the same institution, and in
-        the same year.
-        Newspapers reported the figures, and public concern followed.
-        It appeared that women were being treated unfairly.
+        In 1973, UC Berkeley faced a lawsuit over sex bias.
+        Across the whole university, 44.3% of men who applied for graduate
+        programmes were accepted.
+        For women, it was only 34.6%.
+        Same institution, same year.
+        The newspapers picked it up, and it really did look like women were
+        being treated unfairly.
       </p>
 
       <figure xml:id="fig-berkeley-overall-admissions">
@@ -91,10 +96,10 @@
       </figure>
 
       <p>
-        Before any action was taken, the researchers dug deeper into the
-        numbers.
-        Rather than asking simply <em>what</em> the numbers showed, they asked
-        <em>how</em> those decisions were actually made.
+        But before anyone acted on it, researchers went back to the numbers.
+        And instead of just asking <em>what</em> the numbers showed, they asked
+        <em>how</em> the admissions decisions were actually made.
+        We love this question, because it's the one that so often gets skipped.
       </p>
     </subsection>
 
@@ -102,16 +107,17 @@
       <title>One university, many decisions</title>
 
       <p>
-        Admissions at Berkeley were not decided by a single central committee.
-        Instead, each academic department made their own decisions, with their
-        own standards, number of places, and level of competition.
+        At Berkeley, there wasn't one central committee deciding who got in.
+        Each department made its own decisions, with its own standards, its own
+        number of places, and its own level of competition.
       </p>
 
       <p>
-        While correct, the university-wide figures only told part of the story.
-        Instead, we can look at the exact same data and information, but just
-        look at it by department, instead of at the whole university level.
-        Now were women less likely to be admitted than men?
+        The university-wide figures were correct.
+        They just weren't the whole story.
+        So let's take exactly the same data, and this time look at it department
+        by department.
+        Were women still less likely to get in?
       </p>
 
       <figure xml:id="fig-berkeley-admissions-by-dept">
@@ -139,15 +145,16 @@
       <title>What they found</title>
 
       <p>
-        In most departments, women were admitted around the same rate as men.
-        In fact, in several departments women were admitted at a <em>higher</em>
-        rate!
-        The apparent discrimination had all but vanished.
+        In most departments, women were admitted at about the same rate as men.
+        In several, women were actually admitted at a <em>higher</em> rate!
+        The discrimination that looked so obvious in the overall numbers had
+        pretty much disappeared.
       </p>
 
       <p>
-        So how could women have a lower acceptance rate overall, if they were
-        not being disadvantaged within any individual department?
+        So what's going on?
+        How can women have a lower acceptance rate overall, when they weren't
+        being disadvantaged in the individual departments?
       </p>
 
       <figure xml:id="fig-berkeley-admissions-total-applicants-by-dept">
@@ -171,38 +178,35 @@
       </figure>
 
       <p>
-        The answer lay in where people applied.
-        On average, women tended to apply to departments that were more
-        competitive <mdash/> departments with fewer places and lower acceptance
-        rates for everyone, regardless of sex.
-        Men, on average, applied to departments with higher acceptance rates.
-        Once every department was blended into one set of university- wide
-        numbers, that difference in <em>where people applied</em> disappeared
-        from view, and only a difference in <em>who got in</em> was left
-        visible.
+        It all comes down to where people applied.
+        On average, women tended to apply to the more competitive departments:
+        the ones with fewer places, where acceptance rates were low for
+        everyone, whatever their sex.
+        Men were more likely to apply to departments that accepted a higher
+        proportion of applicants.
+        When you blend all the departments into one set of university-wide
+        numbers, you lose sight of <em>where people applied</em>, and all you're
+        left with is a difference in <em>who got in</em>.
       </p>
 
       <insight xml:id="insight-berkeley-lesson">
-        <title>
-          The university was not discriminating.
-          The way the numbers were combined was.
-        </title>
+        <title>The bias was in how the numbers were combined</title>
 
         <p>
-          By looking at applications across the entire university, unlike
-          situations were treated as if they were the same.
-          It blurred two distinct questions: how applicants were treated
-          <em>within</em> a department, and how departments differed
+          By looking at the whole university at once, very different situations
+          were treated as if they were the same.
+          Two separate questions got blurred together: how applicants were
+          treated <em>within</em> a department, and how departments differed
           <em>from one another</em>.
         </p>
 
         <p>
-          What is important is that this was not a mistake in arithmetic.
-          But, instead, the mistake was in how the situation was understood.
-          The data reflected a layered reality <mdash/> applicants belonged to
-          departments, and departments belonged to a university <mdash/> and
-          flattening that layered structure into one set of averages erased
-          exactly the context needed to read it correctly.
+          There was nothing wrong with the arithmetic - the mistake was in how
+          the situation was understood.
+          Applicants belonged to departments, and departments belonged to a
+          university.
+          Squash those layers into one set of averages, and you throw away
+          exactly the context you need to read the numbers properly.
         </p>
       </insight>
     </subsection>
@@ -211,15 +215,16 @@
       <title>Simpson's paradox</title>
 
       <p>
-        This pattern <mdash/> a trend that appears in combined data but reverses
-        or vanishes once the data is broken into its natural groups <mdash/> is
-        now known as <term>Simpson's paradox</term>
+        This pattern has a name: <term>Simpson's paradox</term>
         <idx><h>Simpson's paradox</h></idx>.
-        It is one of the most famous cautionary tales in applied statistics, and
-        for good reason: the consequences at Berkeley were not trivial.
-        A university's reputation was at stake, a serious accusation had been
+        It's when a trend shows up in combined data, but reverses or disappears
+        once you split the data into its natural groups.
+        It's one of the most famous cautionary tales in statistics, and for good
+        reason.
+        The stakes at Berkeley were really high.
+        A university's reputation was on the line, a serious accusation had been
         made in public, and it took careful, patient re-analysis to show that
-        the accusation, though built from real numbers, did not hold up.
+        the accusation didn't hold up, even though it was built on real numbers.
       </p>
 
       <figure xml:id="fig-simpsons-paradox">
@@ -228,11 +233,10 @@
       </figure>
 
       <p>
-        The deeper lesson is simpler than the paradox's reputation suggests.
-        Multilevel data is not about advanced models or complicated equations.
-        It is about recognising how the world is actually organised, and
-        refusing to erase that organisation just because a single table of
-        averages is easier to report.
+        The good news is that avoiding it doesn't need anything fancy.
+        It starts with recognising how the world is actually organised, and
+        keeping that organisation in your analysis, even when a single table of
+        averages would be much easier to report.
       </p>
 
       <p>
@@ -248,7 +252,9 @@
       <title>Multilevel Structures</title>
 
       <p>
-        There are many examples of multilevel data structures:
+        Once you know what to look for, you'll see multilevel structures
+        everywhere.
+        For example:
         <ul>
           <li>
             <p>
@@ -290,39 +296,41 @@
       <title>Why this matters here</title>
 
       <p>
-        This is a story from 1970s America.
-        Why is this important here?
-        Kenya's own university placement body, the Kenya Universities and
-        Colleges Central Placement Service (KUCCPS), applies an approved
+        This is a story from 1970s America, so why are we telling it here?
+        Because the same kinds of questions come up in Kenya today.
+        The Kenya Universities and Colleges Central Placement Service (KUCCPS),
+        which places students into university programmes, applies approved
         <term>Affirmative Action Criteria</term> covering gender, persons with
-        disabilities and marginalised regions when placing students into higher
-        education programmes.
-        The aim is to enhance access to higher education for groups that may
-        otherwise be disadvantaged.
-        (KUCCPS, n.d.)
+        disabilities, and marginalised regions.
+        The aim is to improve access to higher education for groups who might
+        otherwise be left behind (KUCCPS, n.d.).
       </p>
 
       <p>
-        The principle is familiar: a single overall number can hide important
-        differences between groups.
-        A national placement rate, or a single measure of performance, may tell
-        you something useful about the system as a whole while telling you very
-        little about how that system is working for particular groups.
-        The Berkeley example shows why this matters.
-        The overall numbers looked very different from the numbers within
-        individual departments.
-        The lesson is not that every difference between groups is evidence of
-        unfairness, nor that every difference is an aggregation effect.
-        It is that a pooled statistic is a starting point, not necessarily the
-        end of the analysis.
+        The idea behind this is one we really care about: a single overall
+        number can hide important differences between groups.
+        A national placement rate can tell you something useful about the system
+        as a whole, and still tell you very little about how that system is
+        working for particular groups of people.
+        Berkeley shows exactly why this matters.
+        The overall numbers told a very different story from the numbers within
+        each department.
       </p>
 
       <p>
-        So, when you encounter a national placement rate, an examination result,
+        We want to be careful here, though.
+        Not every difference between groups is evidence of unfairness, and not
+        every difference is an aggregation effect either.
+        What Berkeley teaches us is that a pooled statistic is a place to start,
+        and often it shouldn't be where you stop.
+      </p>
+
+      <p>
+        So next time you come across a national placement rate, an exam result,
         or any other pooled statistic, ask yourself:
-        <em>what groups have been
-  combined to produce this number?</em> Break
-        the data down, look again, and only then start drawing conclusions.
+        <em>what groups have been combined to produce this number?</em> Then
+        break the data down, look again, and only then start drawing
+        conclusions.
       </p>
 
       <p>
@@ -333,111 +341,13 @@
       </p>
     </subsection>
   </section>
-  <!-- ================================================================= -->
-  <!--  SECTION 2: it happened again, elsewhere                          -->
-  <!-- ================================================================= -->
-  <section xml:id="sec-kidney-stones">
-    <title>Aside: This Wasn't a One-Off</title>
-
-    <introduction>
-      <p>
-        TODO: Does this example link to Multilevel data?
-        Or instead, is this more like factors/grouping.
-      </p>
-
-      <p>
-        If Berkeley sounds like a coincidence of the numbers, here is a second,
-        unrelated case where exactly the same thing happened, a decade later, in
-        a completely different field.
-      </p>
-    </introduction>
-
-    <subsection xml:id="ss-kidney-two-treatments">
-      <title>Two treatments for kidney stones</title>
-
-      <p>
-        In the early 1980s, surgeons were deciding how best to treat kidney
-        stones.
-        There were two options.
-        The first was open surgery: invasive, difficult, but familiar.
-        The other was newer and far less invasive, a procedure called
-        percutaneous nephrolithotomy, promising quicker recovery and, many
-        hoped, better results.
-      </p>
-
-      <p>
-        Looking at outcomes across all patients, the answer seemed clear: the
-        newer procedure appeared to work better overall.
-        More patients were successfully treated.
-        On the surface, it looked like the obvious choice.
-      </p>
-
-      <p>
-        TODO: Graph or numbers of the overall numbers
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-kidney-stone-size">
-      <title>Not all stones are equal</title>
-
-      <p>
-        But kidney stones are not all the same.
-        Some are small and relatively easy to remove; others are large,
-        multiple, or deeply embedded, and far harder to treat.
-        When researchers separated patients into two groups <mdash/> small
-        stones and large stones <mdash/> the story changed completely.
-      </p>
-
-      <p>
-        TODO: Graph or numbers of split by stone size
-      </p>
-
-      <p>
-        Within each group, open surgery had the <em>higher</em> success rate.
-        It worked better for patients with small stones, and it also worked
-        better for patients with large stones.
-        The treatment that looked worse overall was performing better in every
-        comparable situation.
-      </p>
-
-      <p>
-        The contradiction came from how the treatments were actually used in
-        practice.
-        Patients with small, easy stones were far more likely to receive the
-        newer, less invasive procedure.
-        Patients with large or complex stones were far more likely to be sent
-        for open surgery.
-        Lump all patients together, and the procedure that had been handed the
-        hardest cases ends up looking like the weaker one, even though, case for
-        comparable case, it was the more effective option.
-      </p>
-
-      <p>
-        Patients are grouped by stone size, and the conclusion reverses
-        depending on which level you look at: the whole patient group, or the
-        two size-based groups within it.
-        Ignoring that grouping doesn't simplify the analysis.
-        It distorts it.
-      </p>
-
-      <p>
-        <term>Source:</term> Bonovas, S.
-        and Piovani, D.
-        (2023).
-        <q>Simpson's
-        Paradox in Clinical Research: A Cautionary Tale.</q>
-        <em>Journal of
-        Clinical Medicine</em>, 12(4), 1633.
-      </p>
-    </subsection>
-  </section>
 
   <section xml:id="sec-ch2-stack">
     <title>STACK Question Here</title>
 
     <introduction>
       <p>
-        Insert the STACK (Pivot Table) question here
+        Insert the STACK (ML data) question here
       </p>
     </introduction>
 
@@ -455,17 +365,18 @@
 
     <introduction>
       <p>
+        Now let's get our hands on some real multilevel data in R.
         The Kenya Multiple Indicator Cluster Survey (MICS) is a nationally
-        representative household survey conducted by UNICEF and the Kenya
-        National Bureau of Statistics.
-        The survey, like most modern data, was designed around a multilevel
-        structure: children are nested within women, women are nested within
-        households, and households are nested within geographic clusters.
+        representative household survey, run by UNICEF and the Kenya National
+        Bureau of Statistics.
+        Like most modern data, it's built around a multilevel structure:
+        children are nested within women, women within household members, and
+        household members within households.
       </p>
 
       <p>
-        The data is freely available but requires registration.
-        To follow the R code in this section:
+        The data is free, but you do need to register to get it.
+        To follow along with the R code in this section:
         <ol>
           <li>
             <p>
@@ -478,13 +389,12 @@
           <li>
             <p>
               Register for a free account and request access to the microdata.
-              Access is typically granted within a few days.
             </p>
           </li>
 
           <li>
             <p>
-              Download the dataset and place the <c>.sav</c> files in your
+              Download the dataset, and put the <c>.sav</c> files in your
               working directory.
             </p>
           </li>
@@ -492,9 +402,9 @@
       </p>
 
       <p>
-        If you do not yet have access, read through this section for the
-        concepts.
-        The ideas apply to any multilevel dataset.
+        If you're still waiting for access, don't worry.
+        Read through this section anyway, because the ideas apply to any
+        multilevel dataset.
       </p>
     </introduction>
 
@@ -502,8 +412,8 @@
       <title>Four files, four levels</title>
 
       <p>
-        The Kenya MICS comes as four separate data files, each corresponding to
-        a different level of the hierarchy:
+        The Kenya MICS comes as four separate data files, one for each level of
+        the hierarchy:
       </p>
 
       <tabular halign="left">
@@ -548,16 +458,17 @@
       </tabular>
 
       <p>
-        The row counts are not multiples of each other - not every household has
-        a child under five; and not every woman has children; and not every
-        household member is a woman aged 15 to 49.
-        The files represent overlapping but distinct subsets of the people in
-        the survey.
+        You'll notice the row counts aren't neat multiples of each other.
+        That makes sense when you think about it: not every household has a
+        child under five, not every woman has children, and not every household
+        member is a woman aged 15 to 49.
+        Each file covers a different, overlapping group of the people in the
+        survey.
       </p>
 
       <p>
-        Load all four files in R using the <c>haven</c> package, which reads
-        SPSS <c>.sav</c> files:
+        We can load all four files into R with the <c>haven</c> package, which
+        reads SPSS <c>.sav</c> files:
       </p>
 
       <program language="r">
@@ -587,45 +498,47 @@
       <title>Understanding the variable names</title>
 
       <p>
-        Opening any of the four files, the column names are not immediately
-        informative.
-        The household file contains variables called <c>HI1</c>, <c>HI2</c>,
+        Open any of the four files, and the first thing you'll notice is that
+        the column names don't tell you very much.
+        The household file has variables called <c>HI1</c>, <c>HI2</c>,
         <c>HI3D</c>, <c>HI3M</c>, <c>HI3Y</c>, <c>HI10</c>, <c>HIMEM</c>, and so
         on.
-        These names follow a coding scheme common in large household surveys:
-        short alphanumeric codes that are unambiguous and consistent across
-        countries and survey rounds, but which tell you nothing about what the
-        variable contains without consulting the documentation.
+        This is really common in large household surveys.
+        The names are short codes that are unambiguous and consistent across
+        countries and survey rounds, but they tell you very little about what's
+        in the variable unless you check the documentation (which is the Word
+        document that comes with the Kenya MICS download).
       </p>
 
       <p>
-        The reason for this convention is practical.
-        MICS surveys are conducted in dozens of countries, often translated into
-        multiple languages.
-        Short codes like <c>HI1</c> are language-neutral and do not change
-        between the French version and the English version of the same survey.
-        Long descriptive names would vary by language and make cross-country
-        comparisons harder to automate.
-        The cost is that the names are opaque to anyone who does not have the
+        There's a good, practical reason for this.
+        MICS surveys run in dozens of countries, often in several languages.
+        A short code like <c>HI1</c> is language-neutral, so it's the same in
+        the French and English versions of a survey.
+        Long descriptive names would change from language to language, and make
+        it much harder to automate comparisons across countries.
+        The price you pay is that the names mean little without the
         documentation.
       </p>
 
       <p>
-        The Word document distributed with the Kenya MICS download provides the
-        translation.
+        Luckily, the Word document that comes with the Kenya MICS download gives
+        you the translation.
         <c>HI1</c> is the cluster number.
         <c>HI2</c> is the household number within the cluster.
         <c>HI3D</c>, <c>HI3M</c>, and <c>HI3Y</c> are the day, month, and year
         of interview.
         <c>HI10</c> is the result of the household interview.
         <c>HIMEM</c> is the number of household members.
-        Refer to that document whenever an unfamiliar variable name appears.
+        Keep that document close by, because you'll need it whenever an
+        unfamiliar variable name comes up (and there are a lot of them!).
       </p>
 
       <p>
-        In R, the <c>haven</c> package preserves the variable labels from the
-        <c>.sav</c> file, so you do not always need to look them up manually.
-        The labels are attached to each column and can be viewed directly:
+        Even better, the <c>haven</c> package keeps the variable labels from the
+        <c>.sav</c> file when you read it into R, so you don't always need to
+        look them up yourself.
+        The labels are attached to each column, and you can see them directly:
       </p>
 
       <program language="r">
@@ -643,11 +556,12 @@
       </program>
 
       <p>
-        The screenshot below shows what this looks like when the data is opened
-        in a spreadsheet: the short variable codes appear as column headers,
-        with the descriptive labels visible in a second row beneath them.
-        In R, those labels are stored as metadata attached to each column rather
-        than as a visible row, but they are always accessible.
+        The screenshot below shows what this looks like if you open the data in
+        the RStudio viewer (<c>View(hh)</c>).
+        The short variable codes are the column headers, and the descriptive
+        labels sit in a second row underneath.
+        In R, the labels are stored as metadata attached to each column instead
+        of as a visible row, and you can get to them whenever you need them.
       </p>
 
       <figure xml:id="fig-mics-variable-labels">
@@ -677,13 +591,14 @@
     </subsection>
 
     <subsection xml:id="ss-mics-linking">
-      <title>How the levels connect, and where they do not</title>
+      <title>How the levels connect, and where they don't</title>
 
       <p>
         The files are linked by a shared household identifier, <c>HID</c>.
-        Every record in every file should be traceable back to a household in
-        <c>hhKE.sav</c>.
-        Let us check whether that is actually true.
+        In theory, every record in every file should trace back to a household
+        in <c>hhKE.sav</c>.
+        But is that actually true?
+        Let's check.
       </p>
 
       <program language="r">
@@ -701,12 +616,11 @@
       </program>
 
       <p>
-        The household file has 8,993 households.
-        The household members file has members from 8,989 of them.
-        Four households that exist in the household file have no corresponding
-        members.
-        Does this mean four households were empty?
-        We can investigate.
+        The household file has 8,993 households, but the household members file
+        only has members from 8,989 of them.
+        So there are four households with no members listed at all.
+        Were they empty?
+        Let's find out.
       </p>
 
       <program language="r">
@@ -723,24 +637,23 @@
       </program>
 
       <p>
-        Looking at these four households reveals something interesting.
-        Two have a large number of <c>NA</c> values across their records,
-        including in the number of household members variable ( <c>HIMEM</c> ) —
-        consistent with households that were visited but where no interview was
-        completed.
-        The sex and age fields for the head of household are coded 7 and 97
-        respectively, which the data dictionary confirms are codes for missing
-        rather than real values.
-        These households may genuinely have had no members present at the time
-        of the survey.
+        This is where it gets interesting.
+        Two of these four households have lots of <c>NA</c> values, including
+        for the number of household members ( <c>HIMEM</c> ).
+        That looks like households that were visited, but where the interview
+        wasn't completed.
+        The sex and age of the head of household are coded as 7 and 97, and the
+        data dictionary tells us these are codes for missing values.
+        So it's quite possible that nobody was at home when the survey team
+        visited these households.
       </p>
 
       <p>
-        But one of the four — household 314034 — has a non-missing value for the
-        variable indicating an eligible child under 5.
-        If there was an eligible child, there should have been a household
-        member record.
-        Let us check whether that child appears in the children's file:
+        But one of the four, household 314034, has a value for the variable that
+        says there's an eligible child under 5.
+        If there was a child, we'd expect to see them in the household members
+        file.
+        Are they in the children's file instead?
       </p>
 
       <program language="r">
@@ -752,22 +665,24 @@
       </program>
 
       <p>
-        The child does not appear in the children's file either.
-        This is a genuine inconsistency in the data: the household record says
-        there should be a child, but neither the household members file nor the
-        children's file contains any record of them.
-        Whether this reflects a recording error, a missed interview, or
-        something else is impossible to determine from the data alone.
+        No, the child isn't in the children's file either.
+        So we have a real inconsistency: the household record says there should
+        be a child, but there's no record of them anywhere else.
+        Was it a recording error?
+        A missed interview?
+        Something else?
+        Honestly, we can't tell from the data alone.
       </p>
 
       <p>
-        The women's file raises a different puzzle.
-        Household 76075 is among the four with no household member records, but
-        it appears in the women's file — twice, as expected, since the household
-        record indicates two women aged 15 to 49.
-        And household 1240005, also missing from the household members file, has
-        a woman's record too.
-        A woman exists in the women's file whose household has no members:
+        The women's file gives us a different puzzle.
+        Household 76075 is one of our four households with no members, but it
+        shows up in the women's file.
+        Twice, in fact, which fits with the household record saying there are
+        two women aged 15 to 49.
+        Household 1240005, also missing from the household members file, has a
+        woman's record too.
+        So we have women in the women's file whose households have no members:
       </p>
 
       <program language="r">
@@ -777,15 +692,16 @@
       </program>
 
       <p>
-        This is internally inconsistent.
-        A woman must be a household member, so a woman's record without a
-        corresponding household member record is a data problem, not a genuine
-        feature of the survey.
+        That doesn't add up.
+        A woman has to be a member of a household, so a woman's record with no
+        matching household member record is a problem with the data.
+        There's no way the survey design could produce it.
       </p>
 
       <p>
-        Now check the other direction: are there women or children in the data
-        whose household ID does not appear in the household file at all?
+        Now let's look in the other direction.
+        Are there women or children whose household ID doesn't appear in the
+        household file at all?
       </p>
 
       <program language="r">
@@ -801,45 +717,45 @@
       </program>
 
       <p>
-        There are 183 women whose household ID does not match any household in
+        There are 183 women whose household ID doesn't match any household in
         the household file.
-        The children's file, by contrast, has no such orphans — every child's
-        household ID appears in the household file.
-        The women's file has a more serious linkage problem than the children's
-        file.
+        The children's file, on the other hand, is clean: every child's
+        household ID is in the household file.
+        So the linking problems are much bigger in the women's file than in the
+        children's file.
       </p>
 
       <insight xml:id="insight-mics-orphans">
         <title>Real multilevel data is rarely perfectly linked</title>
 
         <p>
-          In a perfectly collected multilevel dataset, every record at every
-          level would link cleanly to exactly one record at the level above it.
-          In practice, this is almost never true.
+          In a perfect world, every record at every level of a multilevel
+          dataset would link cleanly to exactly one record at the level above.
+          In practice, this almost never happens.
           Records go missing.
-          Identifiers are recorded incorrectly.
-          Interviews are partially completed.
-          The four households with no members, the woman with no household
-          record, and the 183 women with unmatched household IDs are all
-          examples of what is called <term>orphan records</term> — records that
-          cannot be linked to their parent level.
-          Finding and understanding orphan records is a normal part of working
-          with multilevel survey data, and investigating them — as we did above
-          — is more informative than simply discarding them.
-          Sometimes an orphan record reveals a coding error that can be fixed.
-          Sometimes it reveals a genuine gap in data collection.
-          Sometimes, as with household 314034, it reveals an inconsistency that
-          cannot be resolved from the data alone.
+          IDs get typed in wrong.
+          Interviews get started and not finished.
+          The four households with no members, the women with no household
+          member records, and the 183 women with unmatched household IDs are all
+          examples of <term>orphan records</term>: records that can't be linked
+          to their parent level.
+          Finding orphan records is a completely normal part of working with
+          multilevel survey data, and it's really worth investigating them, like
+          we did above, instead of just throwing them away.
+          Sometimes an orphan record points to a coding error you can fix.
+          Sometimes it shows a real gap in the data collection.
+          And sometimes, like household 314034, it's an inconsistency you just
+          can't resolve from the data.
         </p>
       </insight>
 
       <p>
-        The data cleaning work this kind of investigation requires is covered in
+        We look at how to do this kind of data cleaning in
         <xref ref="ch-cleaning-recoding"/>.
-        For now, the important point is that identifying these issues is the
-        first step — and the step that is only possible once you understand the
-        multilevel structure of the data well enough to know what
-        <q>correctly linked</q> should look like.
+        For now, the important thing is spotting these issues in the first
+        place, and you can only do that once you understand the multilevel
+        structure well enough to know what <q>correctly linked</q> should look
+        like.
       </p>
     </subsection>
 
@@ -847,19 +763,18 @@
       <title>Tracing one household through all four files</title>
 
       <p>
-        A useful exercise when first encountering multilevel data is to trace
-        one unit through every level.
-        Pick one household and find every record that relates to it across all
+        One of our favourite exercises when meeting a multilevel dataset for the
+        first time is to follow one unit all the way through every level.
+        Pick a household, and find every record that relates to it across all
         four files.
-        This makes the structure concrete.
+        It really helps make the structure concrete.
       </p>
 
       <p>
         To see all four files in action, we need a household that has at least
         one woman aged 15 to 49 and at least one child under 5.
-        The variables <c>HI12</c> and <c>HI13</c> in the household file record
-        these counts.
-        We take the first household that satisfies both conditions:
+        The variables <c>HI12</c> and <c>HI13</c> in the household file give us
+        these counts, so we can take the first household that has both:
       </p>
 
       <program language="r">
@@ -874,7 +789,7 @@
       </program>
 
       <p>
-        Now pull every record related to household 2078 from each file:
+        Now let's pull out every record for household 2078 from each file:
       </p>
 
       <program language="r">
@@ -900,49 +815,48 @@
       </program>
 
       <p>
-        Household 2078 has seven members in total.
-        Two of those seven are women aged 15 to 49, so they each have a record
-        in the women's file.
-        One is a child under 5, with a record in the children's file.
-        The remaining four household members (perhaps older children, men, or
-        elderly relatives) appear only in the household members file, nowhere
-        else.
-        We can verify their ages and sex by looking at the household members
-        file.
-        We can see from the four data sets information on household 2078:
+        Household 2078 has seven members.
+        Two of them are women aged 15 to 49, so they each have a record in the
+        women's file.
+        One is a child under 5, who has a record in the children's file.
+        The other four people (maybe older children, men, or elderly relatives)
+        only appear in the household members file, where we can check their ages
+        and sex.
+        Putting the four files together, here's what we know about household
+        2078:
         <ul>
           <li>
-            The household record: They are in Central Kenya, in the 4th wealth
-            quintile (where 5 is richest quintile), They have water piped into
-            their house, and a traditional pit latrine.
+            The household record: they live in Central Kenya, and are in the 4th
+            wealth quintile (where 5 is the richest).
+            They have water piped into their house, and a traditional pit
+            latrine.
           </li>
 
           <li>
-            The women's record: Two women aged 18 and 25 reside in this
-            household.
-            They both have primary education level, and the 25 year old has
-            given birth, and the 18 year-old has not.
+            The women's records: two women live here, aged 18 and 25.
+            Both have primary-level education.
+            The 25-year-old has given birth, and the 18-year-old hasn't.
           </li>
 
           <li>
-            The under-5 record: One child under 5 - an 8 month old girl with
-            some vaccinations.
-            They are 7.2kg and 66cm.
+            The under-5 record: an 8-month-old girl who has had some
+            vaccinations.
+            The child weighs 7.2 kg and is 66 cm long.
           </li>
         </ul>
       </p>
 
       <p>
-        Variables measured at the household level, such as water source, wealth
-        index, or sanitation, apply to all seven members of this household
-        equally.
-        Variables measured at the woman level, such as education, or
-        reproductive history, apply only to the two women.
-        And the variables measured at the child level, such as height, weight,
-        or vaccination status, apply only to the one child.
-        To ask whether this child's nutritional status is related to the
-        mother's education and the household's wealth requires linking across
-        all three of those levels.
+        Think about what that means for the variables.
+        Household-level variables, like water source, wealth index, or
+        sanitation, apply equally to all seven people in the household.
+        Woman-level variables, like education or reproductive history, only
+        apply to the two women.
+        And child-level variables, like height, weight, or vaccination status,
+        only apply to the one child.
+        So if we want to ask whether this child's nutritional status is related
+        to their mother's education and their household's wealth, we need to
+        link across all three of those levels.
       </p>
     </subsection>
 
@@ -950,9 +864,10 @@
       <title>Mapping the levels</title>
 
       <p>
-        Before analysing any multilevel dataset, it is worth doing a brief
-        level-mapping exercise: identifying what units exist at each level, how
-        they connect, and what variables are measured at each level.
+        Before we analyse any multilevel dataset, we find it really helpful to
+        do a quick level-mapping exercise.
+        Work out what units there are at each level, how they connect, and which
+        variables are measured at each level.
         For the Kenya MICS, the map looks like this:
       </p>
 
@@ -996,20 +911,21 @@
       </tabular>
 
       <p>
-        This mapping immediately raises questions that guide the analysis.
-        If the outcome of interest is a child's nutritional status, e.g.,
-        whether their height is low for their age, then the outcome lives at
-        Level 1.
-        But the potential explanations live at multiple levels: the child's own
-        age and sex (Level 1), the mother's education (Level 2), the household's
-        wealth and water source (Level 3), and whether the household is in an
-        urban or rural area (Level 4).
-        None of these levels can be ignored without potentially missing
-        something important.
+        Even this simple map raises questions that shape the analysis.
+        Say we're interested in a child's nutritional status, for example
+        whether they're short for their age.
+        That outcome lives at Level 1.
+        But the things that might explain it live at every level: the child's
+        own age and sex (Level 1), their mother's education (Level 2), the
+        education of other people in the household (Level 3), and the
+        household's wealth, water source, and whether it's in an urban or rural
+        area (Level 4).
+        Leave out any one of these levels, and you risk missing something
+        important.
       </p>
 
       <p>
-        The key questions to ask when mapping any multilevel dataset:
+        Here are the key questions we ask when mapping any multilevel dataset:
         <ul>
           <li>
             <p>
@@ -1049,7 +965,7 @@
         <code>
         # How many household members per household?
         hl %&gt;%
-          group_by(Hid) %&gt;%
+          group_by(HID) %&gt;%
           summarise(n_members = n()) %&gt;%
           summarise(
             mean_size = mean(n_members),
@@ -1064,7 +980,7 @@
         # How many children per household, among households
         # with at least one child?
         ch %&gt;%
-          group_by(Hid) %&gt;%
+          group_by(HID) %&gt;%
           summarise(n_children = n()) %&gt;%
           count(n_children)
         #&gt; # A tibble: 6 x 2
@@ -1080,14 +996,16 @@
       </program>
 
       <p>
-        Unsurprisingly, household sizes are unequal — some households have one
-        member, others many.
-        This is typical of multilevel data from household surveys, and it
-        matters for analysis: a household with eight members contributes more
-        rows to the dataset than a household with two, which can distort simple
-        summaries if the nesting is ignored.
-        Looking at the mean number of rooms within a household using the `hh`
-        data and comparing it to the `hl` data shows a slight difference:
+        No surprises here: household sizes vary a lot, from just one member up
+        to 23.
+        That's typical of household survey data, and it really matters for
+        analysis.
+        A household with eight members contributes more rows to the dataset than
+        a household with two, and if you ignore the nesting, that can distort
+        even simple summaries.
+        Here's an example.
+        Let's calculate the mean number of rooms per household, first using the
+        <c>hh</c> data, and then using the <c>hl</c> data:
       </p>
 
       <program language="r">
@@ -1100,13 +1018,15 @@
       </program>
 
       <p>
-        The mean number of rooms per household is slightly higher when
-        calculated from the household-level data (`hl`) compared to the
-        individual-level data (`hh`).
-        This difference arises because larger households are represented
-        multiple times in the `hl` dataset (there is one row per household
-        member there, so household data is duplicated across many rows).
-        This skews the mean when not accounting for the multilevel structure.
+        The answers are different!
+        The mean number of rooms is higher when we calculate it from the
+        individual-level data ( <c>hl</c> ) than from the household-level data (
+        <c>hh</c> ).
+        That's because bigger households appear lots of times in <c>hl</c>, once
+        for every household member, so their information gets repeated across
+        many rows.
+        If we don't account for the multilevel structure, those bigger
+        households pull the mean up.
       </p>
     </subsection>
 
@@ -1114,36 +1034,36 @@
       <title>What goes wrong when you ignore the levels</title>
 
       <p>
-        Suppose you want to know whether urban children are better nourished
-        than rural children.
-        The child's urban or rural status comes from their household's cluster,
-        which is a cluster-level variable.
-        The nutritional outcome is a child-level variable.
-        These live at different levels of the hierarchy.
+        Let's say you want to find out whether urban children are better
+        nourished than rural children.
+        Whether a child lives in an urban or rural area depends on their
+        household's cluster, so that's a cluster-level variable.
+        How well nourished they are is a child-level variable.
+        These two things live at different levels.
       </p>
 
       <p>
-        If you ignore the levels and simply merge the cluster variable onto
-        every child row and run an analysis treating each child as an
-        independent observation, you will get an answer, but it will be
-        overconfident.
-        Children in the same cluster share a location, the same local food
-        system, the same water supply, and the same local health services.
-        They are not independent of each other.
-        Treating them as if they were means your analysis thinks it has more
-        independent information than it actually does, and confidence intervals
-        that should be wide will appear narrow.
+        Now suppose you ignore that.
+        You merge the cluster variable onto every child's row, and run an
+        analysis that treats every child as an independent observation.
+        You'll get an answer, but it'll be overconfident.
+        Children in the same cluster share a location, a local food system, a
+        water supply, and local health services, so they aren't independent of
+        each other.
+        If you treat them as if they are, your analysis thinks it has more
+        independent information than it really has, and confidence intervals
+        that should be wide end up looking narrow.
       </p>
 
       <p>
-        This is the core problem that multilevel structure creates, and that
-        multilevel methods are designed to address.
-        The Berkeley admissions example from the opening of this chapter showed
-        one consequence: a conclusion that reversed completely when the group
-        structure was acknowledged.
-        The MICS data shows another: even when the conclusion does not reverse,
-        ignoring groups produces false precision.
-        Both are reasons to map the levels before beginning any analysis.
+        This is the heart of the problem with multilevel structure, and it's
+        exactly what multilevel methods are designed to deal with.
+        Berkeley showed us one consequence of ignoring it: a conclusion that
+        completely reversed once we took the groups into account.
+        The MICS data shows us another: even when the conclusion doesn't flip,
+        ignoring the groups gives you false precision.
+        Either way, it's a really good reason to map out your levels before you
+        start any analysis.
       </p>
     </subsection>
   </section>
@@ -1152,31 +1072,33 @@
     <title>Preparing Multilevel Data for Analysis</title>
 
     <p>
-      Before analysing multilevel data, several preparation steps are essential:
+      Before you analyse multilevel data, there are a few steps we'd really
+      recommend:
       <ul>
         <li>
-          Identify and verify the linking keys: The variable(s) that uniquely
-          identify each unit and link levels (e.g., household ID, cluster ID).
+          Identify and check the linking keys: these are the variable(s) that
+          uniquely identify each unit and link the levels together (for example,
+          household ID or cluster ID).
         </li>
 
         <li>
-          Check for orphan records: Child records that have no matching
-          household record (or vice versa).
-          These often indicate data entry or merging errors.
+          Check for orphan records: child records with no matching household
+          record, or the other way round.
+          These are often a sign of data entry or merging errors.
         </li>
 
         <li>
-          Understand the sampling design: MICS surveys use complex multi-stage
+          Understand the sampling design: MICS surveys use complex, multi-stage
           cluster sampling.
-          Analysis should account for this through survey weights and
-          appropriate software (e.g., R’s survey package or R-Instat’s survey
-          functions).
+          Your analysis needs to account for this, using survey weights and
+          appropriate software (for example, R’s survey package, or the survey
+          functions in R-Instat).
         </li>
 
         <li>
-          Decide the analytical level: Is the unit of analysis the child, the
-          household, or the cluster?
-          This determines how variables are aggregated or disaggregated.
+          Decide on the level of analysis: are you analysing children,
+          households, or clusters?
+          This decides how you need to aggregate or disaggregate your variables.
         </li>
       </ul>
     </p>
@@ -1189,15 +1111,14 @@
 
     <introduction>
       <p>
-        Both stories share the same shape, once you strip away the subject
-        matter.
-        In each, individuals (applicants, patients) belong to a group (a
-        department, a stone-size category), and it is the group that determines
-        both the individual's chances and how common that individual's situation
-        is in the data overall.
-        Ignore the grouping, and a comparison across individuals quietly turns
-        into a comparison across groups instead, without telling you it has done
-        so.
+        If you strip away the details, Berkeley and the kidney stones are really
+        the same story.
+        In both, individuals (applicants, patients) belong to groups
+        (departments, stone sizes), and the group shapes both an individual's
+        chances and how common their situation is in the data.
+        Ignore the groups, and a comparison between individuals quietly turns
+        into a comparison between groups, without anything telling you that's
+        happened.
       </p>
     </introduction>
 
@@ -1205,9 +1126,9 @@
       <title>Levels are everywhere once you look for them</title>
 
       <p>
-        Neither Berkeley nor the kidney stone study is an unusual dataset.
-        Once you start looking for this structure, it is the norm rather than
-        the exception:
+        And these aren't unusual datasets.
+        Once you start looking for this kind of structure, you'll find it almost
+        everywhere:
         <ul>
           <li>
             <p>
@@ -1239,34 +1160,35 @@
       </p>
 
       <p>
-        In every case there is more than one <term>level</term> at which the
-        data can honestly be described: the individual level (a pupil, a
-        patient, a plot, a person), and one or more group levels above it (a
-        school, a clinic, a cooperative, a cluster).
-        A number computed at the wrong level, or a group level collapsed away
-        entirely, is exactly the mistake both stories in this chapter made.
+        In each of these, there's more than one <term>level</term> you can
+        honestly describe the data at: the individual level (a pupil, a patient,
+        a plot, a person), and one or more group levels above it (a school, a
+        clinic, a cooperative, a cluster).
+        Calculating a number at the wrong level, or collapsing a group level
+        away completely, is exactly the mistake at the heart of both stories in
+        this chapter.
       </p>
     </subsection>
 
     <subsection xml:id="ss-multilevel-not-a-trick">
-      <title>This is not a trick to watch out for occasionally</title>
+      <title>Something to check for every time</title>
 
       <p>
-        It is tempting to file Simpson's paradox away as something that springs
-        on you once in a career, if at all.
-        Both stories in this chapter argue the opposite.
-        Whenever your data has structure (and most real data does!) that
-        structure is either going to inform your analysis, or it is going to
-        quietly undermine it.
-        There is rarely a neutral option to simply ignore it.
+        It's tempting to think of Simpson's paradox as a rare trap that might
+        catch you out once in your career, if at all.
+        We really don't think that's true, and both stories in this chapter show
+        why.
+        Whenever your data has structure (and most real data does!), that
+        structure is either going to help your analysis or quietly undermine it.
+        You very rarely get to safely ignore it.
       </p>
 
       <p>
-        The rest of this module works with data that has exactly this kind of
+        The rest of this book works with data that has exactly this kind of
         structure.
-        Learning to notice it, name it, and check whether it matters before
-        trusting a single overall number is the skill this chapter exists to
-        start building.
+        So think of this chapter as where you start building the habit: notice
+        the structure, name it, and check whether it matters, before you trust a
+        single overall number.
       </p>
     </subsection>
   </section>
@@ -1281,9 +1203,9 @@
 
       <statement>
         <p>
-          For each of the following datasets, identify the observational unit:
-          that is, what each row of the data represents, and say whether the
-          data has a multilevel structure.
+          For each of the datasets below, work out the observational unit (what
+          each row of the data represents), and say whether the data has a
+          multilevel structure.
           If it does, describe the levels.
         </p>
 
@@ -1322,29 +1244,29 @@
         <p>
           A researcher has data on student exam scores from 20 schools across 3
           counties in Kenya.
-          She computes the average score across all students in the dataset and
-          reports it as the county average.
+          They work out the average score across all the students in the
+          dataset, and reports it as the county average.
         </p>
 
         <ol>
           <li>
             <p>
-              What has she implicitly assumed by computing a single average
-              across all students?
+              What have they assumed, without saying so, by calculating a single
+              average across all the students?
             </p>
           </li>
 
           <li>
             <p>
               Give one example of a situation where this assumption would lead
-              her to the wrong conclusion.
+              them to the wrong conclusion.
             </p>
           </li>
 
           <li>
             <p>
-              What would she need to do differently to produce a valid
-              county-level average?
+              What would they need to do differently to get a valid county-level
+              average?
             </p>
           </li>
         </ol>
@@ -1356,14 +1278,15 @@
 
       <statement>
         <p>
-          A hospital reports that its overall patient survival rate improved
-          from 72% in 2020 to 78% in 2022.
-          A journalist writes a story praising the hospital's improved care.
+          A hospital reports that its overall patient survival rate went up from
+          72% in 2020 to 78% in 2022.
+          A journalist writes a story praising the hospital for improving its
+          care.
         </p>
 
         <p>
-          A data analyst then breaks the survival rate down by ward and finds
-          the following:
+          Then a data analyst breaks the survival rate down by ward, and finds
+          this:
         </p>
 
         <tabular>
@@ -1390,20 +1313,20 @@
           <li>
             <p>
               Survival rates went down in both wards between 2020 and 2022.
-              How is it possible that the overall survival rate went up?
+              So how could the overall survival rate go up?
             </p>
           </li>
 
           <li>
             <p>
-              What is the hidden variable that the journalist's story ignored?
+              What's the hidden variable that the journalist's story ignored?
             </p>
           </li>
 
           <li>
             <p>
               What does this example have in common with the Berkeley admissions
-              case discussed earlier in this chapter?
+              case from earlier in this chapter?
             </p>
           </li>
         </ol>
@@ -1413,17 +1336,17 @@
     <exercise xml:id="ex-multilevel-kuccps">
       <statement>
         <p>
-          <xref ref="ss-kenya-relevance"/> notes that KUCCPS applies an
+          <xref ref="ss-kenya-relevance"/> mentions that KUCCPS applies
           Affirmative Action Criteria covering gender when placing students into
           degree programmes.
           Suppose a single national placement rate showed a gap between men and
           women.
-          Reasoning the way the Berkeley statisticians did, what grouping
-          variable would you want that national rate broken down by before
-          deciding whether the gap reflected unfair treatment, rather than
-          differences in <em>where</em> applicants applied?
-          What pattern in that breakdown would tell you the gap was a
-          Simpson's-paradox-style artefact rather than a real one?
+          If you think about it the way the Berkeley statisticians did, what
+          grouping variable would you want that national rate broken down by,
+          before deciding whether the gap was down to unfair treatment or to
+          differences in <em>where</em> people applied?
+          What pattern in that breakdown would tell you the gap was a result of
+          Simpson's paradox, rather than a real difference?
         </p>
       </statement>
     </exercise>
@@ -1432,10 +1355,9 @@
       <statement>
         <p>
           In your own words, explain why the newer kidney stone procedure looked
-          better overall but worse within every group defined by stone size.
-          Your explanation should mention <em>which</em> patients were more
-          likely to receive which treatment, not just that the numbers
-          <q>reversed.</q>
+          better overall, but worse within every group defined by stone size.
+          Try to explain <em>which</em> patients were more likely to get which
+          treatment, and go further than saying the numbers <q>reversed</q>.
         </p>
       </statement>
     </exercise>
