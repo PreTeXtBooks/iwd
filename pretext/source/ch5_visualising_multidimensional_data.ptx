@@ -1462,46 +1462,48 @@ ggplot(gapminder, aes(x = gdpPercap,
   <exercises xml:id="exercises-visualising-multidimensional">
     <title>Exercises</title>
 
-  <exercise xml:id="ex-challenger">
-    <title>The Challenger disaster: when a chart failed</title>
+    <exercise xml:id="ex-challenger">
+      <title>The Challenger disaster: when a chart failed</title>
 
-    <introduction>
-      <p>
-        On 28 January 1986, the Space Shuttle Challenger exploded 
-        73 seconds after launch, killing all seven crew members. The 
-        cause was the failure of rubber O-rings in the rocket boosters 
-        — seals that became brittle in cold temperatures and failed to 
-        prevent hot gases from escaping.
-      </p>
+      <introduction>
+        <p>
+          On 28 January 1986, the Space Shuttle Challenger exploded 73 seconds
+          after launch, and all seven crew members were killed.
+          The cause was the failure of rubber O-rings in the rocket boosters.
+          These seals became brittle in the cold, and couldn't stop hot gases
+          from escaping.
+        </p>
 
-      <p>
-        The engineers who built the rocket were worried. The night 
-        before the launch, with temperatures forecast to drop to 
-        between −3°C and −2°C (26 to 29 degrees Fahrenheit), 
-        engineers at Morton Thiokol — the company that manufactured 
-        the solid rocket boosters — argued that the launch should be 
-        delayed. They had data from previous launches showing O-ring 
-        damage at low temperatures. But they failed to communicate 
-        that data clearly, presenting it in tables and engineering 
-        diagrams rather than as a visualisation of the relationship 
-        between temperature and damage. NASA managers approved the 
-        launch.
-      </p>
+        <p>
+          The engineers who built the rocket boosters were worried.
+          The night before the launch, temperatures were forecast to drop to
+          between −3°C and −2°C (26 to 29°F).
+          Engineers at Morton Thiokol, the company that made the solid rocket
+          boosters, argued that the launch should be delayed.
+          They had data from earlier launches showing O-ring damage at low
+          temperatures.
+          But they didn't get that data across clearly.
+          They presented it in tables and engineering diagrams, instead of in a
+          visualisation of the relationship between temperature and damage.
+          NASA managers approved the launch.
+        </p>
 
-      <p>
-        Edward Tufte, in his book <em>Visual Explanations</em> (1997), 
-        argues that the engineers had all the data they needed to make 
-        the case for delay — they simply did not display it in a way 
-        that made the pattern visible. This exercise asks you to 
-        reproduce the visualisation that could have been shown.
-      </p>
+        <p>
+          In his book <em>Visual Explanations</em> (1997), Edward Tufte argues
+          that the engineers had all the data they needed to make the case for a
+          delay.
+          The problem was that they didn't show it in a way that made the
+          pattern visible.
+          In this exercise, you'll build the kind of chart that could have been
+          shown.
+        </p>
 
-      <p>
-        The data is available in the <c>DAAG</c> package:
-      </p>
+        <p>
+          The data is in the <c>DAAG</c> package:
+        </p>
 
-      <program language="r">
-        <code>
+        <program language="r">
+          <code>
           # install.packages("DAAG")
           library(DAAG)
           library(ggplot2)
@@ -1514,66 +1516,72 @@ ggplot(gapminder, aes(x = gdpPercap,
           #&gt; 4          63       1      0     1
           #&gt; 5          66       0      0     0
           #&gt; 6          67       0      0     0
-        </code>
-      </program>
+          </code>
+        </program>
 
-      <p>
-        Each row is one launch prior to Challenger. <c>Temperature</c> 
-        is the launch temperature in degrees Fahrenheit. <c>Total</c> 
-        is the total number of O-rings showing damage.
-      </p>
-    </introduction>
-
-    <task xml:id="ex-challenger-a">
-      <title>Part A: Plot the data</title>
-      <statement>
         <p>
-          Create a scatter plot with <c>Temperature</c> on the x-axis 
-          and <c>Total</c> O-ring damage on the y-axis. What pattern 
-          do you see? Is there a relationship between temperature and 
-          damage?
+          Each row is one launch before Challenger.
+          <c>Temperature</c> is the launch temperature in degrees Fahrenheit,
+          and <c>Total</c> is the total number of O-rings showing damage.
         </p>
-      </statement>
-      <solution>
-        <program language="r">
-          <code>
+      </introduction>
+
+      <task xml:id="ex-challenger-a">
+        <title>Part A: Plot the data</title>
+
+        <statement>
+          <p>
+            Make a scatter plot with <c>Temperature</c> on the x-axis and
+            <c>Total</c> O-ring damage on the y-axis.
+            What pattern can you see?
+            Is there a relationship between temperature and damage?
+          </p>
+        </statement>
+
+        <solution>
+          <program language="r">
+            <code>
             ggplot(orings, aes(x = Temperature, y = Total)) +
               geom_point() +
               labs(x = "Temperature (°F)",
                    y = "Total O-ring damage") +
               theme_bw()
-          </code>
-        </program>
-        <p>
-          There is a clear negative relationship: lower temperatures 
-          are associated with more O-ring damage. No launch below 
-          66°F was damage-free. At 53°F, total damage was 5 — the 
-          highest in the dataset.
-        </p>
-      </solution>
-    </task>
+            </code>
+          </program>
 
-    <task xml:id="ex-challenger-b">
-      <title>Part B: Add the forecast temperature</title>
-      <statement>
-        <p>
-          The forecast temperature on the day of the Challenger launch 
-          was 26 to 29 degrees Fahrenheit. Add this to your plot as a 
-          shaded region so that the viewer can immediately see where 
-          the launch temperature sits relative to all previous launches 
-          and their O-ring damage.
-        </p>
-      </statement>
-      <hint>
-        <p>
-          Use <c>xlim()</c> and <c>ylim()</c> to extend the axes to 
-          include the forecast temperature, and <c>annotate()</c> with 
-          <c>geom = "rect"</c> to draw the shaded region.
-        </p>
-      </hint>
-      <solution>
-        <program language="r">
-          <code>
+          <p>
+            There's a clear negative relationship: the colder the launch, the
+            more O-ring damage there tends to be.
+            Every launch below 66°F had some damage.
+            And at 53°F, the total damage was 5, the highest in the dataset.
+          </p>
+        </solution>
+      </task>
+
+      <task xml:id="ex-challenger-b">
+        <title>Part B: Add the forecast temperature</title>
+
+        <statement>
+          <p>
+            On the day of the Challenger launch, the forecast temperature was 26
+            to 29°F.
+            Add this to your plot as a shaded region, so that anyone looking at
+            it can see straight away where the launch temperature sits compared
+            with all the previous launches and their O-ring damage.
+          </p>
+        </statement>
+
+        <hint>
+          <p>
+            Use <c>xlim()</c> and <c>ylim()</c> to stretch the axes far enough to
+            include the forecast temperature, and <c>annotate()</c> with
+            <c>geom = "rect"</c> to draw the shaded region.
+          </p>
+        </hint>
+
+        <solution>
+          <program language="r">
+            <code>
             ggplot(orings, aes(x = Temperature, y = Total)) +
               geom_point() +
               xlim(25, 85) +
@@ -1591,112 +1599,138 @@ ggplot(gapminder, aes(x = gdpPercap,
                    title = "O-ring damage by launch temperature",
                    subtitle = "Previous launches and forecast temperature for Challenger") +
               theme_bw()
-          </code>
-        </program>
-        <p>
-          The shaded region falls far to the left of every previous 
-          launch. The pattern in the existing data — more damage at 
-          lower temperatures — projects directly into the forecast 
-          range. The chart makes the risk immediately visible without 
-          any statistical training.
-        </p>
-      </solution>
-    </task>
+            </code>
+          </program>
 
-    <task xml:id="ex-challenger-c">
-      <title>Part C: What the engineers actually showed</title>
-      <statement>
-        <p>
-          The engineers at Morton Thiokol did not show a chart like 
-          this. They presented tables of numbers and engineering 
-          diagrams showing how O-ring erosion interacted with the 
-          secondary O-ring — detailed, technically accurate, and 
-          nearly impossible to use to see the temperature relationship 
-          at a glance.
-        </p>
+          <p>
+            The shaded region sits far to the left of every previous launch.
+            The pattern in the existing data (more damage at lower temperatures)
+            points straight into the forecast range.
+            You don't need any statistical training to see the risk in this
+            chart.
+          </p>
+        </solution>
+      </task>
 
-      <figure xml:id="fig-challenger-original-chart">
-        <caption>
-          One of the charts presented by Morton Thiokol engineers during the
-          discussions about whether to launch Challenger.
-        </caption>
+      <task xml:id="ex-challenger-c">
+        <title>Part C: What the engineers actually showed</title>
 
-        <image source="images/ch5_challenger_original.png" width="80%"/>
-      </figure>
+        <statement>
+          <p>
+            The engineers at Morton Thiokol didn't show a chart like this.
+            They presented tables of numbers, and engineering diagrams of how
+            O-ring erosion interacted with the secondary O-ring.
+            These were detailed and technically accurate, but it was almost
+            impossible to see the temperature relationship at a glance.
+          </p>
 
-        <p>
-          Put this chart next to your plot from Part B. What question
-          is each one answering? How easy is it to see the link between
-          temperature and damage in each?
-        </p>
-      </statement>
-      <solution>
-        <p>
-          The original chart is organised launch by launch, with
-          temperature written as a label beside each rocket rather than
-          placed on an axis. To see whether cold launches had more
-          damage, you'd have to read every label, remember it, and sort
-          the launches in your head. Your plot from Part B does that
-          sorting for you: temperature is on the x-axis, so the pattern
-          is there the moment you look.
-        </p>
-        <p>
-          There's another problem with the charts that were shown, and
-          it's about which launches made it onto them at all. We come
-          back to this in <xref ref="ex-challenger-missing"/>, once
-          we've looked at missing data.
-        </p>
-      </solution>
-    </task>
+          <figure xml:id="fig-challenger-original-chart">
+            <caption>
+              One of the charts presented by Morton Thiokol engineers during the
+              discussions about whether to launch Challenger.
+            </caption>
 
-    <task xml:id="ex-challenger-d">
-      <title>Part D: Reflect</title>
-      <statement>
-        <p>
-          This case is sometimes used to argue that better 
-          visualisation would have prevented the disaster. Robison 
-          et al. (2002) argue that the situation was more complex — 
-          that the engineers did communicate their concerns clearly, 
-          but that organisational and political pressures overrode 
-          their objections. 
-        </p>
-        <p>
-          In two or three sentences: do you think a better chart 
-          would have changed the outcome? What does this case suggest 
-          about the relationship between data, visualisation, and 
-          decision-making?
-        </p>
-      </statement>
-      <solution>
-        <p>
-          There is no single correct answer here. The chart in Part B 
-          makes the temperature-damage relationship immediately visible, 
-          which is a genuine improvement over what was shown. But 
-          Robison et al.'s point stands: the engineers' concerns were 
-          known to managers. A clearer chart might have strengthened 
-          their argument, but organisational pressure to launch — 
-          schedule delays, visibility, budget — was also a factor. 
-          The case illustrates that visualisation is a tool for 
-          communication, not a substitute for organisational cultures 
-          that take safety seriously. Better data presentation is 
-          necessary but not always sufficient.
-        </p>
-      </solution>
-    </task>
+            <image source="images/ch5_challenger_original.png" width="80%">
+              <description>
+                <p>
+                  A black and white chart titled <q>History of O-Ring Damage in
+                  Field Joints (Cont)</q>, from Morton Thiokol.
+                  It shows 48 small drawings of rocket boosters in two rows, a
+                  pair labelled A and B for each of 24 solid rocket motors.
+                  The O-ring temperature in degrees Fahrenheit is written
+                  vertically on one booster in each pair, with values such as
+                  66, 70, 53, 57, 75, and 81.
+                  Shaded marks on a few boosters show where erosion, blowby, or
+                  heating damage happened.
+                  The boosters are in launch order, so to compare temperature
+                  and damage, you have to read each label one at a time.
+                </p>
+              </description>
+            </image>
+          </figure>
 
-    <p>
-      <term>Sources:</term> Tufte, E.R. (1997). 
-      <em>Visual Explanations: Images and Quantities, Evidence and 
-      Narrative.</em> Graphics Press. Robison, W. et al. (2002). 
-      <q>Representation and Misrepresentation: Tufte and the Morton 
-      Thiokol Engineers on the Challenger.</q> 
-      <em>Science and Engineering Ethics</em>, 8, 59<ndash/>81. 
-      Data from the <c>DAAG</c> R package. Case study adapted from 
-      Helveston, J.P. (2019), George Washington University, 
-      <url href="https://p4a.seas.gwu.edu/2019-Fall/challengerExplosion.html"/>, 
-      CC BY 4.0.
-    </p>
-  </exercise>
+          <p>
+            Put this chart next to your plot from Part B.
+            What question is each one answering?
+            How easy is it to see the link between temperature and damage in
+            each one?
+          </p>
+        </statement>
+
+        <solution>
+          <p>
+            The original chart is organised launch by launch, with the
+            temperature written as a label beside each rocket, instead of placed
+            on an axis.
+            To see whether colder launches had more damage, you'd have to read
+            every label, remember it, and sort the launches in your head.
+            Your plot from Part B does that sorting for you: temperature is on
+            the x-axis, so the pattern jumps out the moment you look.
+          </p>
+
+          <p>
+            There's another problem with the charts that were shown, and it's
+            about which launches made it onto them at all.
+            We come back to this in <xref ref="ex-challenger-missing"/>, once
+            we've looked at missing data.
+          </p>
+        </solution>
+      </task>
+
+      <task xml:id="ex-challenger-d">
+        <title>Part D: Reflect</title>
+
+        <statement>
+          <p>
+            This case is sometimes used to argue that better visualisation would
+            have prevented the disaster.
+            Robison et al. (2002) argue that it was more complicated than that.
+            In their view, the engineers did communicate their concerns clearly,
+            but organisational and political pressures overrode their
+            objections.
+          </p>
+
+          <p>
+            In two or three sentences: do you think a better chart would have
+            changed the outcome?
+            What does this case tell you about the relationship between data,
+            visualisation, and decision-making?
+          </p>
+        </statement>
+
+        <solution>
+          <p>
+            There's no single right answer here.
+            The chart in Part B makes the relationship between temperature and
+            damage obvious, which is a real improvement on what was shown.
+            But Robison et al. make an important point: managers knew about the
+            engineers' concerns.
+            A clearer chart might have made the engineers' argument stronger,
+            but there was also organisational pressure to launch, from schedule
+            delays, public visibility, and budgets.
+            For us, this case shows that a good chart helps people communicate,
+            and that it still needs an organisation that takes safety seriously
+            enough to listen.
+            Better data presentation is necessary, but it isn't always enough.
+          </p>
+        </solution>
+      </task>
+
+      <p>
+        <term>Sources:</term> Tufte, E.R. (1997).
+        <em>Visual Explanations: Images and Quantities, Evidence and
+        Narrative.</em> Graphics Press.
+        Robison, W. et al. (2002).
+        <q>Representation and Misrepresentation: Tufte and the Morton Thiokol
+        Engineers on the Challenger.</q>
+        <em>Science and Engineering Ethics</em>, 8, 59<ndash/>81.
+        Data from the <c>DAAG</c> R package.
+        Case study adapted from Helveston, J.P. (2019), George Washington
+        University,
+        <url href="https://p4a.seas.gwu.edu/2019-Fall/challengerExplosion.html"/>,
+        CC BY 4.0.
+      </p>
+    </exercise>
 
     <exercise xml:id="ex-viz-elephants-variables">
       <statement>

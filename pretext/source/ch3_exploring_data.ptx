@@ -20,9 +20,9 @@
       analyse anything.
       What we want is simpler, and honestly, more important: open the data, look
       at it, and let it surprise you.
-      Every method later in this book (cleaning, multidimensional
-      visualisation, factors, handling missing values, and measuring
-      variability) is there to answer a question that this chapter raises.
+      Every method later in this book (cleaning, multidimensional visualisation,
+      factors, handling missing values, and measuring variability) is there to
+      answer a question that this chapter raises.
       And we're going to deliberately leave those questions open for now!
     </p>
   </introduction>
@@ -37,14 +37,15 @@
         Let's start with something that affects a lot of people in Kenya: road
         safety.
         Since 2012, the National Transport and Safety Authority (NTSA) has been
-        recording road crash data from across the country: the county, the
-        road, the time, the type of vehicle, and who was involved.
+        recording road crash data from across the country: the county, the road,
+        the time, the type of vehicle, and who was involved.
         Every year, they publish summaries of this on their website.
       </p>
     </introduction>
 
     <subsection xml:id="ss-ntsa-crashes">
       <title>Who is dying on Kenya's roads, and where?</title>
+
       <p>
         The NTSA actually publishes two kinds of record.
         The first is a daily comparative report.
@@ -170,7 +171,7 @@
         parts.
         The crash-level part has one row for each incident, with the road, the
         place, the vehicles involved, and a short description of what happened
-        (see <xref ref="table-ntsa-fatal-report"/>).
+        (see <xref ref="table-ntsa-fatal-report"/> ).
         The victim-level part has one row for each person, with their name,
         gender, age, a cause code, and whether they were a driver, a pedestrian,
         and so on.
@@ -376,9 +377,10 @@
       </table>
 
       <p>
-        This is the data that Muguro et al. (2020), a team of researchers from
-        Gifu University in Japan and Dedan Kimathi University of Technology in
-        Kenya, set out to analyse systematically for the very first time.
+        This is the data that Muguro et al.
+        (2020), a team of researchers from Gifu University in Japan and Dedan
+        Kimathi University of Technology in Kenya, set out to analyse
+        systematically for the very first time.
       </p>
 
       <p>
@@ -599,14 +601,16 @@
 
       <p>
         Each NTSA crash report also has a short free-text description of what
-        happened, and Muguro et al. (2020) explored this too.
+        happened, and Muguro et al.
+        (2020) explored this too.
         They used a technique called topic modelling to find patterns in the
         language across thousands of these descriptions.
         We won't go into the details of topic modelling here, but the basic idea
         is actually quite simple.
         You give a topic model a collection of short text descriptions, and it
         looks for groups of words that tend to appear together.
-        Each group is treated as a theme (or <q>topic</q>) that keeps coming up.
+        Each group is treated as a theme (or <q>topic</q> ) that keeps coming
+        up.
         You decide how many topics to look for, and then you look at the results
         and ask: do these groupings make sense?
       </p>
@@ -658,8 +662,9 @@
       </figure>
 
       <p>
-        Muguro et al. (2020) also looked at the data by who was hurt, instead of
-        by cause, which gave the table in <xref ref="table-ntsa-monthly-stats"/>.
+        Muguro et al.
+        (2020) also looked at the data by who was hurt, instead of by cause,
+        which gave the table in <xref ref="table-ntsa-monthly-stats"/>.
         They grouped the monthly records by type of road user, and worked out
         some summaries for each: the average number killed and injured each
         month, the standard deviation, the minimum, and the maximum.
@@ -807,8 +812,8 @@
         That's nearly five times the pedestrian injury average of 103, and
         higher than any other group.
         In fact, it's so much higher that the authors had to scale passenger
-        injuries down in their boxplot (<xref ref="fig-muguro-boxplot"/>) so you
-        could still see the other groups.
+        injuries down in their boxplot ( <xref ref="fig-muguro-boxplot"/> ) so
+        you could still see the other groups.
         Now look at motorcyclists.
         They have the widest range of injuries of any group, from 39 to 217 a
         month.
@@ -860,7 +865,8 @@
       </figure>
 
       <p>
-        So, what did Muguro et al. (2020) find?
+        So, what did Muguro et al.
+        (2020) find?
         Nairobi, Nakuru, Kiambu, Machakos, and Kakamega had the largest share of
         fatal crashes, which fits with their high population density and growing
         numbers of vehicles.
@@ -894,8 +900,8 @@
         <title>Exploration is often the main work</title>
 
         <p>
-          All of this was already in the NTSA data before Muguro et al. (2020)
-          came along.
+          All of this was already in the NTSA data before Muguro et al.
+          (2020) came along.
           The deaths concentrated in five counties, the vulnerability of
           boda-boda riders, the sharp rise in fatalities: it was all sitting in
           the records, waiting for someone to look.
@@ -915,8 +921,8 @@
         category.
         You can find it
         <url href="https://data.humdata.org/dataset/kenya-road-accidents-database">here</url>.
-        It's the same kind of data Muguro et al. worked with, and it's what we
-        use for the rest of this chapter.
+        It's the same kind of data Muguro et al.
+        worked with, and it's what we use for the rest of this chapter.
       </p>
 
       <p>
@@ -1004,10 +1010,7 @@
         Then load the packages and read in the data.
         You can type out the file path, or if you're using RStudio, you can
         click the <em>Import Dataset</em> button in the Environment panel (then
-        <em>From Excel...</em>) and find the file that way.
-      </p>
-      <p>
-                TODO: insert image
+        <em>From Excel...</em> ) and find the file that way.
       </p>
 
       <program language="r">
@@ -1016,8 +1019,14 @@
         library(readxl)
         library(dplyr)
         library(ggplot2)
+        library(statsdata)
 
-        kenya_accidents_database &lt;- read_excel("kenya-accidents-database.xlsx")
+        data(kenya_accidents_2016)
+        # alternatively you can download this from
+        # https://data.humdata.org/dataset/kenya-road-accidents-database
+        # or the raw CSV files are available to
+        # download from the package repository at
+        # https://github.com/PreTeXtBooks/statsdata/tree/main/data-raw.
         </code>
       </program>
     </introduction>
@@ -1035,14 +1044,14 @@
       <program language="r">
         <code>
         # first few rows
-        head(kenya_accidents_database)
+        head(kenya_accidents_2016)
 
         # dimensions: rows and columns
-        dim(kenya_accidents_database)
+        dim(kenya_accidents_2016)
         #&gt; [1] 378  13
 
         # column names and types
-        glimpse(kenya_accidents_database)
+        glimpse(kenya_accidents_2016)
         #&gt; Rows: 378
         #&gt; Columns: 13
         #&gt; $ `TIME 24 HOURS`          &lt;chr&gt; "630", "830", "1330", ...
@@ -1057,16 +1066,17 @@
         #&gt; $ VICTIM                   &lt;chr&gt; "M/CYCLIST", "M/CYCLIST", ...
         #&gt; $ NO.                      &lt;dbl&gt; 1, 1, 1, 1, ...
         #&gt; $ `Date DD/MM/YYYY`        &lt;dttm&gt; 2016-06-25, 2016-06-25, ...
+        #&gt; $ ...13                    &lt;chr&gt; "so MM/DD/YYYY is the solution ...
         </code>
       </program>
 
       <p>
         A few things jump out straight away.
         The <c>AGE</c> column has values like <c>"A &amp; J"</c> (we're guessing
-        adult and junior) mixed in with the numbers, so R has treated the
-        whole column as text.
-        The <c>TIME 24 HOURS</c> column is text too, and some of the values are a
-        bit ambiguous.
+        adult and junior) mixed in with the numbers, so R has treated the whole
+        column as text.
+        The <c>TIME 24 HOURS</c> column is text too, and some of the values are
+        a bit ambiguous.
         And there's a mysterious 13th column, with a stray note in it!
         Don't worry, this is completely normal with real data.
         Spotting things like this early is exactly what exploring is for.
@@ -1094,7 +1104,7 @@
 
       <program language="r">
         <code>
-        rpivotTable(kenya_accidents_database)
+        rpivotTable(kenya_accidents_2016)
         </code>
       </program>
 
@@ -1106,26 +1116,63 @@
         Now move <c>COUNTY</c> to the top, and <c>Date</c> to the left.
         This gives you accidents by county and by date, and you'll see that
         Kiambu, Nakuru, and Nairobi have incidents on almost every single day.
-        Switch the display from counts to a heatmap, and it really stands out.
+        Switch the display from table to a heatmap, and it really stands out.
       </p>
 
-      <p>
-        TODO: add image
-      </p>
+      <figure xml:id="fig-pivot-tables">
+        <caption>Pivot table of accidents by County</caption>
+        <image source="images/ch3_pivot_1.png" width="100%">
+          <description>
+            <p>
+              Pivot table of accidents by County.
+              The table shows the number of incidents for each county, with
+              Nairobi having the highest count.
+            </p>
+          </description>
+        </image>
+      </figure>
+
+      <figure xml:id="fig-pivot-tables-2">
+        <caption>Pivot table of accidents by County and Date</caption>
+        <image source="images/ch3_pivot_2.png" width="100%">
+          <description>
+            <p>
+              Pivot table of accidents by County and Date.
+              The table shows the number of incidents for each county on each
+              date, with Nairobi, Kiambu, and Nakuru having incidents on almost
+              every day.
+            </p>
+          </description>
+        </image>
+      </figure>
 
       <p>
-        Now try adding <c>VICTIM</c> alongside <c>COUNTY</c>.
+        Now remove <c>Date</c> from the rows and add <c>VICTIM</c> instead.
         In Nairobi, most of the victims are pedestrians.
         But Makueni looks really different: only two pedestrians, but 8
         motorcyclists, 6 passengers, and 7 drivers.
         So even in this small, three-month slice of data, we can start to see
-        the same county-level patterns that Muguro et al. (2020) found.
+        the same county-level patterns that Muguro et al.
+        (2020) found.
       </p>
+
+      <figure xml:id="fig-pivot-tables-3">
+        <caption>Pivot table of accidents by County and Victim</caption>
+        <image source="images/ch3_pivot_3.png" width="100%">
+          <description>
+            <p>
+              Pivot table of accidents by County and Victim.
+              The table shows the number of incidents for each county by victim
+              type, with pedestrians being the most common victims in Nairobi,
+              and Makueni having a different distribution.
+            </p>
+          </description>
+        </image>
+      </figure>
 
       <p>
         Pivot tables are also brilliant for spotting data quality issues.
-        Put <c>COUNTY</c> in the rows and <c>VICTIM</c> in the columns, and
-        you'll see <c>M/CYCLIST</c> and <c>MOTOR CYCLIST</c> listed as two
+        You'll see <c>M/CYCLIST</c> and <c>MOTOR CYCLIST</c> listed as two
         separate categories.
         They're almost certainly the same thing, just typed in differently.
       </p>
@@ -1150,12 +1197,12 @@
 
       <program language="r">
         <code>
-        kenya_accidents_database$COUNTY &lt;- as.factor(kenya_accidents_database$COUNTY)
-        kenya_accidents_database$GENDER &lt;- as.factor(kenya_accidents_database$GENDER)
-        kenya_accidents_database$VICTIM &lt;- as.factor(kenya_accidents_database$VICTIM)
-        kenya_accidents_database$ROAD &lt;- as.factor(kenya_accidents_database$ROAD)
+        kenya_accidents_2016$COUNTY &lt;- as.factor(kenya_accidents_2016$COUNTY)
+        kenya_accidents_2016$GENDER &lt;- as.factor(kenya_accidents_2016$GENDER)
+        kenya_accidents_2016$VICTIM &lt;- as.factor(kenya_accidents_2016$VICTIM)
+        kenya_accidents_2016$ROAD &lt;- as.factor(kenya_accidents_2016$ROAD)
 
-        summary(kenya_accidents_database$COUNTY)
+        summary(kenya_accidents_2016$COUNTY)
         #&gt;           BARINGO           BOMET         BUNGOMA           BUSIA ELGEYO MARAKWET
         #&gt;                 6               4              10               3               2
         #&gt;              EMBU         GARISSA        HOMA BAY         KAJIADO        KAKAMEGA
@@ -1175,7 +1222,7 @@
         #&gt;       TRANS NZOIA     UASIN GISHU          VIHIGA            NA's
         #&gt;                 5               7               4               2
 
-        summary(kenya_accidents_database$ROAD)
+        summary(kenya_accidents_2016$ROAD)
         #&gt;         NAIROBI MOMBASA          MOMBASA NAIROBI       THIKA SUPERHIGHWAY
         #&gt;                      14                       10                        8
         #&gt;         MOMBASA-NAIROBI                  MOMBASA                 KANGUNDO
@@ -1184,7 +1231,7 @@
         #&gt;                       5                        5                        4
         #&gt;           ... and so forth!
 
-        summary(kenya_accidents_database$GENDER)
+        summary(kenya_accidents_2016$GENDER)
         #&gt;   2F &amp; M  2M &amp; 2F  2M &amp; 3F    2M, F 4F &amp; INF        F        M    M &amp; F
         #&gt;        1        1        1        1        1       51      321        1
         </code>
@@ -1192,8 +1239,8 @@
 
       <p>
         Nairobi has the most incidents by far, followed by Nakuru and Kiambu.
-        That's the same pattern Muguro et al. (2020) found across five whole
-        years!
+        That's the same pattern Muguro et al.
+        (2020) found across five whole years!
         Looking at roads, the Nairobi-Mombasa road comes up the most, but look
         closely at how it's been recorded.
         <c>NAIROBI MOMBASA</c>, <c>MOMBASA NAIROBI</c>, and
@@ -1216,6 +1263,7 @@
         are concentrated, and <c>coord_flip()</c> turns the chart on its side so
         you can actually read the county names:
       </p>
+
       <p>
         You can make bar charts with the <c>barchart</c> function from the
         <c>lattice</c> package (which comes installed with R), or with
@@ -1228,26 +1276,22 @@
         <code>
         # one approach, using the lattice package
         library(lattice)
-        barchart(kenya_accidents_database$COUNTY)
+        barchart(kenya_accidents_2016$COUNTY)
         </code>
       </program>
 
-      <program language="r">
-        <code>
-        ggplot(kenya_accidents_database, aes(x = COUNTY)) +
-          geom_bar() +
-          coord_flip() +
-          labs(
-            title = "Fatal road accidents by county, Kenya 2016",
-            x = "County",
-            y = "Number of incidents"
-          )
-        </code>
-      </program>
-
-      <p>
-        TODO: put in plots.
-      </p>
+      <figure xml:id="fig-ch3-bar">
+        <caption>Bar chart of accidents by County</caption>
+        <image source="images/ch3_bar.png" width="100%">
+          <description>
+            <p>
+              Bar chart showing the number of accidents in each county.
+              Nairobi has the highest number of incidents, followed by Nakuru
+              and Kiambu.
+            </p>
+          </description>
+        </image>
+      </figure>
 
       <p>
         And we can do the same for victim category:
@@ -1255,20 +1299,24 @@
 
       <program language="r">
         <code>
-        ggplot(kenya_accidents_database, aes(x = VICTIM)) +
-          geom_bar() +
-          coord_flip() +
-          labs(
-            title = "Fatal road accidents by victim category, Kenya 2016",
-            x = "Victim category",
-            y = "Number of incidents"
-          )
+        # one approach, using the lattice package
+        library(lattice)
+        barchart(kenya_accidents_2016$VICTIM)
         </code>
       </program>
 
-      <p>
-        TODO: put in plots.
-      </p>
+      <figure xml:id="fig-ch3-bar-victim">
+        <caption>Bar chart of accidents by Victim category</caption>
+        <image source="images/ch3_bar_victim.png" width="100%">
+          <description>
+            <p>
+              Bar chart showing the number of accidents for each victim
+              category.
+              Male victims outnumber female victims by more than six to one.
+            </p>
+          </description>
+        </image>
+      </figure>
 
       <p>
         These are quick, exploratory plots.
@@ -1300,8 +1348,8 @@
 
       <program language="r">
         <code>
-        kenya_accidents_database$AGE &lt;- as.numeric(kenya_accidents_database$AGE)
-        summary(kenya_accidents_database$AGE)
+        kenya_accidents_2016$AGE &lt;- as.numeric(kenya_accidents_2016$AGE)
+        summary(kenya_accidents_2016$AGE)
         #&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's
         #&gt;    1.50   23.00   30.00   31.53   40.00   90.00     193
         </code>
@@ -1316,16 +1364,29 @@
 
       <program language="r">
         <code>
-        hist(kenya_accidents_database$AGE,
+        hist(kenya_accidents_2016$AGE,
              main = "Age of road accident victims, Kenya 2016",
              xlab = "Age (years)",
-             breaks = 20)
+             breaks = 30)
         </code>
       </program>
 
-      <p>
-        TODO: give image of histogram.
-      </p>
+      <figure xml:id="fig-ch3-hist">
+        <caption>
+          Histogram of ages of road accident victims, Kenya 2016
+        </caption>
+
+        <image source="images/ch3_hist.png" width="100%">
+          <description>
+            <p>
+              Histogram showing the distribution of ages of road accident
+              victims in Kenya in 2016.
+              Notice the spikes at ages that are multiples of five or ten,
+              indicating age rounding.
+            </p>
+          </description>
+        </image>
+      </figure>
 
       <p>
         Can you see the spikes at ages 30, 35, 40, 50, 60, and 70?
@@ -1338,15 +1399,26 @@
 
       <program language="r">
         <code>
-        boxplot(kenya_accidents_database$AGE,
+        boxplot(kenya_accidents_2016$AGE,
                 main = "Age of road accident victims, Kenya 2016",
                 ylab = "Age (years)")
         </code>
       </program>
 
-      <p>
-        TODO: give image of boxplot.
-      </p>
+      <figure xml:id="fig-ch3-box">
+        <caption>Boxplot of ages of road accident victims, Kenya 2016</caption>
+        <image source="images/ch3_box.png" width="100%">
+          <description>
+            <p>
+              Boxplot showing the distribution of ages of road accident victims
+              in Kenya in 2016.
+              The box covers the middle 50% of the data, with the median
+              indicated by the line inside the box.
+              Outliers, like the 90-year-old, are shown as individual points.
+            </p>
+          </description>
+        </image>
+      </figure>
 
       <p>
         The 90-year-old shows up as a single point, sitting on its own above
@@ -1380,15 +1452,7 @@
       </p>
 
       <p>
-        TODO: Have this as an uncleaned version here, so that then some ideas
-        can come out later in the cleaning section that help show how cleaning
-        the data changes conclusions?
-        Then does Ch5 use this cleaned version, or another version.
-        Think about that.
-      </p>
-
-      <p>
-        TODO2: Add in relevant STACK questions here on boxplots/summaries/etc
+        TODO: Add in relevant STACK questions here on boxplots/summaries/etc
       </p>
     </introduction>
 

@@ -9,15 +9,15 @@
   <introduction xml:id="intro-handling-factors">
     <p>
       In 1950, the South African government made a decision that would shape the
-      lives of millions of people for decades: it decided to write down,
-      officially and legally, what race everyone was.
+      lives of millions of people for decades.
+      It decided to write down, officially and legally, what race everyone was.
     </p>
 
     <p>
-      In this chapter, we are going to look carefully at variables like this
-      one: variables that take a fixed set of named values, where the choice of
-      what those values are, and how they are defined, has consequences for
-      every analysis that follows.
+      In this chapter, we're going to look carefully at variables like this one:
+      variables that take a fixed set of named values.
+      With these variables, the choice of what those values are, and how they're
+      defined, affects every analysis that comes after.
     </p>
   </introduction>
   <!-- ================================================================= -->
@@ -28,8 +28,8 @@
 
     <introduction>
       <p>
-        The story of "population group" is a story about how a single variable
-        can shape an entire system of laws, and how that system can change over
+        The story of <q>population group</q> shows how a single variable can
+        shape an entire system of laws, and how that system can change over
         time.
       </p>
     </introduction>
@@ -41,62 +41,63 @@
         In 1950, the South African government passed the Population Registration
         Act, which required every person living in South Africa to be officially
         classified into a racial category.
-        At its simplest, the Act established three categories: White, Coloured,
-        and Native (also referred to as <q>Bantu</q> ).
-        Indians - descendants of South Asians who had come to South Africa under
-        British rule - were later added as a fourth category, on the stated
-        grounds that they had <q>no historical right to the country</q>.
+        At its simplest, the Act set up three categories: White, Coloured, and
+        Native (also called <q>Bantu</q>).
+        Indians, the descendants of South Asians who had come to South Africa
+        under British rule, didn't get a category of their own at first.
+        As we'll see, they were placed within the Coloured category, and it was
+        only later that a fourth category, Asian, was added, on the stated
+        grounds that Indians had <q>no historical right to the country</q>.
       </p>
 
       <p>
-        But the classification system did not stop there.
-        Within each of these top-level categories, the law permitted and
-        eventually required further subdivisions.
-        By 1959, the Coloured category alone had been broken into seven
+        And the classification system didn't stop there.
+        Within each of these top-level categories, the law allowed, and
+        eventually required, further subdivisions.
+        By 1959, the Coloured category alone had been split into seven
         subgroups: Cape Coloured, Cape Malay, Griqua, Chinese, Indian, Other
         Asiatic, and Other Coloured.
-        The criteria used to assign people to these groups included physical
-        appearance, how a person was generally regarded within their community,
-        and their descent.
-        In other words, the same person could in principle be classified
+        People were assigned to these groups based on their physical appearance,
+        how they were generally seen in their community, and their descent.
+        In other words, the same person could, in principle, be classified
         differently depending on who was doing the classifying.
       </p>
 
       <p>
-        This racial classification becamethe foundation on which a whole system
-        of laws was built.
-        The Group Areas Act determined where a person of each category was
-        permitted to live.
-        The Bantu Authorities Act restructured governance for those classified
-        as Native, placing authority in the hands of traditional tribal leaders
+        This racial classification became the foundation for a whole system of
+        laws.
+        The Group Areas Act decided where people in each category were allowed
+        to live.
+        The Bantu Authorities Act restructured government for people classified
+        as Native, putting authority in the hands of traditional tribal leaders
         within designated homelands.
         The Prohibition of Mixed Marriages Act made it illegal for a White
-        person to marry someone of another classification.
-        The Immorality Amendment Act went further, criminalising sexual
-        relations between a white person and any individual of another
-        classification.
-        A person's most basic rights and opportunities, such as where they
-        lived, who they could marry, what schools their children attended, and
-        what work they could do, came from a single categorical variable
-        assigned at birth.
+        person to marry someone from another classification.
+        The Immorality Amendment Act went even further, and made sexual
+        relations between a White person and anyone from another classification
+        a crime.
+        A person's most basic rights and opportunities (where they lived, who
+        they could marry, which schools their children went to, and what work
+        they could do) all came from a single categorical variable, assigned at
+        birth.
       </p>
 
       <p>
-        We begin the chapter on factors here because this is one of the starkest
-        examples in history of what it means to reduce a human being to a
-        category, and of the real consequences that categorical variables can
-        carry.
+        We start this chapter on factors here because this is one of the
+        starkest examples in history of what it means to reduce a human being to
+        a category, and of the very real consequences that categorical variables
+        can carry.
       </p>
 
       <p>
-        In statistics, we call this kind of variable a <term>factor</term> — a
-        variable that takes one of a fixed set of values, each called a
-        <term>level</term>.
+        In statistics, we call this kind of variable a <term>factor</term>: a
+        variable that takes one of a fixed set of values, where each of those
+        values is called a <term>level</term>.
         The Population Registration Act created a factor with a small number of
         levels, defined by law, and then built an entire system on top of it.
-        In data analysis, the stakes are rarely so high — but the principle is
+        In data analysis, the stakes are rarely that high, but the principle is
         the same.
-        The levels you define, and how you define them, shape every summary,
+        The levels you choose, and how you define them, shape every summary,
         every comparison, and every model that follows.
       </p>
 
@@ -151,52 +152,55 @@
     <introduction>
       <p>
         Factors come in two kinds.
-        The first are <term>unordered factors</term>, where the levels are
-        simply distinct categories with no natural ranking between them.
+        The first kind is <term>unordered factors</term>, where the levels are
+        just different categories, with no natural ranking between them.
         The racial classifications of the Population Registration Act are one
-        example: there is no sense in which "White" comes before or after
-        "Coloured" in any meaningful order.
-        Continent is another: "Africa", "Asia", "Europe", and "the Americas" are
-        different, but not greater or lesser than one another.
-        In data analysis, most categorical variables are unordered factors of
-        this kind.
+        example: <q>White</q> doesn't come before or after <q>Coloured</q> in
+        any meaningful order.
+        Continent is another: <q>Africa</q>, <q>Asia</q>, <q>Europe</q>, and
+        <q>the Americas</q> are different from each other, but none of them is
+        greater or lesser than another.
+        In data analysis, most categorical variables are unordered factors like
+        these.
       </p>
 
       <p>
-        The second kind are <term>ordered factors</term>, where the levels have
-        a natural sequence that carries real meaning.
-        The recent Competency Based Curriculum (CBC) in Kenya has very clear
-        ordered levels: "Pre-Primary", "Lower Primary", "Upper Primary", "Junior
-        Secondary", "Senior Secondary", "University".
-        When researchers and policymakers analyse educational outcomes, the
-        ordering matters.
-        A student at Upper Primary is not just different from one at Junior
-        Secondary, they are at a lower stage in a meaningful progression.
-        Ordering within a factor can and should inform how we summarise and
+        The second kind is <term>ordered factors</term>, where the levels have a
+        natural order that carries real meaning.
+        Kenya's Competency Based Curriculum (CBC) has really clear ordered
+        levels: <q>Pre-Primary</q>, <q>Lower Primary</q>, <q>Upper Primary</q>,
+        <q>Junior Secondary</q>, and <q>Senior Secondary</q>.
+        When researchers and policymakers analyse educational outcomes, that
+        order matters.
+        A student in Upper Primary is in a different group from a student in
+        Junior Secondary, and they're also at an earlier stage in a meaningful
+        progression.
+        The order within a factor can, and should, inform how we summarise and
         analyse the data.
       </p>
 
       <p>
-        A starker example comes from humanitarian data.
+        Humanitarian data gives us an even starker example.
         The Integrated Phase Classification (IPC) system, used across Kenya and
-        the wider East Africa region, categorises food security into five
-        ordered levels: "Minimal", "Stressed", "Crisis", "Emergency", and
-        "Famine".
-        This classification is used to help governments and international
-        agencies track food shortages, malnutrition, and death rates to direct
+        the wider East Africa region, puts food security into five ordered
+        levels: <q>Minimal</q>, <q>Stressed</q>, <q>Crisis</q>,
+        <q>Emergency</q>, and <q>Famine</q>.
+        Governments and international agencies use this classification to track
+        food shortages, malnutrition, and death rates, so they can direct
         emergency aid.
-        The ordering is not incidental: Crisis is meaningfully worse than
+        And the order really matters: Crisis is meaningfully worse than
         Stressed, and Emergency is meaningfully worse than Crisis.
-        If an analyst were to treat these five levels as an unordered factor,
-        any summary or comparison they produced would be misleading at best, and
-        at worst could inform decisions that cost lives.
+        If an analyst treated these five levels as an unordered factor, any
+        summary or comparison they produced would be misleading at best.
+        At worst, it could inform decisions that cost lives.
       </p>
 
       <p>
         In R, the tools for working with factors are built into the base
         language, and extended by the <c>forcats</c> package (part of the
         tidyverse).
-        Before working with a factor, it is worth knowing three basic checks:
+        Before you work with a factor, there are three basic checks worth
+        knowing:
       </p>
 
       <program language="r">
@@ -243,12 +247,12 @@
       </program>
 
       <p>
-        <c>VICTIM</c> is an unordered factor — there is no defensible ranking
-        between pedestrians, drivers, and passengers.
-        But now extract the month from the date column.
-        Month has a clear, universally agreed order: January comes before
-        February, February before March.
-        We can create an ordered factor from it:
+        <c>VICTIM</c> is an unordered factor, because there's no sensible way to
+        rank pedestrians, drivers, and passengers.
+        But now let's pull the month out of the date column.
+        Months have a clear order that everyone agrees on: January comes before
+        February, and February comes before March.
+        So we can make month an ordered factor:
       </p>
 
       <program language="r">
@@ -268,30 +272,37 @@
       </program>
 
       <p>
-        <c>lubridate::month(label = TRUE)</c> returns month as an ordered factor
-        automatically.
-        It knows that April comes before June.
-        We can verify that the ordering is meaningful by comparing levels
-        directly:
+        <c>lubridate::month(label = TRUE)</c> gives us month as an ordered
+        factor automatically, so R knows that April comes before June.
+        We can check that R is really using this calendar order, and not
+        alphabetical order, by comparing June with December.
+        Alphabetically, <q>Jun</q> comes after <q>Dec</q>, but in the calendar,
+        June comes first:
       </p>
 
       <program language="r">
         <code>
-      kenya_accidents_2016$month[1] &lt; kenya_accidents_2016$month[2]
-      #&gt; [1] FALSE
+      # Take the month of the first June crash
+      june_crash &lt;- kenya_accidents_2016$month[
+        which(kenya_accidents_2016$month == "Jun")[1]
+      ]
 
-      # June comes after April, so April &lt; June is TRUE
-      levels(kenya_accidents_2016$month)[4] &lt; levels(kenya_accidents_2016$month)[6]
+      # As an ordered factor, June comes before December
+      june_crash &lt; "Dec"
       #&gt; [1] TRUE
+
+      # But as plain text, "Jun" comes after "Dec" alphabetically
+      as.character(june_crash) &lt; "Dec"
+      #&gt; [1] FALSE
         </code>
       </program>
 
       <p>
-        An ordered factor also can give some statistics that are not meaningful
-        for an unordered factor.
-        For example, the maximum or minimum month in a dataset is meaningful.
-        For example, if we have a dataset with months January, February, and
-        March, the minimum month is January, and the maximum month is March.
+        Ordered factors also let you calculate some statistics that don't make
+        sense for unordered factors.
+        For example, the earliest or latest month in a dataset means something.
+        If a dataset has January, February, and March in it, the minimum month
+        is January, and the maximum month is March.
       </p>
 
       <program language="r">
@@ -307,17 +318,26 @@
       </program>
 
       <p>
-        If we needed to change the order of an unordered factor's levels, for
-        example, to control how they appear in a plot, <c>fct_relevel()</c> from
-        the <c>forcats</c> package lets us specify the order explicitly:
+        If we want to change the order of an unordered factor's levels (for
+        example, to control the order they appear in a plot), we can use
+        <c>fct_relevel()</c> from the <c>forcats</c> package to set the order
+        ourselves:
       </p>
 
       <program language="r">
         <code>
       # Default level order for VICTIM is alphabetical
       levels(kenya_accidents_2016$VICTIM)
-      #&gt; [1] "DRIVER"      "M/CYCLIST"   "P/CYCLIST"   "PASSENGER"
-      #&gt; [5] "PEDESTRIAN"  "P/PASSENGER"
+      #&gt;  [1] "2 PASSENGERS &amp; DRIVER"       "2 PEDESTRIANS &amp; PASSENGER"
+      #&gt;  [3] "4 PASSENGER 1 DRIVER"        "7 PASSENGERS 1 DRIVER"
+      #&gt;  [5] "DRIVER"                      "DRIVER PASSENGER"
+      #&gt;  [7] "M/CYCLIST"                   "M/CYCLIST &amp; P/PASSENGER"
+      #&gt;  [9] "MOTOR CYCLIST"               "MOTOR CYCLIST &amp; P/PASSENGER"
+      #&gt; [11] "MOTOR CYCLIST P/PASSENGER"   "P/CYCLIST"
+      #&gt; [13] "P/PASENGER"                  "P/PASSENGER"
+      #&gt; [15] "PASSENGER"                   "PASSENGERS"
+      #&gt; [17] "PEDAL CYCLIST"               "PEDESTRIAN"
+      #&gt; [19] "RIDER"
 
       # Reorder to put PEDESTRIAN first
       kenya_accidents_2016 &lt;- kenya_accidents_2016 %&gt;%
@@ -354,27 +374,26 @@
       <title>Numeric, unordered, or ordered: it is a judgement call</title>
 
       <p>
-        Not every variable announces what it is.
-        A column of numbers might represent a quantity you can meaningfully add
-        and average, or it might be a label that happens to have been written as
-        a number.
+        Variables don't always tell you what they are.
+        A column of numbers might be a quantity you can add up and average, or
+        it might be a label that just happens to be written as a number.
         A column of text might be a free-form description, or it might be one of
         a fixed set of categories.
-        The data itself does not always tell you which; that is a judgement you
-        have to make, and it has consequences for every analysis that follows.
+        The data itself doesn't always tell you which.
+        That's a judgement you have to make, and it affects every analysis that
+        follows.
       </p>
 
       <p>
         The <c>CAUSE CODE</c> column in the Kenya Road Accidents data is a good
         example.
-        It contains numbers (7, 25, 98, 26, 63) and R reads it in as numeric by
+        It contains numbers (7, 25, 98, 26, 63), and R reads it in as numeric by
         default.
-        But these numbers are not quantities.
-        They are administrative codes assigned to categories of crash cause.
-        Code 7 means one thing; code 25 means another.
-        There is no sense in which code 50 is halfway between code 25 and code
-        75, or in which the average cause code of a set of crashes tells you
-        anything useful.
+        But these numbers aren't quantities.
+        They're administrative codes for different categories of crash cause.
+        Code 7 means one thing, and code 25 means another.
+        Code 50 isn't halfway between code 25 and code 75, and the average cause
+        code for a set of crashes tells you nothing useful.
       </p>
 
       <program language="r">
@@ -407,26 +426,26 @@
       </program>
 
       <p>
-        That warning is R correctly refusing to do something meaningless.
-        The decision to convert <c>CAUSE CODE</c> from numeric to factor is not
-        a formatting choice.
-        It is a claim about what the variable represents.
+        That warning is R quite rightly refusing to do something meaningless.
+        Converting <c>CAUSE CODE</c> from numeric to a factor is a claim about
+        what the variable represents, and it deserves as much thought as any
+        other analytical decision.
       </p>
 
       <p>
-        The decision comes down to what you are claiming is true about the
+        So the decision comes down to what you're claiming is true about the
         variable.
-        Is the difference between one value and the next a meaningful quantity;
+        Is the difference between one value and the next a meaningful quantity,
         something you could add, subtract, or average?
         Then store it as a number.
-        Are the values simply distinct labels, with no numeric relationship
+        Are the values just different labels, with no numeric relationship
         between them?
         Then store it as an unordered factor.
-        Do the values have a natural order that carries real information, but
-        where the gaps between levels are not meaningful quantities?
+        Do the values have a natural order that carries real information, where
+        the gaps between levels aren't meaningful quantities?
         Then store it as an ordered factor.
-        Getting this wrong can produce results that are arithmetically valid but
-        analytically meaningless.
+        Get this wrong, and you can end up with results that are arithmetically
+        fine, but analytically meaningless.
       </p>
     </subsection>
 
@@ -434,54 +453,54 @@
       <title>When the categories change: Recoding factor levels</title>
 
       <p>
-        Defining the levels of a factor is rarely a one-time decision.
-        In practice, the categories you start with are often not quite the
+        Deciding on the levels of a factor is hardly ever a one-off decision.
+        In practice, the categories you start with often aren't quite the
         categories you need for your analysis.
-        Some levels may be too fine-grained, with so few observations in each
-        that no meaningful comparison is possible.
-        Others may reflect distinctions that matter administratively but not
-        analytically.
-        And sometimes a classification scheme has simply changed over time, and
-        you need to align old labels with new ones.
+        Some levels might be too detailed, with so few observations in each that
+        you can't make any meaningful comparisons.
+        Others might reflect distinctions that matter for administration, but
+        not for your analysis.
+        And sometimes a classification scheme has changed over time, and you
+        need to line up old labels with new ones.
       </p>
 
       <p>
-        This last problem is one that analysts working with South African census
+        That last problem is one that analysts working with South African census
         data face directly.
         Under apartheid, the Population Registration Act imposed the racial
         classifications we described at the start of this chapter.
-        After the transition to democracy, South Africa continued to collect
-        data on race to measure the legacy of it and track progress towards
+        After the transition to democracy, South Africa carried on collecting
+        data on race, to measure apartheid's legacy and track progress towards
         equity.
-        The 1996 census, the first held after apartheid, asked respondents to
-        classify themselves using four categories: Black African, Coloured,
-        Indian or Asian, and White.
-        Subsequent censuses in 2001 and 2011 used the same four categories, but
-        with slightly different wording and ordering across datasets and survey
+        The 1996 census, the first one after apartheid, asked people to classify
+        themselves using four categories: Black African, Coloured, Indian or
+        Asian, and White.
+        The 2001 and 2011 censuses used the same four categories, but with
+        slightly different wording and ordering across datasets and survey
         instruments.
       </p>
 
       <p>
-        An analyst wanting to compare racial inequality across the 1996, 2001,
-        and 2011 censuses cannot simply join the three datasets and treat the
-        race variable as if it were identical across all three.
-        The labels need to be checked, aligned, and in some cases collapsed or
-        recoded before any comparison is meaningful.
-        This is the work of recoding: adjusting the levels of a factor to better
-        match the question you are actually trying to answer.
-        It is about being deliberate and transparent about what distinctions you
-        are treating as meaningful, and ensuring that the same word means the
-        same thing across every dataset you are combining.
+        So if you want to compare racial inequality across the 1996, 2001, and
+        2011 censuses, you can't just join the three datasets and treat the race
+        variable as if it were identical in all three.
+        The labels need to be checked, lined up, and in some cases collapsed or
+        recoded before any comparison makes sense.
+        This is what recoding is about: adjusting the levels of a factor so they
+        fit the question you're actually trying to answer.
+        It means being deliberate and open about which distinctions you're
+        treating as meaningful, and making sure the same word means the same
+        thing in every dataset you're combining.
       </p>
 
       <p>
         We can see a simpler version of this in the Kenya accidents data.
         In <xref ref="ch-cleaning-recoding"/>, we created an <c>AGE_GROUP</c>
-        variable that collapsed the raw <c>AGE</c> column, which contained a mix
-        of numeric ages and codes like <c>A</c> (adult) and <c>J</c> (junior),
+        variable from the raw <c>AGE</c> column, which had a mix of numeric ages
+        and codes like <c>A</c> (adult) and <c>J</c> (junior), and turned it
         into two clean categories.
         That recoding used <c>case_when()</c>.
-        Once we have the categories, we can make them an explicit factor with a
+        Once we have the categories, we can make them an explicit factor, with a
         defined set of levels:
       </p>
 
@@ -504,32 +523,30 @@
       #&gt; [1] "JUNIOR" "ADULT"
 
       table(kenya_accidents_2016$AGE_GROUP)
-      #&gt; AGE_GROUP
+      #&gt;
       #&gt; JUNIOR  ADULT
-      #&gt;    158    207 
+      #&gt;     38    327
         </code>
       </program>
 
       <p>
-        By specifying <c>levels = c("JUNIOR", "ADULT")</c> explicitly, we
-        control the order in which these categories appear in tables, plots, and
-        model output.
-        Without this, R would order them alphabetically, ( <c>ADULT</c> before
-        <c>JUNIOR</c> ).
-        With it, we get the more natural progression from younger to older.
+        By setting <c>levels = c("JUNIOR", "ADULT")</c> ourselves, we control
+        the order these categories appear in tables, plots, and model output.
+        Without it, R would put them in alphabetical order (<c>ADULT</c> before
+        <c>JUNIOR</c>).
+        With it, we get the more natural order, from younger to older.
       </p>
 
       <p>
-        The IPC food security classification illustrates a different kind of
-        recoding decision where the levels are collapsed or combined to match
-        the question being asked.
-        A researcher studying the difference between households in Crisis versus
-        Emergency needs those levels kept separate.
-        One asking simply <q>how many households are 
-    food insecure?</q>
+        The IPC food security classification shows a different kind of recoding
+        decision, where levels are collapsed or combined to match the question
+        being asked.
+        A researcher studying the difference between households in Crisis and
+        households in Emergency needs to keep those levels separate.
+        A researcher asking simply <q>how many households are food insecure?</q>
         might reasonably collapse Crisis, Emergency, and Famine into a single
         level.
-        Neither choice is wrong, but both need to be made consciously and
+        Neither choice is wrong, but both need to be made on purpose, and
         reported clearly.
       </p>
     </subsection>
@@ -539,27 +556,27 @@
 
       <introduction>
         <p>
-          So far we have talked about what factors are and how to define them
+          So far, we've talked about what factors are, and how to define them
           carefully.
           But why does it matter?
-          What does treating a variable as a factor actually allow you to do?
+          What does treating a variable as a factor actually let you do?
         </p>
 
         <p>
-          One answer is grouping.
-          Once a variable is recognised as a factor, you can split your data on
-          it, computing a separate summary for each level, or drawing a separate
-          plot panel for each group, or fitting a separate model within each
-          category.
-          Every comparison you make between groups, every chart that shows one
-          line per region or one bar per classification, every table that breaks
-          results down by county or by IPC phase — all of it rests on treating
-          the grouping variable as a factor and respecting its levels.
+          One big answer is grouping.
+          Once you've recognised a variable as a factor, you can split your data
+          by it: working out a separate summary for each level, drawing a
+          separate plot panel for each group, or fitting a separate model within
+          each category.
+          Every comparison between groups, every chart with one line per region
+          or one bar per category, and every table that breaks results down by
+          county or by IPC phase relies on treating the grouping variable as a
+          factor, and respecting its levels.
         </p>
 
         <p>
-          Here is a simple example using the Kenya accidents data.
-          With <c>VICTIM</c> as a factor, we can count crashes by victim
+          Here's a simple example using the Kenya accidents data.
+          Now that <c>VICTIM</c> is a factor, we can count crashes by victim
           category in one line:
         </p>
 
@@ -569,22 +586,33 @@
         group_by(VICTIM) %&gt;%
         summarise(crashes = n()) %&gt;%
         arrange(desc(crashes))
-      #&gt; # A tibble: 6 × 2
-      #&gt;   VICTIM       crashes
-      #&gt;   &lt;fct&gt;          &lt;int&gt;
-      #&gt; 1 PEDESTRIAN       152
-      #&gt; 2 M/CYCLIST         82
-      #&gt; 3 PASSENGER         50
-      #&gt; 4 DRIVER            46
-      #&gt; 5 P/PASSENGER       26
-      #&gt; 6 P/CYCLIST          7
-      #&gt; 7 MOTOR CYCLIST      2
-      ...
+      #&gt; # A tibble: 19 × 2
+      #&gt;    VICTIM                      crashes
+      #&gt;    &lt;fct&gt;                         &lt;int&gt;
+      #&gt;  1 PEDESTRIAN                      152
+      #&gt;  2 M/CYCLIST                        82
+      #&gt;  3 PASSENGER                        50
+      #&gt;  4 DRIVER                           46
+      #&gt;  5 P/PASSENGER                      26
+      #&gt;  6 P/CYCLIST                         7
+      #&gt;  7 MOTOR CYCLIST                     2
+      #&gt;  8 RIDER                             2
+      #&gt;  9 2 PASSENGERS &amp; DRIVER             1
+      #&gt; 10 2 PEDESTRIANS &amp; PASSENGER         1
+      #&gt; 11 4 PASSENGER 1 DRIVER              1
+      #&gt; 12 7 PASSENGERS 1 DRIVER             1
+      #&gt; 13 DRIVER PASSENGER                  1
+      #&gt; 14 M/CYCLIST &amp; P/PASSENGER           1
+      #&gt; 15 MOTOR CYCLIST &amp; P/PASSENGER       1
+      #&gt; 16 MOTOR CYCLIST P/PASSENGER         1
+      #&gt; 17 P/PASENGER                        1
+      #&gt; 18 PASSENGERS                        1
+      #&gt; 19 PEDAL CYCLIST                     1
           </code>
         </program>
 
         <p>
-          We can do the same by county, and by month to see whether crashes peak
+          We can do the same by county, or by month, to see whether crashes peak
           in certain months:
         </p>
 
@@ -593,53 +621,54 @@
       kenya_accidents_2016 %&gt;%
         group_by(month) %&gt;%
         summarise(crashes = n())
-      #&gt; # A tibble: 3 × 2
+      #&gt; # A tibble: 2 × 2
       #&gt;   month crashes
       #&gt;   &lt;ord&gt;   &lt;int&gt;
       #&gt; 1 Apr       215
-      #&gt; 2 May         0
-      #&gt; 3 Jun       136
+      #&gt; 2 Jun       163
           </code>
         </program>
 
         <p>
-          Notice that <c>month</c> is displayed as <c>&lt;ord&gt;</c>, an
-          ordered factor, and the months appear in calendar order, not
+          Notice that <c>month</c> is shown as <c>&lt;ord&gt;</c>, an ordered
+          factor, and the months appear in calendar order, instead of
           alphabetical order.
-          That ordering came from the factor definition, not from the data.
-          May has zero crashes because, as we noted in
-          <xref ref="ch-cleaning-recoding"/>, the dataset does not contain May
-          data.
+          That order came from how we defined the factor, and not from the data.
+          May doesn't appear at all because, as we saw in <xref
+          ref="ch-cleaning-recoding"/>, the dataset doesn't include any data for
+          May.
+          If you want every level to show up, even with zero crashes, you can
+          add <c>.drop = FALSE</c> inside <c>group_by()</c>.
         </p>
 
         <p>
-          This is also, looked at again, what actually happened in
-          <xref ref="ch-multilevel-data"/>.
-          Berkeley's <c>department</c> was a factor in exactly this sense.
+          If you look back, this is also exactly what happened in <xref
+          ref="ch-multilevel-data"/>.
+          At Berkeley, <c>department</c> was a factor in exactly this sense.
           The university-wide admission rate that looked like discrimination was
-          computed by ignoring that factor, pooling every department into one
-          group.
-          Splitting by department meant grouping by the factor, and grouping by
-          this factor was the single step that made the real pattern visible and
-          reversed the conclusion.
-          This is seen by facetting the plot in
-          <xref ref="fig-berkeley-admissions-by-dept"/>.
+          calculated by ignoring that factor, and pooling every department into
+          one group.
+          Splitting by department meant grouping by the factor, and that one
+          step made the real pattern visible, and reversed the conclusion.
+          You can see this in the plot split by department in <xref
+          ref="fig-berkeley-admissions-by-dept"/>.
         </p>
 
         <insight xml:id="insight-factors-grouping-payoff">
           <title>Grouping is what a factor is for</title>
 
           <p>
-            A factor is not just a column that happens to hold category labels.
-            It is the thing you can split your data <em>by</em>.
-            Get a factor's levels wrong, as this chapter's opening story shows,
-            and every group you compute is quietly the wrong group.
-            Skip grouping by a factor that actually matters, as
-            <xref ref="ch-multilevel-data"/> showed, and you get one number that
-            describes no part of your data honestly.
-            Treating a variable as a factor is not a formatting choice.
-            It is a decision about which comparisons you are about to be allowed
-            to make.
+            A factor is much more than a column that happens to hold category
+            labels.
+            It's the thing you can split your data <em>by</em>.
+            Get a factor's levels wrong, as the story at the start of this
+            chapter shows, and every group you calculate is quietly the wrong
+            group.
+            Skip grouping by a factor that really matters, as <xref
+            ref="ch-multilevel-data"/> showed, and you get one number that
+            doesn't honestly describe any part of your data.
+            So when you decide to treat a variable as a factor, you're really
+            deciding which comparisons you'll be able to make.
           </p>
         </insight>
       </introduction>
@@ -648,20 +677,23 @@
         <title>Example using Flamingoes Data</title>
 
         <p>
-          The Kenya flamingo data gives us a cleaner illustration of what
+          The Kenya flamingo data gives us a really clear example of what
           splitting by a factor makes possible.
-          The dataset has 344 birds measured across three lakes (Bogoria,
+          The dataset has 344 birds, measured across three lakes (Bogoria,
           Elementaita, and Nakuru), two species (Greater Flamingo and Lesser
           Flamingo), and two sexes.
-          Each of these factors is a natural factor to split on.
+          Each of these is a natural factor to split on.
         </p>
 
         <program language="r">
           <code>
     library(ggplot2)
     library(dplyr)
+    library(statsdata)
 
-    flamingos &lt;- read.csv("kenya_flamingos.csv") %&gt;%
+    data(kenya_flamingos)
+
+    kenya_flamingos &lt;- kenya_flamingos %&gt;%
       mutate(
         lake    = factor(lake),
         species = factor(species),
@@ -669,7 +701,7 @@
       )
 
     # A simple split: mean body mass by species
-    flamingos %&gt;%
+    kenya_flamingos %&gt;%
       group_by(species) %&gt;%
       summarise(mean_mass = mean(body_mass_g, na.rm = TRUE))
     #&gt; # A tibble: 2 × 2
@@ -681,16 +713,16 @@
         </program>
 
         <p>
-          Greater Flamingos are nearly twice the mass of Lesser Flamingos.
-          But we have three factors we can split on — species, lake, and sex —
-          and looking at them one at a time loses the interactions between them.
-          We can build a plot that splits by all three at once.
+          Greater Flamingos are nearly twice as heavy as Lesser Flamingos.
+          But we have three factors we can split on (species, lake, and sex),
+          and if we look at them one at a time, we miss how they interact.
+          So let's build a plot that splits by all three at once.
         </p>
 
         <program language="r">
           <code>
     # Body mass by species and sex, faceted by lake
-    flamingos %&gt;%
+    kenya_flamingos %&gt;%
       filter(!is.na(sex), sex != "") %&gt;%
       ggplot(aes(x = sex, y = body_mass_g, fill = species)) +
         geom_boxplot(alpha = 0.7) +
@@ -734,12 +766,12 @@
         <p>
           We can also look at the relationship between bill length and body
           mass.
-          Start with no factor split at all:
+          Let's start with no split at all:
         </p>
 
         <program language="r">
           <code>
-    flamingos %&gt;%
+    kenya_flamingos %&gt;%
       filter(!is.na(bill_length_mm), !is.na(body_mass_g)) %&gt;%
       ggplot(aes(x = bill_length_mm, y = body_mass_g)) +
         geom_point(alpha = 0.6, colour = "#44575E") +
@@ -766,8 +798,8 @@
                 A scatter plot with bill length in millimetres on the x-axis and
                 body mass in grams on the y-axis.
                 All points are the same dark teal colour.
-                The points form two loose clusters — one in the lower left and
-                one in the upper right — but without colour coding this
+                The points form two loose clusters, one in the lower left and
+                one in the upper right, but without colour coding this
                 structure is not immediately obvious.
                 A single orange trend line runs through all points, suggesting a
                 moderate positive relationship between bill length and body mass
@@ -778,16 +810,16 @@
         </figure>
 
         <p>
-          There is a positive trend (longer bills, heavier birds), but the
-          scatter is wide and the trend line is doing a lot of work over what
-          looks like a somewhat awkward cloud of points.
-          Something about this data does not quite fit a single straight line.
-          Now add species as a factor, mapping it onto colour and shape:
+          There's a positive trend (longer bills, heavier birds), but the points
+          are really spread out, and the trend line is doing a lot of work over
+          what looks like quite an awkward cloud of points.
+          Something about this data doesn't quite fit a single straight line.
+          Now let's add species as a factor, and map it onto colour and shape:
         </p>
 
         <program language="r">
           <code>
-    flamingos %&gt;%
+    kenya_flamingos %&gt;%
       filter(!is.na(bill_length_mm), !is.na(body_mass_g)) %&gt;%
       ggplot(aes(x = bill_length_mm, y = body_mass_g,
                  colour = species, shape = species)) +
@@ -832,40 +864,39 @@
         </figure>
 
         <p>
-          The only thing that changed between the two plots was that we treated
-          <c>species</c> as a factor and used it to split the plot in one of
-          them.
-          What looked like one moderate trend across a wide cloud of points
-          resolves into two tighter clusters — each with a clearer relationship
-          between bill length and body mass within the species.
-          The overall trend was largely being driven by the difference
-          <em>between</em> the two species, not by the relationship
+          The only thing that changed between the two plots is that in the
+          second one, we treated <c>species</c> as a factor and used it to split
+          the plot.
+          What looked like one moderate trend across a big cloud of points turns
+          into two tighter clusters, each with a clearer relationship between
+          bill length and body mass.
+          The overall trend was mostly being driven by the difference
+          <em>between</em> the two species, rather than by the relationship
           <em>within</em> either of them.
-          Without the factor split, you would not know which of those two things
-          you were looking at.
-          This is exactly the kind of structural question that
-          <xref ref="ch-multilevel-data"/> introduced: ignoring a grouping
-          variable does not make it go away; it just hides it inside your
-          summary statistic.
+          Without splitting by the factor, you wouldn't know which of those two
+          things you were looking at.
+          This is exactly the kind of structural question we met in <xref
+          ref="ch-multilevel-data"/>: if you ignore a grouping variable, it's
+          still there, just hidden inside your summary statistic.
         </p>
 
         <p>
-          These summaries and plots required that <c>species</c>, <c>lake</c>,
-          and <c>sex</c> were treated as factors so that <c>ggplot2</c> could
+          All of these summaries and plots needed <c>species</c>, <c>lake</c>,
+          and <c>sex</c> to be treated as factors, so that <c>ggplot2</c> could
           split the data on them cleanly.
-          The factor is the boundary; the plot is what you get to see once you
-          respect it.
+          The factor sets the boundaries, and the plot shows you what's inside
+          them.
         </p>
 
         <p>
-          We can push further and add sex to see whether the relationship
-          between bill length and body mass differs between male and female
+          We can go a step further and add sex, to see whether the relationship
+          between bill length and body mass is different for male and female
           birds within each species:
         </p>
 
         <program language="r">
           <code>
-    flamingos %&gt;%
+    kenya_flamingos %&gt;%
       filter(!is.na(bill_length_mm), !is.na(body_mass_g),
              sex %in% c("female", "male")) %&gt;%
       ggplot(aes(x = bill_length_mm, y = body_mass_g,
@@ -915,32 +946,32 @@
         </figure>
 
         <p>
-          Something unexpected appears.
+          And something unexpected shows up.
           Within Lesser Flamingos, males are slightly heavier than females
-          across the range of bill lengths, and both sexes show a weak positive
-          trend (longer bills, slightly heavier birds).
-          That is unremarkable.
+          across the whole range of bill lengths, and both sexes show a weak
+          positive trend (longer bills, slightly heavier birds).
+          Nothing surprising there.
           But within Greater Flamingos, the male trend line slopes
           <em>downward</em>: male Greater Flamingos with longer bills tend to be
-          lighter, not heavier.
+          lighter.
           The female trend is roughly flat.
-          This reversal, where the direction of the relationship changes
-          depending on which group you look at, is exactly what
-          <xref ref="ch-multilevel-data"/> called Simpson's Paradox.
-          The overall trend across all Greater Flamingos (from
-          <xref ref="fig-flamingo-bill-mass-split"/> ) suggested a positive
+          This reversal, where the direction of a relationship changes depending
+          on which group you look at, is exactly what we called Simpson's
+          paradox in <xref ref="ch-multilevel-data"/>.
+          The overall trend across all Greater Flamingos (in <xref
+          ref="fig-flamingo-bill-mass-split"/>) suggested a positive
           relationship.
           Split by sex, that trend reverses for males.
         </p>
 
         <p>
-          Whether this reflects genuine biology (perhaps males with longer bills
-          invest energy differently, or perhaps longer-billed males tend to be
-          older and lighter) or whether it is an artefact of a small sample of
-          Greater Flamingos, is a question for an ornithologist, not a
-          statistician.
-          What the factor split does is make the pattern visible in the first
-          place.
+          Is this real biology?
+          Perhaps males with longer bills use their energy differently, or
+          perhaps longer-billed males tend to be older and lighter.
+          Or is it just an artefact of a small sample of Greater Flamingos?
+          That's a question an ornithologist is much better placed to answer.
+          What splitting by the factor does is make the pattern visible in the
+          first place.
         </p>
       </subsubsection>
     </subsection>
@@ -955,9 +986,9 @@
     <exercise xml:id="ex-factors-identify">
       <statement>
         <p>
-          For each of the following variables, say whether you would store it as
-          a number, an unordered factor, or an ordered factor, and briefly
-          explain why:
+          For each of these variables, would you store it as a number, an
+          unordered factor, or an ordered factor?
+          Briefly explain why.
         </p>
 
         <ol>
@@ -997,13 +1028,12 @@
     <exercise xml:id="ex-factors-create-ordered">
       <statement>
         <p>
-          Using the Kenya road accidents data, extract the hour of day from the
-          <c>TIME_PARSED</c> column (created in
-          <xref ref="ch-cleaning-recoding"/> ) and store it as an ordered
-          factor.
+          Using the Kenya road accidents data, pull the hour of day out of the
+          <c>TIME_PARSED</c> column (which we created in <xref
+          ref="ch-cleaning-recoding"/>), and store it as an ordered factor.
           Then use <c>group_by()</c> and <c>summarise()</c> to count the number
-          of crashes per hour.
-          Does the ordering of the factor change the output?
+          of crashes in each hour.
+          Does the order of the factor change the output?
           What would happen if you used an unordered factor instead?
         </p>
       </statement>
@@ -1012,13 +1042,13 @@
     <exercise xml:id="ex-factors-recode-victim">
       <statement>
         <p>
-          The <c>VICTIM</c> column in the Kenya road accidents data contains
-          entries like <c>M/CYCLIST</c>, <c>MOTOR CYCLIST</c>, and
-          <c>MOTORCYCLIST</c> that all refer to the same category.
-          Using <c>fct_recode()</c> or <c>case_when()</c>, collapse these into a
-          single clean level.
-          Then produce a bar chart of victim category counts.
-          How does the chart change compared to using the uncleaned factor?
+          The <c>VICTIM</c> column in the Kenya road accidents data has several
+          levels that mean the same thing, like <c>M/CYCLIST</c> and <c>MOTOR
+          CYCLIST</c>, or <c>P/PASENGER</c> and <c>P/PASSENGER</c>.
+          Use <c>fct_recode()</c> or <c>case_when()</c> to collapse these into
+          clean levels.
+          Then make a bar chart of the counts for each victim category.
+          How does the chart change compared with using the uncleaned factor?
         </p>
       </statement>
     </exercise>
@@ -1028,13 +1058,14 @@
         <p>
           The IPC food security classification has five levels: Minimal,
           Stressed, Crisis, Emergency, and Famine.
+          IPC treats Crisis or worse as <term>acute food insecurity</term>.
           A researcher wants to report simply what proportion of households are
-          food secure (Minimal or Stressed) versus food insecure (Crisis,
-          Emergency, or Famine).
-          Using <c>fct_collapse()</c> from the <c>forcats</c> package, create a
+          in acute food insecurity (Crisis, Emergency, or Famine), and what
+          proportion aren't (Minimal or Stressed).
+          Use <c>fct_collapse()</c> from the <c>forcats</c> package to create a
           new two-level factor from the five-level IPC variable.
-          What information is lost by making this collapse, and when might it be
-          justified?
+          What information do you lose by collapsing the levels like this, and
+          when might that be justified?
         </p>
       </statement>
     </exercise>
@@ -1044,10 +1075,10 @@
         <p>
           <xref ref="ss-factors-recoding"/> describes the challenge of comparing
           South African census data across 1996, 2001, and 2011, where the race
-          variable used slightly different wording across surveys.
-          Suppose the 1996 census used the level <c>"Indian or Asian"</c> and
-          the 2001 census split this into <c>"Indian"</c> and <c>"Asian"</c> as
-          separate levels.
+          variable was worded slightly differently in different surveys.
+          Suppose the 1996 census used the level <c>"Indian or Asian"</c>, and
+          the 2001 census split this into separate <c>"Indian"</c> and
+          <c>"Asian"</c> levels.
         </p>
 
         <ol>
