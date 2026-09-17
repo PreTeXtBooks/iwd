@@ -428,7 +428,7 @@
 
     <introduction>
       <p>
-        In <xref ref="ch-introduction"/>, the first thing many readers noticed
+        In <xref ref="ch-intro"/>, the first thing many readers noticed
         about the flamingo dataset was that some birds had no recorded sex.
         That observation — made without any prompting, just from looking at the
         data — is exactly the right instinct.
@@ -1521,8 +1521,6 @@
             Only the minority with some damage are left, so any chart built from
             <c>orings_damaged</c> is describing a much smaller, and very
             particular, group of launches.
-            This is exactly why we say to always report the <m>n</m> (
-            <xref ref="remark-report-n-ch8"/> ).
           </p>
         </solution>
       </task>
