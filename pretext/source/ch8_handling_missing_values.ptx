@@ -72,10 +72,10 @@
       </p>
 
       <p>
-        Adhiambo et al. (2025) followed adults getting HIV treatment at five
-        health facilities in western Kenya, and asked a question that sounds
-        simple: how many of them had missed a routine blood test they were
-        supposed to have?
+        Adhiambo et al.
+        (2025) followed adults getting HIV treatment at five health facilities
+        in western Kenya, and asked a question that sounds simple: how many of
+        them had missed a routine blood test they were supposed to have?
         The answer turned out to depend completely on working out why each
         person was missing, and not just how many were.
       </p>
@@ -423,187 +423,803 @@
   <!-- ================================================================= -->
   <!--  SECTION 3: applied to the flamingo data                          -->
   <!-- ================================================================= -->
-  <section xml:id="sec-missing-applied">
-    <title>Handling Missing Values, Applied</title>
+  <section xml:id="sec-missing-data-r">
+    <title>Missing Data in Practice: the Flamingo Dataset</title>
 
     <introduction>
       <p>
-        Let's go back to the flamingo data, and the gaps we found in <xref
-        ref="ch-cleaning-recoding"/>: 4 missing bill depths, 8 missing masses,
-        and 7 missing sexes.
+        In <xref ref="ch-introduction"/>, the first thing many readers noticed
+        about the flamingo dataset was that some birds had no recorded sex.
+        That observation — made without any prompting, just from looking at the
+        data — is exactly the right instinct.
+        Missing values are not a footnote to deal with later.
+        They are part of the data, and understanding them is part of the
+        analysis.
+        This section works through how to find missing values, understand their
+        pattern, and decide what to do about them.
+      </p>
+
+      <program language="r">
+        <code>
+        library(statsbooks)
+        library(dplyr)
+        library(ggplot2)
+        library(naniar)
+
+        data(kenya_flamingos)
+        </code>
+      </program>
+    </introduction>
+
+    <subsection xml:id="ss-missing-finding">
+      <title>Finding missing values</title>
+
+      <p>
+        The first step is to establish where missing values exist and how many
+        there are.
+        In R, <c>is.na()</c> returns <c>TRUE</c> for each missing value and
+        <c>FALSE</c> for each non-missing value.
+        Wrapping it in <c>sum()</c> counts the missing values in a single
+        column:
+      </p>
+
+      <program language="r">
+        <code>
+        # Is sex missing for the first six birds?
+        is.na(kenya_flamingos$sex)
+        #&gt; [1] FALSE FALSE FALSE FALSE FALSE  TRUE ...
+
+        # How many missing values in sex?
+        sum(is.na(kenya_flamingos$sex))
+        #&gt; [1] 33
+        </code>
+      </program>
+
+      <p>
+        To check every column at once, <c>colSums(is.na())</c> applies this
+        across the whole dataset:
       </p>
 
       <program language="r">
         <code>
         colSums(is.na(kenya_flamingos))
+        #&gt;          lake       species bill_length_mm  bill_depth_mm 
+        #&gt;             0             0             0              0 
+        #&gt;  leg_length_mm   body_mass_g           sex          year 
+        #&gt;             0             0            33              0
+        </code>
+      </program>
 
+      <p>
+        Only <c>sex</c> has missing values — 33 of them out of 344 rows, which
+        is about 10% of the dataset.
+        Every other column is complete.
+        This is already useful information: the missing data problem here is
+        contained to one variable, which makes it more manageable.
+      </p>
+
+      <p>
+        The <c>naniar</c> package provides visual tools for exploring
+        missingness.
+        <c>vis_miss()</c> draws a heatmap of the dataset with missing values
+        shown in a contrasting colour, making the pattern immediately visible:
+      </p>
+
+      <program language="r">
+        <code>
+        vis_miss(kenya_flamingos)
+        </code>
+      </program>
+
+      <figure xml:id="fig-flamingo-vis-miss">
+        <caption>
+          Missingness heatmap for the flamingo dataset.
+          Each row is one bird; each column is one variable.
+          Missing values are shown in dark.
+          Only <c>sex</c> has missing values, and they are scattered through the
+          dataset rather than concentrated in one place.
+        </caption>
+
+        <image source="images/ch-missing-vis-miss.png" width="90%">
+          <description>
+            <p>
+              TODO: A heatmap with one row per bird and one column per variable.
+              All columns appear light grey except for the sex column, which has
+              dark marks scattered throughout indicating missing values.
+              A summary at the top shows the percentage missing for each column.
+            </p>
+          </description>
+        </image>
+      </figure>
+
+      <p>
+        <c>gg_miss_var()</c> gives a bar chart of missing values by variable,
+        which is more useful when there are many columns:
+      </p>
+
+      <program language="r">
+        <code>
+        gg_miss_var(kenya_flamingos)
+        </code>
+      </program>
+
+      <figure xml:id="fig-flamingo-gg-miss-var">
+        <caption>
+          Number of missing values per variable in the flamingo dataset.
+          Only <c>sex</c> has any missing values.
+        </caption>
+
+        <image source="images/ch-missing-gg-miss-var.png" width="80%">
+          <description>
+            <p>
+              TODO: A horizontal bar chart with variable names on the y-axis and
+              number of missing values on the x-axis.
+              All variables show zero missing values except sex, which shows 33.
+            </p>
+          </description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="ss-missing-patterns">
+      <title>Patterns of missingness</title>
+
+      <p>
+        Knowing that 33 values are missing is the start, not the end.
+        The next question is whether those missing values are scattered randomly
+        through the dataset, or whether they cluster in a way that tells you
+        something.
+        Missing values that are random are less dangerous than missing values
+        that follow a pattern — because a pattern means the birds with missing
+        sex are systematically different from the birds with recorded sex, and
+        any analysis that drops the missing rows will be subtly biased.
+      </p>
+
+      <p>
+        Are the missing values equally distributed across species?
+      </p>
+
+      <program language="r">
+        <code>
+        kenya_flamingos %&gt;%
+          group_by(species) %&gt;%
+          summarise(
+            n_total   = n(),
+            n_missing = sum(is.na(sex)),
+            pct_missing = round(n_missing / n_total * 100, 1)
+          )
+        #&gt; # A tibble: 2 x 4
+        #&gt;   species          n_total n_missing pct_missing
+        #&gt;   &lt;chr&gt;              &lt;int&gt;     &lt;int&gt;       &lt;dbl&gt;
+        #&gt; 1 Greater Flamingo      80        14        17.5
+        #&gt; 2 Lesser Flamingo      264        19         7.2
+        </code>
+      </program>
+
+      <p>
+        Missing values are more common among Greater Flamingos (17.5%) than
+        Lesser Flamingos (7.2%).
+        This is not random — it is related to species.
+        Greater Flamingos may be harder to sex visually, or they may have been
+        measured under conditions that made sexing more difficult.
+        Either way, if we simply dropped the rows with missing sex, our
+        remaining dataset would underrepresent Greater Flamingos relative to
+        Lesser Flamingos.
+      </p>
+
+      <p>
+        What about across lakes?
+      </p>
+
+      <program language="r">
+        <code>
+        kenya_flamingos %&gt;%
+          group_by(lake) %&gt;%
+          summarise(
+            n_total     = n(),
+            n_missing   = sum(is.na(sex)),
+            pct_missing = round(n_missing / n_total * 100, 1)
+          )
+        #&gt; # A tibble: 3 x 4
+        #&gt;   lake        n_total n_missing pct_missing
+        #&gt;   &lt;chr&gt;         &lt;int&gt;     &lt;int&gt;       &lt;dbl&gt;
+        #&gt; 1 Bogoria         114        14        12.3
+        #&gt; 2 Elementaita      68         8        11.8
+        #&gt; 3 Nakuru          162        11         6.8
+        </code>
+      </program>
+
+      <p>
+        Nakuru has a lower proportion of missing sex values than the other two
+        lakes.
+        Again, this suggests the missingness is not random — something about the
+        conditions at Bogoria and Elementaita made sexing harder.
+      </p>
+
+      <p>
+        We can also ask whether the birds with missing sex are physically
+        different from those with recorded sex.
+        If missingness is related to body size — perhaps smaller birds are
+        harder to sex — then dropping the missing rows would systematically
+        remove smaller birds from the dataset:
+      </p>
+
+      <program language="r">
+        <code>
+        kenya_flamingos %&gt;%
+          mutate(sex_missing = is.na(sex)) %&gt;%
+          group_by(sex_missing) %&gt;%
+          summarise(
+            mean_mass     = mean(body_mass_g, na.rm = TRUE),
+            mean_bill     = mean(bill_length_mm, na.rm = TRUE),
+            n             = n()
+          )
+        #&gt; # A tibble: 2 x 4
+        #&gt;   sex_missing mean_mass mean_bill     n
+        #&gt;   &lt;lgl&gt;           &lt;dbl&gt;     &lt;dbl&gt; &lt;int&gt;
+        #&gt; 1 FALSE           1931.      104.   311
+        #&gt; 2 TRUE            1898.      102.    33
+        </code>
+      </program>
+
+      <p>
+        Birds with missing sex are slightly lighter and have slightly shorter
+        bills on average than birds with recorded sex.
+        The difference is small, but it exists.
+        The missing values are not completely random — they are subtly related
+        to the birds' physical characteristics.
+      </p>
+
+      <p>
+        We can visualise this with <c>naniar</c> 's <c>ggplot_na_level()</c> —
+        or more simply, by plotting body mass with missing values flagged:
+      </p>
+
+      <program language="r">
+        <code>
+        ggplot(kenya_flamingos,
+               aes(x = species,
+                   y = body_mass_g,
+                   colour = is.na(sex))) +
+          geom_jitter(width = 0.2, alpha = 0.6) +
+          scale_colour_manual(
+            values = c("FALSE" = "#44575E", "TRUE" = "#F37021"),
+            labels = c("FALSE" = "Sex recorded",
+                       "TRUE"  = "Sex missing")) +
+          labs(x = "Species",
+               y = "Body mass (g)",
+               colour = NULL,
+               title = "Body mass by species, with missing sex highlighted") +
+          theme_bw()
+        </code>
+      </program>
+
+      <figure xml:id="fig-flamingo-missing-mass">
+        <caption>
+          Body mass by species, with birds whose sex was not recorded shown in
+          orange.
+          Birds with missing sex are scattered across the body mass range for
+          each species, but are slightly more common among lighter birds.
+        </caption>
+
+        <image source="images/ch-missing-mass.png" width="90%">
+          <description>
+            <p>
+              TODO: A jittered dot plot with species on the x-axis and body mass
+              in grams on the y-axis.
+              Dark teal points represent birds with recorded sex; orange points
+              represent birds with missing sex.
+              Orange points are scattered throughout both species columns but
+              appear slightly more concentrated toward the lower end of the body
+              mass range.
+            </p>
+          </description>
+        </image>
+      </figure>
+
+      <insight xml:id="insight-missing-not-random">
+        <title>Missing values are data too</title>
+
+        <p>
+          The pattern of missingness in the flamingo dataset is not random.
+          Missing sex values are more common in Greater Flamingos, more common
+          at certain lakes, and associated with slightly smaller body size.
+          This means that the missing values themselves carry information: they
+          tell us something about which birds are harder to sex, and therefore
+          about the conditions under which the data was collected.
+          Dropping those birds without acknowledging this pattern would
+          introduce a subtle bias into any analysis comparing males and females.
+          The Challenger engineers made a similar mistake: they excluded
+          zero-damage launches because they seemed irrelevant, but those
+          launches were the most important context for interpreting the data
+          they did show.
+          In both cases, the absent data was not irrelevant — it was
+          informative.
+        </p>
+      </insight>
+    </subsection>
+
+    <subsection xml:id="ss-missing-handling">
+      <title>What to do about missing values</title>
+
+      <p>
+        There is no single correct answer to how to handle missing values.
+        The right decision depends on how many values are missing, what pattern
+        they follow, and what the analysis requires.
+        There are three broad options.
+      </p>
+
+      <paragraphs>
+        <title>Option 1: Remove the rows</title>
+
+        <p>
+          The simplest approach is to drop any row with a missing value in the
+          relevant column.
+          In R, <c>filter(!is.na(sex))</c> or <c>na.omit()</c> does this.
+          This is called <term>listwise deletion</term> or
+          <term>complete case 
+        analysis</term>.
+        </p>
+
+        <program language="r">
+          <code>
+          flamingos_complete &lt;- kenya_flamingos %&gt;%
+            filter(!is.na(sex))
+
+          nrow(flamingos_complete)
+          #&gt; [1] 311
+
+          # What fraction of birds remain?
+          nrow(flamingos_complete) / nrow(kenya_flamingos)
+          #&gt; [1] 0.904
+          </code>
+        </program>
+
+        <p>
+          Dropping the 33 birds with missing sex leaves 311 birds — 90.4% of the
+          original dataset.
+          The cost is small in terms of data lost, but as we saw above, the
+          remaining birds are not perfectly representative: Greater Flamingos
+          and birds from Bogoria and Elementaita are slightly underrepresented.
+          For an analysis that compares males and females, listwise deletion is
+          reasonable here.
+          For an analysis of body mass by species, it introduces a small bias —
+          the 33 removed birds were slightly lighter on average.
+        </p>
+
+        <p>
+          Listwise deletion is most defensible when the fraction of missing
+          values is small and the pattern of missingness appears roughly random.
+          It is least defensible when missingness is strongly related to the
+          outcome variable or to a key grouping variable.
+        </p>
+      </paragraphs>
+
+      <paragraphs>
+        <title>Option 2: Keep the rows and work around the gap</title>
+
+        <p>
+          For some analyses, the missing values in <c>sex</c> simply do not
+          matter.
+          If the question is about body mass by species and lake, sex is
+          irrelevant and the 33 birds with missing sex can be included without
+          issue.
+          R functions like <c>mean()</c> and <c>sum()</c> handle this with the
+          <c>na.rm = TRUE</c> argument, which tells R to skip missing values
+          rather than return <c>NA</c> for the whole result:
+        </p>
+
+        <program language="r">
+          <code>
+          # Without na.rm: returns NA if any value is missing
+          mean(kenya_flamingos$body_mass_g)
+          #&gt; [1] 1929.
+
+          # This works fine because body_mass_g has no missing values.
+          # But for sex-based summaries:
+          kenya_flamingos %&gt;%
+            group_by(sex) %&gt;%
+            summarise(mean_mass = mean(body_mass_g))
+          #&gt; # A tibble: 3 x 2
+          #&gt;   sex    mean_mass
+          #&gt;   &lt;chr&gt;      &lt;dbl&gt;
+          #&gt; 1 female     1897.
+          #&gt; 2 male       1966.
+          #&gt; 3 NA         1898.
+          </code>
+        </program>
+
+        <p>
+          The <c>NA</c> group appears as a third row in the summary.
+          This is not wrong — it is honest.
+          It shows that 33 birds could not be assigned to male or female, and
+          gives their mean mass separately.
+          Whether to include or exclude that row in a report depends on what the
+          report is for.
+        </p>
+      </paragraphs>
+
+      <paragraphs>
+        <title>Option 3: Fill in an estimate</title>
+
+        <p>
+          A third option is to replace missing values with an estimate — a
+          process called <term>imputation</term>.
+          The simplest form is to replace each missing value with the column
+          mean or median.
+          More sophisticated approaches use other variables in the dataset to
+          predict the missing value.
+        </p>
+
+        <program language="r">
+          <code>
+          # Simple example: replace missing sex with "Unknown"
+          # (not imputation in the statistical sense, 
+          # but a common practical approach)
+          kenya_flamingos &lt;- kenya_flamingos %&gt;%
+            mutate(sex_clean = ifelse(is.na(sex), "Unknown", sex))
+
+          table(kenya_flamingos$sex_clean)
+          #&gt; female   male Unknown 
+          #&gt;    155    156      33
+          </code>
+        </program>
+
+        <p>
+          For a categorical variable like <c>sex</c>, true imputation is
+          difficult — you cannot average "male" and "female".
+          Replacing with "Unknown" is honest but creates a third category that
+          complicates comparisons.
+          For continuous variables, mean or median imputation is straightforward
+          but reduces the apparent variability in the data, because all imputed
+          values are identical.
+          More advanced methods are beyond the scope of this chapter, but the
+          key point applies to all of them: imputation introduces assumptions,
+          and those assumptions should be stated explicitly.
+        </p>
+      </paragraphs>
+
+      <insight xml:id="insight-missing-golden-rule">
+        <title>The golden rule: be explicit</title>
+
+        <p>
+          Whichever approach you choose, the most important thing is to say what
+          you did and why.
+          <q>We excluded 33 birds with 
+        unrecorded sex from the male-female comparison. These birds 
+        were slightly lighter on average than birds with recorded 
+        sex, and were more common among Greater Flamingos. This 
+        may introduce a small bias toward heavier birds in our 
+        comparison.</q>
+          That sentence takes thirty seconds to write and is the difference
+          between an analysis that can be evaluated and one that cannot.
+          Missing data does not disappear when you drop the rows.
+          It moves from the dataset into the assumptions of the analysis — and
+          the reader deserves to know it is there.
+        </p>
+      </insight>
+
+      <p>
+        The table below summarises the three options and when each is most
+        appropriate:
+      </p>
+
+      <tabular halign="left">
+        <col halign="left" width="20%"/>
+        <col halign="left" width="40%"/>
+        <col halign="left" width="40%"/>
+        <row header="yes" bottom="minor">
+          <cell>Approach</cell>
+          <cell>When it is reasonable</cell>
+          <cell>When to be cautious</cell>
+        </row>
+
+        <row>
+          <cell>Remove the rows</cell>
+          <cell>
+            Few missing values; missingness appears roughly random; the removed
+            rows are not needed for the specific analysis
+          </cell>
+          <cell>
+            Missingness is related to the outcome or a key grouping variable;
+            many values missing
+          </cell>
+        </row>
+
+        <row>
+          <cell>Keep and work around</cell>
+          <cell>
+            The variable with missing values is not needed for the specific
+            analysis; you want to report the missing group separately
+          </cell>
+          <cell>
+            The missing values are in the outcome variable or a required
+            predictor
+          </cell>
+        </row>
+
+        <row>
+          <cell>Impute</cell>
+          <cell>
+            Many missing values that cannot be dropped; other variables are good
+            predictors of the missing value
+          </cell>
+          <cell>
+            Always: imputation introduces assumptions that must be stated and
+            justified
+          </cell>
+        </row>
+      </tabular>
+    </subsection>
+
+    <subsection xml:id="subsec-ch8-in-practice">
+      <title>Handling Missing Values in Practice</title>
+
+      <p>
+        The previous section found missing values in the flamingo dataset.
+        Before deciding what to do about them, it is worth thinking about
+        <em>why</em> they might be missing — because the reason changes what the
+        right response is.
+      </p>
+
+      <program language="r">
+        <code>
+        colSums(is.na(kenya_flamingos))
         #&gt;           lake        species bill_length_mm  bill_depth_mm  leg_length_mm
         #&gt;              0              0              0              4              0
         #&gt;    body_mass_g            sex           year
         #&gt;              8              7              0
         </code>
       </program>
-    </introduction>
+
+      <p>
+        Three variables have missing values: <c>bill_depth_mm</c> (4 missing),
+        <c>body_mass_g</c> (8 missing), and <c>sex</c> (7 missing).
+      </p>
+    </subsection>
 
     <subsection xml:id="ss-flamingo-mechanism">
-      <title>Which pattern applies to which gap</title>
+      <title>Why values are missing: the mechanism matters</title>
 
       <p>
-        In <xref ref="ch-cleaning-recoding"/>, we sketched out some possible
-        reasons for these gaps.
-        Now we can give them proper names:
-        <ul>
-          <li>
-            <p>
-              Say the battery in the scale ran out mid-morning, so every mass
-              after that point went unrecorded, however heavy the bird was.
-              That's roughly <term>MCAR</term> (missing completely at random),
-              as long as nothing about which birds happened to be weighed that
-              morning is linked to their mass.
-            </p>
-          </li>
-
-          <li>
-            <p>
-              Working out a bird's sex means handling it more closely, and the
-              field team only does that with calmer birds.
-              If being <q>calm enough to handle closely</q> isn't linked to any
-              of the bird's other recorded traits, this could be MCAR.
-              But if calmer birds tend to be a particular species or size, which
-              the dataset does record, it becomes <term>MAR</term> (missing at
-              random) instead.
-            </p>
-          </li>
-
-          <li>
-            <p>
-              But what if the heaviest, strongest birds are the ones that
-              struggle free before anyone can weigh them?
-              That's <term>MNAR</term> (missing not at random): whether a mass
-              is missing depends on the mass itself.
-              It's exactly the same structure as the sickest patients missing
-              their viral load tests, and it means the 336 recorded masses
-              aren't a fair sample of the true weights of all 344 birds.
-            </p>
-          </li>
-        </ul>
+        Consider three plausible stories about why <c>body_mass_g</c> might be
+        missing:
       </p>
 
       <p>
-        The dataset on its own can't tell you which of these is true.
+        The battery in the scale ran out mid-morning, so every mass after that
+        point went unrecorded, however heavy the bird was.
+        Whether a mass is missing has nothing to do with the mass itself — it
+        depends only on when the bird was weighed.
+        This is <term>missing completely at random (MCAR)</term>.
+        The 336 recorded masses are still a fair sample of all 344 birds' true
+        weights.
+      </p>
+
+      <p>
+        Working out a bird's sex requires handling it closely, and the field
+        team only does that with calmer birds.
+        If calmer birds tend to be a particular species or size — both recorded
+        in the dataset — then missingness in <c>sex</c> is related to observed
+        variables but not to sex itself.
+        This is <term>missing at random (MAR)</term>.
+        The name is slightly misleading: it does not mean the missingness is
+        random, only that it can be explained by other variables you have
+        measured.
+      </p>
+
+      <p>
+        But what if the heaviest, strongest birds are the ones that struggle
+        free before anyone can weigh them?
+        Then whether a mass is missing depends on the mass itself — the largest
+        birds are systematically absent from the <c>body_mass_g</c> column.
+        This is <term>missing not at random (MNAR)</term>.
+        It is the same structure as the Challenger engineers excluding
+        zero-damage launches because they seemed irrelevant — the missing values
+        are not a random gap, they are a biased one, and the 336 recorded masses
+        are not a fair sample of all 344 birds' true weights.
+      </p>
+
+      <p>
+        The dataset on its own cannot tell you which of these is true.
         That has to come from knowing how the data was collected.
-        It's the same conclusion we came to in <xref
-        ref="ch-cleaning-recoding"/>, but now we have the words to say exactly
-        what's at stake in each case.
+        It is the same conclusion we reached in
+        <xref ref="ch-cleaning-recoding"/>, but now we have the words to say
+        exactly what is at stake in each case.
       </p>
     </subsection>
 
-    <subsection xml:id="ss-na-rm-precise">
-      <title>What <c>na.rm = TRUE</c> actually does</title>
+    <subsection xml:id="ss-missing-options">
+      <title>What to do: three options, each a decision</title>
 
       <p>
-        It removes the missing observations, and does the calculation on
-        whatever's left.
-        Put simply: <em>you're no longer analysing the sample you thought you
-        were.</em>
+        Before discussing how to handle missing values, it is worth saying that
+        doing nothing — leaving the missing values as <c>NA</c> and not thinking
+        about them — is also a choice, and usually not a good one.
+        Most R functions return <c>NA</c> if any input value is missing:
       </p>
 
       <program language="r">
         <code>
-        mean(kenya_flamingos$body_mass_g, na.rm = TRUE)
-        #&gt; [1] 1957.405
+        mean(kenya_flamingos$body_mass_g)
+        #&gt; [1] NA
         </code>
       </program>
+
       <p>
-        This is the mean of 336 birds, and not 344.
-        And it's really important to be clear that <c>na.rm = TRUE</c> is
-        <em>not</em> imputation.
-        It doesn't estimate the missing values.
-        It just leaves those birds out of the calculation completely, and it
-        does it silently, unless you check <c>sum(!is.na(...))</c> yourself.
-        If the missing values are MCAR, leaving them out costs you some
-        precision, and nothing else.
-        But if they're MNAR, it can make your answer wrong, in a direction you
-        can't detect from the 336 rows you have left.
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-complete-cases-applied">
-      <title>Complete cases and listwise deletion</title>
-
-      <program language="r">
-        <code>
-        sum(complete.cases(kenya_flamingos))
-        #&gt; [1] 325
-
-        nrow(kenya_flamingos)
-        #&gt; [1] 344
-        </code>
-      </program>
-      <p>
-        Only 325 of the 344 rows are complete.
-        That means 19 rows (5.5%) have at least one missing value somewhere,
-        which is more than the 8 missing masses on their own, because the gaps
-        for different variables fall in different rows.
-        Dropping every row with a gap (<term>listwise
-        deletion</term><idx><h>listwise deletion</h></idx>) is convenient, and
-        keeps every analysis on exactly the same sample.
-        But it throws away data you don't need to lose: a bird that's only
-        missing <c>sex</c> still has a perfectly good mass measurement.
-        For descriptive work, we'd recommend using <c>na.rm = TRUE</c> one
-        variable at a time, instead of blanket listwise deletion, and reporting
-        the <m>n</m> for each.
+        This is R refusing to guess.
+        The mean of a set of numbers that includes some unknowns is itself
+        unknown — and R is correct to say so.
+        But in practice, this behaviour prompts most users to add
+        <c>na.rm = TRUE</c> and move on without thinking about what they just
+        decided.
+        There are three meaningful options.
       </p>
 
-      <remark xml:id="remark-report-n-ch8">
-        <title>Report the n</title>
+      <paragraphs>
+        <title>
+          Option 1: Remove the rows ( <c>na.rm = TRUE</c> or listwise deletion)
+        </title>
 
         <p>
-          Never report a mean, a standard deviation, or any other summary
-          without also saying the <m>n</m> it was calculated from.
-          A summary of 344 birds, 336 birds, or 325 birds is a different claim
-          about a different sample, and a table without <m>n</m> makes it
-          impossible to tell them apart.
+          <c>na.rm = TRUE</c> removes missing observations and does the
+          calculation on whatever is left.
+          Put simply: you are no longer analysing the sample you thought you
+          were.
         </p>
-      </remark>
-    </subsection>
 
-    <subsection xml:id="ss-imputation-caution">
-      <title>Imputation is a claim about your data</title>
+        <program language="r">
+          <code>
+          mean(kenya_flamingos$body_mass_g, na.rm = TRUE)
+          #&gt; [1] 1957.405
+          </code>
+        </program>
 
-      <p>
-        A common third option, alongside leaving values out with <c>na.rm</c>
-        and full listwise deletion, is
-        <term>imputation</term><idx><h>imputation</h></idx>: filling in each
-        missing value with an estimate, often the variable's mean or a
-        prediction from a model, so you don't need to drop any rows at all.
-      </p>
+        <p>
+          This is the mean of 336 birds, not 344.
+          It is not imputation — it does not estimate the missing values.
+          It simply leaves those birds out silently, unless you check
+          <c>sum(!is.na(...))</c> yourself.
+        </p>
 
-      <program language="r">
-        <code>
-        mass_imputed &lt;- ifelse(
-          is.na(kenya_flamingos$body_mass_g),
-          mean(kenya_flamingos$body_mass_g, na.rm = TRUE),
-          kenya_flamingos$body_mass_g
-        )
-        </code>
-      </program>
-      <p>
-        This line runs without any complaints, and gives you a column with no
-        missing values at all.
-        But if the missing values are MNAR, it's actually worse than doing
-        nothing.
-        It leaves the bias in place and hides it, replacing 8 honestly missing
-        values with 8 confident-looking numbers, built from the very mean that
-        the bias has already distorted.
-        Imputation is a reasonable tool when values are MCAR or MAR, where the
-        data you have really does contain the information you need to make a
-        sensible estimate.
-        When values are MNAR, you need an outside model of <em>why</em> the data
-        is missing (like Wald's assumption about where bombers get hit, in the
-        exercises at the end of this chapter), and a one-line formula applied to
-        whatever happens to be left won't do that.
-      </p>
+        <p>
+          If missing values are MCAR, leaving them out costs precision and
+          nothing else.
+          If MNAR — if the heaviest birds escaped before being weighed — the
+          remaining 336 masses are biased toward lighter birds, and the mean is
+          wrong in a direction you cannot detect from the data you have.
+        </p>
+
+        <p>
+          A more aggressive version is listwise deletion: dropping every row
+          with any missing value anywhere.
+        </p>
+
+        <program language="r">
+          <code>
+          sum(complete.cases(kenya_flamingos))
+          #&gt; [1] 325
+
+          nrow(kenya_flamingos)
+          #&gt; [1] 344
+          </code>
+        </program>
+
+        <p>
+          Only 325 of 344 rows are complete — more than the 8 missing masses
+          alone, because gaps for different variables fall in different rows.
+          Listwise deletion discards a bird with missing <c>sex</c> even when
+          calculating mean body mass, where sex is irrelevant.
+          For descriptive work, <c>na.rm = TRUE</c> one variable at a time is
+          usually better, but means different summaries come from different
+          subsets of birds — which must be reported.
+        </p>
+
+        <remark xml:id="remark-report-n">
+          <title>Always report the n</title>
+
+          <p>
+            Never report a mean, a standard deviation, or any other summary
+            without also saying the <m>n</m> it was calculated from.
+            A summary of 344 birds, 336 birds, or 325 birds is a different claim
+            about a different sample, and a table without <m>n</m> makes it
+            impossible to tell them apart.
+          </p>
+        </remark>
+      </paragraphs>
+
+      <paragraphs>
+        <title>Option 2: Keep the rows and work around the gap</title>
+
+        <p>
+          For some analyses, the missing values simply do not matter.
+          If the question is about body mass by species and lake, <c>sex</c> is
+          irrelevant and birds with missing sex can be included without issue.
+          And when summarising by group, the missing group can be reported
+          separately rather than silently dropped:
+        </p>
+
+        <program language="r">
+          <code>
+          kenya_flamingos %&gt;%
+            group_by(sex) %&gt;%
+            summarise(mean_mass = mean(body_mass_g, na.rm = TRUE),
+                      n         = sum(!is.na(body_mass_g)))
+          #&gt; # A tibble: 3 x 3
+          #&gt;   sex    mean_mass     n
+          #&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;
+          #&gt; 1 female     1897.   152
+          #&gt; 2 male       1966.   153
+          #&gt; 3 NA         1898.    31
+          </code>
+        </program>
+
+        <p>
+          The <c>NA</c> group is not wrong — it is honest.
+          It shows that 31 birds could not be assigned to male or female, and
+          gives their mean mass separately.
+          Whether to include or exclude that row in a report depends on what the
+          report is for.
+        </p>
+      </paragraphs>
+
+      <paragraphs>
+        <title>Option 3: Fill in an estimate (imputation)</title>
+
+        <p>
+          <term>Imputation</term> fills in each missing value with an estimate —
+          often the variable's mean — so no rows need to be dropped.
+        </p>
+
+        <program language="r">
+          <code>
+          mass_imputed &lt;- ifelse(
+            is.na(kenya_flamingos$body_mass_g),
+            mean(kenya_flamingos$body_mass_g, na.rm = TRUE),
+            kenya_flamingos$body_mass_g
+          )
+          </code>
+        </program>
+
+        <p>
+          This runs without complaint and gives a column with no missing values.
+          But it has replaced 8 honestly missing values with 8 copies of the
+          mean from the 336 birds that were weighed.
+          If those 336 birds are a fair sample — MCAR or MAR — imputing the mean
+          is a reasonable approximation, though it reduces the apparent
+          variability.
+          If the missing values are MNAR — if the heaviest birds escaped —
+          imputing the mean from a sample of lighter birds makes things worse,
+          not better.
+          It replaces 8 honestly missing values with 8 confidently wrong ones,
+          and hides the bias rather than acknowledging it.
+        </p>
+      </paragraphs>
+
+      <insight xml:id="insight-missing-decision">
+        <title>
+          Every missing value requires a decision — and the decision should be
+          stated
+        </title>
+
+        <p>
+          There is no option that avoids making a choice about missing values.
+          Leaving them as <c>NA</c> is a choice.
+          Using <c>na.rm = TRUE</c> is a choice.
+          Listwise deletion is a choice.
+          Imputation is a choice.
+          What distinguishes good practice from bad is not which choice is made,
+          but whether it is made deliberately, whether the reasoning is stated,
+          and whether the sensitivity of the conclusions to that choice is
+          acknowledged.
+          <q>We excluded 8 birds with 
+        missing body mass from the mass analysis. If heavier birds 
+        were systematically harder to weigh, our mean mass may be 
+        an underestimate.</q>
+          That sentence takes thirty seconds to write and is the difference
+          between an analysis that can be evaluated and one that cannot.
+        </p>
+      </insight>
     </subsection>
   </section>
   <!-- ================================================================= -->
@@ -658,7 +1274,8 @@
             down, or damaged so badly that they never made it back to base.
             A plane only gets inspected and added to the tally if it survives
             the mission and lands, so the dataset only ever tells you about
-            <q>damage a plane can survive</q>, and never about <q>damage that
+            <q>damage a plane can survive</q>, and never about
+            <q>damage that
             brings a plane down</q>.
             Whether a plane appears in the data at all depends directly on how
             badly it was hit, and where.
@@ -765,7 +1382,8 @@
         <solution>
           <p>
             The obvious recommendation treats heavy damage in the data as a sign
-            of a weak spot: <q>we see a lot of wing damage, so wings must be
+            of a weak spot:
+            <q>we see a lot of wing damage, so wings must be
             vulnerable, so let's reinforce them.</q>
             But because the data only contains survivors, lots of visible damage
             to a section is actually evidence that the section can take a hit
@@ -834,28 +1452,31 @@
       <introduction>
         <p>
           In <xref ref="ex-challenger"/> we looked at the night before the
-          Challenger launch in January 1986. Engineers at Morton Thiokol, the
-          company that built the rocket boosters, argued the launch should be
-          delayed because the O-ring seals could fail in the cold. NASA went
-          ahead, and all seven crew members were killed.
+          Challenger launch in January 1986.
+          Engineers at Morton Thiokol, the company that built the rocket
+          boosters, argued the launch should be delayed because the O-ring seals
+          could fail in the cold.
+          NASA went ahead, and all seven crew members were killed.
         </p>
 
         <p>
           Edward Tufte's Challenger graph is a famous case study in data
-          visualisation. It shows how a scatter plot of O-ring damage against
-          launch temperature could have made the dangers of the launch really
-          clear. In his book <em>Visual Explanations</em> (1997), Tufte argued
-          that the disaster was partly a failure of data communication: the
-          engineers had the evidence, but it wasn't shown in a way that let
-          anyone see the pattern.
+          visualisation.
+          It shows how a scatter plot of O-ring damage against launch
+          temperature could have made the dangers of the launch really clear.
+          In his book <em>Visual Explanations</em> (1997), Tufte argued that the
+          disaster was partly a failure of data communication: the engineers had
+          the evidence, but it wasn't shown in a way that let anyone see the
+          pattern.
         </p>
 
         <p>
-          Tufte's argument, and our exercise, focused on how the data was shown. But there's
-          another problem with the charts the engineers used, and it's the same
-          kind of problem as Wald's bombers. When they looked at whether
-          temperature mattered, they only included launches where O-ring damage
-          had been found. The launches with no damage at all weren't there.
+          Tufte's argument, and our exercise, focused on how the data was shown.
+          But there's another problem with the charts the engineers used, and
+          it's the same kind of problem as Wald's bombers.
+          When they looked at whether temperature mattered, they only included
+          launches where O-ring damage had been found.
+          The launches with no damage at all weren't there.
         </p>
 
         <p>
@@ -878,8 +1499,9 @@
         <statement>
           <p>
             Filter <c>orings</c> down to the launches where <c>Total &gt; 0</c>,
-            which is what the engineers' charts showed. How many launches are
-            in the full data, and how many are left after filtering?
+            which is what the engineers' charts showed.
+            How many launches are in the full data, and how many are left after
+            filtering?
           </p>
         </statement>
 
@@ -893,12 +1515,14 @@
               nrow(orings_damaged)
             </code>
           </program>
+
           <p>
-            Most of the launches disappear. Only the minority with some damage
-            are left, so any chart built from <c>orings_damaged</c> is
-            describing a much smaller, and very particular, group of launches.
-            This is exactly why we say to always report the <m>n</m>
-            (<xref ref="remark-report-n-ch8"/>).
+            Most of the launches disappear.
+            Only the minority with some damage are left, so any chart built from
+            <c>orings_damaged</c> is describing a much smaller, and very
+            particular, group of launches.
+            This is exactly why we say to always report the <m>n</m> (
+            <xref ref="remark-report-n-ch8"/> ).
           </p>
         </solution>
       </task>
@@ -907,11 +1531,11 @@
         <statement>
           <p>
             Plot <c>Temperature</c> against <c>Total</c> twice: once for all
-            launches, and once for the damaged launches only. Add the forecast
-            temperature for the Challenger launch (26 to 29°F) as a shaded
-            region, as you did in <xref ref="ex-challenger-b"/>. How does the
-            relationship between temperature and damage change when the
-            zero-damage launches are left out?
+            launches, and once for the damaged launches only.
+            Add the forecast temperature for the Challenger launch (26 to 29°F)
+            as a shaded region, as you did in <xref ref="ex-challenger-b"/>.
+            How does the relationship between temperature and damage change when
+            the zero-damage launches are left out?
           </p>
         </statement>
 
@@ -937,19 +1561,22 @@
                 theme_bw()
             </code>
           </program>
+
           <p>
-            For the full data, swap <c>orings_damaged</c> for <c>orings</c>
-            and change the subtitle.
+            For the full data, swap <c>orings_damaged</c> for <c>orings</c> and
+            change the subtitle.
           </p>
+
           <p>
             With every launch included, the pattern is clear: the cold launches
             all had damage, and nearly all the damage-free launches happened at
-            warmer temperatures. Take the zero-damage launches away and that
-            pattern really fades. What's left is damage scattered across a
-            range of temperatures, and it looks like damage can happen whether
-            it's cold or warm. The launches that were left out were the ones
-            that showed warm launches tend to go fine, and that was the
-            evidence that cold was the problem.
+            warmer temperatures.
+            Take the zero-damage launches away and that pattern really fades.
+            What's left is damage scattered across a range of temperatures, and
+            it looks like damage can happen whether it's cold or warm.
+            The launches that were left out were the ones that showed warm
+            launches tend to go fine, and that was the evidence that cold was
+            the problem.
           </p>
         </solution>
       </task>
@@ -957,23 +1584,25 @@
       <task xml:id="ex-challenger-missing-c">
         <statement>
           <p>
-            What decided whether a launch ended up on the chart? Were the
-            launches that got left out just a random handful, or was there
-            something about them that made them go missing? How does that
-            compare to Wald's bombers?
+            What decided whether a launch ended up on the chart?
+            Were the launches that got left out just a random handful, or was
+            there something about them that made them go missing?
+            How does that compare to Wald's bombers?
           </p>
         </statement>
 
         <solution>
           <p>
-            It wasn't random at all. Whether a launch was included depended
-            on its value of <c>Total</c>: launches with zero damage were
-            dropped, and launches with some damage were kept. So the launches
-            went missing because of the very thing we were trying to measure.
+            It wasn't random at all.
+            Whether a launch was included depended on its value of <c>Total</c>:
+            launches with zero damage were dropped, and launches with some
+            damage were kept.
+            So the launches went missing because of the very thing we were
+            trying to measure.
             That's the same structure as the bombers, where whether a plane was
-            in the data depended on how badly it had been hit. And just like
-            the bombers, it means the data that's left gives us a distorted
-            picture, not just a smaller one.
+            in the data depended on how badly it had been hit.
+            And just like the bombers, it means the data that's left gives us a
+            distorted picture, not just a smaller one.
           </p>
         </solution>
       </task>
@@ -982,8 +1611,9 @@
         <statement>
           <p>
             In <xref ref="ex-wald-e"/> we saw that no amount of extra data
-            collected the same way could fix Wald's problem. Is the Challenger
-            case the same? What would it have taken to fix it?
+            collected the same way could fix Wald's problem.
+            Is the Challenger case the same?
+            What would it have taken to fix it?
           </p>
         </statement>
 
@@ -991,28 +1621,33 @@
           <p>
             No, and this is what makes the Challenger case so hard to look at.
             Wald's missing planes were lost over enemy territory, and nobody
-            could ever inspect them. The zero-damage launches were never
-            missing from the records. The engineers had that data; it just
-            didn't make it onto the chart. The fix didn't need new data or a
-            clever model of the missingness. It needed someone to ask
+            could ever inspect them.
+            The zero-damage launches were never missing from the records.
+            The engineers had that data; it just didn't make it onto the chart.
+            The fix didn't need new data or a clever model of the missingness.
+            It needed someone to ask
             <q>which launches are we not looking at, and why?</q>
           </p>
+
           <p>
             Missing data isn't only something that happens to us during data
-            collection. We can also create it ourselves, with a filter or a
-            decision about what's <q>relevant</q>, and it can do just as much
-            damage.
+            collection.
+            We can also create it ourselves, with a filter or a decision about
+            what's <q>relevant</q>, and it can do just as much damage.
           </p>
         </solution>
       </task>
 
       <conclusion>
         <p>
-          <term>Sources:</term> Tufte, E.R. (1997).
+          <term>Sources:</term> Tufte, E.R.
+          (1997).
           <em>Visual Explanations: Images and Quantities, Evidence and
-          Narrative.</em> Graphics Press. Data from the <c>DAAG</c> R package.
-          Case study adapted from Helveston, J.P. (2019), George Washington
-          University,
+          Narrative.</em>
+          Graphics Press.
+          Data from the <c>DAAG</c> R package.
+          Case study adapted from Helveston, J.P.
+          (2019), George Washington University,
           <url href="https://p4a.seas.gwu.edu/2019-Fall/challengerExplosion.html"/>,
           CC BY 4.0.
         </p>
@@ -1022,10 +1657,9 @@
     <exercise xml:id="ex-missing-imputation-risk">
       <statement>
         <p>
-          Using the code in <xref ref="ss-imputation-caution"/> as a starting
-          point, explain what would happen to the mean and the standard
-          deviation of <c>body_mass_g</c> if you used <c>mass_imputed</c>,
-          instead of the original column with <c>na.rm = TRUE</c>.
+          What would happen to the mean and the standard deviation of
+          <c>body_mass_g</c> if you used <c>mass_imputed</c>, instead of the
+          original column with <c>na.rm = TRUE</c>.
           Which one changes, which one doesn't, and why does that matter for
           anyone reading a report built on this column?
         </p>
