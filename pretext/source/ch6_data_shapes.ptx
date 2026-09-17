@@ -3,25 +3,35 @@
 <!-- ================================================================= -->
 <!--  Chapter 6: Data Shapes                                           -->
 <!--                                                                    -->
-<!--  A short, explicitly cross-referenced     -->
-<!--  callback to the Ebola district-Excel-format line already used in  -->
-<!--  ch4, paired with a fresh, independently verified real stories     -->
-<!-- ================================================================== -->
+<!--  Opens with Sierra Leone's Ebola data management (Owada et al.    -->
+<!--  2016): two unlinked systems, district files in different shapes, -->
+<!--  and a case fatality rate that was biased in both directions.     -->
+<!--  The R section then covers:                                       -->
+<!--    - reshaping (flamingos; the JHU COVID-19 wide files)           -->
+<!--    - appending (Kenya road accidents 2016 + 2017; fertiliser       -->
+<!--      voucher lists; Kenya vs Uganda fatality definitions)          -->
+<!--    - merging (road accidents + 2019 census; Homa Bay EMR systems;  -->
+<!--      the IEBC voter register)                                      -->
+<!--  Outstanding: the STACK question, and the TODO in ss-merging-keys. -->
+<!-- ================================================================= -->
 <chapter xml:id="ch-data-shapes" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Data Shapes</title>
 
   <introduction xml:id="intro-data-shapes">
     <p>
-      <xref ref="ch-visualising-multidimensional-data"/> worked because every
-      dataset in it was already arranged the way that a good plotting system
-      expects: one row per observation, one column per variable.
+      In <xref ref="ch-visualising-multidimensional-data"/>, adding dimensions
+      to a plot worked so nicely because every dataset was already laid out the
+      way a good plotting system expects: one row per observation, and one
+      column per variable.
       Add a variable, add an aesthetic mapping.
-      That trick only works if the data is already in the right
-      <term>shape</term> for it.
-      Real data rarely arrives that way, and the same numbers, rearranged, can
-      be either trivial or nearly unusable depending on how they are laid out.
-      This chapter is about recognising that shape is a real, consequential
-      property of a dataset, not a formatting detail.
+      But that only works if the data is already in the right
+      <term>shape</term>.
+      Real data hardly ever arrives like that.
+      And the same numbers, arranged differently, can be really easy to work
+      with, or almost impossible, depending on how they're laid out.
+      So in this chapter, we want to convince you that the shape of a dataset
+      really matters, and deserves just as much thought as the numbers inside
+      it.
     </p>
   </introduction>
   <!-- ================================================================= -->
@@ -32,19 +42,19 @@
 
     <introduction>
       <p>
-        In <xref ref="ch-cleaning-recoding"/> we followed one organisation
+        In <xref ref="ch-cleaning-recoding"/>, we followed one organisation
         managing data across five Ebola treatment units.
-        That story was about data quality: forms degraded by chlorine, values
-        misheard across a fence, the same symptom written down under three
+        That story was about data quality: forms damaged by chlorine, values
+        misheard across a fence, and the same symptom written down under three
         different names.
-        Every one of those problems lived inside a single record.
+        Every one of those problems was inside a single record.
       </p>
 
       <p>
-        Owada et al.
-        (2016) describe a different problem: a system in which the information
-        needed to run the response existed, but it had been recorded in shapes
-        that would not fit together, so could not be combined.
+        Owada et al. (2016) describe a different problem, in Sierra Leone.
+        Here, the information needed to run the response did exist.
+        But it had been recorded in shapes that didn't fit together, so it
+        couldn't be combined.
       </p>
     </introduction>
 
@@ -56,51 +66,51 @@
         case investigation form (CIF), filled in by a surveillance officer in
         the field.
         That form was then entered into the Epi Info VHF database, a tool built
-        by the US Centers for Disease Control specifically for outbreak case and
-        contact tracing.
-        In principle, several people could enter data at once, and district
-        databases could be merged into a national one.
+        by the US Centers for Disease Control specifically for tracking outbreak
+        cases and their contacts.
+        In theory, several people could enter data at the same time, and
+        district databases could be merged into one national database.
       </p>
 
       <p>
-        But, in practice, it was not as simple.
-        There are three main things that went wrong.
-        (1) Most district data managers had never used the software before.
-        (2) Duplicate records, once created, were difficult to find and harder
-        to merge.
-        (3) And the paper forms routinely arrived at district response centres
-        days after the case was investigated, so the national database was never
-        fully current, even late in the outbreak.
+        In practice, it wasn't that simple.
+        Three main things went wrong.
+        First, most district data managers had never used the software before.
+        Second, once duplicate records had been created, they were hard to find,
+        and even harder to merge.
+        And third, the paper forms often reached the district response centres
+        days after the case had been investigated, so the national database was
+        never fully up to date, even late in the outbreak.
       </p>
 
       <p>
-        However, the most consequential failure was quieter than any of these.
-        When a blood sample came back from the laboratory, the result was often
-        entered as a new record rather than added to the existing record for
-        that patient.
-        So now, one person, with one infection, had two rows in the same
-        database, with nothing linking them to show they were the same
-        individual.
+        But the failure with the biggest consequences was much quieter than any
+        of these.
+        When a blood sample came back from the lab, the result was often entered
+        as a brand new record, instead of being added to that patient's existing
+        record.
+        So one person, with one infection, now had two rows in the same
+        database, and nothing to link them or show they were the same person.
       </p>
 
       <p>
-        Alongside the Epi Info database, district teams kept a second, entirely
-        separate line list in Excel.
-        It was built mainly from laboratory sample results and held a subset of
-        the same information: age, sex, location, and the dates a sample was
+        On top of the Epi Info database, district teams also kept a second,
+        completely separate line list in Excel.
+        This was built mainly from lab sample results, and held some of the same
+        information: age, sex, location, and the dates each sample was
         collected, received, and tested.
-        Teams used it because it was faster for producing daily reports and
+        Teams used it because it was quicker for producing daily reports and
         charts.
-        So a single patient might now exist in the national database, possibly
-        twice, and in a district spreadsheet, with no reliable way to tell which
-        entries described the same person between the two systems.
+        So a single patient might now be in the national database (possibly
+        twice!) and in a district spreadsheet, with no reliable way to tell
+        which entries in the two systems were the same person.
       </p>
 
       <p>
-        Nothing here is a data quality failure in the sense of
+        None of this is a data quality problem in the way we talked about in
         <xref ref="ch-cleaning-recoding"/>.
-        But, the problem was structural: two systems collecting overlapping
-        information about the same people, with no agreed identifier and no
+        The problem was structural: two systems collecting overlapping
+        information about the same people, with no agreed identifier, and no
         process for reconciling them.
       </p>
     </subsection>
@@ -111,56 +121,58 @@
       <p>
         As the outbreak grew, District Ebola Response Centres (DERCs) were set
         up across the country.
-        Each was responsible for its own area: who had tested positive, who they
-        had been in contact with, who had died, what the laboratory said.
-        The data collection happened close to where the cases were, meaning that
-        local teams could act on what they saw without waiting for instructions
-        from the capital.
+        Each one was responsible for its own area: who had tested positive, who
+        they'd been in contact with, who had died, and what the lab results
+        said.
+        Collecting data close to where the cases were meant that local teams
+        could act on what they saw, without waiting for instructions from the
+        capital.
       </p>
 
       <p>
-        Each centre had to manage a continuous daily stream of information
-        beyond the case forms.
-        Live alerts recording who had been seen and whether a sample was taken.
-        Death alerts noting whether a swab was collected and a burial team
-        dispatched.
-        Quarantined households and their food supply.
+        And each centre had to manage a constant daily stream of information on
+        top of the case forms.
+        Live alerts, recording who had been seen and whether a sample had been
+        taken.
+        Death alerts, noting whether a swab had been collected and a burial team
+        sent out.
+        Quarantined households, and whether they had food.
         Confirmed positive counts from health facilities.
-        Most centres tracked all of this on manual dashboards, physical displays
-        showing the current state of their district, then transferred the
-        numbers into Excel sheets or Word documents.
+        Most centres tracked all of this on manual dashboards (physical displays
+        showing what was happening in their district right now), and then copied
+        the numbers into Excel sheets or Word documents.
       </p>
 
       <p>
-        The result was that every district had data, but they had structured it
-        in their own way, with their own column names, and definitions, and
-        meanings.
-        For example, in one district's data set, a row might be a patient; but
-        in another a row might be a day, with columns counting how many new
-        cases and deaths occurred within it.
-        In a third, confirmed and suspected cases may sit on separate sheets
-        entirely.
+        So every district had data, but each one had structured it in its own
+        way, with its own column names, definitions, and meanings.
+        In one district's dataset, a row might be a patient.
+        In another, a row might be a day, with columns counting how many new
+        cases and deaths there were that day.
+        And in a third, confirmed and suspected cases might be on completely
+        separate sheets.
       </p>
 
       <p>
-        It is worth being clear that no district was doing anything wrong here.
+        We want to be really clear that no district was doing anything wrong
+        here.
         A team designing a spreadsheet for their own district's daily use has no
-        reason to anticipate how a national team will later want to combine it
-        with others.
-        The incompatibility only appeared when someone tried to put the files
+        reason to think about how a national team might later want to combine it
+        with everyone else's.
+        The incompatibility only showed up when someone tried to put the files
         together.
       </p>
 
       <p>
-        A file where a row is a patient and a file where a row is a day cannot
-        be stacked.
-        Placing one below the other produces a table in which the rows mean two
-        different things, and any count taken from it is meaningless.
+        You can't stack a file where each row is a patient on top of a file
+        where each row is a day.
+        If you put one underneath the other, you get a table where the rows mean
+        two different things, and any count you take from it is meaningless.
         A column called <c>EVD_positive</c> in one district's file and a column
-        called <c>confirmed_cases</c> in another's might hold the same thing or
+        called <c>confirmed_cases</c> in another's might hold the same thing, or
         might not, and there was no documentation to settle it.
-        Before the national team could count anything at all, someone had to
-        answer a question: what shape should this data be in?
+        So before the national team could count anything at all, someone had to
+        answer one question: what shape should this data be in?
       </p>
     </subsection>
 
@@ -168,84 +180,83 @@
       <title>The number that was wrong in both directions</title>
 
       <p>
-        To see what this cost, follow a single number.
-        Of everyone who caught Ebola, what fraction died?
-        Epidemiologists call this the <term>case fatality rate</term>, and it is
-        about as fundamental as a number gets during an outbreak.
+        To see what this cost, let's follow a single number.
+        Out of everyone who caught Ebola, what fraction died?
+        Epidemiologists call this the <term>case fatality rate</term>, and in an
+        outbreak, it's about as fundamental as numbers get.
         It tells you how deadly the disease is in this population, whether
-        treatment is helping, and whether the situation is improving or getting
-        worse.
-        It is confirmed deaths divided by confirmed cases.
+        treatment is helping, and whether things are getting better or worse.
+        It's confirmed deaths divided by confirmed cases.
       </p>
 
       <p>
-        Both halves of that fraction were unreliable, and they failed in ways
-        that pushed the answer in opposite directions.
+        Both halves of that fraction were unreliable, and they went wrong in
+        ways that pushed the answer in opposite directions.
       </p>
 
       <p>
-        Start with deaths: Confirming that a death was caused by Ebola required
-        a post-mortem mouth swab.
-        In areas that continued traditional burial practices, that swab was
-        frequently not taken.
-        Those deaths were real and were caused by Ebola, but they never entered
-        the count as confirmed.
-        Divide a count of deaths that is too low by a count of cases, and the
-        fraction comes out too small.
-        The outbreak looks less deadly than it is.
+        Let's start with deaths.
+        To confirm that a death was caused by Ebola, you needed a post-mortem
+        mouth swab.
+        In areas where traditional burial practices carried on, that swab often
+        wasn't taken.
+        Those deaths were real, and they were caused by Ebola, but they never
+        made it into the count of confirmed deaths.
+        If your count of deaths is too low, and you divide it by the count of
+        cases, the fraction comes out too small.
+        The outbreak looks less deadly than it really is.
       </p>
 
       <p>
-        Now try to correct for that.
-        One reasonable fix is to calculate the fraction using only cases whose
-        outcome is known, either recovered or dead, ignoring everyone still in
-        treatment.
-        This removes the patients whose fate has not yet been decided.
-        But the two outcomes were not recorded on the same schedule.
-        A death could be entered the day it happened.
-        A recovery could only be entered once the patient's hospitalisation had
-        fully concluded, which took considerably longer.
-        At any given moment, the pool of cases waiting to be resolved therefore
-        contained more future deaths than the resolved cases suggested.
-        Restricting to known outcomes pushes the fraction too high.
-        The outbreak now looks more deadly than it is.
+        So let's try to correct for that.
+        One sensible fix is to only use cases where we know the outcome
+        (recovered or died), and ignore everyone who's still being treated.
+        That takes out the patients whose outcome hasn't been decided yet.
+        But deaths and recoveries weren't recorded on the same timescale.
+        A death could be entered on the day it happened.
+        A recovery could only be entered once the patient's hospital stay had
+        completely finished, which took a lot longer.
+        So at any moment, the cases with a known outcome included a bigger share
+        of deaths than they would once everyone's outcome was known.
+        Only using known outcomes pushes the fraction too high.
+        Now the outbreak looks more deadly than it really is.
       </p>
 
       <p>
-        Underneath both calculations sat a third complication.
-        Before Ebola arrived, malaria already accounted for roughly 38% of
-        hospital admissions in Sierra Leone and about 30% of deaths in children
-        under five.
-        Malaria and Ebola share clinical features in their early stages.
-        That overlap plausibly delayed recognition of genuine Ebola cases, and
-        it also meant some malaria deaths risked being counted as Ebola deaths.
-        The same confusion moved the numbers in both directions, in different
-        places, at the same time.
+        And underneath both of these calculations, there was a third
+        complication.
+        Even before Ebola arrived, malaria accounted for roughly 38% of hospital
+        admissions in Sierra Leone, and about 30% of deaths in children under
+        five.
+        In their early stages, malaria and Ebola have similar symptoms.
+        That overlap probably delayed the recognition of some real Ebola cases,
+        and it also meant that some malaria deaths risked being counted as Ebola
+        deaths.
+        So the same confusion was moving the numbers in both directions, in
+        different places, at the same time.
       </p>
 
       <p>
         Both answers were systematically biased, in opposite directions, by the
-        same underlying problem: records that described the same patient could
-        not be reliably linked and combined.
-        The death that needed to enter the numerator existed somewhere in the
-        laboratory records.
-        The case it belonged to existed somewhere in the case database.
-        Without a shared identifier to connect them, the fraction could not be
-        calculated correctly.
+        same underlying problem: records about the same patient couldn't be
+        reliably linked and combined.
+        The death that needed to go on top of the fraction was sitting somewhere
+        in the lab records.
+        The case it belonged to was sitting somewhere in the case database.
+        Without a shared identifier to connect them, there was no way to
+        calculate the fraction correctly.
       </p>
 
       <p>
-        The national team drew the obvious conclusion.
-        The system built to hold the complete picture could not be trusted to
-        produce one, so for the rest of the outbreak they used laboratory data
-        for day-to-day situation reports instead.
-        The response to this was to stop relying on the case database for
-        routine reporting.
-        For the rest of the outbreak, analysts used laboratory data for
-        day-to-day situation reports instead.
-        A complete reconciliation of all case data was never finished.
-        When the outbreak ended, a large number of suspected cases remained
-        permanently unclassified, neither confirmed as Ebola nor ruled out.
+        The national team came to the obvious conclusion.
+        The system that was supposed to hold the complete picture couldn't be
+        trusted to give them one.
+        So for the rest of the outbreak, they stopped relying on the case
+        database for routine reporting, and used lab data for their day-to-day
+        situation reports instead.
+        The case data was never fully reconciled.
+        When the outbreak ended, lots of suspected cases were left permanently
+        unclassified, never confirmed as Ebola, and never ruled out.
       </p>
     </subsection>
 
@@ -253,50 +264,47 @@
       <title>Shape is a decision made before the data arrives</title>
 
       <p>
-        Owada et al.
-        (2016) are direct about the cause.
-        <q>Lack of
-      consistency</q> in how data was structured across
-        districts
-        <q>caused problems with merging and aggregating cases to report
-      critical information.</q>
-        The critical information in question sounds almost mundane.
+        Owada et al. (2016) are really direct about the cause.
+        <q>Lack of consistency</q> in how data was structured across districts
+        <q>caused problems with merging and aggregating cases to report critical
+        information.</q>
+        And that critical information sounds almost mundane.
         How many new alerts today?
         How many new confirmed cases?
-        How many blood tests processed, and what did they show?
-        How many deaths in each district?
-        These are the numbers that decide where treatment units get built, where
-        contact tracers get sent, and where the response is losing ground.
-        When the underlying files cannot be combined automatically, producing
-        them at all becomes a manual exercise.
+        How many blood tests were processed, and what did they show?
+        How many deaths were there in each district?
+        But these are the numbers that decide where treatment units get built,
+        where contact tracers get sent, and where the response is losing ground.
+        When the files underneath can't be combined automatically, just
+        producing those numbers becomes a manual job.
       </p>
 
       <p>
-        The loss was not only to the response as it happened.
-        The authors conclude that
-        <q>much of the data has never found its way into any
-  structured database and may never be recoverable.</q>
-        Data that was collected, at real cost and real risk, in formats that
-        were individually workable and collectively unusable.
+        And the loss went beyond the response at the time.
+        The authors conclude that <q>much of the data has never found its way
+        into any structured database and may never be recoverable.</q>
+        That's data that was collected at real cost, and real risk, in formats
+        that each worked fine on their own, but couldn't be used together.
       </p>
 
       <p>
-        Two of the paper's recommendations address this directly.
+        Two of the paper's recommendations tackle this directly.
         The first is regular data harmonisation meetings between district
         monitoring and evaluation officers and national and external data
         managers, to improve data quality and consistency at both levels.
         The second is training for surveillance officers and data clerks in how
         to collect and enter data.
-        Both are recommendations about shape: agreeing what a row means, what a
-        column is called, and how files from different places will eventually be
-        brought together.
+        Both of these are really recommendations about shape: agreeing what a
+        row means, what a column is called, and how files from different places
+        will eventually be brought together.
       </p>
 
       <p>
-        This chapter is about the operations that bring data together, and about
-        the decisions that have to be made before those operations can work.
-        A shared understanding of what shape national reporting needed would
-        have made much of what was lost recoverable.
+        That's what this chapter is about: the operations that bring data
+        together, and the decisions you need to make before those operations can
+        work.
+        If everyone had shared an understanding of what shape the national
+        reporting needed, much of what was lost could have been recovered.
       </p>
 
       <p>
@@ -338,10 +346,11 @@
 
     <introduction>
       <p>
-        The next three sections work through the same shape problems in
-        different datasets (flamingos, Kenya road accidents, and the census).
-        The aim is to show exactly what goes wrong and how to fix it, before
-        meeting an example of each problem in the wild.
+        In the rest of this chapter, we work through these shape problems in R,
+        using a few different datasets (flamingos, the Kenya road accidents
+        data, and the Kenya census).
+        Along the way, we also look at some real examples of each problem out in
+        the wild.
       </p>
     </introduction>
 
@@ -350,8 +359,8 @@
 
       <introduction>
         <p>
-          The same data can be arranged in fundamentally different ways
-          depending on who needs to use it:
+          The same data can be arranged in really different ways, depending on
+          who needs to use it:
           <ul>
             <li>
               <p>
@@ -369,8 +378,8 @@
               </p>
             </li>
           </ul>
-          Knowing when to use each and how to move between them is a useful
-          skills when working with data.
+          Knowing when to use each one, and how to move between them, is a
+          really useful skill when you're working with data.
         </p>
       </introduction>
 
@@ -378,25 +387,26 @@
         <title>Pivoting the Flamingos Data</title>
 
         <p>
-          <c>kenya_flamingos.csv</c> has always been in <term>long</term>
-          format: one row per bird, one column per variable.
-          That shape is why all our visualisations using <c>ggplot2</c> work
+          <c>kenya_flamingos.csv</c> has been in <term>long</term> format all
+          along: one row per bird, and one column per variable.
+          That's why all our visualisations with <c>ggplot2</c> have worked
           without any reshaping.
-          But long format is not always what you want to <em>look</em> at, and
+          But long format isn't always what you want to <em>look</em> at, and
           reshaping between the two is a skill in its own right.
         </p>
 
         <p>
-          Suppose you want a simple summary table, birds per lake per species,
-          laid out the way a person reading a report would expect: lakes down
-          the side, species across the top.
+          Say you want a simple summary table of how many birds there are of
+          each species at each lake, laid out the way someone reading a report
+          would expect: lakes down the side, and species across the top.
         </p>
 
         <program language="r">
+          <code>
         library(dplyr)
         library(tidyr)
 
-        counts_long &lt;- flamingos %&gt;%
+        counts_long &lt;- kenya_flamingos %&gt;%
           count(lake, species)
 
         head(counts_long)
@@ -408,18 +418,20 @@
         #&gt; 4 Elementaita  Lesser Flamingo 38
         #&gt; 5      Nakuru Greater Flamingo 26
         #&gt; 6      Nakuru  Lesser Flamingo 126
+          </code>
         </program>
         <p>
-          <c>counts_long</c> is exactly the shape a computer wants: one row per
-          lake-species combination, one column holding the count.
-          But, it is not the best shape to communicate to a human.
-          Comparing species counts across lakes is easier when the species are
+          <c>counts_long</c> is exactly the shape a computer wants: one row for
+          each lake and species combination, and one column holding the count.
+          But it's not the easiest shape for a person to read.
+          It's much easier to compare species across lakes when the species are
           in columns instead of rows.
           <c>pivot_wider()</c> turns the <c>species</c> values into column
           names.
         </p>
 
         <program language="r">
+          <code>
         counts_wide &lt;- counts_long %&gt;%
           pivot_wider(names_from = species, values_from = n)
 
@@ -429,10 +441,11 @@
         #&gt; 1     Bogoria               10             114
         #&gt; 2 Elementaita               30              38
         #&gt; 3      Nakuru               26             126
+          </code>
         </program>
         <p>
-          Now the table is laid out in a way that is easy to read by eye, but it
-          is no longer in a shape that <c>ggplot2</c> can plot directly.
+          Now the table is really easy to read by eye, but it's no longer in a
+          shape that <c>ggplot2</c> can plot directly.
         </p>
 
         <p>
@@ -440,11 +453,12 @@
         </p>
 
         <p>
-          Reverse the process with <c>pivot_longer()</c>, and <c>counts_wide</c>
-          becomes plottable again.
+          If we reverse the process with <c>pivot_longer()</c>,
+          <c>counts_wide</c> becomes plottable again.
         </p>
 
         <program language="r">
+          <code>
         counts_long &lt;- counts_wide %&gt;%
           pivot_longer(cols = -lake, names_to = "species", values_to = "n")
         counts_long
@@ -463,6 +477,7 @@
 ggplot(counts_long, aes(x = lake, y = n, fill = species)) + 
   geom_bar(stat = "identity") +
   labs(x = "Lake", y = "Count", fill = "Species")
+          </code>
         </program>
         <figure>
           <caption>
@@ -476,8 +491,8 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
               <p>
                 A bar chart with three bars comparing the number of flamingoes
                 at each lake, split by species.
-                The bar for Elementaita is the tallest, followed by Nakuru, then
-                Bogoria.
+                The bar for Nakuru is the tallest, followed by Bogoria, then
+                Elementaita.
                 The bar for Lesser Flamingoes is taller than the bar for Greater
                 Flamingoes at each lake.
               </p>
@@ -486,17 +501,18 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </figure>
 
         <p>
-          This round trip, long <mdash/> wide <mdash/> long, is not busywork.
-          Each direction serves a different reader.
+          This round trip, from long to wide and back to long again, is worth
+          the effort.
+          Each shape serves a different reader.
           Long format serves R: <c>ggplot2</c>, <c>group_by()</c>, and joins all
           expect it.
           Wide format serves a person scanning a table by eye, or a spreadsheet
-          cell reference that assumes species live in fixed columns.
-          Knowing which one a task actually needs, before writing any code,
-          saves exactly the repeated reshaping that cost Gassen a day's work
-          when JHU's columns shifted under him, and exactly the merging failure
-          that cost Sierra Leone's Ebola response.
-          This JHU example is given below.
+          formula that expects species to be in fixed columns.
+          If you know which one a task actually needs before you write any code,
+          you can save yourself exactly the kind of repeated reshaping that cost
+          Gassen a day's work when JHU's columns shifted under him, and the kind
+          of merging failure that hurt Sierra Leone's Ebola response.
+          We look at the JHU example next.
         </p>
       </subsubsection>
 
@@ -506,14 +522,15 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         <p>
           In January 2020, a small team at Johns Hopkins University's Center for
           Systems Science and Engineering (CSSE) launched a public COVID-19
-          dashboard, described the following May in a peer-reviewed paper by
-          Dong, Du, and Gardner (2020).
-          It became, within weeks, one of the single most-used sources of
-          COVID-19 data in the world <mdash/> the map that news outlets,
-          governments, and researchers everywhere pulled numbers from.
-          The underlying data was published openly, and it started out
-          <term>wide</term>: one row per country or region, and one column for
-          every date, holding that location's cumulative case count on that day.
+          dashboard, which they described that May in a peer-reviewed paper
+          (Dong, Du, and Gardner, 2020).
+          Within weeks, it had become one of the most-used sources of COVID-19
+          data in the world: the map that news outlets, governments, and
+          researchers everywhere were pulling numbers from.
+          The data behind it was published openly, and it started out
+          <term>wide</term>: one row for each country or region, and one column
+          for every date, holding that location's total case count so far on
+          that day.
         </p>
 
         <p>
@@ -521,20 +538,18 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </p>
 
         <p>
-          Most wide tables have a fixed, known set of columns.
-          This one did not.
-          Every single day the pandemic continued, the dataset needed one more
-          column than it had the day before, for as long as anyone was tracking
-          the outbreak.
-          Anyone who wanted to do more than eyeball the day's totals <mdash/>
-          plot a trend, compute a weekly change, merge in a country's population
-          to calculate a rate <mdash/> first had to reshape the table from wide
-          to long, and had to do it again every time a new day's column was
-          added.
-          Wide format was not <em>hard</em> to use.
-          It was hard to use
-          <em>repeatedly, at
-        growing scale, indefinitely.</em>
+          Most wide tables have a fixed set of columns that you know in advance.
+          This one didn't.
+          Every single day the pandemic went on, the dataset needed one more
+          column than the day before, for as long as anyone was tracking the
+          outbreak.
+          Anyone who wanted to do more than look at the day's totals (plot a
+          trend, work out a weekly change, or merge in a country's population to
+          calculate a rate) first had to reshape the table from wide to long.
+          And they had to do it again every time a new day's column was added.
+          Wide format wasn't <em>hard</em> to use.
+          It was hard to use <em>again and again, at a growing scale, with no
+          end in sight.</em>
         </p>
 
         <figure xml:id="fig-covid-wide-format">
@@ -568,23 +583,23 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </p>
 
         <p>
-          For a dashboard glanced at once a day, wide was never actually broken.
-          It was the perfect format.
-          But, some individuals needed to do more than glance at the data, and
-          so they reshaped it themselves.
+          For a dashboard that people glanced at once a day, wide format worked
+          perfectly.
+          But some people needed to do more than glance at the data, so they
+          reshaped it themselves.
         </p>
 
         <p>
           On 23 March 2020, the researcher Joachim Gassen published R code that
-          pulled JHU's wide file and reshaped it to long <mdash/> one row per
-          country per date <mdash/> specifically so it could be merged with
-          other data.
+          took JHU's wide file and reshaped it to long (one row per country per
+          date), specifically so it could be merged with other data.
           A wide table with a different date in every column has no single
-          column two datasets can agree to join on; a long table does.
-          Gassen's code went further, attaching standardised <term>ISO3c</term>
-          country codes to every row, because without a shared identifier,
-          nobody could reliably bring in a country's population to convert raw
-          case counts into a per-capita rate.
+          column that two datasets can agree to join on, but a long table does.
+          Gassen's code went a step further, and attached standardised
+          <term>ISO3c</term> country codes to every row.
+          Without a shared identifier like that, nobody could reliably bring in
+          each country's population to turn raw case counts into a rate per
+          person.
         </p>
 
         <figure xml:id="fig-covid-long-format">
@@ -608,38 +623,36 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </figure>
 
         <p>
-          The reshaping held up for about a day.
-          On 24 March 2020, Gassen published a follow-up post:
-          <q>Just hours after my old blog post
-        about tidying Johns Hopkins CSSE Covid-19 data the team has changed
-        their time-series table data structure.</q>
-          JHU had restructured the wide file's own columns <mdash/> adding
-          latitude and longitude, and reorganising how US states were broken out
-          <mdash/> a genuine improvement, but one that broke every piece of code
-          written against the old column layout, Gassen's included.
-          He rewrote and republished the same day.
+          His reshaping lasted about a day.
+          On 24 March 2020, Gassen published a follow-up post: <q>Just hours
+          after my old blog post about tidying Johns Hopkins CSSE Covid-19 data
+          the team has changed their time-series table data structure.</q>
+          JHU had restructured the columns in their wide file, adding latitude
+          and longitude, and reorganising how US states were broken down.
+          It was a real improvement, but it broke every piece of code written
+          for the old column layout, including Gassen's.
+          He rewrote his code and republished it the same day.
         </p>
 
         <insight xml:id="insight-jhu-shapes-lesson">
           <title>
-            Reshaping isn't a one-time fix.
-            It's a job that keeps coming back.
+            Reshaping is a job that keeps coming back
           </title>
 
           <p>
-            JHU never made its published file long, and it didn't need to
-            <mdash/> wide genuinely was the right shape for a dashboard scanned
-            once a day.
-            The people who needed it long, to merge, to compute rates, to plot
-            trends across countries, had to reshape it themselves.
-            And because they did not control the source format, a change nobody
-            warned them about broke that reshaping within a day of them
+            JHU never made its published file long, and it didn't need to,
+            because wide really was the right shape for a dashboard people
+            checked once a day.
+            The people who needed it long (to merge, to calculate rates, to plot
+            trends across countries) had to reshape it themselves.
+            And because they didn't control the source format, a change nobody
+            warned them about broke their reshaping within a day of them
             publishing it.
-            Wide and long are not a wrong version and a right version of the
-            same table.
-            They serve different readers, and whoever needs the other shape is
-            the one who ends up doing the reshaping <mdash/> repeatedly, for as
-            long as the source keeps changing underneath them.
+            So think of wide and long as two shapes serving two different
+            readers, rather than a right and a wrong version of the same table.
+            And whoever needs the other shape is the one who ends up doing the
+            reshaping, again and again, for as long as the source keeps changing
+            underneath them.
           </p>
         </insight>
 
@@ -669,13 +682,13 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
 
       <introduction>
         <p>
-          Appending is the simplest shape operation: take two datasets that
-          describe the same kind of thing and stack them into one.
-          It sounds straightforward, and when everything is consistent it is.
-          But column names, data types, and variable definitions all need to
+          Appending is the simplest shape operation: you take two datasets that
+          describe the same kind of thing, and stack them into one.
+          It sounds straightforward, and when everything is consistent, it is!
+          But the column names, data types, and variable definitions all need to
           match.
-          When they do not, the result is either an error or, more dangerously,
-          a silent expansion that looks fine until you try to use it.
+          When they don't, you either get an error, or (more dangerously) a
+          silent expansion that looks fine until you try to use it.
         </p>
       </introduction>
 
@@ -683,13 +696,14 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         <title>Appending the 2016 and 2017 Kenya Road Accidents Data</title>
 
         <p>
-          In <xref ref="ch-exploring-data"/> and
-          <xref ref="ch-cleaning-recoding"/> we worked with the Kenya Road
-          Accidents database covering April to June 2016.
-          This same excel file contains a second sheet with data from 2017.
+          In <xref ref="ch-exploring-data"/> and <xref
+          ref="ch-cleaning-recoding"/>, we worked with the Kenya Road Accidents
+          database for April to June 2016.
+          It turns out the same Excel file has a second sheet, with data from
+          2017.
           This is a natural appending problem: two datasets recording the same
           kind of information, in the same format, for different time periods.
-          The goal is to combine them into one.
+          We want to combine them into one.
         </p>
 
         <program language="r">
@@ -705,10 +719,10 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </program>
 
         <p>
-          Before combining anything, it is worth looking at both datasets side
+          Before we combine anything, it's worth looking at both datasets side
           by side to see how they compare.
-          What columns do they share?
-          What is different?
+          Which columns do they share?
+          What's different?
         </p>
 
         <program language="r">
@@ -744,16 +758,15 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </program>
 
         <p>
-          The two datasets share 12 columns with the same names and the same
+          The two datasets share 12 columns, with the same names and the same
           data types: <c>TIME 24 HOURS</c>, <c>COUNTY</c>, <c>GENDER</c>,
           <c>AGE</c>, and so on.
-          The 2016 data has a 13th column ( <c>...13</c> ) that we established
-          in the cleaning chapter is just a stray note, not real data.
-          The 2017 data has two extra columns that 2016 does not:
-          <c>MV INVOLVED</c> (the vehicle registration number) and
-          <c>NAME OF VICTIM</c>, as well as its own stray column ( <c>...15</c>
-          ).
-          We drop the stray columns from both before proceeding.
+          The 2016 data has a 13th column (<c>...13</c>), which we found out in
+          <xref ref="ch-cleaning-recoding"/> is just a stray note.
+          The 2017 data has two extra columns that 2016 doesn't have, <c>MV
+          INVOLVED</c> (the vehicle registration number) and <c>NAME OF
+          VICTIM</c>, plus its own stray column (<c>...15</c>).
+          We drop the stray columns from both before we go any further.
         </p>
 
         <program language="r">
@@ -768,9 +781,10 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </p>
 
         <p>
-          In <c>dplyr</c>, <c>bind_rows()</c> stacks two data frames vertically:
-          the rows of the second are placed below the rows of the first.
-          It is the computational equivalent of printing both spreadsheets and
+          In <c>dplyr</c>, <c>bind_rows()</c> stacks two data frames on top of
+          each other: the rows of the second go underneath the rows of the
+          first.
+          It's the computer version of printing out both spreadsheets and
           stapling them together.
         </p>
 
@@ -800,20 +814,19 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </program>
 
         <p>
-          It works.
-          Notice that the columns that exist only in the 2017 data (
-          <c>MV INVOLVED</c> and <c>NAME OF VICTIM</c> ) appear in the combined
-          dataset, filled with <c>NA</c> for all the 2016 rows.
-          <c>bind_rows()</c> handles this gracefully: it creates a column for
-          every column that exists in either dataset, and fills the gaps with
-          missing values.
-          No data is lost and nothing errors.
+          It works!
+          Notice that the columns that only exist in the 2017 data (<c>MV
+          INVOLVED</c> and <c>NAME OF VICTIM</c>) are in the combined dataset,
+          filled with <c>NA</c> for all the 2016 rows.
+          <c>bind_rows()</c> handles this really nicely: it creates a column for
+          every column in either dataset, and fills the gaps with missing
+          values.
+          No data is lost, and there are no errors.
         </p>
 
         <p>
-          We can verify that the append worked by plotting the date
-          distribution.
-          If both years are present, we should see dates spanning 2016 and 2017.
+          We can check the append worked by counting the rows from each year.
+          If both years are there, we should see rows from 2016 and from 2017.
         </p>
 
         <program language="r">
@@ -833,29 +846,28 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </program>
 
         <p>
-          There are 378 rows from 2016 and 740 from 2017.
-          Both years present, as expected.
-          This is the kind of quick check worth doing after every append:
-          confirm that the row count is what you expected, and that the data
-          from each source is actually there.
+          There are 378 rows from 2016 and 740 from 2017, so both years are
+          there, as expected.
+          This is a quick check that's worth doing after every append: make sure
+          the row count is what you expected, and that the data from each source
+          is actually there.
         </p>
 
         <p>
-          It is also worth checking the columns.
-          The 2016 data had 12 columns and the 2017 data had 14 — but the
-          combined dataset does not have 12 + 14 = 26 columns.
-          It has 14, because most columns are shared between the two datasets
-          and appear only once.
-          The two extra columns from 2017 ( <c>MV INVOLVED</c> and
-          <c>NAME OF VICTIM</c> ) are added to the shared set, giving 14 in
-          total.
-          If a column name appeared in one dataset but not the other and was
-          genuinely a different variable — not just a naming inconsistency — you
-          would expect to see it appear as an extra column filled with <c>NA</c>
-          s for the dataset that did not have it.
-          Checking the column count after an append, and inspecting any
-          unexpected columns, is a quick way to catch naming mismatches before
-          they cause problems downstream.
+          It's also worth checking the columns.
+          The 2016 data had 12 columns and the 2017 data had 14, but the
+          combined dataset doesn't have 12 + 14 = 26 columns.
+          It has 14, because most of the columns are shared, so they only appear
+          once.
+          The two extra columns from 2017 (<c>MV INVOLVED</c> and <c>NAME OF
+          VICTIM</c>) are added to the shared set, giving 14 in total.
+          If a column appeared in one dataset but not the other, and it really
+          was a different variable (and not just a naming inconsistency), you'd
+          expect to see it as an extra column, filled with <c>NA</c>s for the
+          dataset that didn't have it.
+          So checking the number of columns after an append, and looking closely
+          at any columns you didn't expect, is a quick way to catch naming
+          mismatches before they cause problems later.
         </p>
 
         <p>
@@ -865,16 +877,16 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         <p>
           A clean append depends on both datasets using the same column names
           for the same variables.
-          One issue that may have arisen in Ebola response story is if different
-          districts used different names for the same field.
-          In this case, the files could not be combined correctly.
-          We can recreate that problem deliberately.
+          In the Ebola response, one problem could easily have been different
+          districts using different names for the same field, and then the files
+          couldn't be combined correctly.
+          We can recreate that problem on purpose.
         </p>
 
         <p>
-          Suppose the 2016 data had been collected with the column called
+          Let's pretend the 2016 data had been collected with a column called
           <c>SEX</c> instead of <c>GENDER</c>.
-          We simulate that by renaming it:
+          We can simulate that by renaming it:
         </p>
 
         <program language="r">
@@ -892,7 +904,7 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </program>
 
         <p>
-          Now what happens when we append?
+          So what happens when we append now?
         </p>
 
         <program language="r">
@@ -912,23 +924,24 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </program>
 
         <p>
-          No error — but look carefully at the columns.
-          Both <c>SEX</c> and <c>GENDER</c> appear in the combined dataset as
+          There's no error, but look carefully at the columns.
+          <c>SEX</c> and <c>GENDER</c> both appear in the combined dataset, as
           separate columns.
           R has no way of knowing that <c>SEX</c> in the 2016 data and
           <c>GENDER</c> in the 2017 data are the same variable.
-          From R's perspective, they are two different column names, so they
+          As far as R is concerned, they're two different column names, so they
           become two different columns.
           The 2016 rows have values in <c>SEX</c> and <c>NA</c> in
-          <c>GENDER</c>; the 2017 rows have values in <c>GENDER</c> and
+          <c>GENDER</c>, and the 2017 rows have values in <c>GENDER</c> and
           <c>NA</c> in <c>SEX</c>.
-          The information is all there, but it is now split across two columns
-          that should be one.
-          Any analysis of sex or gender would need to reconcile them first.
+          All the information is still there, but it's now split across two
+          columns that should be one.
+          Any analysis of sex or gender would need to bring them back together
+          first.
         </p>
 
         <p>
-          The ideal fix is to standardise the column name before appending:
+          The best fix is to make the column names match before you append:
         </p>
 
         <program language="r">
@@ -943,14 +956,14 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </p>
 
         <p>
-          A more subtle problem arises when both datasets use the same column
-          name but store the values as different types.
-          The date column is a good illustration.
+          A more subtle problem comes up when both datasets use the same column
+          name, but store the values as different types.
+          The date column is a good example.
           In both datasets, <c>Date DD/MM/YYYY</c> is read in as a
           <c>POSIXct</c> datetime object.
           But suppose we convert it to a simpler <c>Date</c> type in the 2016
-          data as part of cleaning, as we did in chapter 4, while leaving the
-          2017 data unconverted:
+          data as part of cleaning, like we did in <xref
+          ref="ch-cleaning-recoding"/>, and leave the 2017 data as it is:
         </p>
 
         <program language="r">
@@ -967,8 +980,8 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </program>
 
         <p>
-          Both represent dates, but R stores them differently.
-          What happens when we append?
+          Both of these are dates, but R stores them differently.
+          So what happens when we append?
         </p>
 
         <program language="r">
@@ -980,34 +993,37 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         <p>
           It works!
           <c>bind_rows()</c> silently converts both to <c>dttm</c> (datetime)
-          format to resolve the conflict.
-          This is convenient, but <q>silently</q> is worth noting: R made a
+          format to sort out the conflict.
+          That's convenient, but notice the word <q>silently</q>: R made a
           decision about your data without telling you.
-          In this case the decision is harmless, but in general it is worth
-          checking the types of the combined dataset after appending, rather
-          than assuming everything was resolved correctly.
+          Here, that decision doesn't do any harm, but in general, it's worth
+          checking the types in the combined dataset after you append, instead
+          of assuming everything was sorted out correctly.
         </p>
 
         <p>
-          Not all type mismatches are resolved so gracefully.
-          Convert <c>AGE</c> to numeric in the 2016 data, like in
-          <xref ref="ch-cleaning-recoding"/>, using <c>as.numeric()</c>, and
-          leave it as character in the 2017 data.
-          The result is an error when you try to append:
+          Not every type mismatch gets sorted out so nicely.
+          Convert <c>AGE</c> to numeric in the 2016 data with
+          <c>as.numeric()</c>, like we did in <xref
+          ref="ch-cleaning-recoding"/>, and leave it as character in the 2017
+          data.
+          We'll do this on a copy of the 2016 data, so the original stays as it
+          is for later in the chapter.
+          This time, you get an error when you try to append:
         </p>
 
         <program language="r">
           <code>
-        kenya_accidents_2016 &lt;- kenya_accidents_2016 %&gt;%
+        kenya_accidents_2016_numeric &lt;- kenya_accidents_2016 %&gt;%
           mutate(AGE = as.numeric(AGE))
 
-        class(kenya_accidents_2016$AGE)
+        class(kenya_accidents_2016_numeric$AGE)
         #&gt; [1] "numeric"
 
         class(kenya_accidents_2017$AGE)
         #&gt; [1] "character"
 
-        bind_rows(kenya_accidents_2016, kenya_accidents_2017)
+        bind_rows(kenya_accidents_2016_numeric, kenya_accidents_2017)
         #&gt; Error in `bind_rows()`:
         #&gt;   ! Can't combine `..1$AGE` &lt;double&gt; and `..2$AGE` &lt;character&gt;.
         #&gt; Run `rlang::last_trace()` to see where the error occurred.
@@ -1015,14 +1031,13 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </program>
 
         <p>
-          Unlike the date mismatch, R cannot automatically decide whether a
-          number and a string are the same thing, so it refuses rather than
-          guessing.
-          This error is actually helpful: it is telling you exactly which column
-          is causing the problem and what the conflict is.
-          The fix is to make the types consistent before appending — either
-          convert <c>AGE</c> to numeric in both datasets, or leave it as
-          character in both:
+          Unlike the dates, R can't decide by itself whether a number and a
+          piece of text are the same thing, so instead of guessing, it refuses.
+          And this error is actually really helpful: it tells you exactly which
+          column is causing the problem, and what the conflict is.
+          The fix is to make the types match before you append, either by
+          converting <c>AGE</c> to numeric in both datasets, or by leaving it as
+          character in both.
         </p>
 
         <insight xml:id="insight-append-lesson">
@@ -1031,132 +1046,141 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           </title>
 
           <p>
-            A clean append requires that both datasets agree on three things:
-            the same column names for the same variables, the same data types
-            for each column, and the same definition of what a row represents.
-            When any of those assumptions breaks, the result is either an error
-            (which at least tells you something went wrong) or a silent
-            expansion — extra columns appearing, types being quietly coerced —
-            which may not.
-            The two sheets of the Kenya road accidents data fail at none of
-            them, which is why the append works so cleanly.
-            That is not accidental: it reflects a consistent data collection
-            format applied across both years.
+            A clean append needs both datasets to agree on three things: the
+            same column names for the same variables, the same data types for
+            each column, and the same definition of what a row is.
+            When any of those breaks, you either get an error (which at least
+            tells you something's gone wrong), or a silent expansion, with extra
+            columns appearing and types being quietly changed, which might not.
+            The two sheets of the Kenya road accidents data pass all three,
+            which is why the append works so cleanly.
+            That's no accident: it's because the same data collection format was
+            used in both years.
           </p>
         </insight>
       </subsubsection>
 
       <subsubsection xml:id="ss-binding-by-rows">
         <title>
-          Binding by Rows: Stacking Farmer Lists for Fertilizer Vouchers
+          Binding by Rows: Stacking Farmer Lists for Fertiliser Vouchers
         </title>
 
         <p>
           Every planting season, the Kenyan government subsidises fertiliser for
-          smallholder farmers and distributes it through National Cereals and
+          smallholder farmers, and distributes it through National Cereals and
           Produce Board (NCPB) depots.
-          A farmer registers once, and is issued a voucher by SMS: turn up at
-          the depot with your phone and your ID, the clerk checks you against
-          the system, and you walk away with fertiliser at a fraction of the
-          market price.
-          For a smallholder farmer, that price difference is not a minor saving.
+          A farmer registers once, and gets a voucher by SMS.
+          They turn up at the depot with their phone and their ID, the clerk
+          checks them against the system, and they walk away with fertiliser at
+          a fraction of the market price.
+          For a smallholder farmer, that price difference really matters.
           It can be the difference between planting a full acre and planting
           half of one.
         </p>
 
         <p>
-          Behind that single lookup at the depot counter sits a chain of
-          ordinary data work: registration lists have to be combined into one
-          national list, and that list has to be checked against a farmer's ID
-          and phone details before a voucher is issued.
+          Behind that one lookup at the depot counter, there's a whole chain of
+          everyday data work.
+          Registration lists have to be combined into one national list, and
+          that list has to be checked against each farmer's ID and phone details
+          before a voucher is issued.
         </p>
 
         <p>
           One way to build a national registry is to take every local list of
-          registered farmers and stack them into a single table, one after
-          another.
-          For it to work cleanly, every list being stacked has to agree on its
-          columns: the same column names, meaning the same thing, all the way
-          down.
-          If one office's spreadsheet calls a column <c>phone_number</c> and
-          another calls the same thing <c>mobile_no</c>, software does not stop
-          and ask what to do.
-          It creates a new column for the name it hasn't seen before, and fills
-          it with <term>NA</term> <mdash/> <q>not available</q>, the standard
-          way software marks a hole in the data <mdash/> everywhere that column
-          does not apply.
+          registered farmers, and stack them into one table, one after another.
+          For that to work cleanly, every list has to agree on its columns: the
+          same column names, meaning the same things, all the way down.
+          If one office's spreadsheet calls a column <c>phone_number</c>, and
+          another calls the same thing <c>mobile_no</c>, the software won't stop
+          and ask you what to do.
+          It'll create a new column for the name it hasn't seen before, and fill
+          it with <term>NA</term> (<q>not available</q>, the standard way
+          software marks a gap in the data) everywhere that column doesn't
+          apply.
           A registry that should have five clean columns quietly grows extra
-          ones nobody asked for, and a farmer's real phone number can end up
-          split across two of them depending on which office registered them.
+          ones that nobody asked for, and a farmer's real phone number can end
+          up in one of two different columns, depending on which office
+          registered them.
         </p>
 
         <insight xml:id="insight-schema-drift">
-          <title>Computers Match Characters, Not Intent</title>
+          <title>Computers Only Match Characters</title>
 
           <p>
-            Two records that look identical to a human being can be completely
-            different to a computer if the column names, spacing, or exact text
-            differ by even a single character.
+            Two records that look identical to a person can be completely
+            different to a computer, if the column names, spacing, or exact text
+            differ by even one character.
             An append needs every table to agree on its columns before you stack
-            them, and ideally needs a rule for what counts as
-            <q>the same real-world entity twice</q> before it lets a duplicate
-            in.
+            them.
+            Ideally, it also needs a rule for what counts as <q>the same
+            real-world thing twice</q>, before it lets a duplicate in.
           </p>
         </insight>
+
+        <p>
+          <term>Sources:</term> Kenyans.co.ke (9 February 2023).
+          <q>Govt Gives Out Vouchers for Fertilizers; How to Apply.</q>
+          <url href="https://www.kenyans.co.ke/news/85395-govt-gives-out-vouchers-fertilizers-how-apply" visual="kenyans.co.ke"/>.
+          Ministry of Agriculture and Livestock Development (2025).
+          <q>Launch of the 2025 Long Rains National Fertilizer Subsidy
+          Programme.</q>
+          <url href="https://kilimo.go.ke/cs-dr-andrew-karanja-has-presided-over-the-launch-of-the-2025-long-rains-national-fertilizer-subsidy-programme-nfsp-at-the-ncpb-gpc-depot-nairobi/" visual="kilimo.go.ke"/>.
+        </p>
       </subsubsection>
 
       <subsubsection xml:id="subsec-ss-shapes-definitions">
         <title>Same Column Name, Different Definition</title>
 
         <p>
-          Suppose we wanted to append our 2016 Kenya road crash data with
-          equivalent data from Uganda to compare them.
+          Now suppose we wanted to append our 2016 Kenya road crash data to some
+          equivalent data from Uganda, so we could compare them.
           The two datasets might have the same column names, the same data
-          types, and the same apparent structure (a row per crash, columns for
-          time, location, victim category, and cause), and hence
-          <c>bind_rows()</c> would run without error.
+          types, and the same structure (a row per crash, with columns for time,
+          location, victim category, and cause), so <c>bind_rows()</c> would run
+          without any errors.
           But Kenya and Uganda define a road fatality differently.
-          In Kenya, the NTSA appears to record only deaths at the scene — with
-          no follow-up at hospitals to determine whether injuries sustained in
-          the crash later proved fatal (Muguro et al., 2020).
-          Uganda, by contrast, classifies a road crash as fatal if an individual
-          dies at the scene or within a year and a day of the crash due to
-          injuries sustained in it (Apunyu et al., 2024).
-          This means that a person who died at the scene would be counted as a
-          road fatality in both countries, but a person who survived the scene
-          and died in hospital six months later would be counted in Uganda and
-          not in Kenya.
-          The data would contain a mix of values collected under different
-          rules, with no flag to tell you which is which.
-          The append would succeed technically and fail analytically.
+          In Kenya, the NTSA seems to only record deaths at the scene, with no
+          follow-up at hospitals to find out whether people later died of their
+          injuries (Muguro et al., 2020).
+          In Uganda, a road crash counts as fatal if someone dies at the scene,
+          or within a year and a day of the crash because of their injuries
+          (Nankunda and Evdorides, 2025).
+          So someone who died at the scene would count as a road fatality in
+          both countries.
+          But someone who survived the crash and died in hospital six months
+          later would count in Uganda, and not in Kenya.
+          The combined data would be a mix of values collected under different
+          rules, with nothing to tell you which is which.
+          The append would work technically, and fail analytically.
         </p>
 
         <insight xml:id="insight-variable-definitions">
-          <title>A Variable Name Is Not a Definition</title>
+          <title>Same Name, Different Meaning</title>
 
           <p>
-            Software checks whether column names and data types match during an
-            append; it cannot check whether the underlying data-generation
-            processes are comparable.
-            Before combining data from different sources, ask:
-            <q>are the things being combined actually measuring 
-      the same reality?</q>
+            When you append, software checks whether the column names and data
+            types match.
+            It can't check whether the data behind them was produced in
+            comparable ways.
+            So before you combine data from different sources, ask yourself:
+            <q>are these datasets actually measuring the same reality?</q>
           </p>
 
           <p>
-            Identical column names are not a guarantee of identical meaning.
+            Two columns can have exactly the same name, and still mean different
+            things.
           </p>
         </insight>
 
         <p>
-          <term>Sources:</term> Muguro et al.
-          (2020), cited above, on Kenya NTSA fatality definition.
-          Apunyu, B.
-          et al.
-          (2024).
-          <q>Road Traffic Fatalities in Uganda.</q> <em>Urban Science</em>,
-          5(1), 29.
-          <url href="https://www.mdpi.com/2673-7590/5/1/29"/>.
+          <term>Sources:</term> Muguro et al. (2020), cited in
+          <xref ref="ch-exploring-data"/>, on the Kenya NTSA fatality definition.
+          Nankunda, C. and Evdorides, H. (2025).
+          <q>Data Availability for Road Crash Valuation in Low- and Middle-Income
+          Countries: A Case Study in Uganda.</q>
+          <em>Future Transportation</em>, 5(1), 29.
+          <url href="https://doi.org/10.3390/futuretransp5010029" visual="doi.org/10.3390/futuretransp5010029"/>.
         </p>
       </subsubsection>
     </subsection>
@@ -1169,18 +1193,17 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           Appending stacks datasets that describe the same kind of thing.
           Merging does something different: it brings together two datasets that
           describe <em>different</em> things about the same subjects.
-          The Kenya road accidents data tells us where each crash happened,
-          when, and who was involved.
-          We saw when exploring the data that Nairobi had the most crashes, but
-          Nairobi also has the largest population of any county in Kenya.
-          Does that mean Nairobi's roads are the most dangerous, or simply that
+          The Kenya road accidents data tells us where and when each crash
+          happened, and who was involved.
+          When we explored the data, we saw that Nairobi had the most crashes.
+          But Nairobi also has the biggest population of any county in Kenya.
+          So does that mean Nairobi's roads are the most dangerous, or just that
           more people use them?
           The 2019 Kenya census tells us how many people live in each county.
-          Together, the two datasets can answer a question that neither could
-          answer alone:
-          <em>which counties have 
-  the most dangerous roads relative to their population?</em>
-          The answer, it turns out, is not Nairobi.
+          Put the two datasets together, and they can answer a question that
+          neither one could answer alone: <em>which counties have the most
+          dangerous roads for the size of their population?</em>
+          And the answer, it turns out, isn't Nairobi!
         </p>
       </introduction>
 
@@ -1188,13 +1211,13 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         <title>Loading the census data</title>
 
         <p>
-          The 2019 Kenya Population and Housing Census county-level data is
-          available directly from the Kenya National Bureau of Statistics (KNBS)
-          website, and also from the Humanitarian Data Exchange (HDX).
-          This is the same platform the accidents data came from.
-          <url href="https://www.knbs.or.ke/wp-content/uploads/2023/09/2019-Kenya-population-and-Housing-Census-Population-households-density-by-county.xlsx">Download
-      the county-level Excel file</url>
-          and load it into R:
+          The county-level data from the 2019 Kenya Population and Housing
+          Census is available directly from the Kenya National Bureau of
+          Statistics (KNBS) website, and also from the Humanitarian Data
+          Exchange (HDX), which is where the accidents data came from too.
+          <url
+          href="https://www.knbs.or.ke/wp-content/uploads/2023/09/2019-Kenya-population-and-Housing-Census-Population-households-density-by-county.xlsx">Download
+          the county-level Excel file</url> and load it into R:
         </p>
 
         <program language="r">
@@ -1217,13 +1240,13 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </program>
 
         <p>
-          This is an interesting start.
+          Well, this is an interesting start!
           The spreadsheet has two rows of headers: a merged header spanning
-          multiple columns on row 2, and the actual column names on row 3.
+          several columns on row 2, and the actual column names on row 3.
           The data doesn't start until row 4.
-          R expects exactly one header row, so it has read the first row of data
-          as column names and everything else as data.
-          We skip the first three rows and supply our own column names:
+          R expects exactly one header row, so it has used the first row as
+          column names, and read everything else as data.
+          So we skip the first three rows, and give the columns our own names:
         </p>
 
         <program language="r">
@@ -1243,11 +1266,13 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </program>
 
         <p>
-          The last row of the file contains a source note rather than data.
-          By flicking through the data we can see that Population has a value
-          for all rows, except this source note row.
-          So, we drop this final row by removing any row where <c>Population</c>
-          is <c>NA</c>:
+          The last row of the file is a source note, and isn't data.
+          If we flick through the data, we can see that <c>Population</c> has a
+          value in every row except this one.
+          So we can drop that last row by removing any row where
+          <c>Population</c> is <c>NA</c>.
+          The file also has a row for <c>KENYA</c> as a whole.
+          That's the national total, and isn't a county, so we remove it too:
         </p>
 
         <program language="r">
@@ -1263,30 +1288,30 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         #&gt; 6 Source: 201…         NA      NA      NA       NA         NA ...
 
         kenya_census_2019 &lt;- kenya_census_2019 %&gt;%
-          dplyr::filter(!is.na(Population))
+          dplyr::filter(!is.na(Population), County != "KENYA")
           </code>
         </program>
 
         <note>
           <p>
             Notice that the census data is in wide format: one row per county,
-            with separate columns for male and female population.
-            That is the right shape for displaying as a summary table, but as we
-            discussed earlier in this chapter, we may want to reshape it later
-            if we need to plot or analyse by sex.
+            with separate columns for the male and female populations.
+            That's the right shape for a summary table, but as we saw earlier in
+            this chapter, we might want to reshape it later if we want to plot
+            or analyse the data by sex.
           </p>
         </note>
 
         <p>
-          <alert>Choosing the right join</alert>
+          <alert>Telling R what to join on</alert>
         </p>
 
         <p>
-          Before joining, we need to tell R which column in each dataset
-          contains the shared identifier.
-          In <c>dplyr</c>, the join functions take a <c>by</c> argument
-          specifying this.
-          If we forget to supply it:
+          Before we join, we need to tell R which column in each dataset holds
+          the shared identifier.
+          In <c>dplyr</c>, the join functions have a <c>by</c> argument for
+          this.
+          What happens if we forget it?
         </p>
 
         <program language="r">
@@ -1300,11 +1325,12 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </program>
 
         <p>
-          The error tells us exactly what is wrong: the two datasets share no
-          column with the same name, so R cannot guess which columns to join on.
-          In the accidents data the county column is called <c>COUNTY</c>; in
-          the census it is called <c>County</c>.
-          We specify the match explicitly:
+          The error tells us exactly what's wrong: the two datasets don't share
+          any columns with the same name, so R can't guess which columns to join
+          on.
+          In the accidents data, the county column is called <c>COUNTY</c>, and
+          in the census, it's called <c>County</c>.
+          So we tell R which columns match:
         </p>
 
         <program language="r">
@@ -1316,10 +1342,10 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </program>
 
         <p>
-          But examining the result reveals a problem.
-          Let's look at the first five rows of the joined dataset, which shows
-          both the accident columns (from the accidents data) and the population
-          columns (from the census):
+          But when we look at the result, there's a problem.
+          Here are the first five rows of the joined dataset, with the accident
+          columns (from the accidents data) and the population columns (from the
+          census):
         </p>
 
         <table xml:id="table-ch6-joined-sample">
@@ -1553,14 +1579,14 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </table>
 
         <p>
-          Row 2 of the joined dataset has <c>NA</c> for all the census columns
-          because <c>TAITA TAVETA</c> did not match the census name
+          Row 2 of the joined dataset has <c>NA</c> for all the census columns,
+          because <c>TAITA TAVETA</c> didn't match the census name,
           <c>TAITA/TAVETA</c>.
-          In fact, there are several counties in the accidents data that did not
-          match the census, and hence have <c>NA</c> for all columns.
-          This has happened where the county names are recorded differently in
+          In fact, there are several counties in the accidents data that didn't
+          match the census, and so have <c>NA</c> in all the census columns.
+          This happened wherever the county names were recorded differently in
           the two datasets.
-          We can find these by looking for crash rows where <c>Population</c> is
+          We can find them by looking for crash rows where <c>Population</c> is
           <c>NA</c>:
         </p>
 
@@ -1578,10 +1604,10 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </program>
 
         <p>
-          Each of these is a county name that appeared in the accidents data but
-          found no match in the census.
-          Comparing these to the County names in the census data shows where the
-          problems lay.
+          Each of these is a county name from the accidents data that didn't
+          find a match in the census.
+          If we compare them with the county names in the census data, we can
+          see what went wrong:
           <ul>
             <li>
               <p>
@@ -1608,21 +1634,20 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
               </p>
             </li>
           </ul>
-          For every one of these mismatches, R had no way of knowing that
-          <c>NAIROBI</c> and <c>NAIROBI CITY</c> refer to the same place.
-          The join key must match character for character.
-          A difference of one space, one slash, or one letter is enough for R to
-          treat two values as completely different.
-          We still have the crash and the population data, but without an
-          identical key, the two cannot be connected.
-          Hence, we need to change those counties names in the accidents data to
-          match the census names before we can join them.
+          For every one of these mismatches, R had no way of knowing that, for
+          example, <c>NAIROBI</c> and <c>NAIROBI CITY</c> are the same place.
+          The join key has to match character for character.
+          One extra space, one slash, or one letter is enough for R to treat two
+          values as completely different.
+          We still have the crash data and the population data, but without an
+          identical key, we can't connect them.
+          So before we can join, we need to change those county names in the
+          accidents data to match the census.
         </p>
 
         <p>
-          We can also check whether any rows have <c>NA</c> as their county
-          value.
-          These are crashes where the county was not recorded at all:
+          We should also check whether any rows have <c>NA</c> as their county.
+          These are crashes where nobody recorded the county at all:
         </p>
 
         <program language="r">
@@ -1704,13 +1729,12 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </table>
 
         <p>
-          Both rows have a missing county, but neither is a mystery.
+          Both rows are missing a county, but neither one is really a mystery.
           The <c>BASE/SUB BASE</c> column tells us where each crash was reported
           from: Nanyuki is a town in Laikipia County, and Kinangop is a
           sub-county in Nyandarua County.
-          We can fill in the missing county values using <c>BASE/SUB BASE</c> as
-          a fallback, which is already handled by the <c>case_when()</c>
-          corrections applied earlier:
+          So we can fill in the missing counties using <c>BASE/SUB BASE</c>, at
+          the same time as fixing all the county names we found above:
         </p>
 
         <program language="r">
@@ -1751,28 +1775,29 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </program>
 
         <p>
-          We can also check the other direction — which census counties have no
-          corresponding crashes in the accidents data:
+          We can also check the other direction: which census counties don't
+          have any crashes in the accidents data?
         </p>
 
         <program language="r">
           <code>
     setdiff(unique(kenya_census_2019$County),
             unique(kenya_accidents_2016$COUNTY))
-    #&gt; [1] "KENYA"         "TANA RIVER"    "LAMU"
-    #&gt; [4] "WAJIR"         "MANDERA"       "MARSABIT"
-    #&gt; [7] "ISIOLO"        "THARAKA-NITHI" "TURKANA"
-    #&gt; [10] "WEST POKOT"    "SAMBURU"
+    #&gt; [1] "TANA RIVER"    "LAMU"          "WAJIR"
+    #&gt; [4] "MANDERA"       "MARSABIT"      "ISIOLO"
+    #&gt; [7] "THARAKA-NITHI" "TURKANA"       "WEST POKOT"
+    #&gt; [10] "SAMBURU"
           </code>
         </program>
 
         <p>
-          This second list is expected — these are counties with no recorded
-          fatal crashes in this three-month extract, which is plausible for
-          sparsely populated or remote counties.
-          The first list required fixing.
-          After applying all the county name corrections described earlier in
-          this chapter, we verify that no mismatches remain:
+          We'd expect this second list.
+          These are counties with no recorded fatal crashes in this three-month
+          extract, which is plausible for counties that are sparsely populated
+          or remote.
+          It's the first list that needed fixing.
+          Now we've applied all the county name corrections, let's check that
+          there are no mismatches left:
         </p>
 
         <program language="r">
@@ -1786,18 +1811,14 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         <p>
           Every county name in the accidents data now has an exact match in the
           census.
-          Only then does it make sense to run the join again.
-        </p>
-
-        <p>
-          <alert>Choosing the right join</alert>
+          Only now does it make sense to run the join again.
         </p>
 
         <paragraphs>
           <title>Choosing the right join: left_join</title>
 
           <p>
-            With the county names fixed, we run the join again.
+            With the county names fixed, we can run the join again.
             But we still need to think about which kind of join to use.
             A <c>full_join()</c> keeps every row from both datasets:
           </p>
@@ -1812,29 +1833,30 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
       #&gt; [1] 378
 
       nrow(kenya_accidents_join)
-      #&gt; [1] 389
+      #&gt; [1] 388
             </code>
           </program>
 
           <p>
-            We have gained 11 rows.
-            These are counties that exist in the census but have no recorded
-            crashes in the accidents data — Tana River, Lamu, Wajir, and others.
+            We've gained 10 rows!
+            These are the counties from the census that don't have any recorded
+            crashes in the accidents data: Tana River, Lamu, Wajir, and others.
             A <c>full_join()</c> has added them as empty rows, with <c>NA</c>
             for every accident column.
-            We do not want these.
+            We don't want these.
             Our question is about crash rates, and a county with no crashes in
-            the accidents extract is not the same as a county with no crashes at
-            all — it simply means no fatal crash was recorded there in this
-            three-month period.
+            this extract hasn't necessarily had no crashes at all.
+            It just means no fatal crash was recorded there in this three-month
+            period.
           </p>
 
           <p>
-            What we want is a <c>left_join()</c>: keep every row from the left
-            dataset (the accidents data), bring in matching information from the
-            right dataset (the census), and discard any right-side rows that
-            have no match on the left.
-            In other words — every crash gets population data attached, and no
+            What we want here is a <c>left_join()</c>.
+            This keeps every row from the left dataset (the accidents data),
+            brings in the matching information from the right dataset (the
+            census), and throws away any rows on the right that don't have a
+            match on the left.
+            In other words, every crash gets population data attached, and no
             new rows are added.
           </p>
 
@@ -1850,11 +1872,11 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           </program>
 
           <p>
-            Back to 378 rows.
-            The first five rows of the joined dataset are shown below.
-            Notice that row 2 — previously <c>TAITA TAVETA</c>, which had failed
-            to match — now correctly shows <c>TAITA/TAVETA</c> and has a full
-            set of population values.
+            We're back to 378 rows.
+            The first five rows of the joined dataset are below.
+            Notice that row 2, which is <c>TAITA TAVETA</c> and didn't match
+            before, now shows <c>TAITA/TAVETA</c>, with a full set of population
+            values.
           </p>
         </paragraphs>
 
@@ -2000,7 +2022,7 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </table>
 
         <p>
-          Finally, we confirm that no crash rows are missing population data:
+          Finally, let's check that no crash rows are missing population data:
         </p>
 
         <program language="r">
@@ -2013,8 +2035,8 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </program>
 
         <p>
-          Every crash has been matched to its county's census data.
-          The join is complete.
+          Every crash has been matched to its county's census data, so the join
+          is done.
         </p>
 
         <p>
@@ -2023,12 +2045,12 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
 
         <p>
           With population data attached to every crash, we can now answer a
-          question that the accidents data alone could never answer: how many
-          crashes occurred <em>per person</em> in each county.
-          Raw crash counts favour populous counties simply because more people
-          live there and travel there.
-          A rate adjusts for that, and reveals which counties have genuinely
-          dangerous roads rather than just more traffic.
+          question that the accidents data could never answer on its own: how
+          many crashes were there <em>per person</em> in each county?
+          Raw crash counts are always going to be higher in counties with bigger
+          populations, just because more people live and travel there.
+          A rate adjusts for that, and shows which counties have really
+          dangerous roads, as opposed to just more traffic.
         </p>
 
         <program language="r">
@@ -2074,10 +2096,10 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
                 A horizontal bar chart with county names on the y-axis and
                 crashes per 100,000 population on the x-axis, ordered from
                 highest to lowest rate.
-                Makueni has the longest bar at just under 2.5 crashes per
-                100,000, followed by Embu at around 1.7.
-                Nairobi City is shown in orange and ranks third at approximately
-                1.5.
+                Makueni has the longest bar at around 2.6 crashes per 100,000,
+                followed by Embu at around 1.6.
+                Nairobi City is shown in orange and ranks third, just behind Embu,
+                at around 1.6.
                 Nakuru and Kiambu follow closely.
                 The bars shorten progressively down to Nandi at the bottom with
                 fewer than 0.2 crashes per 100,000.
@@ -2090,45 +2112,46 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </figure>
 
         <p>
-          The story this chart tells is quite different from the raw crash
-          count.
-          Nairobi had the most crashes in absolute terms — 71 in this
-          three-month period — and it leads any ranking based on counts alone.
-          Makueni had 26 crashes and Embu had just 10.
-          In a raw count chart, Embu would barely register.
-          But Nairobi has a population of over 4.4 million people; Makueni has
-          just under one million; and Embu has around 560,000.
-          Once population is accounted for, those 10 crashes in Embu represent a
-          higher rate per person than Nairobi's 71.
-          Makueni's 26 crashes, spread across a smaller population still,
-          produce the highest rate of all.
+          This chart tells a really different story from the raw crash counts.
+          Nairobi had the most crashes in absolute terms (71 in this three-month
+          period), so it would top any ranking based on counts alone.
+          Makueni had 26 crashes, and Embu had just 10.
+          In a chart of raw counts, Embu would barely show up.
+          But Nairobi has a population of over 4.4 million people, Makueni has
+          just under one million, and Embu has just over 600,000.
+          Once we take population into account, Embu's 10 crashes work out as a
+        slightly higher rate per person than Nairobi's 71 (both are around 1.6
+        per 100,000, with Embu just ahead).
+          And Makueni's 26 crashes, in a much smaller population than Nairobi's,
+          give the highest rate of all, at around 2.6 per 100,000.
         </p>
 
         <p>
-          This matters for policy.
-          A government deciding where to invest in road safety on the basis of
-          raw crash counts would prioritise Nairobi, Nakuru, and Kiambu (the
-          most populous counties with the most crashes).
-          A government working from crash rates would also prioritise Makueni
-          and Embu.
-          The ranking changes because the question changes: not
-          <em>where do the most crashes happen?</em> but
-          <em>where are people most at risk?</em> And the only reason we can ask
-          the second question is because we merged in the population data.
+          And this really matters for policy.
+          If a government decided where to invest in road safety based on raw
+          crash counts, it would prioritise Nairobi, Nakuru, and Kiambu (the
+          most populous counties, with the most crashes).
+          A government working from crash rates would prioritise Makueni and
+          Embu too.
+          The ranking changes because the question changes, from <em>where do
+          the most crashes happen?</em> to <em>where are people most at
+          risk?</em>
+          And the only reason we can ask that second question is because we
+          merged in the population data.
         </p>
 
         <insight xml:id="insight-merge-lesson">
           <title>A join is only as good as its key</title>
 
           <p>
-            The entire value of this merge depended on the county names matching
-            perfectly between both datasets.
-            A mismatch of even one character ( <c>NAIROBI</c> v
-            <c>NAIROBI CITY</c>; <c>TAITA TAVETA</c> v <c>TAITA/TAVETA</c> )
-            silently drops that county from the joined result.
+            This whole merge depended on the county names matching perfectly
+            between the two datasets.
+            A mismatch of even one character (<c>NAIROBI</c> and <c>NAIROBI
+            CITY</c>, or <c>TAITA TAVETA</c> and <c>TAITA/TAVETA</c>) silently
+            drops that county from the joined result.
             Without a matching key, R has no way to connect them.
-            Checking join quality is the difference between a merge that worked
-            and a merge that looked like it worked.
+            Checking the quality of your join is what tells a merge that worked
+            apart from a merge that only looked like it worked.
           </p>
         </insight>
 
@@ -2149,86 +2172,85 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         <title>Merging and the Idea of a Key: The Homa Bay Health System</title>
 
         <p>
-          Homa Bay County, on the shore of Lake Victoria, has a significant HIV
-          burden and a well-established HIV care programme.
-          Health facilities there run on electronic medical record systems, the
-          same as facilities across much of the country, but a 2025 study of
-          Homa Bay's digital health landscape found that its single county
-          referral hospital was running not one such system, but seven, side by
-          side.
-          Three of those seven, all built specifically for HIV care, do share a
-          common patient identifier with each other.
+          Homa Bay County, on the shore of Lake Victoria, has a high HIV burden,
+          and a well-established HIV care programme.
+          Like facilities across much of Kenya, health facilities there run on
+          electronic medical record (EMR) systems.
+          But a 2025 study of Homa Bay's digital health landscape found that its
+          one county referral hospital was running seven of these systems, side
+          by side!
+          Three of the seven, all built specifically for HIV care, do share a
+          common patient identifier.
           The other four cover general outpatient care, inpatient stays, the
           laboratory, and faith-based providers.
-          These connect to none of the HIV systems, and not reliably to each
-          other either.
+          These don't connect to any of the HIV systems, and don't reliably
+          connect to each other either.
         </p>
 
         <p>
-          To make that concrete: picture a hypothetical patient, built from the
-          study's own findings rather than a specific case it reported.
-          A woman is HIV-positive and pregnant.
-          Her HIV care sits in the HIV system.
-          Her antenatal visits, being outside HIV care, are logged somewhere
+          To make that concrete, let's picture a patient.
+          She's hypothetical, but based on the study's findings, and not on a
+          specific case it reported.
+          She's HIV-positive and pregnant.
+          Her HIV care is recorded in the HIV system.
+          Her antenatal visits are outside HIV care, so they're logged somewhere
           else.
-          If she is admitted to hospital, her inpatient stay goes somewhere else
-          again.
-          This is not a stretch: the study's own interviews describe exactly
-          this pattern in general, with people
-          <q>assigned multiple numbers for
-      different purposes, i.e., at the inpatient, outpatient and antenatal
-      clinics.</q>
+          And if she's admitted to hospital, her inpatient stay goes somewhere
+          else again.
+          This isn't a stretch: the study's interviews describe exactly this
+          pattern, with people <q>assigned multiple numbers for different
+          purposes, i.e., at the inpatient, outpatient and antenatal
+          clinics.</q>
         </p>
 
         <p>
-          Every operation involving merging tables depends on the same quiet
-          assumption: that somewhere in your data, there is a column that
+          Every operation that merges tables relies on the same quiet
+          assumption: that somewhere in your data, there's a column that
           reliably means <q>this same real-world thing</q>, everywhere it
           appears.
           That column is called a <term>key</term>.
-          Homa Bay's hospital records show what happens when that assumption
-          holds for only part of a system.
+          Homa Bay's hospital records show what happens when that's only true
+          for part of a system.
           TODO: we saw exactly how this can go wrong in the illustrative
           example, when county names failed to match
         </p>
 
         <p>
-          The 2025 study found that patient identifiers were manually generated
-          in most of the county's EMR systems and manually allocated at first
-          interaction in 97% of facilities, with no county-wide identifier
-          linking a person across every system they might touch.
-          Within HIV care specifically, a shared identifier does exist and does
-          its job.
-          Step outside HIV care, and there is no column, anywhere in the
-          hospital, that reliably means <q>this same person</q> across the rest
-          of the systems she might touch.
+          The 2025 study found that in most of the county's EMR systems, patient
+          identifiers were created by hand, and in 97% of facilities, they were
+          allocated by hand at the patient's first visit.
+          There was no county-wide identifier linking a person across every
+          system they might come into contact with.
+          Within HIV care, a shared identifier does exist, and it does its job.
+          But step outside HIV care, and there's no column anywhere in the
+          hospital that reliably means <q>this same person</q> across the rest
+          of the systems she might use.
         </p>
 
         <p>
-          The problem is that there is nothing to <term>join</term> or
-          <term>merge</term> most of those correct records together on.
-          Stack or link the non-HIV systems anyway, without a shared key, and
+          The problem is that there's nothing to <term>join</term> or
+          <term>merge</term> most of those correct records on.
+          If you stack or link the non-HIV systems anyway, without a shared key,
           one of two things happens.
-          Either the same person is silently counted more than once across
+          Either the same person gets silently counted more than once across
           different systems, inflating whatever gets reported to the county or
-          the ministry at the end of the month, or a clinician treating her for
-          a complication during pregnancy has no way of seeing, from where they
-          are sitting, that she is currently on HIV treatment at all <mdash/>
-          even though that exact information exists, correctly recorded, one
-          system over.
+          the ministry at the end of the month.
+          Or a clinician treating her for a complication in her pregnancy has no
+          way of seeing, from where they're sitting, that she's on HIV treatment
+          at all, even though that exact information exists, correctly recorded,
+          in the system next door.
         </p>
 
         <insight xml:id="insight-homa-bay-no-key">
           <title>You Cannot Join What Was Never Given a Shared Key</title>
 
           <p>
-            A join, a stack, a reshape <mdash/> every one of these operations
-            assumes a key already exists linking your tables together.
-            When separate systems are built independently, with no agreement in
-            advance on how a person, place, or thing will be identified across
-            all of them, no amount of clever code recovers that link later.
-            The key has to be designed in, before the data is collected, not
-            discovered afterward.
+            A join, a stack, a reshape: every one of these operations assumes
+            there's already a key linking your tables together.
+            When separate systems are built independently, without agreeing in
+            advance how a person, place, or thing will be identified across all
+            of them, no amount of clever code can recover that link later.
+            The key has to be designed in before the data is collected.
           </p>
         </insight>
 
@@ -2249,110 +2271,114 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         <p>
           Before national elections in Kenya, the Independent Electoral and
           Boundaries Commission (IEBC) has to check its master voter register
-          against other government records: identity records, to catch invalid
-          or duplicate registrations, and death records, to remove voters who
-          have since died.
+          against other government records.
+          It checks against identity records, to catch invalid or duplicate
+          registrations, and against death records, to remove voters who have
+          died.
           Checking one table against another like this is a <term>lookup</term>,
           or <term>join</term>, and the sensible key to join on is each person's
           National ID number.
-          The same register also periodically needs its own duplicates removed,
-          a step usually called <term>deduplication</term>: find rows that
-          represent the same person entered twice, and collapse them into one.
+          The register also needs its own duplicates removing every so often, a
+          step usually called <term>deduplication</term>: finding rows that are
+          the same person entered twice, and collapsing them into one.
         </p>
 
         <p>
-          Both of these jobs depend entirely on one thing: having a key that is
-          both correct for every row, and unique to one person.
+          Both of these jobs depend completely on one thing: a key that's
+          correct for every row, and unique to one person.
           Get that wrong, and a register can break in two opposite directions at
-          once.
+          the same time.
         </p>
 
         <p>
-          <term>A key that isn't actually unique inflates the numbers.</term> If
-          a system ever falls back to matching people on something other than a
-          clean, unique identifier (for example, a full name and date of birth
-          together), that can go wrong in an easy-to-miss way.
-          If ten voters share a name and date of birth, and a second table
-          contains three other people with that same name and date of birth, a
-          join does not pick one sensible match.
-          It matches every one of the ten against every one of the three,
-          producing thirty rows out of what should have been, at most, one real
-          match.
-          Run that same overly broad matching rule through a deduplication step
-          instead, and the failure runs the other way: anyone who happens to
-          share those same details with someone else gets treated as a duplicate
-          of them, and is quietly deleted, even though they are two entirely
-          different, entirely real people.
+          <term>A key that isn't actually unique inflates the numbers.</term>
+          If a system ever falls back on matching people using something other
+          than a clean, unique identifier (say, full name and date of birth
+          together), things can go wrong in a way that's easy to miss.
+          Imagine ten voters share a name and date of birth, and a second table
+          has three other people with that same name and date of birth.
+          A join won't pick one sensible match.
+          It matches every one of the ten against every one of the three, and
+          gives you thirty rows, when there should have been one real match at
+          most.
+          Now run that same overly broad matching rule through a deduplication
+          step, and it goes wrong the other way.
+          Anyone who happens to share those details with someone else gets
+          treated as their duplicate, and is quietly deleted, even though
+          they're two completely different, completely real people.
         </p>
 
         <p>
-          We saw a benign version of this in our own join.
+          We actually saw a harmless version of this in our own join.
           The <c>NAIROBI CITY</c> row appears exactly once in the 2019 census
           data.
           But it appears 71 times in the accidents data, once for each crash
           recorded in Nairobi.
-          The left join correctly matched each of those 71 crash rows to the
-          same single census row, repeating Nairobi's population figure 71 times
-          in the joined dataset.
-          That is exactly what we wanted.
-          But it would be a serious problem if that same behaviour of one record
-          matching many occurred in a voter register context.
-          Whether repeated matches are correct or catastrophic depends entirely
-          on what the key represents and what the join is meant to do.
+          The left join correctly matched all 71 of those crash rows to the same
+          census row, repeating Nairobi's population 71 times in the joined
+          dataset.
+          That's exactly what we wanted!
+          But one record matching many would be a serious problem in a voter
+          register.
+          Whether repeated matches are right or disastrous depends entirely on
+          what the key represents, and what the join is meant to do.
         </p>
 
         <p>
-          <term>A key that's untidy hides real matches.</term> Even with a
-          clean, unique identifier as the key, small formatting differences
-          break things: one system stores an ID as a plain number, another
-          stores the same ID as text with a leading zero kept in front of it, a
-          third has a stray space typed in at the end of the number by accident.
-          To a human, these are obviously the same ID.
-          To a join or a deduplication step, they are three unrelated pieces of
+          <term>A key that's untidy hides real matches.</term>
+          Even with a clean, unique identifier as the key, small formatting
+          differences can break things.
+          One system stores an ID as a plain number.
+          Another stores the same ID as text, with a leading zero kept on the
+          front.
+          A third has a stray space accidentally typed at the end.
+          To a person, these are obviously the same ID.
+          To a join or a deduplication step, they're three unrelated pieces of
           text, and no match is ever found.
         </p>
 
         <p>
-          What KPMG's 2022 audit of the IEBC register actually reported was a
-          third variant of the same underlying problem: a shared, empty value.
-          The audit found that <term>481,711</term> individuals were registered
-          as voters with duplicated blank ID or passport reference fields
-          <mdash/> records where that field had simply never been filled in.
-          A blank matches a blank exactly as confidently as a real ID matches a
-          real ID, so any process checking for duplicate identity references
-          will flag every one of those empty-field records against every other
-          one, whether or not the people behind them are actually the same.
-          The same 2022 audit also found nearly 246,000 deceased voters still
-          listed as active on the register, and 226,000 entries attached to
-          invalid ID numbers.
+          So what did KPMG's 2022 audit of the IEBC register actually find?
+          Their preliminary report found <term>481,711</term> duplicate records
+          on the register.
+          It also found 246,465 deceased voters still on the register, and
+          226,143 voters registered with ID numbers that didn't validly belong
+          to them.
+          Every one of these is a key problem.
+          Duplicate records are what you get when the same person ends up on the
+          register twice, and the deduplication step doesn't catch it.
+          Deceased voters can only be removed if the join against death records
+          actually finds a match.
+          And an ID number that belongs to someone else is a key that's simply
+          wrong, so any join on it links the wrong people together.
         </p>
 
         <insight xml:id="insight-cartesian-explosion">
           <title>A Key Is Either Too Broad or Too Untidy, Rarely Neither</title>
 
           <p>
-            A join should never make your row count bigger than expected; if it
-            does, the key you joined on is not unique on at least one side.
+            A join should never make your row count bigger than you expected.
+            If it does, the key you joined on isn't unique on at least one side.
             A deduplication step should only ever remove rows you can point to
-            as genuine duplicates; if entries you know are distinct disappear,
-            your key was too broad.
-            And if a join or a deduplication misses matches that are obviously
-            the same to a human eye, check spacing, leading zeros, and whether
-            both sides are storing the value as the same kind of thing, before
-            you trust the result.
+            as real duplicates.
+            If entries you know are different disappear, your key was too broad.
+            And if a join or deduplication misses matches that are obviously the
+            same to a person, check the spacing, the leading zeros, and whether
+            both sides store the value as the same type, before you trust the
+            result.
           </p>
         </insight>
 
         <p>
-          <term>Sources:</term> KPMG.
-          (2022).
-          <foreign>Preliminary audit report on the Register of
-      Voters</foreign>,
+          <term>Sources:</term> KPMG (2022).
+          <foreign>Preliminary audit report on the Register of Voters</foreign>,
           prepared for the Independent Electoral and Boundaries Commission
-          (IEBC) [As reported in: IEBC press briefing, June 8, 2022; see
-          Ministry of Interior and National Administration press archive and
-          contemporaneous coverage in the <foreign>Daily Nation</foreign>,
-          <foreign>The Star</foreign>, and <foreign>Citizen Digital</foreign> ].
+          (IEBC), as reported in the IEBC press release of 8 June 2022
+          (<url href="https://www.iebc.or.ke/uploads/resources/cWyBL8fhHH.pdf" visual="iebc.or.ke"/>)
+          and in <foreign>Citizen Digital</foreign>,
+          <q>IEBC announces delay in publishing final voters' register as 1M names
+          flagged</q>
+          (<url href="https://www.citizen.digital/article/iebc-announces-delay-in-publishing-final-voters-register-as-1m-names-flagged-n299750" visual="citizen.digital"/>).
         </p>
       </subsubsection>
     </subsection>
@@ -2366,14 +2392,14 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
     <exercise xml:id="ex-shapes-jhu-daily">
       <statement>
         <p>
-          <xref ref="insight-jhu-shapes-lesson"/> says a new column had to be
-          added to the wide-format dataset every single day.
-          Sketch, in words, what would have gone wrong for a downstream user's
-          code if it referenced date columns by a fixed position (for example,
-          <q>column 47</q> ) rather than by name.
-          Would switching to long format on its own have fixed that particular
+          <xref ref="insight-jhu-shapes-lesson"/> says that a new column had to
+          be added to the wide dataset every single day.
+          Describe, in words, what would go wrong for someone's code if it
+          referred to date columns by a fixed position (for example, <q>column
+          47</q>) instead of by name.
+          Would switching to long format, on its own, have fixed that particular
           problem?
-          Why or why not?
+          Why, or why not?
         </p>
       </statement>
     </exercise>
@@ -2381,14 +2407,14 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
     <exercise xml:id="ex-reshape-census-data">
       <statement>
         <p>
-          The census data loaded in <xref ref="ss-merge-census"/> has separate
-          columns for <c>Male</c> and <c>Female</c> population.
-          Using <c>pivot_longer()</c>, reshape it so that each county appears
-          twice, once for male population and once for female, with a new column
-          called <c>sex</c> and a column called <c>population</c> holding the
-          count.
-          Then plot the population of males and females side by side for each
-          county using <c>ggplot2</c>, with a different colour for each sex.
+          The census data we loaded in <xref ref="ss-merge-census"/> has
+          separate columns for the <c>Male</c> and <c>Female</c> populations.
+          Use <c>pivot_longer()</c> to reshape it so that each county appears
+          twice, once for the male population and once for the female
+          population, with a new column called <c>sex</c>, and a column called
+          <c>population</c> holding the count.
+          Then use <c>ggplot2</c> to plot the male and female populations side
+          by side for each county, with a different colour for each sex.
           Which counties have the most unequal sex distributions?
         </p>
       </statement>
@@ -2398,11 +2424,11 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
       <statement>
         <p>
           <xref ref="sec-intro-data-shapes"/> argues that agreeing on a shape in
-          advance is cheaper than reconciling incompatible shapes afterward.
-          Propose one concrete rule Sierra Leone's district response centres
-          could have agreed to in advance <mdash/> about column names, row
-          structure, or file format <mdash/> that would have prevented the
-          merging problem described in <xref ref="ss-ebola-two-systems"/>.
+          advance is cheaper than trying to reconcile incompatible shapes
+          afterwards.
+          Suggest one practical rule that Sierra Leone's district response
+          centres could have agreed on in advance (about column names, row
+          structure, or file format) that would have prevented the merging problem described in <xref ref="ss-ebola-districts"/>.
         </p>
       </statement>
     </exercise>
@@ -2411,11 +2437,12 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
       <statement>
         <p>
           Using <xref ref="ss-shapes-long-to-wide"/> as a model, build a wide
-          table of mean <c>body_mass_g</c> by <c>lake</c> (rows) and
-          <c>species</c> (columns), instead of counts.
-          Which version, this one or "table-lake-species-crosstab", would you
-          send to someone who wanted to read it in an email, and which would you
-          hand to someone who wanted to plot it in <c>ggplot2</c>?
+          table of the mean <c>body_mass_g</c>, with <c>lake</c> as rows and
+          <c>species</c> as columns, instead of counts.
+          Which version, this one or the <c>counts_wide</c> table of counts, would you
+          send to someone who wanted to read it in an email?
+          And which would you give to someone who wanted to plot it in
+          <c>ggplot2</c>?
         </p>
       </statement>
     </exercise>
@@ -2423,12 +2450,12 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
     <exercise xml:id="ex-shapes-gapminder-wide">
       <statement>
         <p>
-          The <c>gapminder</c> package from
-          <xref ref="ch-visualising-multidimensional-data"/> is in long format:
-          one row per country per year.
-          Using <c>pivot_wider()</c>, build a table with one row per country and
-          one column per year, holding <c>lifeExp</c>.
-          Try plotting directly from this wide version with the same
+          The <c>gapminder</c> data from <xref
+          ref="ch-visualising-multidimensional-data"/> is in long format: one
+          row per country per year.
+          Use <c>pivot_wider()</c> to build a table with one row per country,
+          and one column per year, holding <c>lifeExp</c>.
+          Now try plotting directly from this wide version, using the same
           <c>ggplot2</c> code from <xref ref="ss-gapminder-2d"/>.
           What breaks, and why?
         </p>

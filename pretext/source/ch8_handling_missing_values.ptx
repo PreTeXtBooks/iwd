@@ -45,16 +45,13 @@
       <xref ref="ch-exploring-data"/> hit <c>NA</c> the moment it tried to
       compute a mean, and set the problem aside.
       <xref ref="ch-cleaning-recoding"/> audited the gaps and started reasoning
-      informally about why <c>bill_depth_mm</c>, <c>body_mass_g</c> and
-      <c>sex</c> specifically had them.
-      Both chapters promised a proper answer later.
-      This is later.
+      informally about why VARIBABLES specifically had NAs.
     </p>
 
     <p>
       The central idea of this chapter is easy to state and easy to
-      underestimate: <em>why</em> a value is missing determines what you are
-      allowed to do about it.
+      underestimate: <em>why</em> a value is missing determines what you should
+      do about it.
       Sometimes missingness is background noise, safely ignorable.
       Sometimes it is the single most important piece of information in the
       dataset.
@@ -65,352 +62,365 @@
   <!-- ================================================================= -->
   <!--  SECTION 1: Wald and the bombers                                  -->
   <!-- ================================================================= -->
-  <section xml:id="sec-intro-story">
-    <title>Motivating introduction story</title>
-
-    <p>
-      todo Example in Kenya (based on its own abstract and how later papers
-      describe it): Maina and colleagues at Kenya's Ministry of Health evaluated
-      the completeness and quality of HIV-indicator data flowing through DHIS2 —
-      the system where every health facility in the country submits monthly
-      aggregate reports (on testing, treatment, PMTCT, etc.) that get rolled up
-      to county and national totals.
-      The paper is explicitly about the mechanics of assembling that rolled-up
-      national picture from thousands of individual facility submissions over
-      time, and it's one of the most-cited sources in the Kenyan literature on
-      this exact problem — later papers describe it as the reference point for
-      how to adjust for incomplete reporting, apart from where missing reports
-      were considered an indication that no services were provided, which is a
-      genuinely subtle data-shape judgment call: is a blank row a missing
-      observation, or a true zero?
-      Maina, I., et al.
-      (2020).
-      <em>Evaluating the quality and completeness of Kenya's routine HIV-indicator reporting data.</em>
-      PLOS ONE, 15(11), e0243047.
-    </p>
-  </section>
-
-  <section xml:id="ss-ch8-stories">
-    <title>todo</title>
+  <section xml:id="sec-intro-missing-values">
+    <title>The Patients Who Aren't in the Data</title>
 
     <introduction>
       <p>
-        missing data stories: One MCAR, one MAR, and one MNAR.
-        MNAR: The Bombers That Didn't Come Back Need a MCAR and MAR story.
-        A famous good one.
-        (Remove the challenger one.
-        Unless that is MAR)
+        In <xref ref=" cleaning-chapter "/>, the problem was ...
+        .
+        This case study is about [..]: data that should have existed, but simply
+        isn't there at all.
+      </p>
+
+      <p>
+        Adhiambo et al.
+        (2025) followed adults receiving HIV treatment at five health facilities
+        in western Kenya, and asked a question that sounds simple: how many of
+        them were missing a routine blood test they were supposed to have?
+        Answering it turned out to depend entirely on figuring out why each
+        person was missing, not just how many were.
       </p>
     </introduction>
 
-    <subsection xml:id="sec-wald-survivorship">
-      <title>The Bombers That Didn't Come Back</title>
-
-      <introduction>
-        <p>
-          During the Second World War, the US military examined bombers
-          returning from missions over Germany and recorded where each one had
-          been hit.
-          The damage was not evenly spread.
-          It clustered heavily on the wings and fuselage, far more than on the
-          engines.
-          The obvious recommendation followed immediately: reinforce the wings
-          and fuselage, since that is clearly where the bullets go.
-          TODO: Get image of the affected points on the planes.
-        </p>
-      </introduction>
-
-      <subsubsection xml:id="ss-wald-the-catch">
-        <title>The data was correct. The dataset was incomplete.</title>
-
-        <p>
-          The Statistical Research Group (SRG) at Columbia University, a team
-          the US military had assembled to bring rigorous statistics to exactly
-          these kinds of operational problems, included the mathematician
-          Abraham Wald.
-          Wald's objection to the obvious recommendation was not that the damage
-          counts were wrong.
-          They were almost certainly accurate.
-          His objection was about which planes had been counted at all.
-        </p>
-
-        <p>
-          Every bomber in that dataset had survived its mission and made it
-          home.
-          A bomber hit badly enough in the engine did not return to be
-          inspected, photographed, and added to the tally.
-          The data was not a random sample of <q>where bombers get hit.</q> It
-          was a sample of <q>where bombers can be hit and still make it back</q>
-          <mdash/> and those are very different questions.
-          Heavy wing and fuselage damage was common in the surviving planes
-          precisely <em>because</em> a plane could absorb a great deal of damage
-          there and keep flying.
-          The scarcity of engine damage in the data did not mean the engines
-          were rarely hit.
-          It meant a hit there was rarely survived, which is why those planes
-          were missing from the dataset entirely.
-        </p>
-      </subsubsection>
-
-      <subsubsection xml:id="ss-wald-the-method">
-        <title>What Wald actually did about it</title>
-
-        <p>
-          Wald did not simply assert the intuition and stop there.
-          Across a series of memoranda for the SRG, later formalised and
-          republished by Mangel and Samaniego (1984), he built a statistical
-          method for estimating vulnerability by aircraft section that
-          explicitly accounted for the missing planes rather than reading the
-          returning planes' damage at face value.
-          Roughly: assuming hits were distributed over the airframe more or less
-          in proportion to each section's surface area, the pattern of damage on
-          <em>survivors</em> could be used to infer how survivable a hit to each
-          section actually was <mdash/> and a section that rarely showed damage
-          on returning planes, despite having no reason to be hit less often,
-          was exactly the section a hit was least likely to be survived.
-        </p>
-
-        <p>
-          The recommendation that followed was the reverse of the obvious one:
-          reinforce the sections that were <em>under</em>-represented in the
-          damage data, not over-represented, because that absence was the
-          signal.
-        </p>
-
-        <insight xml:id="insight-wald-lesson">
-          <title>The missing data was not noise. It was the finding.</title>
-
-          <p>
-            It would have been easy to treat the absent engine damage as nothing
-            more than a smaller sample size for that section, safely ignorable,
-            and analyse the rest of the data as if the missing rows simply were
-            not there.
-            Wald's insight was recognising that the missingness itself was
-            informative: which planes were absent from the dataset depended
-            directly on the thing being measured (survivability), not on some
-            unrelated cause.
-            Deleting the incomplete cases and moving on would not have lost a
-            little statistical power.
-            It would have inverted the conclusion.
-          </p>
-        </insight>
-
-        <p>
-          <term>Sources:</term> Wald, A.
-          (1943).
-          <em>A Method of Estimating
-        Plane Vulnerability Based on Damage of Survivors.</em>
-          Statistical Research Group, Columbia University, memorandum for the
-          National Defense Research Committee (reprinted, Center for Naval
-          Analyses, 1980).
-          Mangel, M.
-          and Samaniego, F.J.
-          (1984).
-          <q>Abraham Wald's Work
-        on Aircraft Survivability.</q>
-          <em>Journal of the American
-        Statistical Association</em>,
-          79(386), 259 <ndash/> 267.
-        </p>
-      </subsubsection>
-    </subsection>
-
-    <subsection xml:id="ss-viz-challenger">
-      <title>The Challenger disaster (1986)</title>
+    <subsection xml:id="ss-vl-background">
+      <title>A test that tells you if treatment is working</title>
 
       <p>
-        This final story is much more recent.
-        And is not so much on multidimensionality.
-        But hopefully shows the importance of showing information in graphics.
+        People living with HIV take antiretroviral therapy (ART) to keep the
+        virus suppressed, ideally to levels so low that it can't be transmitted
+        and can't seriously damage the body.
+        The most direct way to know whether that's actually happening for a
+        given patient is a <term>viral load</term> test: a blood test that
+        measures how much virus is circulating.
+        <fn>
+    It isn't the only way. Before viral load testing became routine, clinics
+    relied on CD4 cell counts (a proxy that tracks immune system damage) and
+    on watching for clinical symptoms of disease progression. Both work, but
+    both lag behind. Viral load can rise for months before CD4 count falls or
+    symptoms appear, so a patient whose treatment is failing may go
+    undetected for a long time under either older method. That's why viral
+    load testing was treated as such a major improvement when it was
+    introduced.
+  </fn>
+        Kenyan national guidelines, in line with World Health Organization
+        recommendations, say this test should happen 6 and 12 months after
+        starting treatment, and every 12 months after that.
       </p>
 
       <p>
-        On the morning of 28 January 1986, the Space Shuttle <em>Challenger</em>
-        stood on the launch pad at Kennedy Space Center in Florida.
-        Mission STS-51-L was supposed to be a particularly important flight.
-        Among the seven crew members was Christa McAuliffe, a 37-year-old
-        teacher from New Hampshire, USA, who had been selected from more than
-        11,000 applicants to become the first private citizen to travel into
-        space.
-        She was going to conduct lessons from orbit as part of NASA's "Teacher
-        in Space" programme.
-      </p>
-
-      <p>
-        The mission had attracted enormous public attention.
-        Millions of schoolchildren were expected to watch the launch, and the
-        shuttle programme was being presented as proof that space travel was
-        becoming something ordinary people could participate in.
-      </p>
-
-      <p>
-        The night before the launch, engineers at Morton Thiokol, the company
-        that manufactured the shuttle's solid rocket boosters, were increasingly
-        worried about the forecast temperature.
-        Their concern centred on small rubber seals called <em>O-rings</em>.
-        These seals were designed to prevent hot gases from escaping from the
-        joints between sections of the solid rocket boosters.
-      </p>
-
-      <p>
-        Engineers already knew that the O-rings had experienced damage on
-        previous flights.
-        They were particularly concerned that cold temperatures would make the
-        rubber less flexible, slowing the O-rings' ability to seal the joint
-        when the booster was ignited.
-      </p>
-
-      <p>
-        On the coldest previous shuttle launch, STS-51-C in January 1985, the
-        O-ring temperature had been about 53°F (12°C), and significant O-ring
-        damage had been observed.
-        The engineers therefore argued that they did not have evidence that the
-        shuttle could safely launch at temperatures below this.
-        They prepared charts and tables to explain their concerns during a
-        telephone conference with NASA and Morton Thiokol managers.
-      </p>
-
-      <figure xml:id="fig-challenger-original-chart">
-        <caption>
-          One of the charts presented by Morton Thiokol engineers during the
-          discussions about whether to launch Challenger.
-        </caption>
-
-        <image source="images/challenger-original-chart" width="80%"/>
-      </figure>
-
-      <p>
-        <xref ref="fig-challenger-original-chart"/> contains information about
-        previous O-ring problems, but the evidence is difficult to interpret.
-        Rather than putting every previous shuttle flight into one simple
-        comparison of temperature and O-ring damage, the information is split
-        across tables and categories.
-        Some of the most important comparisons are therefore difficult to see.
-      </p>
-
-      <p>
-        The engineers' concerns were not accepted by NASA management.
-        After a lengthy discussion, Morton Thiokol management eventually
-        reversed its original recommendation and agreed that the launch could
-        proceed.
-      </p>
-
-      <p>
-        The next morning, Challenger launched.
-      </p>
-
-      <p>
-        It was extremely cold.
-        The ambient air temperature at the launch site was 36°F (2°C), around
-        15°F colder than any previous shuttle launch.
-      </p>
-
-      <p>
-        Just 73 seconds after lift-off, Challenger broke apart.
-        All seven crew members were killed.
-      </p>
-
-      <p>
-        The immediate physical cause of the disaster was the failure of an
-        O-ring seal in one of the solid rocket boosters.
-        Hot gases escaped through the failed joint and ultimately caused the
-        catastrophic breakup of the shuttle.
-        The Presidential Commission investigating the disaster concluded that
-        the launch decision itself was seriously flawed, noting that the
-        decision-makers were unaware of important evidence and of the engineers'
-        continuing opposition to launching in the cold conditions.
-      </p>
-
-      <p>
-        But there is another question worth asking:
-        <em>what did the data look like when the decision was being made?</em>
-      </p>
-
-      <p>
-        Edward Tufte later examined the Challenger decision in
-        <em>Visual Explanations</em> (1997).
-        His argument was that the problem was not simply that there was too
-        little data.
-        The engineers had accumulated years of information about O-ring
-        performance.
-        The problem was that the information was not displayed in a way that
-        made the most important relationship obvious.
-      </p>
-
-      <p>
-        Tufte reconstructed the evidence as a simple scatter plot.
-        Each point represents a previous shuttle flight, with temperature on one
-        axis and the amount of O-ring damage on the other.
-      </p>
-
-      <figure xml:id="fig-challenger-tufte">
-        <caption>
-          O-ring damage plotted against temperature for previous shuttle
-          launches, with the forecast temperature for Challenger shown for
-          comparison.
-        </caption>
-
-        <image source="images/challenger-tufte" width="80%"/>
-      </figure>
-
-      <p>
-        Now the pattern is much easier to see.
-        The colder launches tended to have greater O-ring damage.
-        Indeed, every previous launch below 66°F had experienced some O-ring
-        damage, while the most serious damage occurred on relatively cold
-        flights.
-        The planned Challenger launch temperature was far outside the range of
-        previous shuttle experience.
-      </p>
-
-      <p>
-        The important lesson is not that "a better graph would definitely have
-        prevented the Challenger disaster." That would be too simple.
-        The decision involved engineering uncertainty, management pressure,
-        communication failures, organisational culture and a demanding launch
-        schedule.
-        Historians and researchers have also pointed out that Tufte's later
-        reconstruction is not identical to the information actually available to
-        engineers that night.
-      </p>
-
-      <p>
-        The more useful lesson is about how we visualise multidimensional data.
-        Data can be available without the pattern being visible.
-        A table can contain the information needed to answer a question while
-        simultaneously making that answer difficult to see.
-      </p>
-
-      <p>
-        In the Challenger case, temperature, flight, O-ring damage and type of
-        damage were all relevant.
-        The challenge was to bring those dimensions together in a form that
-        allowed the relationship between them to be seen.
-        When the data are displayed appropriately, the question changes from
-        <em>"Which flights had O-ring problems?"</em> to
-        <em>"What happens to O-ring performance as temperature falls?"</em>
-      </p>
-
-      <p>
-        That is the power of visualising multidimensional data: sometimes the
-        evidence is already there.
-        The visualisation determines whether we can see it.
-      </p>
-
-      <p>
-        <term>Sources:</term> Presidential Commission on the Space Shuttle
-        Challenger Accident (1986).
-        <em>Report to the President.</em> Washington, DC: US Government Printing
-        Office.
-      </p>
-
-      <p>
-        Tufte, E.R.
-        (1997).
-        <em>Visual Explanations: Images and Quantities, Evidence and Narrative.</em>
-        Cheshire, CT: Graphics Press.
+        The first year is when treatment failure is most likely, and a timely
+        viral load result is what lets a clinician catch it early, before drug
+        resistance develops or the patient's health declines further.
+        A missed viral load test could mean a patient has failing treatment,
+        with nobody currently able to tell.
       </p>
     </subsection>
+
+    <subsection xml:id="ss-vl-study">
+      <title>Following 1,754 people for two years</title>
+
+      <p>
+        The study sat inside a larger clinical trial running from 2014 to 2019,
+        across three urban clinics in Kisumu County and two more rural clinics
+        in Migori County.
+        Viral load monitoring wasn't managed specially for the trial.
+        It happened through ordinary, routine clinic care, which is exactly what
+        makes the results useful: they show what actually happens in the health
+        system, not what happens under ideal research conditions.
+      </p>
+
+      <p>
+        For every one of 1,754 participants, the researchers checked whether a
+        viral load result existed in the 9 to 15 month window after starting
+        treatment, and again in the 21 to 27 month window.
+        If a result couldn't be found in the routine records, that wasn't the
+        end of the process.
+        The researchers went further: checking laboratory logs, a national
+        database, paper files, and eventually contacting clinicians directly, to
+        work out, case by case, what had actually happened to that missing test.
+        Later in this chapter, we'll come back to why that second step mattered
+        so much.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-vl-headline-number">
+      <title>The number you'd report first</title>
+
+      <p>
+        In year one, 428 of 1,754 participants, 24.4%, had no viral load result
+        in their window.
+        In year two, it was 502 of 1,709, 29.4%.
+        Almost a third of patients, on the most basic reading of the data,
+        simply didn't have the information their doctors needed.
+      </p>
+
+      <p>
+        Faced with a gap like this, the easiest thing to do is to just work with
+        the data you have.
+        Take the roughly 1,300 people who do have a year-one viral load result,
+        calculate whatever you need from them, (look at `urban vs rural`, `older
+        vs younger`), and assume it applies to everyone.
+      </p>
+
+      <p>
+        Faced with a gap like this, the easiest thing to do is to just work with
+        what you have.
+        Take the roughly 1,300 people who do have a year-one viral load result,
+        calculate whatever you need from them, urban vs rural, older vs younger,
+        and assume it applies to everyone.
+      </p>
+
+      <p>
+        Think about a class of 100 students sitting an exam, where 24 are absent
+        on the day.
+        If you calculate the class average from the 76 who showed up, is that a
+        fair estimate of how the whole class of 100 would have done?
+        It depends entirely on <em>why</em> those 24 weren't there.
+        If they were kept home by 24 unrelated colds and stomach bugs, there's
+        no reason to think they'd have scored any differently, so the average
+        from the 76 is a perfectly good stand-in for all 100.
+        But if most of the 24 stayed home because they hadn't done the reading
+        and didn't want to sit the exam, the 76 who showed up are, on average,
+        the more prepared half of the class.
+        Their average isn't a fair estimate of everyone anymore.
+        It's an estimate of the students who choose to turn up when they're
+        ready.
+      </p>
+
+      <p>
+        The same question applies to the 428 people missing a year-one viral
+        load.
+        Working with just the 1,300 who were tested is only safe if <em>why</em>
+        someone went untested has nothing to do with whether their treatment was
+        working.
+        In this dataset, it turns out that isn't the case.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-vl-why">
+      <title>Ah, but why is it missing?</title>
+
+      <p>
+        The extended investigation gave the missing results a reason, and the
+        reasons were not evenly spread.
+        In year one, of the 406 participants who were still alive and missing a
+        test, 149 (36.7%) were missing because a clinician misread the
+        monitoring schedule, ordering the next test 12 months after the
+        <em>last</em> viral load rather than 12 months after treatment started.
+        209 (51.5%) had missed every clinic appointment during the testing
+        window and couldn't be found at all.
+        42 (10.3%) had no documented reason.
+        And 6 (1.5%) had a test ordered by a clinician, with no record that a
+        sample was ever collected.
+      </p>
+
+      <p>
+        Four reasons, and as we'll see, each one changes what the missing data
+        is quietly telling you.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-vl-mcar">
+      <title>Some people are missing for no reason at all</title>
+
+      <p>
+        There's 6 participants in year one, and 6 again in year two, whose
+        clinician ordered a viral load test, and where a sample was, apparently,
+        simply never collected.
+        No record of a patient refusal.
+        No record of a clinical decision.
+        Just a test that should have happened, and didn't, for reasons that look
+        like nothing more than an administrative slip.
+      </p>
+
+      <p>
+        This is the closest thing in the dataset to missingness that has nothing
+        to do with the patient at all.
+        It's the "kept home by an unrelated cold" case from our exam: whatever
+        happened to these six people, it wasn't connected to whether their
+        treatment was working.
+        Losing these six records doesn't quietly shift your results in any
+        particular direction.
+        There's no reason to think they'd have looked any different from the
+        patients who were tested, so leaving them out costs you six data points,
+        and nothing else.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-vl-mar">
+      <title>Some people are missing because of who they are</title>
+
+      <p>
+        Two other characteristics also predicted missingness, but in a different
+        way.
+        Participants under 24 had more than double the risk of a missed viral
+        load compared to those over 44, and participants at rural clinics had a
+        higher risk than those at urban clinics.
+        Neither of these is a measurement of how sick someone is.
+        They're just facts about the patient that happen to be recorded already,
+        in every participant's file, tested or not.
+      </p>
+
+      <p>
+        That difference matters.
+        Can we assume that younger and older patients would show the same viral
+        suppression results, if we could see everyone's?
+        Not necessarily; the paper suggests younger patients are more mobile,
+        and more likely to fall out of care for reasons that have nothing to do
+        with how their treatment is going.
+        Can we assume rural and urban patients would look the same?
+        Again, probably not exactly, since rural clinics face harder equipment
+        access and longer sample transport.
+        But because age and clinic location are known for every single
+        participant, missing or not, they at least give you something to work
+        with.
+        You can compare rural patients to rural patients, and under-24s to
+        under-24s, instead of guessing at the group as a whole.
+        A gap you can explain using information you already have!
+        But, assuming these were
+      </p>
+
+      <p>
+        That difference matters.
+        Unlike the six lost samples, we can't just assume these absences were
+        unrelated to anything, the way we could with an unlucky cold.
+        Think back to the exam: imagine the 24 absent students weren't a random
+        slice of the class, but were disproportionately the students who come to
+        school from a further, poorer part of town, and they didn't make it in
+        that day.
+        Averaging just the students who made it in would quietly overrepresent
+        those who live closer, and you'd have no way to know it, unless you'd
+        also recorded where each student lived.
+      </p>
+
+      <p>
+        That's the difference here.
+        Age and clinic location aren't a guess.
+        They're recorded for every single participant, tested or not.
+        So instead of assuming the untested under-24s would have looked like the
+        tested over-44s, or that untested rural patients would have looked like
+        tested urban ones, we can do something more careful: compare like with
+        like.
+        Look at suppression rates among tested under-24s, and treat that as your
+        best estimate for untested under-24s, rather than borrowing an estimate
+        from a different age group entirely.
+        A gap you can explain using information you already have is a very
+        different problem from a gap you can only explain using the very thing
+        you're trying to measure, which is exactly the case we turn to next.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-vl-mnar">
+      <title>And some people are missing because they're sicker</title>
+
+      <p>
+        The study's analysis found that participants at the most advanced stage
+        of HIV disease (WHO clinical stage 4), had more than twice the risk of
+        missing their year-two viral load compared to those at stage 1.
+        The research team also learned something that never made it into any
+        official record at all: some clinicians told them, when asked directly,
+        that they had deliberately avoided sending viral load tests for patients
+        they suspected were already failing treatment, because they already
+        knew, or believed, the result would come back high.
+      </p>
+
+      <p>
+        This is the most dangerous kind of missing data there is, because the
+        reason for the gap is tangled up with the very thing you're trying to
+        measure.
+        Go back to the exam one last time.
+        This is the student who stayed home because they hadn't done the reading
+        and didn't want to sit a test they knew they'd fail.
+        Their absence isn't unrelated to their score, like the cold, and it
+        isn't something you could correct for with a note about which bus they
+        take, like the traffic.
+        Their absence <em>is</em> their score, in the sense that not showing up
+        is itself evidence of how unprepared they were.
+      </p>
+
+      <p>
+        The same is true here.
+        The patients missing from the "viral load" column aren't a random slice
+        of everyone, and they aren't a slice you can identify from something
+        else in their file, the way you could identify an under-24 or a rural
+        patient.
+        They're disproportionately the patients doing worst, and the very fact
+        of their disease progressing is bound up with why they weren't tested.
+        If you calculate what fraction of tested patients are virally suppressed
+        and treat that as the answer for everyone, you'll come out too
+        optimistic, because the sickest people were the ones most likely never
+        to be tested in the first place.
+        There's no group to compare like with like here, the way there was for
+        age or clinic location.
+        The information you'd need to correct for the gap is the same
+        information that's missing.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-vl-lesson">
+      <title>Missingness is not one problem</title>
+
+      <p>
+        Put these different reasons side by side, and you can see why treating
+        "24.4% missing" as a single fact would have been a mistake.
+        Lost to follow-up, which accounts for over half of all missing cases,
+        could mean a death that was never recorded, a self-transfer to another
+        clinic, or a patient who is very much alive and simply out of care.
+        Clinician misinterpretation of the guidelines, more than a third,
+        reflects a scheduling error, unrelated to the patient's health at all.
+        Advanced disease stage reflects the sickest patients disappearing from
+        the very data used to judge how well treatment is working.
+        And the handful of lost samples reflect nothing more than bad luck.
+      </p>
+
+      <p>
+        Adhiambo et al.
+        (2025) are explicit that this changes what the topline numbers can be
+        trusted to say.
+        Missed viral load monitoring, they write,
+        <q>remains high, primarily due to loss to follow-up, and may
+        substantially alter suppression estimates.</q>
+        Once the team understood that the missing data wasn't random, they
+        stopped relying on the case database for routine reporting and used
+        laboratory data for day-to-day reports instead.
+      </p>
+
+      <p>
+        That's the habit this chapter is trying to build.
+        A missing value is never just an empty cell.
+        Before you decide whether to drop it, fill it in, or flag it and move
+        on, you have to ask why it's empty.
+        Sometimes that question has a simple answer, and you can safely ignore
+        the gap.
+        Sometimes it has an answer tied to information you already have
+        elsewhere, and you can work around it.
+        And sometimes, as with the sickest patients in this study, the answer is
+        tied to the exact thing you were trying to measure, and ignoring it
+        could seriously bias your study.
+      </p>
+
+      <p>
+        <term>Source:</term> Adhiambo, H.F., Lewis-Kulzer, J., Nyagesoa, E.,
+        Gimbel, S., Akama, E., Mangale, D., Montonya, L., Eshun-Wilson, I.,
+        Iguna, S., Nyandieka, E., Bukusi, E., Abuogi, L., Odeny, T., Petersen,
+        M.L.
+        and Geng, E.H.
+        (2025).
+        <q>Examining and classifying reasons for missing viral loads among
+        adults living with HIV: An extended outcome investigation and
+        ascertainment approach in Western Kenya.</q>
+        <em>PLOS Global Public Health</em>, 5(5), e0004038.
+      </p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-ch8-stack">
+    <title>STACK question</title>
+
+    <p>
+      TODO: add STACK question
+    </p>
   </section>
   <!-- ================================================================= -->
   <!--  SECTION 3: applied to the flamingo data                          -->
@@ -584,71 +594,415 @@
     </subsection>
   </section>
   <!-- ================================================================= -->
-  <!--  OBJECTIVES                                                       -->
-  <!-- ================================================================= -->
-  <objectives xml:id="objectives-handling-missing-values">
-    <title>By the end of this topic you will be able to</title>
-
-    <ul>
-      <li>
-        <p>
-          Explain why the reason a value is missing determines what you may
-          safely do about it.
-        </p>
-      </li>
-
-      <li>
-        <p>
-          Distinguish MCAR, MAR, and MNAR, and identify which applies to a given
-          case.
-        </p>
-      </li>
-
-      <li>
-        <p>
-          Explain what <c>na.rm = TRUE</c> and <c>complete.cases()</c> actually
-          do, and what they do not do.
-        </p>
-      </li>
-
-      <li>
-        <p>
-          Recognise when imputation is a reasonable tool and when it disguises
-          rather than fixes a bias.
-        </p>
-      </li>
-    </ul>
-  </objectives>
-  <!-- ================================================================= -->
   <!--  EXERCISES                                                        -->
   <!-- ================================================================= -->
   <exercises xml:id="exercises-handling-missing-values">
     <title>Exercises</title>
 
-    <exercise xml:id="ex-missing-wald-recap">
-      <statement>
+    <exercise xml:id="ex-wald-survivorship">
+      <title>The Bombers That Didn't Come Back</title>
+
+      <introduction>
         <p>
-          In your own words, explain why deleting the aircraft with the heaviest
-          hypothetical engine damage <mdash/> if the SRG had somehow had partial
-          records for a few of them <mdash/> would still not have solved Wald's
-          problem.
-          What, specifically, does MNAR data require that listwise deletion
-          cannot provide?
+          During the Second World War, the US military examined bombers
+          returning from missions over Germany and recorded where each one had
+          been hit.
+          The damage was not evenly spread.
+          It clustered heavily on the wings and fuselage, far more than on the
+          engines.
+          The obvious recommendation followed immediately: reinforce the wings
+          and fuselage, since that is clearly where the bullets go.
         </p>
-      </statement>
+
+        <p>
+          The mathematician Abraham Wald, working with a team the US military
+          had assembled to bring statistics to problems exactly like this one,
+          objected.
+          Not because the damage counts were wrong.
+          They were almost certainly accurate.
+          His objection was about which planes had been counted at all.
+        </p>
+
+        <p>
+          Every bomber in that dataset had survived its mission and made it
+          home.
+          A bomber hit badly enough in the engine did not return to be
+          inspected, photographed, and added to the tally.
+        </p>
+      </introduction>
+
+      <task xml:id="ex-wald-a">
+        <statement>
+          <p>
+            Whose damage is missing from this dataset, and why?
+            Think about what has to be true of a bomber for it to end up
+            recorded at all.
+          </p>
+        </statement>
+
+        <solution>
+          <p>
+            The planes missing from the dataset are the ones that were shot down
+            or damaged badly enough that they never made it back to base.
+            A plane only gets inspected and added to the tally if it survives
+            the mission and lands, so the dataset only ever contains information
+            about "damage a plane can survive," never "damage that brings a
+            plane down." Whether a given plane appears in the data at all
+            depends directly on how badly it was hit, and where.
+          </p>
+        </solution>
+      </task>
+
+      <task xml:id="ex-wald-b">
+        <statement>
+          <p>
+            The engines show very little damage in the data.
+            Give two different explanations for that pattern, one where the
+            engines really were rarely hit, and one where they were hit just as
+            often as anywhere else.
+            What would have to be true of the missing planes for each
+            explanation to be correct?
+          </p>
+        </statement>
+
+        <solution>
+          <p>
+            <term>Explanation one: engines really were rarely hit.</term> This
+            would be true if enemy fire, for whatever reason, tended to miss the
+            engines and land on the wings and fuselage instead, perhaps because
+            of the plane's shape, flight path, or the positioning of gunners.
+            Under this explanation, the missing planes (the ones that didn't
+            come back) would show roughly the same pattern as the surviving
+            planes: mostly wing and fuselage hits, occasionally an engine hit.
+          </p>
+
+          <p>
+            <term>Explanation two: engines were hit just as often, but rarely
+      survived.</term>
+            This would be true if hits were spread fairly evenly across the
+            whole aircraft, but a hit to the engine was usually fatal to the
+            mission, while a hit to the wing or fuselage usually wasn't.
+            Under this explanation, the missing planes would show a very
+            different pattern from the surviving planes: heavily concentrated on
+            the engines, which is exactly why none of them are in the data to
+            show it.
+          </p>
+
+          <p>
+            The dataset alone can't distinguish between these two explanations,
+            because it only contains the survivors either way.
+            Wald's contribution was recognising that the second explanation was
+            far more plausible on engineering grounds, and building a method
+            that assumed it.
+          </p>
+        </solution>
+      </task>
+
+      <task xml:id="ex-wald-c">
+        <statement>
+          <p>
+            Suppose you simply excluded any plane you had no data for, in this
+            case, this is every plane that never returned, and analysed only the
+            bombers that came back.
+            Would this be safe?
+            Compare this to a case where a few data logs were lost to a filing
+            error unrelated to how damaged the plane was.
+            Why does one gap sink the analysis and the other doesn't?
+          </p>
+        </statement>
+
+        <solution>
+          <p>
+            It would not be safe, and it's already exactly what happened, since
+            the data was never gathered on the planes that didn't return in the
+            first place.
+            The problem is that whether a plane is missing is tied directly to
+            how much damage it took, and specifically where.
+            Missing planes aren't a random subset of all planes.
+            They're the worst-damaged ones, concentrated in one part of the
+            aircraft.
+            Removing them (or, as happened, never having them) removes exactly
+            the evidence you'd need to see the true pattern.
+          </p>
+
+          <p>
+            Compare that to a handful of paperwork logs lost in a filing error.
+            If which logs get lost has nothing to do with where the plane was
+            hit, some records for lightly-damaged planes and some for
+            heavily-damaged planes will disappear at roughly the same rate.
+            The planes you can still see remain a fair picture of all planes,
+            just a slightly smaller one.
+            One kind of gap changes what conclusion you'd draw.
+            The other just costs you a bit of precision.
+          </p>
+        </solution>
+      </task>
+
+      <task xml:id="ex-wald-d">
+        <statement>
+          <p>
+            Wald's actual recommendation was to reinforce the sections that were
+            <em>least</em> represented in the damage data, not the most.
+            Using your answer to <xref ref="ex-wald-a"/>, explain why that's the
+            opposite conclusion from the obvious one, and why it's the correct
+            one.
+          </p>
+        </statement>
+
+        <solution>
+          <p>
+            The obvious recommendation treats heavy damage in the data as a sign
+            of a weak spot: "we see a lot of wing damage, so wings must be
+            vulnerable, reinforce them." But because the data only contains
+            survivors, heavy visible damage to a section is actually evidence
+            that the section can absorb a hit and keep flying.
+            It's a strength, not a weakness.
+          </p>
+
+          <p>
+            A section that's barely damaged in the data, like the engines, isn't
+            necessarily a section that rarely gets hit.
+            Given that hits are spread fairly evenly over the whole airframe,
+            its absence from the data is far better explained by planes hit
+            there not surviving to be counted.
+            So the section with the least visible damage is the one hiding the
+            planes you never got to see, which is exactly the section that most
+            needs reinforcing.
+          </p>
+        </solution>
+      </task>
+
+      <task xml:id="ex-wald-e">
+        <statement>
+          <p>
+            Could you fix this problem by simply gathering more data, for
+            example, inspecting even more returning bombers?
+            Why or why not?
+            What kind of missing data can be fixed by collecting more of the
+            same kind of records, and what kind can't?
+          </p>
+        </statement>
+
+        <solution>
+          <p>
+            No.
+            Inspecting more returning bombers only gives you more survivors, and
+            survivors are exactly the group that's already overrepresented.
+            No matter how many more of them you inspect, you'll never see the
+            damage pattern on a plane that didn't make it back, because those
+            planes are permanently absent from the pool you're sampling from.
+            More data of the same kind just makes you more confident in the
+            wrong picture.
+          </p>
+
+          <p>
+            This is the key difference from the filing-error case in
+            <xref ref="ex-wald-c"/>.
+            If your gap is caused by something unrelated to the thing you're
+            measuring, like a lost log, collecting more records genuinely helps,
+            because the new records aren't systematically excluding a whole
+            category of outcome.
+            But if the gap exists <em>because</em> of the thing you're
+            measuring, like a plane not surviving because of where it was hit,
+            no amount of additional data collected the same way will ever
+            recover it.
+            You need a different source of information entirely (in Wald's case,
+            the logic of the missingness itself) rather than more of what you
+            already have.
+          </p>
+        </solution>
+      </task>
     </exercise>
 
-    <exercise xml:id="ex-missing-classify-flamingo">
-      <statement>
+    <exercise xml:id="ex-challenger-missing">
+      <title>The Launches That Weren't on the Chart</title>
+
+      <introduction>
         <p>
-          <xref ref="ss-flamingo-mechanism"/> gives three different possible
-          mechanisms for the missing <c>body_mass_g</c> values, corresponding to
-          MCAR, MAR, and MNAR.
-          For each mechanism, describe one piece of additional information,
-          beyond what <c>kenya_flamingos.csv</c> already contains, that would
-          let you tell which mechanism actually applies.
+          In <xref ref="ex-challenger"/> we looked at the night before the
+          Challenger launch in January 1986. Engineers at Morton Thiokol, the
+          company that built the rocket boosters, argued the launch should be
+          delayed because the O-ring seals could fail in the cold. NASA went
+          ahead, and all seven crew members were killed.
         </p>
-      </statement>
+
+        <p>
+          Edward Tufte's Challenger graph is a famous case study in data
+          visualisation. It shows how a scatter plot of O-ring damage against
+          launch temperature could have made the dangers of the launch really
+          clear. In his book <em>Visual Explanations</em> (1997), Tufte argued
+          that the disaster was partly a failure of data communication: the
+          engineers had the evidence, but it wasn't shown in a way that let
+          anyone see the pattern.
+        </p>
+
+        <p>
+          Tufte's argument, and our exercise, focused on how the data was shown. But there's
+          another problem with the charts the engineers used, and it's the same
+          kind of problem as Wald's bombers. When they looked at whether
+          temperature mattered, they only included launches where O-ring damage
+          had been found. The launches with no damage at all weren't there.
+        </p>
+
+        <p>
+          We use the same <c>orings</c> data from the <c>DAAG</c> package.
+          Each row is one launch before Challenger, <c>Temperature</c> is the
+          launch temperature in degrees Fahrenheit, and <c>Total</c> is the
+          number of O-rings showing damage.
+        </p>
+
+        <program language="r">
+          <code>
+            library(DAAG)
+            library(dplyr)
+            library(ggplot2)
+          </code>
+        </program>
+      </introduction>
+
+      <task xml:id="ex-challenger-missing-a">
+        <statement>
+          <p>
+            Filter <c>orings</c> down to the launches where <c>Total &gt; 0</c>,
+            which is what the engineers' charts showed. How many launches are
+            in the full data, and how many are left after filtering?
+          </p>
+        </statement>
+
+        <solution>
+          <program language="r">
+            <code>
+              orings_damaged &lt;- orings %&gt;%
+                filter(Total &gt; 0)
+
+              nrow(orings)
+              nrow(orings_damaged)
+            </code>
+          </program>
+          <p>
+            Most of the launches disappear. Only the minority with some damage
+            are left, so any chart built from <c>orings_damaged</c> is
+            describing a much smaller, and very particular, group of launches.
+            This is exactly why we say to always report the <m>n</m>
+            (<xref ref="remark-report-n-ch8"/>).
+          </p>
+        </solution>
+      </task>
+
+      <task xml:id="ex-challenger-missing-b">
+        <statement>
+          <p>
+            Plot <c>Temperature</c> against <c>Total</c> twice: once for all
+            launches, and once for the damaged launches only. Add the forecast
+            temperature for the Challenger launch (26 to 29°F) as a shaded
+            region, as you did in <xref ref="ex-challenger-b"/>. How does the
+            relationship between temperature and damage change when the
+            zero-damage launches are left out?
+          </p>
+        </statement>
+
+        <solution>
+          <program language="r">
+            <code>
+              ggplot(orings_damaged, aes(x = Temperature, y = Total)) +
+                geom_point() +
+                xlim(25, 85) +
+                ylim(0, 6) +
+                annotate("rect",
+                         xmin = 26, xmax = 29,
+                         ymin = 0,  ymax = 6,
+                         alpha = 0.3, fill = "red") +
+                annotate("text",
+                         x = 33, y = 3,
+                         label = "Forecast\ntemperature\n26 to 29°F",
+                         hjust = 0) +
+                labs(x = "Temperature (°F)",
+                     y = "Total O-ring damage",
+                     title = "O-ring damage by launch temperature",
+                     subtitle = "Launches with damage only: zero-damage launches excluded") +
+                theme_bw()
+            </code>
+          </program>
+          <p>
+            For the full data, swap <c>orings_damaged</c> for <c>orings</c>
+            and change the subtitle.
+          </p>
+          <p>
+            With every launch included, the pattern is clear: the cold launches
+            all had damage, and nearly all the damage-free launches happened at
+            warmer temperatures. Take the zero-damage launches away and that
+            pattern really fades. What's left is damage scattered across a
+            range of temperatures, and it looks like damage can happen whether
+            it's cold or warm. The launches that were left out were the ones
+            that showed warm launches tend to go fine, and that was the
+            evidence that cold was the problem.
+          </p>
+        </solution>
+      </task>
+
+      <task xml:id="ex-challenger-missing-c">
+        <statement>
+          <p>
+            What decided whether a launch ended up on the chart? Were the
+            launches that got left out just a random handful, or was there
+            something about them that made them go missing? How does that
+            compare to Wald's bombers?
+          </p>
+        </statement>
+
+        <solution>
+          <p>
+            It wasn't random at all. Whether a launch was included depended
+            on its value of <c>Total</c>: launches with zero damage were
+            dropped, and launches with some damage were kept. So the launches
+            went missing because of the very thing we were trying to measure.
+            That's the same structure as the bombers, where whether a plane was
+            in the data depended on how badly it had been hit. And just like
+            the bombers, it means the data that's left gives us a distorted
+            picture, not just a smaller one.
+          </p>
+        </solution>
+      </task>
+
+      <task xml:id="ex-challenger-missing-d">
+        <statement>
+          <p>
+            In <xref ref="ex-wald-e"/> we saw that no amount of extra data
+            collected the same way could fix Wald's problem. Is the Challenger
+            case the same? What would it have taken to fix it?
+          </p>
+        </statement>
+
+        <solution>
+          <p>
+            No, and this is what makes the Challenger case so hard to look at.
+            Wald's missing planes were at the bottom of the sea, and nobody
+            could ever inspect them. The zero-damage launches were never
+            missing from the records. The engineers had that data; it just
+            didn't make it onto the chart. The fix didn't need new data or a
+            clever model of the missingness. It needed someone to ask
+            <q>which launches are we not looking at, and why?</q>
+          </p>
+          <p>
+            Missing data isn't only something that happens to us during data
+            collection. We can also create it ourselves, with a filter or a
+            decision about what's <q>relevant</q>, and it can do just as much
+            damage.
+          </p>
+        </solution>
+      </task>
+
+      <conclusion>
+        <p>
+          <term>Sources:</term> Tufte, E.R. (1997).
+          <em>Visual Explanations: Images and Quantities, Evidence and
+          Narrative.</em> Graphics Press. Data from the <c>DAAG</c> R package.
+          Case study adapted from Helveston, J.P. (2019), George Washington
+          University,
+          <url href="https://p4a.seas.gwu.edu/2019-Fall/challengerExplosion.html"/>,
+          CC BY 4.0.
+        </p>
+      </conclusion>
     </exercise>
 
     <exercise xml:id="ex-missing-imputation-risk">
@@ -660,32 +1014,6 @@
           instead of the original column with <c>na.rm = TRUE</c>.
           Which one changes, which one doesn't, and why does that matter for
           anyone reading a report built on this column?
-        </p>
-      </statement>
-    </exercise>
-
-    <exercise xml:id="ex-clean-crop-recap">
-      <statement>
-        <p>
-          In your own words, explain why filtering the crop data to
-          <c>sold == "yes"</c> before averaging ( ) produced a wrong answer even
-          though the averaging itself was done correctly.
-          Then describe one other variable, in any dataset you have worked with,
-          where <q>missing</q> and <q>zero</q> would mean genuinely different
-          things, and explain what filtering it out would silently assume.
-        </p>
-      </statement>
-    </exercise>
-
-    <exercise xml:id="ex-missing-sex-mechanism">
-      <statement>
-        <p>
-          Propose a plausible MNAR mechanism for the 7 missing <c>sex</c>
-          values, distinct from the one given in
-          <xref ref="ss-flamingo-mechanism"/>.
-          Then propose a plausible MCAR mechanism for the same variable.
-          What would you need to know about how the data was collected to decide
-          between them?
         </p>
       </statement>
     </exercise>
