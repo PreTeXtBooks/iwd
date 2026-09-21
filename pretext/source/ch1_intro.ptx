@@ -565,7 +565,7 @@ ggplot(kenya_flamingos,
       <title>Chapter format</title>
 
       <p>
-        Most chapters follow the same structure.
+        The remaining chapters in this book follow the same structure.
         Each one opens with a case study to introduce the problem, usually a
         real situation where the way the data was handled really mattered.
         Following this is a <term>STACK question</term> to give you a chance to

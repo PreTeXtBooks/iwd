@@ -101,7 +101,7 @@ ggplot(gapminder, aes(x = log_gdpPercap, y = lifeExp)) +
     color = "orange",
     alpha = 0.5
   ) +
-  geom_hline(yintercept = 59.47444, color = "black", linewidth = 1)
+  geom_hline(yintercept = 59.47444, color = "black", linewidth = 1) +
 theme_bw() +
   labs(x = "GDP Per Capita (log)", y = "Life Expectancy")
 
@@ -135,8 +135,8 @@ ggplot(gapminder, aes(x = log_gdpPercap, y = lifeExp)) +
     alpha = 0.5
   ) +
   geom_smooth(se = FALSE, method = "lm", color = "black") +
-  geom_hline(yintercept = 59.47444, color = "black", linewidth = 1)
-theme_bw() +
+  geom_hline(yintercept = 59.47444, color = "black", linewidth = 1) +
+  theme_bw() +
   labs(x = "GDP Per Capita (log)", y = "Life Expectancy")
 
 # give plot in here
@@ -351,3 +351,20 @@ anova(mod4)
 # ● They're a key tool in exploring data to help determine variables that
 # account for variability
 # ● The aim is to reduce the unidentified variability
+
+
+
+#### GRAPHS
+mean_lifeExp <- mean(gapminder$lifeExp)
+
+ggplot(gapminder, aes(x = log_gdpPercap, y = lifeExp)) +
+  geom_segment(aes(xend = log_gdpPercap, yend = mean_lifeExp),
+               colour = "orange", alpha = 0.5) +
+  geom_point(colour = "#636363") +
+  geom_hline(yintercept = mean_lifeExp,
+             colour = "black", linewidth = 1) +
+  labs(title = "Total sum of squares",
+       subtitle = "Orange: distance from each point to the overall mean",
+       x = "Log GDP per capita",
+       y = "Life expectancy (years)") +
+  theme_bw()
