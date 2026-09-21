@@ -12,8 +12,7 @@
 <!--  The R section (sec-mics-multilevel) uses the Kenya MICS files    -->
 <!--  (hh, hl, wm, ch), linked by HID, to show linking, orphan records, -->
 <!--  level mapping, and what goes wrong when levels are ignored.      -->
-<!--  Outstanding: kidney stone numbers/graphs, the STACK question,    -->
-<!--  and the "Then more here" placeholder in ss-multilevel-structures. -->
+<!--  Outstanding: the STACK question (sec-ch2-stack).                 -->
 <!-- ================================================================= -->
 <chapter xml:id="ch-multilevel-data" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Multilevel Data</title>
@@ -24,9 +23,8 @@
     </p>
 
     <p>
-      We start with a hospital dataset.
-      This dataset records patients, but those patients are admitted to wards,
-      and those wards belong to hospitals.
+      A hospital dataset records patients, but those patients are admitted to
+      wards, and those wards belong to hospitals.
       A school survey collects responses from students, who sit in classrooms,
       in schools, in districts.
       Even the flamingos from <xref ref="ch-intro"/> belong to flocks, living on
@@ -40,12 +38,10 @@
       what you're allowed to conclude.
       Ignore it, and you can end up with results where every calculation is
       right and the conclusion is still wrong.
-      One of the examples in this chapter shows that really dramatically.
-    </p>
-
-    <p>
-      So this chapter is about learning to spot that structure before you start
-      any analysis.
+      This chapter opens with a real case study where exactly that happened,
+      before turning to a household survey from Kenya to show what multilevel
+      data actually looks like in R, and what goes wrong if you don't map out
+      its structure first.
     </p>
   </introduction>
   <!-- ================================================================= -->
@@ -71,7 +67,6 @@
         Across the whole university, 44.3% of men who applied for graduate
         programmes were accepted.
         For women, it was only 34.6%.
-        Same institution, same year.
         The newspapers picked it up, and it really did look like women were
         being treated unfairly.
       </p>
@@ -99,7 +94,7 @@
         But before anyone acted on it, researchers went back to the numbers.
         And instead of just asking <em>what</em> the numbers showed, they asked
         <em>how</em> the admissions decisions were actually made.
-        We love this question, because it's the one that so often gets skipped.
+        We love this question, because it's one that so often gets skipped.
       </p>
     </subsection>
 
@@ -108,16 +103,18 @@
 
       <p>
         At Berkeley, there wasn't one central committee deciding who got in.
-        Each department made its own decisions, with its own standards, its own
-        number of places, and its own level of competition.
+        Each department made its own decisions, with their own standards, number
+        of places, and level of competition.
       </p>
 
       <p>
-        The university-wide figures were correct.
-        They just weren't the whole story.
+        The university-wide figures were correct, but they just weren't the
+        whole story.
+        We can look at it across six departments (and "other").
         So let's take exactly the same data, and this time look at it department
-        by department.
-        Were women still less likely to get in?
+        by department ( <xref ref="fig-berkeley-admissions-by-dept"/> ) What do
+        you think?
+        Would you still conclude that women were less likely to get in?
       </p>
 
       <figure xml:id="fig-berkeley-admissions-by-dept">
@@ -178,10 +175,9 @@
       </figure>
 
       <p>
-        It all comes down to where people applied.
-        On average, women tended to apply to the more competitive departments:
-        the ones with fewer places, where acceptance rates were low for
-        everyone, whatever their sex.
+        It all comes down to which department individuals applied to.
+        On average, women tended to apply to departments with fewer places and
+        lower acceptance rates for everyone, whatever their sex.
         Men were more likely to apply to departments that accepted a higher
         proportion of applicants.
         When you blend all the departments into one set of university-wide
@@ -205,8 +201,8 @@
           the situation was understood.
           Applicants belonged to departments, and departments belonged to a
           university.
-          Squash those layers into one set of averages, and you throw away
-          exactly the context you need to read the numbers properly.
+          Squash those layers into one set of averages, and you throw away the
+          context you need to read the numbers properly.
         </p>
       </insight>
     </subsection>
@@ -216,7 +212,8 @@
 
       <p>
         This pattern has a name: <term>Simpson's paradox</term>
-        <idx><h>Simpson's paradox</h></idx>.
+        <idx><h>Simpson's paradox</h></idx>, illustrated in
+        <xref ref="fig-simpsons-paradox"/>.
         It's when a trend shows up in combined data, but reverses or disappears
         once you split the data into its natural groups.
         It's one of the most famous cautionary tales in statistics, and for good
@@ -235,21 +232,9 @@
       <p>
         The good news is that avoiding it doesn't need anything fancy.
         It starts with recognising how the world is actually organised, and
-        keeping that organisation in your analysis, even when a single table of
+        keeping that organisation in your analysis, even if a single table of
         averages would be much easier to report.
       </p>
-
-      <p>
-        <term>Source:</term> Bickel, P.J., Hammel, E.A.
-        and O'Connell, J.W.
-        (1975).
-        <q>Sex Bias in Graduate Admissions: Data from Berkeley.</q>
-        <em>Science</em>, 187(4175), pp.398 <ndash/> 404.
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-multilevel-structures">
-      <title>Multilevel Structures</title>
 
       <p>
         Once you know what to look for, you'll see multilevel structures
@@ -265,7 +250,8 @@
 
           <li>
             <p>
-              Repeated measurements (Level 1) within individuals (Level 2).
+              Farmers (Level 1) manage plots (Level 2), which belong to a
+              cooperative or region (Level 3).
             </p>
           </li>
 
@@ -278,17 +264,24 @@
 
           <li>
             <p>
-              Employees within teams within organisations.
+              Employees (Level 1) within teams (Level 2) within organisations
+              (Level 3).
             </p>
           </li>
 
           <li>
             <p>
-              Patients within wards within hospitals.
+              Patients (Level 1) within wards (Level 2) within hospitals (Level
+              3).
             </p>
           </li>
         </ul>
-        Then more here.
+        In each of these, there's more than one <term>level</term> you can
+        honestly describe the data at: the individual level (a pupil, a patient,
+        a plot, a person), and one or more group levels above it (a school, a
+        clinic, a cooperative, a cluster).
+        Calculating a number at the wrong level, or collapsing a group level
+        away completely, can cause misleading results.
       </p>
     </subsection>
 
@@ -296,7 +289,7 @@
       <title>Why this matters here</title>
 
       <p>
-        This is a story from 1970s America, so why are we telling it here?
+        This is a story from 1970s America, so is it relevant here?
         Because the same kinds of questions come up in Kenya today.
         The Kenya Universities and Colleges Central Placement Service (KUCCPS),
         which places students into university programmes, applies approved
@@ -315,14 +308,7 @@
         Berkeley shows exactly why this matters.
         The overall numbers told a very different story from the numbers within
         each department.
-      </p>
-
-      <p>
-        We want to be careful here, though.
-        Not every difference between groups is evidence of unfairness, and not
-        every difference is an aggregation effect either.
-        What Berkeley teaches us is that a pooled statistic is a place to start,
-        and often it shouldn't be where you stop.
+        An overall summary is a good start, but, it shouldn't be where you stop.
       </p>
 
       <p>
@@ -338,6 +324,14 @@
         Service (KUCCPS).
         <q>Frequently Asked Questions.</q>
         <url href="https://kuccps.net/frequently-asked-questions" visual="kuccps.net/frequently-asked-questions"/>.
+      </p>
+
+      <p>
+        <term>Source:</term> Bickel, P.J., Hammel, E.A.
+        and O'Connell, J.W.
+        (1975).
+        <q>Sex Bias in Graduate Admissions: Data from Berkeley.</q>
+        <em>Science</em>, 187(4175), pp.398 <ndash/> 404.
       </p>
     </subsection>
   </section>
@@ -381,7 +375,7 @@
           <li>
             <p>
               Go to
-              <url href="https://mics.unicef.org/surveys" visual="mics.unicef.org/surveys"/>
+              <url href="https://mics.unicef.org/surveys">https://mics.unicef.org/surveys</url>
               and select Kenya.
             </p>
           </li>
@@ -417,13 +411,15 @@
       </p>
 
       <tabular halign="left">
-        <col halign="left" width="20%"/>
-        <col halign="left" width="20%"/>
-        <col halign="right" width="15%"/>
-        <col halign="left" width="45%"/>
+        <col halign="left" width="15%"/>
+        <col halign="left" width="15%"/>
+        <col halign="left" width="35%"/>
+        <col halign="right" width="10%"/>
+        <col halign="left" width="25%"/>
         <row header="yes" bottom="minor">
           <cell>File</cell>
           <cell>Level</cell>
+          <cell>Description</cell>
           <cell>Rows</cell>
           <cell>What each row represents</cell>
         </row>
@@ -431,6 +427,10 @@
         <row>
           <cell><c>hhKE.sav</c></cell>
           <cell>Household</cell>
+          <cell>
+            Information on household, so therefore at household level - e.g.,
+            material of roof, if there's a latrine, etc
+          </cell>
           <cell>8,993</cell>
           <cell>One household</cell>
         </row>
@@ -438,6 +438,15 @@
         <row>
           <cell><c>hlKE.sav</c></cell>
           <cell>Household member</cell>
+          <cell>
+            Information on each household member, therefore, you can have
+            multiple household level variables here, but they would be repeated
+            for all members in a household.
+            Instead that household level information is given in the data set
+            about.
+            This is just information on household members - e.g., age, sex,
+            relationship to household head
+          </cell>
           <cell>46,038</cell>
           <cell>One person living in a surveyed household</cell>
         </row>
@@ -445,6 +454,12 @@
         <row>
           <cell><c>wmKE.sav</c></cell>
           <cell>Woman</cell>
+          <cell>
+            This is also at the household member level, and contains additional
+            information for women aged 15-49 within a household.
+            This is given in it's own data set as a lot of the questions would
+            be irrelevant for the whole household - e.g., fertility status
+          </cell>
           <cell>10,525</cell>
           <cell>One woman aged 15 <ndash/> 49 in a surveyed household</cell>
         </row>
@@ -452,6 +467,13 @@
         <row>
           <cell><c>chKE.sav</c></cell>
           <cell>Child</cell>
+          <cell>
+            This is also at the household member level, and contains additional
+            information for children under 5 within a household.
+            This is given in it's own data set as a lot of the questions would
+            be irrelevant for the whole household - e.g., height, weight, and
+            vaccination status.
+          </cell>
           <cell>7,266</cell>
           <cell>One child under 5 in a surveyed household</cell>
         </row>
@@ -462,8 +484,6 @@
         That makes sense when you think about it: not every household has a
         child under five, not every woman has children, and not every household
         member is a woman aged 15 to 49.
-        Each file covers a different, overlapping group of the people in the
-        survey.
       </p>
 
       <p>
@@ -492,57 +512,55 @@
         #&gt; [1] 7266
         </code>
       </program>
-    </subsection>
 
-    <subsection xml:id="ss-mics-variables">
-      <title>Understanding the variable names</title>
+      <insight xml:id="ss-mics-variables">
+        <title>Understanding the variable names</title>
 
-      <p>
-        Open any of the four files, and the first thing you'll notice is that
-        the column names don't tell you very much.
-        The household file has variables called <c>HI1</c>, <c>HI2</c>,
-        <c>HI3D</c>, <c>HI3M</c>, <c>HI3Y</c>, <c>HI10</c>, <c>HIMEM</c>, and so
-        on.
-        This is really common in large household surveys.
-        The names are short codes that are unambiguous and consistent across
-        countries and survey rounds, but they tell you very little about what's
-        in the variable unless you check the documentation (which is the Word
-        document that comes with the Kenya MICS download).
-      </p>
+        <p>
+          Open any of the four files, and the first thing you'll notice is that
+          the column names don't tell you very much.
+          The household file has variables called <c>HI1</c>, <c>HI2</c>,
+          <c>HI3D</c>, <c>HI3M</c>, <c>HI3Y</c>, <c>HI10</c>, <c>HIMEM</c>, and
+          so on.
+          This is really common in large household surveys.
+          The names are short codes that are unambiguous and consistent across
+          countries and survey rounds, but they tell you very little about
+          what's in the variable.
+        </p>
 
-      <p>
-        There's a good, practical reason for this.
-        MICS surveys run in dozens of countries, often in several languages.
-        A short code like <c>HI1</c> is language-neutral, so it's the same in
-        the French and English versions of a survey.
-        Long descriptive names would change from language to language, and make
-        it much harder to automate comparisons across countries.
-        The price you pay is that the names mean little without the
-        documentation.
-      </p>
+        <p>
+          There's a good, practical reason for this.
+          MICS surveys run in dozens of countries, often in several languages.
+          A short code like <c>HI1</c> is language-neutral, so it's the same in
+          the French and English versions of a survey.
+          Long descriptive names would change from language to language, and
+          make it much harder to automate comparisons across countries.
+          The price you pay is that the names mean little without the
+          documentation.
+        </p>
 
-      <p>
-        Luckily, the Word document that comes with the Kenya MICS download gives
-        you the translation.
-        <c>HI1</c> is the cluster number.
-        <c>HI2</c> is the household number within the cluster.
-        <c>HI3D</c>, <c>HI3M</c>, and <c>HI3Y</c> are the day, month, and year
-        of interview.
-        <c>HI10</c> is the result of the household interview.
-        <c>HIMEM</c> is the number of household members.
-        Keep that document close by, because you'll need it whenever an
-        unfamiliar variable name comes up (and there are a lot of them!).
-      </p>
+        <p>
+          Luckily, the Word document that comes with the Kenya MICS download
+          gives you the translation.
+          <c>HI1</c> is the cluster number.
+          <c>HI2</c> is the household number within the cluster.
+          <c>HI3D</c>, <c>HI3M</c>, and <c>HI3Y</c> are the day, month, and year
+          of interview.
+          <c>HI10</c> is the result of the household interview.
+          <c>HIMEM</c> is the number of household members.
+          Keep that document close by, because you'll need it whenever an
+          unfamiliar variable name comes up (and there are a lot of them!).
+        </p>
 
-      <p>
-        Even better, the <c>haven</c> package keeps the variable labels from the
-        <c>.sav</c> file when you read it into R, so you don't always need to
-        look them up yourself.
-        The labels are attached to each column, and you can see them directly:
-      </p>
+        <p>
+          Even better, the <c>haven</c> package keeps the variable labels from
+          the <c>.sav</c> file when you read it into R, so you don't always need
+          to look them up yourself.
+          The labels are attached to each column, and you can see them directly:
+        </p>
 
-      <program language="r">
-        <code>
+        <program language="r">
+          <code>
       # See the label for one variable
       attr(hh$HI1, "label")
       #&gt; [1] "Cluster number"
@@ -552,312 +570,44 @@
 
       # See labels for all variables at once
       labelled::var_label(hh)
-        </code>
-      </program>
-
-      <p>
-        The screenshot below shows what this looks like if you open the data in
-        the RStudio viewer (<c>View(hh)</c>).
-        The short variable codes are the column headers, and the descriptive
-        labels sit in a second row underneath.
-        In R, the labels are stored as metadata attached to each column instead
-        of as a visible row, and you can get to them whenever you need them.
-      </p>
-
-      <figure xml:id="fig-mics-variable-labels">
-        <caption>
-          Variable names and labels from the Kenya MICS household file, as
-          displayed in a spreadsheet.
-          Short codes like <c>HI1</c> and <c>HIMEM</c> are the actual column
-          names; the descriptive labels below them are stored as metadata and
-          preserved by the <c>haven</c> package when the file is read into R.
-        </caption>
-
-        <image source="images/ch2_mics_variable_labels.png" width="100%">
-          <description>
-            <p>
-              A spreadsheet showing the top two rows of the Kenya MICS household
-              file.
-              The first row contains short variable codes: HI1, HI2, HI3D, HI3M,
-              HI3Y, HI10, HIMEM.
-              The second row contains descriptive labels in orange text: Cluster
-              number, Household number, Day of interview, Month of interview,
-              Year of interview, Result of household interview, Number of
-              household members.
-            </p>
-          </description>
-        </image>
-      </figure>
-    </subsection>
-
-    <subsection xml:id="ss-mics-linking">
-      <title>How the levels connect, and where they don't</title>
-
-      <p>
-        The files are linked by a shared household identifier, <c>HID</c>.
-        In theory, every record in every file should trace back to a household
-        in <c>hhKE.sav</c>.
-        But is that actually true?
-        Let's check.
-      </p>
-
-      <program language="r">
-        <code>
-      # How many unique households appear in each file?
-      n_distinct(hh$HID)
-      #&gt; [1] 8993
-      n_distinct(hl$HID)
-      #&gt; [1] 8989
-      n_distinct(wm$HID)
-      #&gt; [1] 7787
-      n_distinct(ch$HID)
-      #&gt; [1] 4955
-        </code>
-      </program>
-
-      <p>
-        The household file has 8,993 households, but the household members file
-        only has members from 8,989 of them.
-        So there are four households with no members listed at all.
-        Were they empty?
-        Let's find out.
-      </p>
-
-      <program language="r">
-        <code>
-      # Which households are in hh but not in hl?
-      missing_hids &lt;- setdiff(hh$HID, hl$HID)
-      missing_hids
-      #&gt; [1]      18043      76075     314034    1240005
-
-      hh %&gt;%
-        filter(HID %in% missing_hids) %&gt;%
-        select(HID, HI13, HIMEM)
-        </code>
-      </program>
-
-      <p>
-        This is where it gets interesting.
-        Two of these four households have lots of <c>NA</c> values, including
-        for the number of household members ( <c>HIMEM</c> ).
-        That looks like households that were visited, but where the interview
-        wasn't completed.
-        The sex and age of the head of household are coded as 7 and 97, and the
-        data dictionary tells us these are codes for missing values.
-        So it's quite possible that nobody was at home when the survey team
-        visited these households.
-      </p>
-
-      <p>
-        But one of the four, household 314034, has a value for the variable that
-        says there's an eligible child under 5.
-        If there was a child, we'd expect to see them in the household members
-        file.
-        Are they in the children's file instead?
-      </p>
-
-      <program language="r">
-        <code>
-      ch %&gt;% filter(HID %in% missing_hids)
-      #&gt; # A tibble: 0 x ...
-      #&gt; # ... with ... variables
-        </code>
-      </program>
-
-      <p>
-        No, the child isn't in the children's file either.
-        So we have a real inconsistency: the household record says there should
-        be a child, but there's no record of them anywhere else.
-        Was it a recording error?
-        A missed interview?
-        Something else?
-        Honestly, we can't tell from the data alone.
-      </p>
-
-      <p>
-        The women's file gives us a different puzzle.
-        Household 76075 is one of our four households with no members, but it
-        shows up in the women's file.
-        Twice, in fact, which fits with the household record saying there are
-        two women aged 15 to 49.
-        Household 1240005, also missing from the household members file, has a
-        woman's record too.
-        So we have women in the women's file whose households have no members:
-      </p>
-
-      <program language="r">
-        <code>
-      wm %&gt;% filter(HID %in% missing_hids)
-        </code>
-      </program>
-
-      <p>
-        That doesn't add up.
-        A woman has to be a member of a household, so a woman's record with no
-        matching household member record is a problem with the data.
-        There's no way the survey design could produce it.
-      </p>
-
-      <p>
-        Now let's look in the other direction.
-        Are there women or children whose household ID doesn't appear in the
-        household file at all?
-      </p>
-
-      <program language="r">
-        <code>
-      # Women whose HID does not appear in the household file
-      setdiff(wm$HID, hh$HID)
-      #&gt; [1] ... 183 values ...
-
-      # Children whose HID does not appear in the household file
-      setdiff(ch$HID, hh$HID)
-      #&gt; integer(0)
-        </code>
-      </program>
-
-      <p>
-        There are 183 women whose household ID doesn't match any household in
-        the household file.
-        The children's file, on the other hand, is clean: every child's
-        household ID is in the household file.
-        So the linking problems are much bigger in the women's file than in the
-        children's file.
-      </p>
-
-      <insight xml:id="insight-mics-orphans">
-        <title>Real multilevel data is rarely perfectly linked</title>
+          </code>
+        </program>
 
         <p>
-          In a perfect world, every record at every level of a multilevel
-          dataset would link cleanly to exactly one record at the level above.
-          In practice, this almost never happens.
-          Records go missing.
-          IDs get typed in wrong.
-          Interviews get started and not finished.
-          The four households with no members, the women with no household
-          member records, and the 183 women with unmatched household IDs are all
-          examples of <term>orphan records</term>: records that can't be linked
-          to their parent level.
-          Finding orphan records is a completely normal part of working with
-          multilevel survey data, and it's really worth investigating them, like
-          we did above, instead of just throwing them away.
-          Sometimes an orphan record points to a coding error you can fix.
-          Sometimes it shows a real gap in the data collection.
-          And sometimes, like household 314034, it's an inconsistency you just
-          can't resolve from the data.
+          The screenshot below shows what this looks like if you open the data
+          in the RStudio viewer ( <c>View(hh)</c> ).
+          The short variable codes are the column headers, and the descriptive
+          labels sit in a second row underneath.
+          In R, the labels are stored as metadata attached to each column
+          instead of as a visible row, and you can get to them whenever you need
+          them.
         </p>
+
+        <figure xml:id="fig-mics-variable-labels">
+          <caption>
+            Variable names and labels from the Kenya MICS household file, as
+            displayed in a spreadsheet.
+            Short codes like <c>HI1</c> and <c>HIMEM</c> are the actual column
+            names; the descriptive labels below them are stored as metadata and
+            preserved by the <c>haven</c> package when the file is read into R.
+          </caption>
+
+          <image source="images/ch2_mics_variable_labels.png" width="100%">
+            <description>
+              <p>
+                A spreadsheet showing the top two rows of the Kenya MICS
+                household file.
+                The first row contains short variable codes: HI1, HI2, HI3D,
+                HI3M, HI3Y, HI10, HIMEM.
+                The second row contains descriptive labels in orange text:
+                Cluster number, Household number, Day of interview, Month of
+                interview, Year of interview, Result of household interview,
+                Number of household members.
+              </p>
+            </description>
+          </image>
+        </figure>
       </insight>
-
-      <p>
-        We look at how to do this kind of data cleaning in
-        <xref ref="ch-cleaning-recoding"/>.
-        For now, the important thing is spotting these issues in the first
-        place, and you can only do that once you understand the multilevel
-        structure well enough to know what <q>correctly linked</q> should look
-        like.
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-mics-trace">
-      <title>Tracing one household through all four files</title>
-
-      <p>
-        One of our favourite exercises when meeting a multilevel dataset for the
-        first time is to follow one unit all the way through every level.
-        Pick a household, and find every record that relates to it across all
-        four files.
-        It really helps make the structure concrete.
-      </p>
-
-      <p>
-        To see all four files in action, we need a household that has at least
-        one woman aged 15 to 49 and at least one child under 5.
-        The variables <c>HI12</c> and <c>HI13</c> in the household file give us
-        these counts, so we can take the first household that has both:
-      </p>
-
-      <program language="r">
-        <code>
-      example_hid &lt;- (hh %&gt;%
-        filter(HI12 &gt; 0 &amp; HI13 &gt; 0) %&gt;%
-        pull(HID))[1]
-
-      example_hid
-      #&gt; [1] 2078
-        </code>
-      </program>
-
-      <p>
-        Now let's pull out every record for household 2078 from each file:
-      </p>
-
-      <program language="r">
-        <code>
-      # Household-level record
-      hh %&gt;% filter(HID == example_hid)
-
-      # Everyone in the household
-      hl %&gt;% filter(HID == example_hid)
-      #&gt; # A tibble: 7 x ...
-      # Seven people live in this household.
-
-      # Women aged 15-49 in the household
-      wm %&gt;% filter(HID == example_hid)
-      #&gt; # A tibble: 2 x ...
-      # Two of those seven are women aged 15-49.
-
-      # Children under 5 in the household
-      ch %&gt;% filter(HID == example_hid)
-      #&gt; # A tibble: 1 x ...
-      # One child under 5.
-        </code>
-      </program>
-
-      <p>
-        Household 2078 has seven members.
-        Two of them are women aged 15 to 49, so they each have a record in the
-        women's file.
-        One is a child under 5, who has a record in the children's file.
-        The other four people (maybe older children, men, or elderly relatives)
-        only appear in the household members file, where we can check their ages
-        and sex.
-        Putting the four files together, here's what we know about household
-        2078:
-        <ul>
-          <li>
-            The household record: they live in Central Kenya, and are in the 4th
-            wealth quintile (where 5 is the richest).
-            They have water piped into their house, and a traditional pit
-            latrine.
-          </li>
-
-          <li>
-            The women's records: two women live here, aged 18 and 25.
-            Both have primary-level education.
-            The 25-year-old has given birth, and the 18-year-old hasn't.
-          </li>
-
-          <li>
-            The under-5 record: an 8-month-old girl who has had some
-            vaccinations.
-            The child weighs 7.2 kg and is 66 cm long.
-          </li>
-        </ul>
-      </p>
-
-      <p>
-        Think about what that means for the variables.
-        Household-level variables, like water source, wealth index, or
-        sanitation, apply equally to all seven people in the household.
-        Woman-level variables, like education or reproductive history, only
-        apply to the two women.
-        And child-level variables, like height, weight, or vaccination status,
-        only apply to the one child.
-        So if we want to ask whether this child's nutritional status is related
-        to their mother's education and their household's wealth, we need to
-        link across all three of those levels.
-      </p>
     </subsection>
 
     <subsection xml:id="ss-mics-level-mapping">
@@ -959,6 +709,10 @@
             </p>
           </li>
         </ul>
+        We can take the household members data and find information on the
+        number of members per household (on average).
+        Note that <c>HID</c> is the household identifier, so individuals within
+        the same household would have the same <c>HID</c>.
       </p>
 
       <program language="r">
@@ -976,7 +730,18 @@
         #&gt;   mean_size min_size max_size
         #&gt;       &lt;dbl&gt;    &lt;int&gt;    &lt;int&gt;
         #&gt; 1      5.12        1       23
+        </code>
+      </program>
 
+      <p>
+        One average, there are 5.12 surveyed individuals within a household.
+        Some households have just one, and at least one has 23 members surveyed!
+        Similarly, we can look at the number of children (5 years or younger)
+        per household:
+      </p>
+
+      <program language="r">
+        <code>
         # How many children per household, among households
         # with at least one child?
         ch %&gt;%
@@ -996,38 +761,152 @@
       </program>
 
       <p>
-        No surprises here: household sizes vary a lot, from just one member up
-        to 23.
-        That's typical of household survey data, and it really matters for
-        analysis.
-        A household with eight members contributes more rows to the dataset than
-        a household with two, and if you ignore the nesting, that can distort
-        even simple summaries.
-        Here's an example.
-        Let's calculate the mean number of rooms per household, first using the
-        <c>hh</c> data, and then using the <c>hl</c> data:
+        Most households have just a few children, but there are some with many:
+        3040 households have one child, but two households have six children!
       </p>
+    </subsection>
 
-      <program language="r">
-        <code>
-        mean(hh$SE4, na.rm = TRUE)
-        #&gt; [1] 2.392829
-        mean(hl$SE4, na.rm = TRUE)
-        #&gt; [1] 2.507339
-        </code>
-      </program>
+    <subsection xml:id="ss-mics-linking">
+      <title>How the levels connect, and where they don't</title>
 
-      <p>
-        The answers are different!
-        The mean number of rooms is higher when we calculate it from the
-        individual-level data ( <c>hl</c> ) than from the household-level data (
-        <c>hh</c> ).
-        That's because bigger households appear lots of times in <c>hl</c>, once
-        for every household member, so their information gets repeated across
-        many rows.
-        If we don't account for the multilevel structure, those bigger
-        households pull the mean up.
-      </p>
+      <introduction>
+        <p>
+          The files are linked by a shared household identifier, <c>HID</c>.
+          This allows us to connect information across the different levels of
+          the survey data.
+        </p>
+
+        <program language="r">
+          <code>
+      # How many unique households appear in each file?
+      n_distinct(hh$HID)
+      #&gt; [1] 8993
+      n_distinct(hl$HID)
+      #&gt; [1] 8989
+      n_distinct(wm$HID)
+      #&gt; [1] 7787
+      n_distinct(ch$HID)
+      #&gt; [1] 4955
+          </code>
+        </program>
+
+        <p>
+          At the household level, there are 8993 unique households.
+          This checks out, as we previously saw there are 8993 rows, and we know
+          this should be one household per row.
+          At the household members level, there are slightly fewer unique
+          households (8989), indicating that four households have no members
+          listed (we dig into this in <xref ref="ch-cleaning-recoding"/> ).
+          At the women's level, there are even fewer unique households (7787),
+          indicating that many households did not have any eligible women (women
+          aged 15-49).
+          At the children's level, there are only 4955 unique households,
+          indicating that many households did not have any eligible children
+          (children under 5).
+        </p>
+      </introduction>
+
+      <subsubsection xml:id="ss-mics-trace">
+        <title>Tracing one household through all four files</title>
+
+        <p>
+          A good exercise to help understand a new multilevel dataset for the
+          first time is to follow one unit all the way through every level.
+          Pick a household, and find every record that relates to it across all
+          four files.
+          It really helps make the structure concrete.
+        </p>
+
+        <p>
+          To see all four files in action, we need a household that has at least
+          one woman aged 15 to 49 and at least one child under 5.
+          The variables <c>HI12</c> and <c>HI13</c> in the household file give
+          us these counts, so we can take the first household that has both:
+        </p>
+
+        <program language="r">
+          <code>
+      example_hid &lt;- (hh %&gt;%
+        filter(HI12 &gt; 0 &amp; HI13 &gt; 0) %&gt;%
+        pull(HID))[1]
+
+      example_hid
+      #&gt; [1] 2078
+          </code>
+        </program>
+
+        <p>
+          Now let's pull out every record for household 2078 from each file:
+        </p>
+
+        <program language="r">
+          <code>
+      # Household-level record
+      hh %&gt;% filter(HID == example_hid)
+
+      # Everyone in the household
+      hl %&gt;% filter(HID == example_hid)
+      #&gt; # A tibble: 7 x ...
+      # Seven people live in this household.
+
+      # Women aged 15-49 in the household
+      wm %&gt;% filter(HID == example_hid)
+      #&gt; # A tibble: 2 x ...
+      # Two of those seven are women aged 15-49.
+
+      # Children under 5 in the household
+      ch %&gt;% filter(HID == example_hid)
+      #&gt; # A tibble: 1 x ...
+      # One child under 5.
+          </code>
+        </program>
+
+        <p>
+          Household 2078 has seven members.
+          Two of them are women aged 15 to 49, so they each have a record in the
+          women's file.
+          One is a child under 5, who has a record in the children's file.
+          The other four people (maybe older children, men, or elderly
+          relatives) only appear in the household members file, where we can
+          check their ages and sex.
+          Putting the four files together, here's some of what we know about
+          household 2078:
+          <ul>
+            <li>
+              The household record shows that they live in Central Kenya, and
+              are in the 4th wealth quintile (where 5 is the richest).
+              They have water piped into their house, and a traditional pit
+              latrine.
+            </li>
+
+            <li>
+              The women's records gives that the two 15-49 year old women that
+              live here have primary-level education.
+              The 25-year-old has given birth, and the 18-year-old hasn't.
+            </li>
+
+            <li>
+              The under-5 record gives details of the 25-year-olds child.
+              They have a daughter who weighs 7.2 kg and is 66 cm long.
+              She has had some vaccinations.
+            </li>
+          </ul>
+        </p>
+
+        <p>
+          Think about what that means for the variables.
+          Household-level variables, like water source, wealth index, or
+          sanitation, apply equally to all people in the household.
+          This data is therefore at the household level.
+          Then information on individual household members is given in the
+          household-members file.
+          Women's (15-49) and children's (less than 5 years old) information is
+          still at the household members level.
+          But, these data sets contain extra information related to just women
+          aged 15-49, or children less than or equal to 5 years old,
+          respectively, so warrant their own data set.
+        </p>
+      </subsubsection>
     </subsection>
 
     <subsection xml:id="ss-mics-wrong-level">
@@ -1055,6 +934,38 @@
         that should be wide end up looking narrow.
       </p>
 
+      <insight>
+        <p>
+          For example, a household with eight members contributes more rows to
+          the dataset than a household with two, and if you ignore the nesting,
+          that can distort even simple summaries.
+          Here's an example.
+          Let's calculate the mean number of rooms per household, first using
+          the <c>hh</c> data, and then using the <c>hl</c> data:
+        </p>
+
+        <program language="r">
+          <code>
+        mean(hh$SE4, na.rm = TRUE)
+        #&gt; [1] 2.392829
+        mean(hl$SE4, na.rm = TRUE)
+        #&gt; [1] 2.507339
+          </code>
+        </program>
+
+        <p>
+          The answers are different!
+          The mean number of rooms is higher when we calculate it from the
+          individual-level data ( <c>hl</c> ) than from the household-level data
+          ( <c>hh</c> ).
+          That's because bigger households appear lots of times in <c>hl</c>,
+          once for every household member, so their information gets repeated
+          across many rows.
+          If we don't account for the multilevel structure, those bigger
+          households pull the mean up.
+        </p>
+      </insight>
+
       <p>
         This is the heart of the problem with multilevel structure, and it's
         exactly what multilevel methods are designed to deal with.
@@ -1067,175 +978,11 @@
       </p>
     </subsection>
   </section>
-
-  <section>
-    <title>Preparing Multilevel Data for Analysis</title>
-
-    <p>
-      Before you analyse multilevel data, there are a few steps we'd really
-      recommend:
-      <ul>
-        <li>
-          Identify and check the linking keys: these are the variable(s) that
-          uniquely identify each unit and link the levels together (for example,
-          household ID or cluster ID).
-        </li>
-
-        <li>
-          Check for orphan records: child records with no matching household
-          record, or the other way round.
-          These are often a sign of data entry or merging errors.
-        </li>
-
-        <li>
-          Understand the sampling design: MICS surveys use complex, multi-stage
-          cluster sampling.
-          Your analysis needs to account for this, using survey weights and
-          appropriate software (for example, R’s survey package, or the survey
-          functions in R-Instat).
-        </li>
-
-        <li>
-          Decide on the level of analysis: are you analysing children,
-          households, or clusters?
-          This decides how you need to aggregate or disaggregate your variables.
-        </li>
-      </ul>
-    </p>
-  </section>
-  <!-- ================================================================= -->
-  <!--  SECTION 3: what makes data multilevel                            -->
-  <!-- ================================================================= -->
-  <section xml:id="sec-what-is-multilevel">
-    <title>What Makes Data Multilevel</title>
-
-    <introduction>
-      <p>
-        If you strip away the details, Berkeley and the kidney stones are really
-        the same story.
-        In both, individuals (applicants, patients) belong to groups
-        (departments, stone sizes), and the group shapes both an individual's
-        chances and how common their situation is in the data.
-        Ignore the groups, and a comparison between individuals quietly turns
-        into a comparison between groups, without anything telling you that's
-        happened.
-      </p>
-    </introduction>
-
-    <subsection xml:id="ss-levels-everywhere">
-      <title>Levels are everywhere once you look for them</title>
-
-      <p>
-        And these aren't unusual datasets.
-        Once you start looking for this kind of structure, you'll find it almost
-        everywhere:
-        <ul>
-          <li>
-            <p>
-              Pupils belong to schools, which belong to sub-counties, which
-              belong to counties.
-            </p>
-          </li>
-
-          <li>
-            <p>
-              Patients belong to clinics, which belong to a county health
-              system.
-            </p>
-          </li>
-
-          <li>
-            <p>
-              Farmers manage plots, which belong to a cooperative or a region.
-            </p>
-          </li>
-
-          <li>
-            <p>
-              Survey respondents belong to households, which belong to a sampled
-              cluster.
-            </p>
-          </li>
-        </ul>
-      </p>
-
-      <p>
-        In each of these, there's more than one <term>level</term> you can
-        honestly describe the data at: the individual level (a pupil, a patient,
-        a plot, a person), and one or more group levels above it (a school, a
-        clinic, a cooperative, a cluster).
-        Calculating a number at the wrong level, or collapsing a group level
-        away completely, is exactly the mistake at the heart of both stories in
-        this chapter.
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-multilevel-not-a-trick">
-      <title>Something to check for every time</title>
-
-      <p>
-        It's tempting to think of Simpson's paradox as a rare trap that might
-        catch you out once in your career, if at all.
-        We really don't think that's true, and both stories in this chapter show
-        why.
-        Whenever your data has structure (and most real data does!), that
-        structure is either going to help your analysis or quietly undermine it.
-        You very rarely get to safely ignore it.
-      </p>
-
-      <p>
-        The rest of this book works with data that has exactly this kind of
-        structure.
-        So think of this chapter as where you start building the habit: notice
-        the structure, name it, and check whether it matters, before you trust a
-        single overall number.
-      </p>
-    </subsection>
-  </section>
   <!-- ================================================================= -->
   <!--  EXERCISES                                                        -->
   <!-- ================================================================= -->
   <exercises xml:id="exercises-multilevel-data">
     <title>Exercises</title>
-
-    <exercise xml:id="ex-identify-observational-unit">
-      <title>What is being measured?</title>
-
-      <statement>
-        <p>
-          For each of the datasets below, work out the observational unit (what
-          each row of the data represents), and say whether the data has a
-          multilevel structure.
-          If it does, describe the levels.
-        </p>
-
-        <ol>
-          <li>
-            <p>
-              A dataset from the Kenya Demographic and Health Survey, where each
-              row records the age, education level, and county of residence of
-              one woman interviewed in the survey.
-            </p>
-          </li>
-
-          <li>
-            <p>
-              A dataset of exam results, where each row records the score of one
-              student, along with the name of the school the student attends and
-              the county the school is in.
-            </p>
-          </li>
-
-          <li>
-            <p>
-              A dataset of daily rainfall measurements, where each row records
-              the amount of rainfall at one weather station on one day, along
-              with the station's location and elevation.
-            </p>
-          </li>
-        </ol>
-      </statement>
-    </exercise>
 
     <exercise xml:id="ex-aggregation-consequences">
       <title>What gets lost when you aggregate?</title>
@@ -1271,6 +1018,45 @@
           </li>
         </ol>
       </statement>
+
+      <solution>
+        <p>
+          <ol>
+            <li>
+              <p>
+                They've assumed that every student contributes equally to the
+                county picture, regardless of which school they're in.
+                In other words, they've assumed school membership doesn't
+                matter, and that schools with more students in the dataset
+                shouldn't count for any more than schools with fewer.
+              </p>
+            </li>
+
+            <li>
+              <p>
+                Say one very large, high-performing school in a county has far
+                more students than the other schools combined.
+                Pooling all students together, that one school's scores would
+                dominate the county average, even if most of the county's
+                schools were actually performing poorly.
+                The reported "county average" would really just be describing
+                that one school.
+              </p>
+            </li>
+
+            <li>
+              <p>
+                Work out the average score within each school first, then
+                average those school-level averages (or otherwise account for
+                school size explicitly), rather than pooling every student's
+                score into one calculation.
+                That way, every school gets a fair say in the county figure,
+                regardless of how many students it has.
+              </p>
+            </li>
+          </ol>
+        </p>
+      </solution>
     </exercise>
 
     <exercise xml:id="ex-simpsons-paradox-spot">
@@ -1331,6 +1117,45 @@
           </li>
         </ol>
       </statement>
+
+      <solution>
+        <p>
+          <ol>
+            <li>
+              <p>
+                Survival can rise overall even though it fell in both wards, if
+                the <em>mix</em> of patients across the two wards shifted
+                between 2020 and 2022.
+                If a larger share of patients were treated in General (where
+                survival is much higher) in 2022 than in 2020, and a smaller
+                share in Intensive Care, the overall figure would drift up
+                towards General's rate, even with both wards individually
+                getting slightly worse.
+              </p>
+            </li>
+
+            <li>
+              <p>
+                The hidden variable is which ward each patient was treated in,
+                and specifically how the proportion of patients in each ward
+                changed over time.
+                A pooled survival rate hides that shift completely.
+              </p>
+            </li>
+
+            <li>
+              <p>
+                It's the same structure as Berkeley.
+                A single headline number blends together groups (departments, or
+                wards) that have very different rates and very different sizes.
+                Judging fairness, or improvement, from the pooled number alone
+                misses what's actually happening within each group, and can even
+                point you in the wrong direction.
+              </p>
+            </li>
+          </ol>
+        </p>
+      </solution>
     </exercise>
 
     <exercise xml:id="ex-multilevel-kuccps">
@@ -1349,17 +1174,215 @@
           Simpson's paradox, rather than a real difference?
         </p>
       </statement>
+
+      <solution>
+        <p>
+          You'd want the national rate broken down by the programme (or
+          institution) each person applied to, the same role that department
+          played at Berkeley.
+          Programmes differ hugely in how competitive they are and how many
+          places they offer, so where people applied can matter as much as how
+          they were treated once they got there.
+        </p>
+
+        <p>
+          You'd suspect Simpson's paradox if, within most individual programmes,
+          men and women were placed at roughly similar rates (or women even did
+          better), while women were more concentrated in the more competitive,
+          harder-to-enter programmes overall.
+          That pattern would mean the national gap comes from <em>where</em>
+          women tended to apply, not from unequal treatment within any given
+          programme.
+        </p>
+      </solution>
     </exercise>
 
     <exercise xml:id="ex-multilevel-kidney-recap">
       <statement>
         <p>
-          In your own words, explain why the newer kidney stone procedure looked
-          better overall, but worse within every group defined by stone size.
-          Try to explain <em>which</em> patients were more likely to get which
-          treatment, and go further than saying the numbers <q>reversed</q>.
+          In the 1980s, doctors compared two treatments for kidney stones: open
+          surgery, and a newer, less invasive procedure called percutaneous
+          nephrolithotomy (PCNL) (Charig et al., 1986).
+        </p>
+
+        <p>
+          Looking at all patients together, PCNL looked like the better option:
+          it succeeded 82.6% of the time, compared with 78.0% for open surgery.
+        </p>
+
+        <p>
+          But stone size matters for how difficult a case is to treat, so the
+          researchers also looked separately at patients with small and large
+          stones.
+        </p>
+
+        <p>
+          For small stones, open surgery succeeded 93.1% of the time, compared
+          with 86.7% for PCNL.
+          For large stones, open surgery succeeded 73.0% of the time, compared
+          with 68.8% for PCNL.
+        </p>
+
+        <p>
+          So open surgery was more successful in both groups defined by stone
+          size, but less successful overall.
+        </p>
+
+        <p>
+          Let's work out why.
+        </p>
+
+        <ol>
+          <li>
+            <p>
+              <term>What does the overall comparison suggest?</term>
+            </p>
+
+            <p>
+              If you only looked at the overall success rates, which treatment
+              would appear to be more successful?
+            </p>
+          </li>
+
+          <li>
+            <p>
+              <term>What happens when we take stone size into account?</term>
+            </p>
+
+            <p>
+              Compare the treatments separately for small stones and large
+              stones.
+              Which treatment has the higher success rate in each group?
+            </p>
+          </li>
+
+          <li>
+            <p>
+              <term>So why does open surgery look worse overall?</term>
+            </p>
+
+            <p>
+              The treatments were not used equally for all types of patients.
+              Doctors tended to reserve open surgery for the harder cases.
+              76.7% of patients with large stones received open surgery.
+              Meanwhile, 75.6% of patients with small stones received PCNL.
+            </p>
+
+            <p>
+              What does this tell us about the kinds of patients whose success
+              rates were being combined for each treatment?
+            </p>
+          </li>
+
+          <li>
+            <p>
+              <term>Put the pieces together.</term>
+            </p>
+
+            <p>
+              Open surgery was more successful within both stone-size groups.
+              Why didn't that advantage appear when all patients were combined?
+            </p>
+          </li>
+
+          <li>
+            <p>
+              <term>What is the general lesson?</term>
+            </p>
+
+            <p>
+              Stone size sits above the individual patient, in much the same way
+              that department sat above the individual applicant in the Berkeley
+              example.
+            </p>
+
+            <p>
+              In your own words, explain why it can be misleading to compare
+              treatments using one overall number when the groups receiving the
+              treatments are different.
+            </p>
+          </li>
+        </ol>
+
+        <p>
+          <term>Source:</term> Charig, C.R., Webb, D.R., Payne, S.R.
+          and Wickham, J.E.A.
+          (1986).
+          <q>Comparison of treatment of renal calculi by open surgery,
+          percutaneous nephrolithotomy, and extracorporeal shockwave
+          lithotripsy.</q>
+          <em>British Medical Journal</em>, 292(6524), pp.879 <ndash/> 882.
+        </p>
+
+        <p>
+          <term>Source:</term> Bonovas, S.
+          and Piovani, D.
+          (2023).
+          <q>Simpson's Paradox in Clinical Research: A Cautionary Tale.</q>
+          <em>Journal of Clinical Medicine</em>, 12(4), 1633.
         </p>
       </statement>
+
+      <solution>
+        <p>
+          Here are the solutions to the questions posed in the previous section.
+          <ol>
+            <li>
+              <p>
+                PCNL would appear to be more successful overall, with an 82.6%
+                success rate compared with 78.0% for open surgery.
+              </p>
+            </li>
+
+            <li>
+              <p>
+                Open surgery has the higher success rate in both groups.
+                For small stones, it succeeds in 93.1% of cases compared with
+                86.7% for PCNL.
+                For large stones, it succeeds in 73.0% of cases compared with
+                68.8% for PCNL.
+              </p>
+            </li>
+
+            <li>
+              <p>
+                The open-surgery group contained a much larger proportion of
+                patients with large, harder-to-treat stones.
+                The PCNL group contained a much larger proportion of patients
+                with small, easier-to-treat stones.
+              </p>
+            </li>
+
+            <li>
+              <p>
+                Open surgery was being used more often for difficult cases, so
+                its overall success rate included many more large-stone cases.
+                PCNL was used more often for easier cases, so its overall
+                success rate included many more small-stone cases.
+              </p>
+
+              <p>
+                The overall comparison therefore mixed together differences in
+                treatment and differences in the difficulty of the patients
+                receiving each treatment.
+                The pooled success rates made PCNL look better even though open
+                surgery had the higher success rate within both stone-size
+                groups.
+              </p>
+            </li>
+
+            <li>
+              <p>
+                When an important group variable affects both the outcome and
+                who receives each treatment, combining everyone together can
+                produce a misleading comparison.
+                We need to look at the groups separately before interpreting the
+                overall result.
+              </p>
+            </li>
+          </ol>
+        </p>
+      </solution>
     </exercise>
   </exercises>
 </chapter>
