@@ -5,7 +5,7 @@
 
   <introduction>
     <p>
-      We're starting this chapter, and so the book, with an exercise.
+      We're starting this chapter, and the book, with an exercise.
       That's probably not what you expect from a first chapter, but there's a
       good reason for it.
       We haven't introduced any techniques yet, so you'll be working purely from
@@ -24,8 +24,9 @@
 
     <introduction>
       <p>
-        All the datasets in this book come from the <c>statsdata</c> R package.
-        You install it once:
+        Most of the datasets in this book come from the <c>statsdata</c> R
+        package.
+        You can install it once in R by:
       </p>
 
       <program language="r">
@@ -42,6 +43,7 @@
       <program language="r">
         <code>
     library(statsdata)
+    data(kenya_flamingos)
         </code>
       </program>
 
@@ -65,7 +67,7 @@
       <p>
         If you'd rather use other software, the raw CSV files are available to
         download from the package repository at
-        <url href="https://github.com/PreTeXtBooks/statsdata/tree/main/data-raw" visual="github.com/PreTeXtBooks/statsdata"/>.
+        <url href="https://github.com/PreTeXtBooks/statsdata/tree/main/data-raw">github.com/PreTeXtBooks/statsdata</url>.
       </p>
     </introduction>
 
@@ -73,22 +75,14 @@
       <title>The dataset</title>
 
       <p>
-        Most of the datasets in this book are real.
-        This first one isn't, but it's grounded in something that is: flamingo
-        populations at three lakes in Kenya's Rift Valley, Lake Bogoria, Lake
-        Elementaita, and Lake Nakuru.
+        While most of the datasets in this book are real, this first one is
+        simulated.
+        It is grounded in flamingo populations at three lakes in Kenya's Rift
+        Valley - Lake Bogoria, Lake Elementaita, and Lake Nakuru.
         The dataset <c>kenya_flamingos</c>, available through the
         <c>statsdata</c> R package, has one row per bird, with the columns
         described in <xref ref="table-flamingo-columns"/>.
-        You can access the data in R through the <c>statsdata</c> package:
       </p>
-
-      <program language="r">
-        <code>
-        library(statsdata)
-        data(kenya_flamingos)
-        </code>
-      </program>
 
       <table xml:id="table-flamingo-columns">
         <title>Columns in <c>kenya_flamingos.csv</c></title>
@@ -194,312 +188,278 @@
     <subsection xml:id="what-did-others-find">
       <title>What did others find?</title>
 
-      <introduction>
-        <p>
-          There are lots of different things you might have noticed while
-          exploring the data.
-          Let us know on the Discussion GitHub page what you found.
-          Here are some examples.
-          If you didn't find any of these, that's fine.
-          This book is about how to do all of these explorations.
-        </p>
-      </introduction>
+      <p>
+        You can let us know on the Discussion GitHub page what you found.
+        Here are some examples.
+        If you didn't find any of these, that's fine.
+        This book is about how to do all of these explorations.
+        <ul>
+          <li>
+            <p>
+              There are eight columns and 344 rows in the data.
+            </p>
 
-      <subsubsection>
-        <title>How much data?</title>
-
-        <p>
-          There are eight columns and 344 rows in the data.
-        </p>
-
-        <program language="r">
-          <code>
+            <program language="r">
+              <code>
 data("kenya_flamingos")
 dim(kenya_flamingos)
 View(kenya_flamingos)
-          </code>
-        </program>
-      </subsubsection>
+              </code>
+            </program>
+          </li>
 
-      <subsubsection>
-        <title>What about bill depth?</title>
+          <li>
+            <p>
+              Bill depth ranges from 18.10 mm to 33.90 mm, and there are four
+              missing values.
+            </p>
 
-        <p>
-          Bill depth ranges from 18.10 mm to 33.90 mm, and there are four
-          missing values.
-        </p>
-
-        <program language="r">
-          <code>
+            <program language="r">
+              <code>
 summary(kenya_flamingos$bill_depth_mm)
-          </code>
-        </program>
+              </code>
+            </program>
 
-        <p>
-          A simple summary like this tells us quite a lot: the smallest and
-          largest values, some values in between, the mean, and how many values
-          are missing.
-        </p>
-      </subsubsection>
+            <p>
+              A simple summary like this tells us quite a lot: the smallest and
+              largest values, some values in between, the mean, and how many
+              values are missing.
+            </p>
+          </li>
 
-      <subsubsection>
-        <title>How many of each species?</title>
+          <li>
+            <p>
+              There are two species in the data, Greater Flamingos and Lesser
+              Flamingos, and Lesser Flamingos outnumber Greater Flamingos by a
+              substantial margin.
+            </p>
 
-        <p>
-          There are two species in the data, Greater Flamingos and Lesser
-          Flamingos, and Lesser Flamingos outnumber Greater Flamingos by a
-          substantial margin.
-        </p>
-
-        <program language="r">
-          <code>
+            <program language="r">
+              <code>
 table(kenya_flamingos$species)
-          </code>
-        </program>
-
-        <p>
-          This gives us:
-        </p>
-        <pre>
+              </code>
+            </program>
+            <pre>
 Greater Flamingo  Lesser Flamingo
              66              278
-        </pre>
-        <p>
-          But these counts tell us which birds were measured, not which birds
-          were there.
-          Maybe there just happened to be more Lesser Flamingos around on the
-          day the data was collected.
-        </p>
-      </subsubsection>
+            </pre>
+            <p>
+              These counts tell us which birds were measured, not which birds
+              were there.
+              Maybe there just happened to be more Lesser Flamingos around on
+              the day the data was collected.
+            </p>
+          </li>
 
-      <subsubsection>
-        <title>Comparing body mass between species</title>
+          <li>
+            <p>
+              Greater Flamingos are heavier than Lesser Flamingos, by roughly a
+              factor of two.
+            </p>
 
-        <p>
-          We can also compare the body mass of the two species.
-          One simple way to do that is to work out the average body mass for
-          each one.
-        </p>
-
-        <program language="r">
-          <code>
+            <program language="r">
+              <code>
 library(dplyr)
 
 kenya_flamingos %&gt;%
   group_by(species) %&gt;%
   summarise(mean(body_mass_g, na.rm = TRUE))
-          </code>
-        </program>
-        <pre>
+              </code>
+            </program>
+            <pre>
 # A tibble: 2 x 2
   species           mean(body_mass_g, na.rm = TRUE)
   &lt;chr&gt;                              &lt;dbl&gt;
 1 Greater Flamingo                    3120
 2 Lesser Flamingo                     1689
-        </pre>
-        <p>
-          Greater Flamingos are heavier than Lesser Flamingos, by roughly a
-          factor of two.
-        </p>
+            </pre>
+            <p>
+              This difference is big enough that anything we say about
+              <q>flamingos</q> in general will depend heavily on the mix of
+              species in the data.
+            </p>
+          </li>
 
-        <p>
-          That difference is big enough that anything we say about
-          <q>flamingos</q> in general will depend heavily on the mix of species
-          in the data.
-        </p>
-      </subsubsection>
+          <li>
+            <p>
+              There are 170 females and 167 males in the data, and seven rows
+              with no recorded sex.
+            </p>
 
-      <subsubsection>
-        <title>Sorting by sex</title>
-
-        <p>
-          There are 170 females and 167 males in the data, and seven rows with
-          no recorded sex.
-        </p>
-
-        <program language="r">
-          <code>
+            <program language="r">
+              <code>
 table(kenya_flamingos$sex)
-          </code>
-        </program>
-        <pre>
+              </code>
+            </program>
+            <pre>
 female   male
     170    167
-        </pre>
-        <p>
-          Flamingos are hard to sex from how they look, so this is a plausible
-          limitation of the data collection rather than a mistake.
-          But any comparison between male and female birds will quietly drop
-          those rows unless we deal with the missing values on purpose.
-        </p>
-      </subsubsection>
+            </pre>
+            <p>
+              Flamingos could be hard to sex from how they look, so this is a
+              plausible limitation of the data collection rather than a mistake.
+              But any comparison between male and female birds will quietly drop
+              those rows unless we deal with the missing values on purpose.
+            </p>
+          </li>
 
-      <subsubsection>
-        <title>Counting rows by lake</title>
+          <li>
+            <p>
+              There's 124 measurements from Bogoria, 68 from Elementaita, and
+              152 from Nakuru.
+            </p>
 
-        <p>
-          The three lakes aren't equally represented in the data.
-        </p>
-
-        <program language="r">
-          <code>
+            <program language="r">
+              <code>
 table(kenya_flamingos$lake)
-          </code>
-        </program>
-        <pre>
+              </code>
+            </program>
+            <pre>
 Bogoria Elementaita      Nakuru
     124          68         152
-        </pre>
-        <p>
-          That's 124 measurements from Bogoria, 68 from Elementaita, and 152
-          from Nakuru.
-          This might reflect real differences in the flamingo populations, or
-          differences in how much survey effort went into each lake, or
-          something else entirely.
-        </p>
-      </subsubsection>
+            </pre>
+            <p>
+              This might reflect real differences in the flamingo populations,
+              or differences in how much survey effort went into each lake, or
+              something else entirely.
+            </p>
+          </li>
 
-      <subsubsection>
-        <title>Plotting bill length against body mass</title>
+          <li>
+            <p>
+              As bill length increases, body mass tends to increase as well.
+            </p>
 
-        <p>
-          We can also look at two variables together.
-          For example, what happens to body mass as bill length increases?
-        </p>
-
-        <program language="r">
-          <code>
+            <program language="r">
+              <code>
 plot(kenya_flamingos$bill_length_mm,
      kenya_flamingos$body_mass_g)
-          </code>
-        </program>
+              </code>
+            </program>
 
-        <figure xml:id="fig-ch1-plot1">
-          <caption>Bill length against body mass for Kenyan flamingos.</caption>
-          <image source="images/ch1_plot1.jpeg" width="100%">
-            <description>
-              <p>
-                A scatter plot of bill length against body mass for Kenyan
-                flamingos.
-                There is a positive trend, and two clear groups.
-              </p>
-            </description>
-          </image>
-        </figure>
+            <figure xml:id="fig-ch1-plot1">
+              <caption>
+                Bill length against body mass for Kenyan flamingos.
+              </caption>
 
-        <p>
-          We could make the same plot with <c>ggplot2</c>.
-        </p>
+              <image source="images/ch1_plot1.jpeg" width="100%">
+                <description>
+                  <p>
+                    A scatter plot of bill length against body mass for Kenyan
+                    flamingos.
+                    There is a positive trend, and two clear groups.
+                  </p>
+                </description>
+              </image>
+            </figure>
 
-        <program language="r">
-          <code>
+            <p>
+              We could make the same plot with <c>ggplot2</c>, a plotting tool
+              covered in <xref ref="ch-visualising-multidimensional-data"/>.
+            </p>
+
+            <program language="r">
+              <code>
 library(ggplot2)
 
 ggplot(kenya_flamingos,
        aes(x = bill_length_mm, y = body_mass_g)) +
   geom_point()
-          </code>
-        </program>
+              </code>
+            </program>
 
-        <figure xml:id="fig-ch1-plot2">
-          <caption>
-            Bill length against body mass for Kenyan flamingos using
-            <c>ggplot</c>.
-          </caption>
+            <figure xml:id="fig-ch1-plot2">
+              <caption>
+                Bill length against body mass for Kenyan flamingos using
+                <c>ggplot</c>.
+              </caption>
 
-          <image source="images/ch1_plot2.png" width="100%">
-            <description>
-              <p>
-                A scatter plot of bill length against body mass for Kenyan
-                flamingos.
-                There is a positive trend, and two clear groups.
-              </p>
-            </description>
-          </image>
-        </figure>
+              <image source="images/ch1_plot2.png" width="100%">
+                <description>
+                  <p>
+                    A scatter plot of bill length against body mass for Kenyan
+                    flamingos.
+                    There is a positive trend, and two clear groups.
+                  </p>
+                </description>
+              </image>
+            </figure>
+          </li>
 
-        <p>
-          We might then add species to the plot.
-        </p>
+          <li>
+            <p>
+              Birds with longer bills tend to be heavier.
+              But, also, Greater Flamingos tend to have both a higher body mass
+              and a longer bill than Lesser Flamingos.
+            </p>
 
-        <program language="r">
-          <code>
+            <program language="r">
+              <code>
 ggplot(kenya_flamingos,
        aes(x = bill_length_mm,
            y = body_mass_g,
            colour = species)) +
   geom_point() +
   geom_smooth(method = "lm")
-          </code>
-        </program>
+              </code>
+            </program>
 
-        <figure xml:id="fig-ch1-plot3">
-          <caption>
-            Bill length against body mass for Kenyan flamingos using
-            <c>ggplot</c>, with each group coloured and a line of best fit.
-          </caption>
+            <figure xml:id="fig-ch1-plot3">
+              <caption>
+                Bill length against body mass for Kenyan flamingos using
+                <c>ggplot</c>, with each group coloured and a line of best fit.
+              </caption>
 
-          <image source="images/ch1_plot3.png" width="100%">
-            <description>
-              <p>
-                A scatter plot of bill length against body mass for Kenyan
-                flamingos.
-                There is a positive trend, and two clear groups.
-                Each group is coloured, with a line of best fit for each group.
-              </p>
-            </description>
-          </image>
-        </figure>
+              <image source="images/ch1_plot3.png" width="100%">
+                <description>
+                  <p>
+                    A scatter plot of bill length against body mass for Kenyan
+                    flamingos.
+                    There is a positive trend, and two clear groups.
+                    Each group is coloured, with a line of best fit for each
+                    group.
+                  </p>
+                </description>
+              </image>
+            </figure>
+          </li>
+        </ul>
+      </p>
 
-        <p>
-          There's a clear positive relationship here: birds with longer bills
-          tend to be heavier.
-        </p>
+      <p>
+        You might have spotted things that aren't mentioned here at all.
+        For example:
+        <ul>
+          <li>Do males and females differ in body mass?</li>
+          <li>Does bill length differ between the two species?</li>
+          <li>Are the flamingos at different lakes different sizes?</li>
+          <li>Is there a relationship between bill depth and bill length?</li>
+          <li>Are there any unusually large or small flamingos?</li>
+          <li>
+            Are missing values concentrated in particular variables or groups?
+          </li>
 
-        <p>
-          We can also see that Greater Flamingos tend to have both a higher body
-          mass and a longer bill than Lesser Flamingos.
-        </p>
-      </subsubsection>
+          <li>Does the balance of species differ between the three lakes?</li>
+          <li>
+            Does the relationship between bill length and body mass look the
+            same for both species?
+          </li>
 
-      <subsubsection>
-        <title>And there is much more you could find</title>
+          <li>Can you identify individual observations that look unusual?</li>
+          <li>What questions can't this dataset answer?</li>
+        </ul>
+      </p>
 
-        <p>
-          You might have spotted things that aren't mentioned here at all.
-          For example:
-          <ul>
-            <li>Do males and females differ in body mass?</li>
-            <li>Does bill length differ between the two species?</li>
-            <li>Are the flamingos at different lakes different sizes?</li>
-            <li>Is there a relationship between bill depth and bill length?</li>
-            <li>Are there any unusually large or small flamingos?</li>
-            <li>
-              Are missing values concentrated in particular variables or groups?
-            </li>
+      <p>
+        You don't need to have found any of these in particular.
+        The point of the activity was to explore the data and see what questions
+        you could ask of it.
+      </p>
 
-            <li>Does the balance of species differ between the three lakes?</li>
-            <li>
-              Does the relationship between bill length and body mass look the
-              same for both species?
-            </li>
-
-            <li>Can you identify individual observations that look unusual?</li>
-            <li>What questions can't this dataset answer?</li>
-          </ul>
-        </p>
-
-        <p>
-          You don't need to have found any of these in particular.
-          The point of the activity was to explore the data and see what
-          questions you could ask of it.
-        </p>
-
-        <p>
-          These are just some of the things people noticed when they explored
-          the same data.
-        </p>
-      </subsubsection>
+      <p>
+        These are just some of the things people noticed when they explored the
+        same data.
+      </p>
     </subsection>
 
     <subsection xml:id="ss-what-the-exercise-covered">
@@ -516,8 +476,9 @@ ggplot(kenya_flamingos,
         <xref ref="ch-exploring-data"/>, with more advanced visualisations in
         <xref ref="ch-visualising-multidimensional-data"/>.
         The missing values in the <c>sex</c> column, and the question of what to
-        do about them, are the subject of <xref ref="ch-cleaning-recoding"/> and
-        <xref ref="ch-handling-missing-values"/>.
+        do about them, are the subject of
+        <xref ref="ch-handling-missing-values"/>, with other data cleaning
+        methods covered in <xref ref="ch-cleaning-recoding"/>.
         Comparing species, lakes or years means treating those variables as
         categories, which is what <xref ref="ch-handling-factors"/> is about.
         The bill length and body mass relationship, which holds across the whole
@@ -527,21 +488,6 @@ ggplot(kenya_flamingos,
         is, is the subject of <xref ref="ch-variability"/>, and accounting for
         those differences is the subject of
         <xref ref="ch-accounting-variability"/>.
-        And the question of whether the unequal counts across lakes reflect the
-        population or the survey is a question about what the data can actually
-        answer, which comes up in every chapter of this book.
-      </p>
-
-      <p>
-        None of that needed the techniques introduced in those chapters.
-        What it needed was attention, and a willingness to ask whether a pattern
-        is really what it looks like.
-        The techniques that follow are tools for answering that question.
-        They're not a substitute for asking it.
-        (So, go on, be honest.
-        Did you read ahead?
-        It's not too late to go and explore the data your own way for thirty
-        minutes.)
       </p>
     </subsection>
   </section>
@@ -551,7 +497,7 @@ ggplot(kenya_flamingos,
 
     <introduction>
       <p>
-        This book is an introduction to statistical computing with R.
+        This book is an introduction to working with data.
         It's about the work that has to happen before any statistical result can
         be trusted: getting data into a usable shape, understanding how it was
         collected, deciding what to do about the parts that are missing or
@@ -574,8 +520,6 @@ ggplot(kenya_flamingos,
         beyond arithmetic.
         What we do assume is that you're willing to run code, look at the
         output, and ask whether it means what it looks like it means.
-        If you have used R before, the early chapters are still worth reading
-        for the way they treat the data rather than the syntax.
       </p>
     </introduction>
 
@@ -583,46 +527,37 @@ ggplot(kenya_flamingos,
       <title>Structure</title>
 
       <p>
-        The chapters are ordered so that each one deals with a problem raised by
-        the one before it.
-      </p>
-
-      <p>
         <xref ref="ch-multilevel-data"/> begins with data that has structure:
         individuals belonging to groups, where the group shapes both an
         individual's outcome and how common that individual is in the data.
-        This is where the most persuasive wrong conclusions come from, so it's
-        worth meeting early.
-        <xref ref="ch-exploring-data"/> covers the first thing to do with any
-        dataset: summarising it, tabulating it, and plotting it well enough to
-        know what you're holding.
-        <xref ref="ch-cleaning-recoding"/> deals with data that isn't yet ready
-        to be asked questions of: inconsistent categories, implausible values,
-        and entries that were recorded under several different names.
+        <xref ref="ch-exploring-data"/> covers exploring data by summarising,
+        tabulating, and plotting it to know what you're holding.
+        <xref ref="ch-cleaning-recoding"/> deals with data cleaning:
+        inconsistent categories, implausible values, and entries that were
+        recorded under several different names.
       </p>
 
       <p>
         <xref ref="ch-visualising-multidimensional-data"/> takes up the problem
-        of showing several variables at once, where a table holds the answer but
-        can't display it.
+        of visualising multiple columns at once, where a table holds the answer
+        but can't display it.
         <xref ref="ch-data-shapes"/> is about the arrangement of the data
         itself, and how the same information laid out differently makes some
-        questions easy and others impossible.
-        <xref ref="ch-handling-factors"/> covers categorical variables: how R
-        stores them, how their levels are ordered, and how much rests on
-        decisions about which categories exist at all.
+        questions easier to answer and some answers easier to visualise.
+        <xref ref="ch-handling-factors"/> covers factors, including how R stores
+        them, how their levels are ordered, and how much rests on decisions
+        about which categories exist at all.
         <xref ref="ch-handling-missing-values"/> asks why values are missing,
-        and shows that the answer changes what you're entitled to do about them.
+        and shows that the answer changes how to handle them.
       </p>
 
       <p>
         The last two chapters turn from the value of a measurement to its
         spread.
-        <xref ref="ch-variability"/> introduces variability, why it matters at
-        least as much as the average, and how to measure it.
-        <xref ref="ch-accounting-variability"/> then shows how to separate
-        variability that's explained by the structure of the data from
-        variability that isn't.
+        <xref ref="ch-variability"/> introduces variability, why it matters, and
+        how to measure it.
+        <xref ref="ch-accounting-variability"/> then looks at accounting for
+        that variability.
       </p>
     </subsection>
 
@@ -631,18 +566,19 @@ ggplot(kenya_flamingos,
 
       <p>
         Most chapters follow the same structure.
-        Each one opens with an account of a situation where the topic of the
-        chapter mattered in practice, often one where it was handled badly.
-        The chapter then develops the ideas using data, with R code alongside.
-        Exercises come at the end of each chapter.
-      </p>
-
-      <p>
-        Those opening accounts aren't decoration.
-        Statistical techniques are easy to apply and just as easy to misapply,
-        and telling the two apart is usually a matter of judgement rather than
-        method.
-        The accounts are there to build that judgement.
+        Each one opens with a case study to introduce the problem, usually a
+        real situation where the way the data was handled really mattered.
+        Following this is a <term>STACK question</term> to give you a chance to
+        try the idea for yourself before we go any further.
+        The chapter then develops the ideas using data, with R code alongside,
+        to illustrate how to deal with the problem, step by step, using real
+        data.
+        Exercises come at the end of each chapter, to let you practise, and
+        check that it has stuck.
+        Some chapters also include interactive questions at the end too.
+        These are often mastery, which means that each time they are attempted
+        there are a new set of values in the question.
+        As a result, they can be completed as many times as you like.
       </p>
 
       <p>
@@ -675,12 +611,6 @@ library(statsdata)
         instead.
         Where that happens, the chapter gives you the link and the steps needed
         to read the file into R.
-      </p>
-
-      <p>
-        Some chapters also include interactive questions.
-        These check understanding rather than recall, and usually ask you to
-        work something out from a dataset rather than pick a definition.
       </p>
     </subsection>
   </section>
