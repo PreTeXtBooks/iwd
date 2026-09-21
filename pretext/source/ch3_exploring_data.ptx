@@ -15,15 +15,11 @@
 
   <introduction xml:id="intro-exploring-data">
     <p>
-      This chapter is a bit different.
-      There's no formula to learn, and nothing here is the <q>correct</q> way to
-      analyse anything.
-      What we want is simpler, and honestly, more important: open the data, look
-      at it, and let it surprise you.
-      Every method later in this book (cleaning, multidimensional visualisation,
-      factors, handling missing values, and measuring variability) is there to
-      answer a question that this chapter raises.
-      And we're going to deliberately leave those questions open for now!
+      This chapter is all about exploring data and noticing patterns.
+      It starts with a case study on road safety in Kenya, using a paper
+      analysing data from the National Transport and Safety Authority (NTSA).
+      Then, we will look at how to visualise and summarise this data to uncover
+      patterns and insights.
     </p>
   </introduction>
   <!-- ================================================================= -->
@@ -34,12 +30,11 @@
 
     <introduction>
       <p>
-        Let's start with something that affects a lot of people in Kenya: road
-        safety.
+        Let's start with something that affects all of us: road safety.
         Since 2012, the National Transport and Safety Authority (NTSA) has been
-        recording road crash data from across the country: the county, the road,
-        the time, the type of vehicle, and who was involved.
-        Every year, they publish summaries of this on their website.
+        recording road crash data from across the country, such as the county,
+        the road, the time, the type of vehicle, and who was involved.
+        They publish summaries of this on their website.
       </p>
     </introduction>
 
@@ -47,12 +42,13 @@
       <title>Who is dying on Kenya's roads, and where?</title>
 
       <p>
-        The NTSA actually publishes two kinds of record.
+        The NTSA publish two kinds of records.
         The first is a daily comparative report.
         This gives the number of people killed and injured so far that year,
-        split across six types of road user: pedestrians, passengers, drivers,
-        pillion passengers, pedal cyclists, and motorcyclists.
-        You can see a snippet of one in <xref ref="table-ntsa-daily-report"/>.
+        split across whether they were a pedestrian, passenger, driver, pillion
+        passenger, pedal cyclist, or motorcyclist.
+        You can see a snippet example of this data in
+        <xref ref="table-ntsa-daily-report"/>.
       </p>
 
       <table xml:id="table-ntsa-daily-report" landscape="yes">
@@ -167,44 +163,47 @@
       </table>
 
       <p>
-        The second is the fatal accident report, and this one comes in two
-        parts.
-        The crash-level part has one row for each incident, with the road, the
-        place, the vehicles involved, and a short description of what happened
-        (see <xref ref="table-ntsa-fatal-report"/> ).
-        The victim-level part has one row for each person, with their name,
-        gender, age, a cause code, and whether they were a driver, a pedestrian,
-        and so on.
+        The second is the fatal accident report, and this one comes in two data
+        sets.
+        One is at the crash level, where each row represents a single incident.
+        This data has columns on the location, road, vehicles involved, and a
+        short description of what happened (see
+        <xref ref="table-ntsa-fatal-report"/> ).
+        The other data set is at the victim-level, and with one row for each
+        individual involved in the incident.
+        The data has columns on the individuals name, gender, age, a cause code,
+        and their position (e.g., whether they were a driver, a pedestrian,
+        etc).
       </p>
 
       <p>
-        Did you spot it?
         Even in this small snippet, the NTSA data has a multilevel structure:
         <ul>
           <li>
             <p>
-              The yearly data summarises deaths over the year for different
-              types of victim (passengers, motorcyclists, and so on).
+              The yearly data has one row per year, detailing the number of
+              deaths over the year for different types of victim (passengers,
+              motorcyclists, etc).
             </p>
           </li>
 
           <li>
             <p>
-              The crash-level table has one row per incident.
+              The crash-level table has one row per incident, detailing
+              information on the incident.
             </p>
           </li>
 
           <li>
             <p>
-              The victim-level table has one row per person.
+              The victim-level table has one row per person, detailing
+              information on the individual involved in the incident.
             </p>
           </li>
         </ul>
         A single crash can involve several victims, so the tables are linked,
         but you can't just swap one for the other.
-        Count at the crash level and you'll get one answer; count at the victim
-        level and you'll get another, and they answer different questions.
-        This is exactly the kind of structure we talked about in
+        This is exactly the kind of multilevel data structure we talked about in
         <xref ref="ch-multilevel-data"/>.
       </p>
 
@@ -377,18 +376,14 @@
       </table>
 
       <p>
-        This is the data that Muguro et al.
+        Muguro et al.
         (2020), a team of researchers from Gifu University in Japan and Dedan
-        Kimathi University of Technology in Kenya, set out to analyse
-        systematically for the very first time.
-      </p>
-
-      <p>
-        They'd noticed something surprising: for such a big problem, there was
-        very little systematic research on road crashes in Kenya.
-        So they took on five years of NTSA data, from 2015 to 2020.
-        They wanted to understand how often crashes were happening, what was
-        causing them, and where in Kenya the burden was greatest.
+        Kimathi University of Technology in Kenya, noticed that despite the
+        problem of road safety in Kenya, there was very little systematic
+        research on it.
+        They took on five years of NTSA data, from 2015 to 2020, to understand
+        how often crashes were happening, what was causing them, and where in
+        Kenya the burden was greatest.
         But before they could do any of that, they had to get to know the data
         itself: what was in it, how it was structured, and what questions it
         could actually answer.
@@ -546,12 +541,11 @@
         Hit-and-run was the most common cause of a crash between January and
         October 2019, and by a long way, with 925 incidents.
         That's more than double the next cause!
-        And excessive speeding, which arguably gets the most attention in public
-        and media conversations about road safety in Kenya?
-        It's seventh, with 120 incidents, roughly an eighth as many as
-        hit-and-run.
-        Just by summarising the data, we've challenged something a lot of people
-        assume.
+        Excessive speeding, which arguably gets the most attention in public and
+        media conversations about road safety in Kenya, is seventh, with 120
+        incidents - roughly an eighth as many as hit-and-run.
+        This simple table of frequencies has challenged something a lot of
+        people assume.
         That's exactly what exploratory analysis is for.
       </p>
 
@@ -560,13 +554,13 @@
         county, which gave them <xref ref="fig-frequency-by-county-time"/>
         (copied here from Muguro et al., 2020).
         Two things jump out.
-        First, look at the hourly chart.
-        There's a big spike at 00:00, but before you start worrying about
-        midnight driving, those are crashes where the time wasn't recorded.
+        First, the hourly chart shows a big spike at 00:00.
+        Before you start worrying about midnight driving, most of these are
+        crashes where the time wasn't recorded.
         Once you set that aside, most crashes happen between 16:00 and 21:00,
         which fits with the evening rush hour.
         Second, look at the counties.
-        Nairobi is well ahead, followed by Nakuru and Kiambu.
+        Nairobi has the most crashes, followed by Nakuru and Kiambu.
         Some of that is just population: Nairobi is Kenya's most populous
         county, so it has the most cars.
         But the gap is big enough that it looks like something else is going on
@@ -579,7 +573,7 @@
           and county distribution of accidents ranked by prevalence (bottom),
           Kenya 2015-2020.
           Note that the 00:00 spike reflects crashes with unknown recorded time.
-          Reproduced from Muguro et al.
+          Original source: Muguro et al.
           (2020).
         </caption>
 
@@ -606,9 +600,8 @@
         They used a technique called topic modelling to find patterns in the
         language across thousands of these descriptions.
         We won't go into the details of topic modelling here, but the basic idea
-        is actually quite simple.
-        You give a topic model a collection of short text descriptions, and it
-        looks for groups of words that tend to appear together.
+        is that you give a topic model a collection of short text descriptions,
+        and it looks for groups of words that tend to appear together.
         Each group is treated as a theme (or <q>topic</q> ) that keeps coming
         up.
         You decide how many topics to look for, and then you look at the results
@@ -639,7 +632,7 @@
           Word clouds from topic modelling of NTSA accident brief descriptions,
           for three-, four-, five-, and six-topic models.
           Word size reflects frequency within each topic.
-          Reproduced from Muguro et al.
+          Original source: Muguro et al.
           (2020), <em>Cogent Engineering</em>, 7(1), 1797981, under CC BY 4.0.
         </caption>
 
@@ -663,12 +656,12 @@
 
       <p>
         Muguro et al.
-        (2020) also looked at the data by who was hurt, instead of by cause,
-        which gave the table in <xref ref="table-ntsa-monthly-stats"/>.
-        They grouped the monthly records by type of road user, and worked out
-        some summaries for each: the average number killed and injured each
-        month, the standard deviation, the minimum, and the maximum.
-        And these numbers really bring home how badly vulnerable road users are
+        (2020) also looked at the data by <em>who</em> was hurt, instead of by
+        cause, which gave <xref ref="table-ntsa-monthly-stats"/>.
+        They grouped the monthly records by type of road user, and calculated
+        the average number killed and injured each month, alongside the standard
+        deviation, minimum, and maximum.
+        These numbers really bring home how badly vulnerable road users are
         affected.
       </p>
 
@@ -912,17 +905,14 @@
       </insight>
 
       <p>
-        The best part?
-        You can explore this kind of data yourself.
-        The Humanitarian Data Exchange (HDX) hosts a Kenya Road Accidents
-        database, which is a real extract of NTSA crash records from April to
-        June 2016.
-        It includes the county, road, time of crash, vehicle type, and road user
-        category.
-        You can find it
-        <url href="https://data.humdata.org/dataset/kenya-road-accidents-database">here</url>.
-        It's the same kind of data Muguro et al.
-        worked with, and it's what we use for the rest of this chapter.
+        You can explore a real extract of NTSA crash records from April to June
+        2016.
+        Either by the <c>kenya_accidents_2016</c> dataset in the R package
+        <c>statsdata</c>, or by going to
+        <url href="https://data.humdata.org/dataset/kenya-road-accidents-database">The Humanitarian Data Exchange (HDX)</url>.
+        This data includes the county, road, time of crash, vehicle type, and
+        road user category, and is the same kind of data Muguro et al.
+        (2020) worked with.
       </p>
 
       <p>
@@ -971,14 +961,12 @@
 
     <introduction>
       <p>
-        Let's get into it!
         The Kenya Road Accidents database is publicly available from the
-        Humanitarian Data Exchange, and you can download it from
-        <url href="https://data.humdata.org/dataset/kenya-road-accidents-database">data.humdata.org/dataset/kenya-road-accidents-database</url>.
+        Humanitarian Data Exchange, and can be downloaded from
+        <url href="https://data.humdata.org/dataset/kenya-road-accidents-database">data.humdata.org/dataset/kenya-road-accidents-database</url>,
+        or accessed in the R package ( <c>statsdata</c> ).
         It covers fatal accident reports from April to June 2016, and has 378
         rows and 13 columns.
-        Save the file somewhere you'll be able to find it, and then we'll load
-        it into R.
       </p>
 
       <p>
@@ -1072,13 +1060,13 @@
 
       <p>
         A few things jump out straight away.
-        The <c>AGE</c> column has values like <c>"A &amp; J"</c> (we're guessing
-        adult and junior) mixed in with the numbers, so R has treated the whole
-        column as text.
+        The <c>AGE</c> column has values like <c>"A &amp; J"</c> (perhaps
+        meaning adult and junior) mixed in with the numbers, so R has treated
+        the whole column as text.
         The <c>TIME 24 HOURS</c> column is text too, and some of the values are
         a bit ambiguous.
         And there's a mysterious 13th column, with a stray note in it!
-        Don't worry, this is completely normal with real data.
+        This is completely normal with real data.
         Spotting things like this early is exactly what exploring is for.
         We come back to cleaning data in <xref ref="ch-cleaning-recoding"/>, but
         for now, we'll work with what we've got.
@@ -1109,11 +1097,12 @@
       </program>
 
       <p>
-        Give it a go!
-        Drag <c>COUNTY</c> into the row area.
+        Drag <c>COUNTY</c> into the row area, and press the little arrow by
+        "County" at the top ( <xref ref="fig-pivot-tables"/> ).
         Straight away, you'll see that Nairobi has 71 incidents in the dataset.
-        That's almost one for every day of the three months!
-        Now move <c>COUNTY</c> to the top, and <c>Date</c> to the left.
+        That's almost one for each incident each day in the three months!
+        Now move <c>COUNTY</c> to the top, and <c>Date</c> to the left (
+        <xref ref="fig-pivot-tables-2"/> ).
         This gives you accidents by county and by date, and you'll see that
         Kiambu, Nakuru, and Nairobi have incidents on almost every single day.
         Switch the display from table to a heatmap, and it really stands out.
@@ -1147,13 +1136,14 @@
       </figure>
 
       <p>
-        Now remove <c>Date</c> from the rows and add <c>VICTIM</c> instead.
+        Now remove <c>Date</c> from the rows and add <c>VICTIM</c> instead (
+        <xref ref="fig-pivot-tables-3"/> ).
         In Nairobi, most of the victims are pedestrians.
-        But Makueni looks really different: only two pedestrians, but 8
+        But Makueni looks different with only two pedestrians, but 8
         motorcyclists, 6 passengers, and 7 drivers.
         So even in this small, three-month slice of data, we can start to see
         the same county-level patterns that Muguro et al.
-        (2020) found.
+        (2020) found over their five years of data.
       </p>
 
       <figure xml:id="fig-pivot-tables-3">
@@ -1175,6 +1165,7 @@
         You'll see <c>M/CYCLIST</c> and <c>MOTOR CYCLIST</c> listed as two
         separate categories.
         They're almost certainly the same thing, just typed in differently.
+        There is more on this in <xref ref="ch-cleaning-recoding"/>.
       </p>
     </subsection>
 
@@ -1183,8 +1174,8 @@
 
       <p>
         Categorical data tells you which group an observation belongs to.
-        The go-to way to visualise it is a <term>bar chart</term>, where the
-        length of each bar shows how many observations are in each category.
+        A good way to visualise it is a <term>bar chart</term>, where the length
+        of each bar shows how many observations are in each category.
         It makes it really easy to compare groups at a glance.
       </p>
 
@@ -1260,11 +1251,7 @@
       <p>
         Summaries give us the counts, but plots let us see the distribution.
         A bar chart of county gives you an instant picture of where incidents
-        are concentrated, and <c>coord_flip()</c> turns the chart on its side so
-        you can actually read the county names:
-      </p>
-
-      <p>
+        are concentrated.
         You can make bar charts with the <c>barchart</c> function from the
         <c>lattice</c> package (which comes installed with R), or with
         <c>ggplot2</c>.
@@ -1436,7 +1423,7 @@
         Scatter plots are the standard way to look at how two numerical
         variables relate to each other.
         The Kenya accidents data doesn't really have many pairs of numerical
-        variables to compare, but don't worry, we use scatter plots a lot in
+        variables to compare, but we use scatter plots a lot in
         <xref ref="ch-visualising-multidimensional-data"/>, on some richer
         datasets.
       </p>
@@ -1445,56 +1432,54 @@
   <exercises xml:id="exercises-exploring-data">
     <title>Exercises</title>
 
-    <introduction>
-      <p>
-        For these exercises, we're going back to the flamingo data from
-        <xref ref="ch-intro"/>.
-      </p>
-
-      <p>
-        TODO: Add in relevant STACK questions here on boxplots/summaries/etc
-      </p>
-    </introduction>
-
     <exercise xml:id="ex-explore-bill-length">
       <statement>
         <p>
-          Before you calculate anything, make a guess.
-          When you plot <c>bill_length_mm</c>, do you think it'll have one hump,
-          or two?
-          Now load the data, plot a histogram of <c>bill_length_mm</c>, and see
-          if you were right.
-          If there's more than one hump, try colouring or splitting the plot by
-          <c>species</c>.
-          Does that explain it?
-        </p>
-      </statement>
-    </exercise>
+          For this set of exercises, we're going back to the flamingo data from
+          <xref ref="ch-intro"/>.
+          <ol>
+            <li>
+              <p>
+                Before you calculate anything, make a guess.
+                When you plot <c>bill_length_mm</c>, do you think it'll have one
+                hump, or two?
+                Now load the data, plot a histogram of <c>bill_length_mm</c>,
+                and see if you were right.
+                If there's more than one hump, try colouring or splitting the
+                plot by <c>species</c>.
+                Does that explain it?
+              </p>
+            </li>
 
-    <exercise xml:id="ex-explore-lake-sex">
-      <statement>
-        <p>
-          Build a pivot table of <c>lake</c> against <c>sex</c>.
-          Does the balance of males and females look different from one lake to
-          another?
-          Tell us which comparison you used to answer that (row proportions or
-          column proportions), and why you picked it.
-        </p>
-      </statement>
-    </exercise>
+            <li>
+              <p>
+                Build a pivot table of <c>lake</c> against <c>sex</c>.
+                Does the balance of males and females look different from one
+                lake to another?
+                Tell us which comparison you used to answer that (row
+                proportions or column proportions), and why you picked it.
+              </p>
+            </li>
 
-    <exercise xml:id="ex-explore-write-up">
-      <statement>
-        <p>
-          Pick a numeric variable in the dataset, anything except
-          <c>body_mass_g</c> or <c>bill_length_mm</c>.
-          Look at it however you like: draw a histogram, make a table of rounded
-          values, or just sort it and scan through by eye.
-          Then write two or three sentences about what you notice, and one
-          question it raises that you can't answer yet.
-          There's no right answer here!
-          We just want you to practise looking at the data before you start
-          summarising it.
+            <li>
+              <p>
+                Now pick a categorical variable other than <c>lake</c> or
+                <c>sex</c>.
+                Build a pivot table of this variable against <c>species</c>.
+                Do you notice any patterns?
+              </p>
+            </li>
+
+            <li>
+              <p>
+                Now pick a numeric variable other than <c>body_mass_g</c> or
+                <c>bill_length_mm</c>.
+                Look at it using a histogram, a summary table, or any other
+                method you like.
+                What do you notice about its distribution?
+              </p>
+            </li>
+          </ol>
         </p>
       </statement>
     </exercise>
