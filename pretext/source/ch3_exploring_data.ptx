@@ -655,6 +655,16 @@
       </figure>
 
       <p>
+        The descriptions commonly involve vehicles knocking down pedestrians or
+        other road users, vehicles hitting or colliding with cyclists or other
+        vehicles, vehicles losing control and leaving or overturning on the
+        road, and head-on collisions.
+        The prominence of words such as vehicle, victim, pedestrian, cyclist,
+        knocked and collision shows that many of the incidents concern
+        interactions between motor vehicles and vulnerable road users.
+      </p>
+
+      <p>
         Muguro et al.
         (2020) also looked at the data by <em>who</em> was hurt, instead of by
         cause, which gave <xref ref="table-ntsa-monthly-stats"/>.
@@ -800,34 +810,43 @@
       </table>
 
       <p>
-        Look at passenger injuries.
-        On average, 490 passengers were injured every month.
+        A simple table can reveal striking patterns and raise questions or
+        hypotheses about what the data are actually measuring before we do any
+        deeper analysis.
+        For example, on average, 490 passengers were injured every month.
         That's nearly five times the pedestrian injury average of 103, and
         higher than any other group.
-        In fact, it's so much higher that the authors had to scale passenger
-        injuries down in their boxplot ( <xref ref="fig-muguro-boxplot"/> ) so
-        you could still see the other groups.
-        Now look at motorcyclists.
-        They have the widest range of injuries of any group, from 39 to 217 a
-        month.
-        That fits with how fast boda-boda transport grew over this period, and
-        with how much enforcement and road conditions vary from county to
-        county.
-        And you can see all of this in a simple table, before doing any deeper
-        analysis or modelling.
+        Meanwhile, the number of recorded pedestrian injuries is surprisingly
+        close to the number of deaths: on average, around 100 pedestrians were
+        killed and 103 injured each month.
+        This is very different from passengers, where there were around 490
+        injuries for every 57 deaths.
+        This may reflect the particular severity of collisions involving
+        pedestrians, who have little physical protection from vehicles.
+        But it may also tell us something about the data: these are reported
+        road-traffic incidents, not necessarily every injury that occurred.
+        Minor injuries may be less likely to result in a report.
       </p>
 
       <p>
         The same patterns show up in the boxplot of monthly fatalities and
         injuries in <xref ref="fig-muguro-boxplot"/>, which has one box for each
         type of road user.
-        Boxplots are great here, because they show you the spread and the
-        outliers, as well as the averages.
-        Pedestrians have the most deaths.
-        The passenger injury box is so big it had to be scaled down by a factor
-        of four.
-        And motorcyclists vary a lot in both panels.
-        There's nothing fancy about these plots.
+        Boxplots are useful here because they show the centre and spread of the
+        data, as well as potential outliers.
+        The line inside each box represents the median, the halfway point of the
+        distribution, while the box contains the middle 50% of the data.
+        The lines extending from the box are called whiskers and show the
+        remaining spread according to the convention used for the plot.
+        Pedestrians have the highest number of deaths on average.
+        The passenger injury box is so large that it had to be scaled down by a
+        factor of four.
+        Motorcyclists also show considerable variation in injuries, ranging from
+        39 to 217 per month.
+        This raises questions about what might be driving that variation, such
+        as changes in boda-boda use, enforcement, or road conditions over time.
+        There's nothing fancy about these plots, they're just a different way to
+        see your data.
         They're the kind of thing you'd make in your first hour with a new
         dataset, and look how much they tell you!
       </p>
@@ -874,8 +893,8 @@
         And remember, everything we've looked at so far is just the exploratory
         part of their research!
         The patterns that came out of it (rising deaths, a heavy burden on
-        boda-boda riders and pedestrians, and hit-and-run as the leading
-        recorded cause) went straight into the paper's recommendations.
+        boda-boda riders and pedestrians, hit-and-run as the leading recorded
+        cause) went straight into the paper's recommendations.
         They called for targeted enforcement against hit-and-run, for
         infrastructure and policy attention in the counties where most deaths
         happen, and for urgent action to protect vulnerable road users, whose
@@ -885,8 +904,8 @@
         That one figure turns a table of counts into a real argument for
         investment.
         The NTSA had been collecting this data for years, and this is a great
-        example of what becomes possible when someone takes the time to explore
-        it properly.
+        example of what becomes possible when we take the time to explore it
+        properly.
       </p>
 
       <insight xml:id="insight-ntsa-exploration">
@@ -895,12 +914,8 @@
         <p>
           All of this was already in the NTSA data before Muguro et al.
           (2020) came along.
-          The deaths concentrated in five counties, the vulnerability of
-          boda-boda riders, the sharp rise in fatalities: it was all sitting in
-          the records, waiting for someone to look.
-          That's what this chapter is about.
-          We want to give you the tools and the habits to take a dataset you've
-          never seen before, and find out what it's actually telling you.
+          This chapter aims to give you the tools to take a dataset you've never
+          seen before, and find out what it's <em>actually</em> telling you.
         </p>
       </insight>
 
