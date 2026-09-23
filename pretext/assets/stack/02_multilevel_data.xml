@@ -1,0 +1,765 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+<!-- question: 274390  -->
+  <question type="stack">
+    <name>
+      <text>Forest Fertilisers (Multilevel Data)</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<h3>The forest fertiliser experiment</h3><p>An ecologist applied fertiliser to some forest plots and left the remaining plots untreated. The researchers measured growth in a different number of trees in each plot.</p><p>Download the data. The columns are <strong>Plot_ID</strong>, <strong>Tree_ID</strong>, <strong>Treatment</strong> and <strong>Growth_cm</strong>.</p><p><a href="[[textdownload name="forest_fertiliser.csv"]]{@stack_csv_formatter(tree_data,lab)@}[[/textdownload]]">Download the CSV dataset</a></p><p><strong>1.</strong> How many different forest plots were included in the experiment? </p>
+<p>[[input:ans1]] [[validation:ans1]]</p>
+<p><strong>2.</strong> How many different plots were in the <strong>control</strong> group (the plots without fertiliser)?</p>
+<p>[[input:ans4]] [[validation:ans4]]</p>
+<p><strong>3.</strong> Find the mean growth within each plot. Then calculate the mean of the fertilised plot means and the mean of the control plot means. What is the difference (fertilised minus control), in cm? Give your answer to two decimal places.</p>
+<p>[[input:ans2]] [[validation:ans2]]</p>
+<p><strong>4.</strong> At what level was fertiliser assigned?</p><p>[[input:ans3]] [[validation:ans3]]</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<h4>Q3: See the means for each plot</h4>
+<p>Blue points represent fertilised plots; green points represent control plots. Each point is the mean of that plot, not one tree.</p>
+[[jsxgraph width="500px" height="350px"]]
+var ys = [{#float(plot_means[1])#},{#float(plot_means[2])#},{#float(plot_means[3])#},{#float(plot_means[4])#},{#float(plot_means[5])#},{#float(plot_means[6])#},{#float(plot_means[7])#},{#float(plot_means[8])#}];
+var ts = [{#is_fert[1]#},{#is_fert[2]#},{#is_fert[3]#},{#is_fert[4]#},{#is_fert[5]#},{#is_fert[6]#},{#is_fert[7]#},{#is_fert[8]#}];
+var ymin = Math.min.apply(null,ys)-3;
+var ymax = Math.max.apply(null,ys)+3;
+var board = JXG.JSXGraph.initBoard(divid,{
+    boundingbox:[0,ymax,9,ymin],
+    axis:true,
+    showCopyright:false,
+    showNavigation:false
+});
+for(var i=0;i<ys.length;i++){
+    var c=ts[i]===1?'#2563eb':'#16a34a';
+    board.create('point',[i+1,ys[i]],{
+        name:'P'+(i+1),
+        size:4,
+        fixed:true,
+        highlight:false,
+        strokeColor:c,
+        fillColor:c
+    });
+}
+[[/jsxgraph]]
+
+<h4>Why not average all the trees directly?</h4>
+<p>If you pool every tree measurement, the fertilised-minus-control difference is \( {@ta_tree_diff@} \) cm. That gives more weight to plots where more trees were measured.</p><p>That calculation answers a different question. Here, we were asked to compare the <strong>average plot growth</strong>, giving each experimental plot equal weight.</p><p>More tree measurements can help estimate a particular plot's mean, but they do not turn one fertilised plot into many independently treated plots. This is the central idea of multilevel data.</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>4</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <stackversion>
+      <text>2026063000</text>
+    </stackversion>
+    <questionvariables>
+      <text><![CDATA[/* Forest fertiliser: trees nested within eight plots */
+plot_n0:[10,15,30,45,45,30,15,10];
+shift:rand(4);
+f_pattern:[12,14,17,21];
+f_means0:makelist(f_pattern[k]+shift+rand(3)-1,k,1,4);
+c_pattern:[10,12,15,17];
+c_means0:makelist(c_pattern[k]+shift+rand(3)-1,k,1,4);
+plot_means0:append(f_means0,c_means0);
+
+/* Randomise plot labels, preserving each plot's size and mean. */
+plot_order:random_permutation(makelist(k,k,1,8));
+plot_n:makelist(plot_n0[plot_order[k]],k,1,8);
+plot_means:makelist(plot_means0[plot_order[k]],k,1,8);
+is_fert:makelist(if plot_order[k]<=4 then 1 else 0,k,1,8);
+treatments:makelist(if is_fert[k]=1 then "Fertiliser" else "Control",k,1,8);
+
+/* Generate individual measurements in balanced +/- pairs.
+   Each plot's actual mean is exactly plot_means[k]. */
+tree_rows(i):=block([ni,half,offs,vals,j],
+  ni:plot_n[i],
+  half:floor(ni/2),
+  offs:makelist(rand(5)-2,j,1,half),
+  vals:append(
+    makelist(plot_means[i]+offs[j],j,1,half),
+    makelist(plot_means[i]-offs[j],j,1,half)
+  ),
+  if mod(ni,2)=1 then vals:append(vals,[plot_means[i]]),
+  vals:random_permutation(vals),
+  makelist([sconcat("P",i),sconcat("T",j),treatments[i],vals[j]],j,1,ni)
+);
+tree_data:apply(append,makelist(tree_rows(i),i,1,8));
+tree_data:random_permutation(tree_data);
+lab:["Plot_ID","Tree_ID","Treatment","Growth_cm"];
+
+/* Equal-weight means: each experimental plot counts once. */
+mean_f:sum(is_fert[k]*plot_means[k],k,1,8)/4;
+mean_c:sum((1-is_fert[k])*plot_means[k],k,1,8)/4;
+ta_diff:float(mean_f-mean_c);
+
+/* Plausible but different answer: average all measured trees. */
+nf:sum(is_fert[k]*plot_n[k],k,1,8);
+nc:sum((1-is_fert[k])*plot_n[k],k,1,8);
+tree_mean_f:sum(is_fert[k]*plot_n[k]*plot_means[k],k,1,8)/nf;
+tree_mean_c:sum((1-is_fert[k])*plot_n[k]*plot_means[k],k,1,8)/nc;
+ta_tree_diff:float(tree_mean_f-tree_mean_c);
+
+/* Diagnostic answers for targeted feedback. */
+ta_control_plots:sum(1-is_fert[k],k,1,8);
+ta_control_tree_rows:nc;
+/* Tree_ID restarts at T1 in every plot; the largest control plot
+   determines the number of distinct Tree_ID labels. */
+ta_distinct_control_tree_ids:apply(max,makelist(if is_fert[k]=0 then plot_n[k] else 0,k,1,8));
+ta_all_plot_mean:sum(plot_means[k],k,1,8)/8;
+ta_reversed_diff:mean_c-mean_f;
+ta_wrong_fert_minus_all:mean_f-ta_all_plot_mean;
+ta_wrong_all_minus_control:ta_all_plot_mean-mean_c;
+
+/* Input model answers */
+ta_plots:8;
+ta_level:[[1,false,"Individual tree"],
+          [2,true,"Forest plot"],
+          [3,false,"Entire forest"]];]]></text>
+    </questionvariables>
+    <specificfeedback format="html">
+      <text>[[feedback:prt1]] [[feedback:prt4]] [[feedback:prt2]] [[feedback:prt3]]</text>
+    </specificfeedback>
+    <questionnote format="html">
+      <text>{@plot_n@}, {@plot_means@}</text>
+    </questionnote>
+    <questiondescription format="html">
+      <text></text>
+    </questiondescription>
+    <questionsimplify>1</questionsimplify>
+    <assumepositive>0</assumepositive>
+    <assumereal>0</assumereal>
+    <prtcorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:green;"><i class="fa fa-check"></i></span> Correct answer, well done.]]></text>
+    </prtcorrect>
+    <prtpartiallycorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:orange;"><i class="fa fa-adjust"></i></span> Your answer is partially correct.]]></text>
+    </prtpartiallycorrect>
+    <prtincorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:red;"><i class="fa fa-times"></i></span> Incorrect answer.]]></text>
+    </prtincorrect>
+    <decimals>.</decimals>
+    <scientificnotation>*10</scientificnotation>
+    <multiplicationsign>dot</multiplicationsign>
+    <sqrtsign>1</sqrtsign>
+    <complexno>i</complexno>
+    <inversetrig>cos-1</inversetrig>
+    <logicsymbol>lang</logicsymbol>
+    <matrixparens>[</matrixparens>
+    <isbroken>0</isbroken>
+    <variantsselectionseed></variantsselectionseed>
+    <input>
+      <name>ans1</name>
+      <type>numerical</type>
+      <tans>ta_plots</tans>
+      <boxsize>8</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>1</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>ans2</name>
+      <type>numerical</type>
+      <tans>ta_diff</tans>
+      <boxsize>8</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>1</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>ans3</name>
+      <type>dropdown</type>
+      <tans>ta_level</tans>
+      <boxsize>15</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>1</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>ans4</name>
+      <type>numerical</type>
+      <tans>ta_control_plots</tans>
+      <boxsize>8</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>1</showvalidation>
+      <options></options>
+    </input>
+    <prt>
+      <name>prt1</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description>Number of plots</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans1</sans>
+        <tans>ta_plots</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Correct: there are {@ta_plots@} plots. Each plot appears on several rows because several trees were measured there.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt1-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Look down the <code>Plot_ID</code> column. The same plot appears on several rows because several trees were measured there. We just want the number of unique plot IDs, since one plot has one ID.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt2</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description>Correct result</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans2</sans>
+        <tans>ta_diff</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt2-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Correct. You calculated the average for each plot, averaged the plot averages separately for the two treatment groups, and subtracted control from fertilised. Each plot received equal weight.</p>
+
+<p><strong>Step by step:</strong> Filter or group your data by <code>Plot_ID</code> and calculate one mean <code>Growth_cm</code> for each plot. Then separate those plot averages by <code>Treatment</code>. Average the fertilised plot averages, and separately average the control plot averages.
+</p>
+<p> Each plot contributes <strong>one mean</strong>, regardless of how many trees were measured there.</p>
+
+<p>Mean of the four fertilised plot means: \( {@mean_f@} \) cm.<br>
+Mean of the four control plot means: \( {@mean_c@} \) cm.</p>
+
+<p>The requested difference is \( {@mean_f@}-{@mean_c@}={@ta_diff@} \) cm.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>prt2-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description>Possible diagnostic calculation</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans2</sans>
+        <tans>ta_tree_diff</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt2-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Your result matches the difference obtained by pooling <strong>all individual tree measurements</strong> in each treatment group. Plots with more measured trees then count more.</p>
+<p>We want to compare tree growth in the two groups, giving <strong>each plot equal importance</strong>, even if different numbers of trees were measured in each plot.</p>
+<ol><li>First, find the average growth of the trees in <strong>each plot separately</strong>.</li><li>Next, average the plot averages for the fertilised group. Separately, average the plot averages for the control group.</li><li>Finally, subtract the control group's average from the fertilised group's average.</li></ol><p><strong>What is the difference in average growth (fertilised minus control), in cm?</strong> Give your answer to two decimal places.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>prt2-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description>Possible diagnostic calculation</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans2</sans>
+        <tans>ta_all_plot_mean</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt2-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This looks like the average of <strong>all the plot means combined</strong>. The question asks you to compare two groups. Separate the fertilised and control plots, calculate the average of each group’s plot means, and subtract.</p>
+
+
+<p>Work in three steps: 
+<ol><li>calculate the mean of the tree measurements within each <code>Plot_ID</code></li>
+<li>average those plot means <em>separately</em> for fertilised and control plots;</li>
+<li>subtract control from fertilised.</li>
+</ol>
+Check that you do not average all trees together or reverse the subtraction.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>3</falsenextnode>
+        <falseanswernote>prt2-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>3</name>
+        <description>Possible diagnostic calculation</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans2</sans>
+        <tans>mean_f</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt2-3-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This looks like the average of the <strong>fertilised plot means</strong>. That is a useful intermediate result, but the answer needs a difference. Find the average of the control plot means too, then subtract it.</p>
+
+
+<p>Work in three steps: 
+<ol><li>calculate the mean of the tree measurements within each <code>Plot_ID</code></li>
+<li>average those plot means <em>separately</em> for fertilised and control plots;</li>
+<li>subtract control from fertilised.</li>
+</ol>
+Check that you do not average all trees together or reverse the subtraction.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>4</falsenextnode>
+        <falseanswernote>prt2-3-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>4</name>
+        <description>Possible diagnostic calculation</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans2</sans>
+        <tans>mean_c</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt2-4-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This looks like the average of the <strong>control plot means</strong>. That is a useful intermediate result, but the answer needs a difference. Find the fertilised group’s average and subtract the control group’s average.</p>
+
+
+<p>Work in three steps: 
+<ol><li>calculate the mean of the tree measurements within each <code>Plot_ID</code></li>
+<li>average those plot means <em>separately</em> for fertilised and control plots;</li>
+<li>subtract control from fertilised.</li>
+</ol>
+Check that you do not average all trees together or reverse the subtraction.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>5</falsenextnode>
+        <falseanswernote>prt2-4-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>5</name>
+        <description>Possible diagnostic calculation</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans2</sans>
+        <tans>ta_reversed_diff</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt2-5-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>You appear to have subtracted in the opposite direction. Check the order: <strong>fertilised group’s average minus control group’s average</strong>.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>6</falsenextnode>
+        <falseanswernote>prt2-5-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>6</name>
+        <description>Possible diagnostic calculation</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans2</sans>
+        <tans>tree_mean_f</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt2-6-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This looks like the average of <strong>all fertilised tree measurements pooled together</strong>. First find a mean for each fertilised plot separately, then average those plot means.</p>
+
+<p>Work in three steps: 
+<ol><li>calculate the mean of the tree measurements within each <code>Plot_ID</code></li>
+<li>average those plot means <em>separately</em> for fertilised and control plots;</li>
+<li>subtract control from fertilised.</li>
+</ol>
+Check that you do not average all trees together or reverse the subtraction.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>7</falsenextnode>
+        <falseanswernote>prt2-6-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>7</name>
+        <description>Possible diagnostic calculation</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans2</sans>
+        <tans>tree_mean_c</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt2-7-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This looks like the average of <strong>all control tree measurements pooled together</strong>. First find a mean for each control plot separately, then average those plot means.</p>
+
+<p>Work in three steps: 
+<ol><li>calculate the mean of the tree measurements within each <code>Plot_ID</code></li>
+<li>average those plot means <em>separately</em> for fertilised and control plots;</li>
+<li>subtract control from fertilised.</li>
+</ol>
+Check that you do not average all trees together or reverse the subtraction.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>8</falsenextnode>
+        <falseanswernote>prt2-7-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>8</name>
+        <description>Possible diagnostic calculation</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans2</sans>
+        <tans>ta_wrong_fert_minus_all</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt2-8-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>You may have subtracted the average of <strong>all plots</strong> from the fertilised group’s average. The second average must use only control plots, not all plots together.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>9</falsenextnode>
+        <falseanswernote>prt2-8-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>9</name>
+        <description>Possible diagnostic calculation</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans2</sans>
+        <tans>ta_wrong_all_minus_control</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt2-9-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>You may have used the average of <strong>all plots</strong> instead of the fertilised group’s average. Keep the two treatment groups separate before subtracting.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt2-9-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Work in three steps: (1) calculate the mean of the tree measurements within each <code>Plot_ID</code>; (2) average those plot means <em>separately</em> for fertilised and control plots; (3) subtract control from fertilised. Check that you did not average all trees together or reverse the subtraction.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt3</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description>Level of treatment assignment</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans3</sans>
+        <tans>2</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt3-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Correct. Fertiliser was assigned to forest plots.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>prt3-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans3</sans>
+        <tans>1</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>+</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt3-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>You're looking at the individual trees, which are the measurements in this dataset. But look more closely at the <code>Plot_ID</code> and <code>Treatment</code> columns. Do trees belonging to the same plot ever receive different treatments?</p>
+
+<p>In multilevel data, observations can be grouped within larger units. Here, trees are grouped within plots. Think about whether fertiliser was assigned separately to each tree or to the group of trees sharing a plot.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>-</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>prt3-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans3</sans>
+        <tans>3</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>+</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt3-3-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Think about how the trees are grouped in this experiment. Trees belong to plots, and plots belong to the forest. These are different levels of the data.</p>
+
+<p>Look at the <code>Treatment</code> column. Did every plot in the forest receive the same treatment, or were some plots treated differently from others?</p>
+
+<p>Which level would allow the researchers to decide which groups of trees received fertiliser and which did not?</p>]]></text>
+        </truefeedback>
+        <falsescoremode>-</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt3-3-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt4</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description>Correct number of control plots</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans4</sans>
+        <tans>ta_control_plots</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt4-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Correct. You filtered to the untreated group and counted each different <code>Plot_ID</code> once. A plot counts once, however many trees were measured in it.</p>
+<p>There are {@ta_control_plots@} control plots. The {@ta_control_tree_rows@} control-tree rows are observations, not separate plots; <code>Tree_ID</code> also restarts within each plot.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>prt4-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description>Counted all control tree records</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans4</sans>
+        <tans>ta_control_tree_rows</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt4-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>It looks as though you counted <strong>rows of control trees</strong>, not control plots. Filter to <code>Treatment = Control</code>, then count the <em>different Plot_ID values</em>. Several rows can belong to the same plot.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>prt4-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description>Counted distinct repeated tree labels</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans4</sans>
+        <tans>ta_distinct_control_tree_ids</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt4-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>You may have counted different <code>Tree_ID</code> labels. Notice that tree numbering starts again at T1 in every plot, so these labels do not identify plots. Keep only the control rows and count distinct <code>Plot_ID</code> values instead.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>3</falsenextnode>
+        <falseanswernote>prt4-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>3</name>
+        <description>Counted all plots instead of control plots</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans4</sans>
+        <tans>ta_plots</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt4-3-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This appears to count <strong>all</strong> plots. First filter the <code>Treatment</code> column to <code>Control</code>; then count each remaining <code>Plot_ID</code> only once.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt4-3-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Try filtering the data to <code>Treatment = Control</code>. Read the <code>Plot_ID</code> column, cross out repeated identifiers, and count the different plot IDs left. Do not count rows or tree labels.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+  </question>
+
+</quiz>

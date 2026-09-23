@@ -336,23 +336,30 @@
     </subsection>
   </section>
 
-  <section xml:id="sec-ch2-stack">
-    <title>STACK Question Here</title>
+<section xml:id="sec-ch2-stack">
+  <title>Practise: Understanding Multilevel Data</title>
+
+  <exercise>
+    <title>Forest fertiliser experiment</title>
 
     <introduction>
       <p>
-        Insert the STACK (ML data) question here
+        Try this interactive exercise to practise identifying the
+        different levels in a dataset and comparing average tree growth
+        in a forest fertiliser experiment. This is a mastery question:
+        each attempt generates a new dataset, allowing you to practise
+        the same concepts with different values. Use the feedback to
+        understand any mistakes, then try again until you are confident
+        with the material.
+      </p>
+      <p>
+        Use any software of your choice to answer this.
       </p>
     </introduction>
 
-    <subsection xml:id="subsec-ch2-TODO">
-      <title>TODO</title>
-
-      <p>
-        TODO
-      </p>
-    </subsection>
-  </section>
+    <stack label="stack-integration" source="stack/02_multilevel_data.xml"/>
+  </exercise>
+</section>
 
   <section xml:id="sec-mics-multilevel">
     <title>Multilevel Data in R: Kenya MICS</title>
