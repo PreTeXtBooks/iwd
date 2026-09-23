@@ -357,7 +357,7 @@
       </p>
     </introduction>
 
-    <stack label="stack-integration" source="stack/02_multilevel_data.xml"/>
+    <stack label="stack-multilevel" source="stack/02_multilevel_data.xml"/>
   </exercise>
 </section>
 
