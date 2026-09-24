@@ -962,6 +962,12 @@
       </p>
     </introduction>
 
+    <exercise xml:id="ex-pivot-table">
+      <title>Pivot Table</title>
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Estimating-the-mean-and-median-of-data-presented-as-a-dotplot_2.xml"
+             label="stk-pivot-table"/>
+    </exercise>
+
     <subsection xml:id="subsec-ch3-TODO">
       <title>TODO</title>
 

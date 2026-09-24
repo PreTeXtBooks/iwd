@@ -21,6 +21,17 @@ To view the built book:
 pretext view web
 ```
 
+### PDF version
+
+To build the PDF version, we need to generate static versions of the STACK questions (once).
+Thus, the first time and whenever STACK questions have been updated or added, run:
+
+```bash
+pretext generate stack
+pretext build print
+```
+
+
 ## GitHub Actions Deployment
 
 The book is automatically built and validated when commits are made to pull requests, and deployed to GitHub Pages when changes are pushed to the main branch. See `.github/workflows/deploy-pretext.yml` for the deployment configuration.
@@ -73,7 +84,7 @@ Each commit in this PreTeXt repo has a specific commit of the submodule associat
 
 Two options:
 1. Go into submodule subfolder, e.g. `assets/stack/Statistics-and-Probability-Open-Question-Bank`, run `git pull` to update to the latest commit of the submodule.
-2. Alternatively, anywhere else run `git submodule update --remote [NAME OF REMOTE TO PULL FROM]` (which is likely `origin`)
+2. Alternatively, in the project root run `git submodule update --remote` or `git submodule update --remote pretext/assets/stack/Statistics-and-Probability-Open-Question-Bank/` to update a specific submodule (the path is relative to current working directory)
 Then make a new commit in the PreTeXt repo to associate the new commit with the PreTeXt repository.
 
 ## Pulling latest changes
