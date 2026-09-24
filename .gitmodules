@@ -1,0 +1,3 @@
+[submodule "pretext/assets/stack/Statistics-and-Probability-Open-Question-Bank"]
+	path = pretext/assets/stack/Statistics-and-Probability-Open-Question-Bank
+	url = git@github.com:IDEMSInternational/Statistics-and-Probability-Open-Question-Bank.git
