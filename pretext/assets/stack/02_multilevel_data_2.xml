@@ -1,0 +1,1773 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+<!-- question: 274215  -->
+  <question type="stack">
+    <name>
+      <text>Kenya child-health programme (Multilevel Data)</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>A child-health programme is being evaluated using a survey in Kenya. Each row of your dataset represents one child. Children belong to households; households belong to survey clusters; clusters are located within counties. Each cluster received Programme A or Programme B.</p>
+<p><a href="[[textdownload name="kenya_child_health.csv"]]{@stack_csv_formatter(kenya_data,kenya_columns)@}[[/textdownload]]">Download your CSV dataset</a>. Use the statistical software of your choice to explore it.</p>
+
+<h4>Construct the overall graph</h4>
+<p>For each programme, find the proportion of children who are fully vaccinated (<code>fully_vaccinated = 1</code>). <strong>Move the two sliders to change the bar heights.</strong> The bars show percentages, not the total number vaccinated: each programme may have a different number of children.</p>
+[[jsxgraph width="100%" aspect-ratio="1.9/1" input-ref-ans1="aRef" input-ref-ans2="bRef"]]
+var board = JXG.JSXGraph.initBoard(divid,{
+ boundingbox:[-0.55,117,3.25,-27],axis:false,
+ showCopyright:false,showNavigation:false,
+ pan:{enabled:false},zoom:{enabled:false}
+});
+var blue='#4285c5',red='#e57373';
+for(var y=0;y<=100;y+=20){
+ board.create('segment',[[0.28,y],[2.85,y]],{strokeColor:'#dddddd',dash:2,fixed:true});
+ board.create('text',[-0.10,y,y+'%'],{fontSize:12,fixed:true,anchorX:'right'});
+}
+var sa=board.create('slider',[[0.60,-13],[1.42,-13],[0,50,100]],{
+ name:'',snapWidth:0.5,strokeColor:blue,fillColor:blue,
+ baseline:{strokeColor:blue},highline:{strokeColor:blue}
+});
+var sb=board.create('slider',[[1.66,-13],[2.48,-13],[0,50,100]],{
+ name:'',snapWidth:0.5,strokeColor:red,fillColor:red,
+ baseline:{strokeColor:red},highline:{strokeColor:red}
+});
+stack_jxg.bind_slider(aRef,sa);
+stack_jxg.bind_slider(bRef,sb);
+function bar(x,s,c){
+ board.create('polygon',[
+  [x-0.29,0],[x+0.29,0],
+  [x+0.29,function(){return s.Value();}],
+  [x-0.29,function(){return s.Value();}]
+ ],{fillColor:c,fillOpacity:0.85,
+ borders:{strokeColor:c},vertices:{visible:false},fixed:true,highlight:false});
+ board.create('text',[x,function(){return s.Value()+5;},
+  function(){return s.Value().toFixed(1)+'%';}],
+  {fontSize:15,anchorX:'middle',fixed:true,highlight:false});
+}
+bar(1,sa,blue);bar(2,sb,red);
+board.create('text',[1,-23,'Programme A'],{anchorX:'middle',fontSize:14,fixed:true});
+board.create('text',[2,-23,'Programme B'],{anchorX:'middle',fontSize:14,fixed:true});
+board.update();
+[[/jsxgraph]]
+<p>Programme A: [[input:ans1]]% [[validation:ans1]]<br>
+Programme B: [[input:ans2]]% [[validation:ans2]]</p>
+<p><small>The values in the boxes are linked to the sliders. Aim for the nearest percentage point; exact calculations are not the main objective.</small></p>
+[[feedback:prt1]]
+[[feedback:prt2]]
+<p></p>
+<p>Which programme has the higher <strong>overall vaccination rate</strong>?</p>
+<p>[[input:ans3]] [[validation:ans3]]</p>
+[[feedback:prt3]]
+<p></p>
+<h4>Complete the graph within wealth quintiles</h4>
+<p>The <strong>blue bars</strong> already show Programme A's vaccination rates in each wealth quintile. Use your dataset to find Programme B's rates and <strong>move the five red sliders</strong> to complete the graph. Each bar shows the percentage vaccinated <em>within that programme and quintile</em>, not the number of children. Aim for the nearest percentage point.</p>
+[[jsxgraph width="100%" aspect-ratio="1.65/1" input-ref-ans4="r1" input-ref-ans5="r2" input-ref-ans6="r3" input-ref-ans7="r4" input-ref-ans8="r5"]]
+var board=JXG.JSXGraph.initBoard(divid,{
+ boundingbox:[0,119,6.15,-29],axis:false,showCopyright:false,
+ showNavigation:false,pan:{enabled:false},zoom:{enabled:false}
+});
+var a=[{#float(ta4)#},{#float(ta6)#},{#float(ta8)#},{#float(ta10)#},{#float(ta12)#}];
+var refs=[r1,r2,r3,r4,r5];
+var blue='#4285c5',red='#e57373';
+for(var y=0;y<=100;y+=20){
+ board.create('segment',[[0.6,y],[5.75,y]],{strokeColor:'#dddddd',dash:2,fixed:true});
+ board.create('text',[0.45,y,y+'%'],{fontSize:11,anchorX:'right',fixed:true});
+}
+function bar(x,h,c){
+ board.create('polygon',[[x-0.17,0],[x+0.17,0],
+ [x+0.17,h],[x-0.17,h]],{
+ fillColor:c,fillOpacity:0.88,borders:{strokeColor:c},
+ vertices:{visible:false},fixed:true,highlight:false
+ });
+}
+for(var i=0;i<5;i++){
+ (function(i){
+ var x=i+1;
+ bar(x-0.19,a[i],blue);
+ board.create('text',[x-0.19,a[i]+4,a[i].toFixed(1)+'%'],{
+  fontSize:10,anchorX:'middle',fixed:true,highlight:false
+ });
+ var s=board.create('slider',[[x-0.32,-14],[x+0.32,-14],[0,50,100]],{
+  name:'',snapWidth:0.5,strokeColor:red,fillColor:red,
+  baseline:{strokeColor:red},highline:{strokeColor:red}
+ });
+ stack_jxg.bind_slider(refs[i],s);
+ bar(x+0.19,function(){return s.Value();},red);
+ board.create('text',[x+0.19,function(){return s.Value()+4;},
+  function(){return s.Value().toFixed(1)+'%';}],{
+  fontSize:10,anchorX:'middle',fixed:true,highlight:false
+ });
+ board.create('text',[x,-23,'Q'+(i+1)],{
+  fontSize:13,anchorX:'middle',fixed:true
+ });
+ })(i);
+}
+board.create('text',[3,111,'Blue: Programme A (given)    Red: Programme B (move sliders)'],{
+ fontSize:12,anchorX:'middle',fixed:true
+});
+board.update();
+[[/jsxgraph]]
+<p><small>Programme B bar heights (linked to the sliders):</small></p>
+<table class="table"><thead><tr><th>Quintile</th><th>Programme B (%)</th></tr></thead><tbody><tr><td>1</td><td>[[input:ans4]] [[validation:ans4]] [[feedback:prt4]]</td></tr><tr><td>2</td><td>[[input:ans5]] [[validation:ans5]] [[feedback:prt5]]</td></tr><tr><td>3</td><td>[[input:ans6]] [[validation:ans6]] [[feedback:prt6]]</td></tr><tr><td>4</td><td>[[input:ans7]] [[validation:ans7]] [[feedback:prt7]]</td></tr><tr><td>5</td><td>[[input:ans8]] [[validation:ans8]] [[feedback:prt8]]</td></tr></tbody></table>
+<p></p>
+<p>Which programme has the higher vaccination rate <strong>within every wealth quintile</strong>? Compare your completed graph with the overall graph in (a)–(b).</p>
+<p>[[input:ans14]] [[validation:ans14]]</p>
+[[feedback:prt14]]
+<p><em>After submitting, use the General feedback to explore why the overall and within-quintile comparisons differ, and what this tells us about levels of data.</em></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<h4>Explore the results: what changes when we look within groups?</h4><p><strong>Overall:</strong> Programme A has {@A_total_vacc@} vaccinated children out of {@A_total_n@} ({@float(round(10*ta1)/10)@}%). Programme B has {@B_total_vacc@} out of {@B_total_n@} ({@float(round(10*ta2)/10)@}%). Programme A has the higher overall rate.</p><p><strong>Within wealth quintiles:</strong> Programme B has the higher vaccination rate in every quintile. You can see the exact percentages below.</p><table class="table"><thead><tr><th>Wealth quintile</th><th>Programme A</th><th>Programme B</th></tr></thead><tbody><tr><td>1</td><td>{@float(round(10*ta4)/10)@}%</td><td>{@float(round(10*ta5)/10)@}%</td></tr><tr><td>2</td><td>{@float(round(10*ta6)/10)@}%</td><td>{@float(round(10*ta7)/10)@}%</td></tr><tr><td>3</td><td>{@float(round(10*ta8)/10)@}%</td><td>{@float(round(10*ta9)/10)@}%</td></tr><tr><td>4</td><td>{@float(round(10*ta10)/10)@}%</td><td>{@float(round(10*ta11)/10)@}%</td></tr><tr><td>5</td><td>{@float(round(10*ta12)/10)@}%</td><td>{@float(round(10*ta13)/10)@}%</td></tr></tbody></table><h4>Explore the distribution of children</h4><p>Before reading the explanation, compare the numbers of children in each quintile. Where are the two programmes most heavily represented?</p>[[jsxgraph width="100%" aspect-ratio="1.8/1"]]
+
+var A = [
+    {#A_n1#}, {#A_n2#}, {#A_n3#},
+    {#A_n4#}, {#A_n5#}
+];
+
+var B = [
+    {#B_n1#}, {#B_n2#}, {#B_n3#},
+    {#B_n4#}, {#B_n5#}
+];
+
+var maxN = Math.max.apply(null, A.concat(B));
+var top = Math.ceil(maxN/100)*100+60;
+
+var board = JXG.JSXGraph.initBoard(divid, {
+    boundingbox: [-0.7, top, 6.1, -top*0.22],
+    axis: false,
+    showCopyright: false,
+    showNavigation: false,
+    pan: {enabled: false},
+    zoom: {enabled: false}
+});
+
+var blue = '#4285c5';
+var red = '#e57373';
+
+function txt(x,y,s,size,bold) {
+    return board.create('text',[x,y,s],{
+        fontSize:size,
+        fixed:true,
+        highlight:false,
+        anchorX:'middle',
+        anchorY:'middle',
+        cssStyle:bold?'font-weight:bold;':''
+    });
+}
+
+function bar(x,n,color) {
+    board.create('polygon',[
+        [x-0.19,0],
+        [x+0.19,0],
+        [x+0.19,n],
+        [x-0.19,n]
+    ],{
+        fillColor:color,
+        fillOpacity:0.9,
+        borders:{strokeColor:color},
+        vertices:{visible:false},
+        fixed:true,
+        highlight:false
+    });
+}
+
+var step = Math.ceil(maxN/5/50)*50;
+
+for (var y=0; y<=maxN; y+=step) {
+    board.create('segment',[[0.3,y],[5.7,y]],{
+        strokeColor:'#dddddd',
+        dash:2,
+        fixed:true
+    });
+    txt(-0.25,y,String(y),11,false);
+}
+
+for (var i=0; i<5; i++) {
+    var x=i+1;
+
+    bar(x-0.21,A[i],blue);
+    bar(x+0.21,B[i],red);
+
+    txt(x-0.21,A[i]+top*0.035,
+        String(A[i]),11,true);
+
+    txt(x+0.21,B[i]+top*0.035,
+        String(B[i]),11,true);
+
+    txt(x,-top*0.07,'Quintile '+(i+1),12,true);
+}
+
+txt(3,-top*0.16,
+    'Blue: Programme A       Red: Programme B',
+    13,false);
+
+[[/jsxgraph]]<p><strong>Why does the comparison reverse?</strong> Programme A has many more children in the wealthier quintiles, where vaccination rates tend to be higher for both programmes. Programme B has more children in the less wealthy quintiles. When everyone is combined, the two programmes therefore have very different mixes of children. This is an example of <strong>Simpson's paradox</strong>.</p><h4>What does this tell us about levels of data?</h4><p><strong>What does this tell us about levels of data?</strong> The dataset contains children (individual level), households, survey clusters and counties. A child's vaccination status is recorded for that child; wealth is a household characteristic; the programme is assigned at cluster level. Children in the same household or cluster can share circumstances, so they should not automatically be thought of as completely unrelated observations. Looking only at the overall figures can hide important patterns within groups.</p><p><strong>Remember:</strong> Wealth quintiles are the groups that reveal the reversal here. Children, households, clusters and counties are the levels describing how the dataset is organised. Both ways of looking at the data matter.</p><p>To calculate a percentage if you need it: <strong>(number vaccinated ÷ total number of children in that group) × 100</strong>. The denominator must match the group you are describing.</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <stackversion>
+      <text>2026063000</text>
+    </stackversion>
+    <questionvariables>
+      <text><![CDATA[/* ============================================================
+   KENYA VACCINATION DATA
+   Direct-construction version
+   ============================================================ */
+
+
+/* ------------------------------------------------------------
+   1. Parameters
+   ------------------------------------------------------------ */
+
+counties:["Kakamega","Kisumu","Machakos","Turkana"];
+
+A_households:[8,11,19,38,75];
+B_households:[75,38,19,11,8];
+
+A_prob:[55/100,65/100,75/100,85/100,90/100];
+B_prob:[70/100,80/100,90/100,95/100,98/100];
+
+
+/* ------------------------------------------------------------
+   2. Cluster counties
+   ------------------------------------------------------------ */
+
+/*
+   Clusters 1--4 belong to Programme A.
+   Clusters 5--8 belong to Programme B.
+*/
+
+cluster_counties:
+    makelist(
+        counties[rand(4)+1],
+        i,1,8
+    );
+
+
+/* ------------------------------------------------------------
+   3. Initialise dataset
+   ------------------------------------------------------------ */
+
+/*
+   Final child-level row structure:
+
+   [cluster_id,
+    county,
+    programme,
+    household_id,
+    wealth_quintile,
+    child_id,
+    age_months,
+    sex,
+    fully_vaccinated]
+*/
+
+kenya_data:[];
+
+household_id:0;
+child_id:0;
+
+
+/* ------------------------------------------------------------
+   4. Initialise summary variables
+   ------------------------------------------------------------ */
+
+/*
+   These scalar variables store the number of children and
+   number vaccinated in each programme x wealth-quintile cell.
+
+   We calculate them during data generation rather than
+   searching kenya_data afterwards.
+*/
+
+A_n1:0;
+A_n2:0;
+A_n3:0;
+A_n4:0;
+A_n5:0;
+
+A_vacc1:0;
+A_vacc2:0;
+A_vacc3:0;
+A_vacc4:0;
+A_vacc5:0;
+
+B_n1:0;
+B_n2:0;
+B_n3:0;
+B_n4:0;
+B_n5:0;
+
+B_vacc1:0;
+B_vacc2:0;
+B_vacc3:0;
+B_vacc4:0;
+B_vacc5:0;
+
+
+/* ------------------------------------------------------------
+   5. Programme A
+   ------------------------------------------------------------ */
+
+for q:1 thru 5 do block(
+    [cell_households,
+     n_cell,
+     n_vaccinated,
+     vaccination,
+     hh_size,
+     cluster_id,
+     county,
+     sex,
+     age_months,
+     k],
+
+    /*
+       Generate household sizes.
+
+       Each household independently contains 4, 5 or 6 children.
+    */
+
+    cell_households:
+        makelist(
+            rand(3)+4,
+            h,1,A_households[q]
+        ),
+
+    /*
+       Number of children in this programme x wealth cell.
+    */
+
+    n_cell:
+        sum(
+            cell_households[h],
+            h,1,A_households[q]
+        ),
+
+    /*
+       Exact number vaccinated in the cell.
+    */
+
+    n_vaccinated:
+        round(n_cell*A_prob[q]),
+
+    /*
+       Store the summary counts as scalar variables.
+    */
+
+    if q=1 then (
+        A_n1:n_cell,
+        A_vacc1:n_vaccinated
+    ),
+
+    if q=2 then (
+        A_n2:n_cell,
+        A_vacc2:n_vaccinated
+    ),
+
+    if q=3 then (
+        A_n3:n_cell,
+        A_vacc3:n_vaccinated
+    ),
+
+    if q=4 then (
+        A_n4:n_cell,
+        A_vacc4:n_vaccinated
+    ),
+
+    if q=5 then (
+        A_n5:n_cell,
+        A_vacc5:n_vaccinated
+    ),
+
+    /*
+       Construct and randomly permute the vaccination vector.
+    */
+
+    vaccination:
+        random_permutation(
+            append(
+                makelist(
+                    1,
+                    i,1,n_vaccinated
+                ),
+                makelist(
+                    0,
+                    i,1,n_cell-n_vaccinated
+                )
+            )
+        ),
+
+    k:1,
+
+    /*
+       Generate households and child-level records directly.
+    */
+
+    for h:1 thru A_households[q] do (
+
+        household_id:household_id+1,
+
+        hh_size:cell_households[h],
+
+        cluster_id:rand(4)+1,
+
+        county:cluster_counties[cluster_id],
+
+        for c:1 thru hh_size do (
+
+            child_id:child_id+1,
+
+            age_months:rand(12)+12,
+
+            sex:
+                if rand(2)=0
+                then "Female"
+                else "Male",
+
+            kenya_data:
+                cons(
+                    [
+                        cluster_id,
+                        county,
+                        "A",
+                        household_id,
+                        q,
+                        child_id,
+                        age_months,
+                        sex,
+                        vaccination[k]
+                    ],
+                    kenya_data
+                ),
+
+            k:k+1
+        )
+    )
+);
+
+
+/* ------------------------------------------------------------
+   6. Programme B
+   ------------------------------------------------------------ */
+
+for q:1 thru 5 do block(
+    [cell_households,
+     n_cell,
+     n_vaccinated,
+     vaccination,
+     hh_size,
+     cluster_id,
+     county,
+     sex,
+     age_months,
+     k],
+
+    /*
+       Generate household sizes.
+    */
+
+    cell_households:
+        makelist(
+            rand(3)+4,
+            h,1,B_households[q]
+        ),
+
+    /*
+       Number of children in this programme x wealth cell.
+    */
+
+    n_cell:
+        sum(
+            cell_households[h],
+            h,1,B_households[q]
+        ),
+
+    /*
+       Exact number vaccinated.
+    */
+
+    n_vaccinated:
+        round(n_cell*B_prob[q]),
+
+    /*
+       Store summary counts as scalar variables.
+    */
+
+    if q=1 then (
+        B_n1:n_cell,
+        B_vacc1:n_vaccinated
+    ),
+
+    if q=2 then (
+        B_n2:n_cell,
+        B_vacc2:n_vaccinated
+    ),
+
+    if q=3 then (
+        B_n3:n_cell,
+        B_vacc3:n_vaccinated
+    ),
+
+    if q=4 then (
+        B_n4:n_cell,
+        B_vacc4:n_vaccinated
+    ),
+
+    if q=5 then (
+        B_n5:n_cell,
+        B_vacc5:n_vaccinated
+    ),
+
+    /*
+       Construct and randomise vaccination outcomes.
+    */
+
+    vaccination:
+        random_permutation(
+            append(
+                makelist(
+                    1,
+                    i,1,n_vaccinated
+                ),
+                makelist(
+                    0,
+                    i,1,n_cell-n_vaccinated
+                )
+            )
+        ),
+
+    k:1,
+
+    /*
+       Generate final child-level records.
+    */
+
+    for h:1 thru B_households[q] do (
+
+        household_id:household_id+1,
+
+        hh_size:cell_households[h],
+
+        cluster_id:rand(4)+5,
+
+        county:cluster_counties[cluster_id],
+
+        for c:1 thru hh_size do (
+
+            child_id:child_id+1,
+
+            age_months:rand(12)+12,
+
+            sex:
+                if rand(2)=0
+                then "Female"
+                else "Male",
+
+            kenya_data:
+                cons(
+                    [
+                        cluster_id,
+                        county,
+                        "B",
+                        household_id,
+                        q,
+                        child_id,
+                        age_months,
+                        sex,
+                        vaccination[k]
+                    ],
+                    kenya_data
+                ),
+
+            k:k+1
+        )
+    )
+);
+
+
+/* ------------------------------------------------------------
+   7. Randomise row order
+   ------------------------------------------------------------ */
+
+kenya_data:
+    random_permutation(kenya_data);
+
+
+/* ------------------------------------------------------------
+   8. Column names and metadata
+   ------------------------------------------------------------ */
+
+kenya_columns:[
+    "cluster_id",
+    "county",
+    "programme",
+    "household_id",
+    "wealth_quintile",
+    "child_id",
+    "age_months",
+    "sex",
+    "fully_vaccinated"
+];
+
+n_households:household_id;
+n_children:child_id;
+
+
+/* ------------------------------------------------------------
+   9. Overall summary counts
+   ------------------------------------------------------------ */
+
+A_total_n:
+    A_n1+A_n2+A_n3+A_n4+A_n5;
+
+A_total_vacc:
+    A_vacc1+A_vacc2+A_vacc3+A_vacc4+A_vacc5;
+
+B_total_n:
+    B_n1+B_n2+B_n3+B_n4+B_n5;
+
+B_total_vacc:
+    B_vacc1+B_vacc2+B_vacc3+B_vacc4+B_vacc5;
+
+
+/* ------------------------------------------------------------
+   10. Teacher answers
+   ------------------------------------------------------------ */
+
+/*
+   Overall vaccination percentages.
+*/
+
+ta1:
+    100*A_total_vacc/A_total_n;
+
+ta2:
+    100*B_total_vacc/B_total_n;
+
+
+/*
+   Overall apparent winner.
+
+   Multiple-choice/radio teacher answer.
+*/
+
+ta3:[
+    [1,true,"Programme A"],
+    [2,false,"Programme B"]
+];
+
+
+/*
+   Wealth quintile 1.
+*/
+
+ta4:
+    100*A_vacc1/A_n1;
+
+ta5:
+    100*B_vacc1/B_n1;
+
+
+/*
+   Wealth quintile 2.
+*/
+
+ta6:
+    100*A_vacc2/A_n2;
+
+ta7:
+    100*B_vacc2/B_n2;
+
+
+/*
+   Wealth quintile 3.
+*/
+
+ta8:
+    100*A_vacc3/A_n3;
+
+ta9:
+    100*B_vacc3/B_n3;
+
+
+/*
+   Wealth quintile 4.
+*/
+
+ta10:
+    100*A_vacc4/A_n4;
+
+ta11:
+    100*B_vacc4/B_n4;
+
+
+/*
+   Wealth quintile 5.
+*/
+
+ta12:
+    100*A_vacc5/A_n5;
+
+ta13:
+    100*B_vacc5/B_n5;
+
+
+/*
+   Programme with the higher vaccination percentage
+   within every wealth quintile.
+
+   Multiple-choice/radio teacher answer.
+*/
+
+ta14:[
+    [1,false,"Programme A"],
+    [2,true,"Programme B"]
+];]]></text>
+    </questionvariables>
+    <specificfeedback format="html">
+      <text></text>
+    </specificfeedback>
+    <questionnote format="html">
+      <text>A: {@A_total_vacc@}/{@A_total_n@}; B: {@B_total_vacc@}/{@B_total_n@}; B quintile vaccinated/total: {@B_vacc1@}/{@B_n1@}, {@B_vacc2@}/{@B_n2@}, {@B_vacc3@}/{@B_n3@}, {@B_vacc4@}/{@B_n4@}, {@B_vacc5@}/{@B_n5@}.</text>
+    </questionnote>
+    <questiondescription format="html">
+      <text></text>
+    </questiondescription>
+    <questionsimplify>1</questionsimplify>
+    <assumepositive>0</assumepositive>
+    <assumereal>0</assumereal>
+    <prtcorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:green;"><i class="fa fa-check"></i></span> Correct answer, well done.]]></text>
+    </prtcorrect>
+    <prtpartiallycorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:orange;"><i class="fa fa-adjust"></i></span> Your answer is partially correct.]]></text>
+    </prtpartiallycorrect>
+    <prtincorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:red;"><i class="fa fa-times"></i></span> Incorrect answer.]]></text>
+    </prtincorrect>
+    <decimals>.</decimals>
+    <scientificnotation>*10</scientificnotation>
+    <multiplicationsign>none</multiplicationsign>
+    <sqrtsign>1</sqrtsign>
+    <complexno>i</complexno>
+    <inversetrig>cos-1</inversetrig>
+    <logicsymbol>lang</logicsymbol>
+    <matrixparens>[</matrixparens>
+    <isbroken>0</isbroken>
+    <variantsselectionseed></variantsselectionseed>
+    <input>
+      <name>ans1</name>
+      <type>numerical</type>
+      <tans>float(round(10*ta1)/10)</tans>
+      <boxsize>8</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>ans14</name>
+      <type>radio</type>
+      <tans>ta14</tans>
+      <boxsize>15</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>1</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options>nonotanswered</options>
+    </input>
+    <input>
+      <name>ans2</name>
+      <type>numerical</type>
+      <tans>float(round(10*ta2)/10)</tans>
+      <boxsize>8</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>ans3</name>
+      <type>radio</type>
+      <tans>ta3</tans>
+      <boxsize>15</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>1</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options>nonotanswered</options>
+    </input>
+    <input>
+      <name>ans4</name>
+      <type>numerical</type>
+      <tans>float(round(10*ta5)/10)</tans>
+      <boxsize>8</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>ans5</name>
+      <type>numerical</type>
+      <tans>float(round(10*ta7)/10)</tans>
+      <boxsize>8</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>ans6</name>
+      <type>numerical</type>
+      <tans>float(round(10*ta9)/10)</tans>
+      <boxsize>8</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>ans7</name>
+      <type>numerical</type>
+      <tans>float(round(10*ta11)/10)</tans>
+      <boxsize>8</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>ans8</name>
+      <type>numerical</type>
+      <tans>float(round(10*ta13)/10)</tans>
+      <boxsize>8</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <prt>
+      <name>prt1</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans1</sans>
+        <tans>ta1</tans>
+        <testoptions>1</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-correct</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Good: your bar shows the overall vaccination rate for Programme A, to within one percentage point.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>prt1-check</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans1</sans>
+        <tans>A_total_vacc</tans>
+        <testoptions>1</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-diagnostic-1</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Your bar appears to show the <strong>number vaccinated</strong>, not the percentage. Divide {@A_total_vacc@} by the total {@A_total_n@} children, then multiply by 100.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>prt1-other-1</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans1</sans>
+        <tans>A_total_vacc/A_total_n</tans>
+        <testoptions>0.02</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-diagnostic-2</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>You have found the <strong>proportion</strong> correctly. Multiply by 100 to turn it into a percentage and move the bar accordingly.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>3</falsenextnode>
+        <falseanswernote>prt1-other-2</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>3</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans1</sans>
+        <tans>100*(A_total_n-A_total_vacc)/A_total_n</tans>
+        <testoptions>1</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-diagnostic-3</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This looks like the percentage <strong>not fully vaccinated</strong>. Use the children with <code>fully_vaccinated = 1</code> instead.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt1-other-3</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Check the denominator: use <strong>all {@A_total_n@} children receiving Programme A</strong>, not the number vaccinated or the number in just one wealth quintile. There are {@A_total_vacc@} vaccinated children. The rate is {@float(round(10*ta1)/10)@}%.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt14</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans14</sans>
+        <tans>first(mcq_correct(ta14))</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt14-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Correct! Programme B has a higher vaccination rate in every wealth quintile, even though Programme A has a higher overall rate. Explore the group-size graph and explanation in General feedback.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt14-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Look again at the red and blue bars. Programme B has a higher vaccination rate in every wealth quintile, even though Programme A has a higher overall rate. Explore the group-size graph and explanation in General feedback.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt2</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans2</sans>
+        <tans>ta2</tans>
+        <testoptions>1</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt2-correct</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Good: your bar shows the overall vaccination rate for Programme B, to within one percentage point.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>prt2-check</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans2</sans>
+        <tans>B_total_vacc</tans>
+        <testoptions>1</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt2-diagnostic-1</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Your bar appears to show the <strong>number vaccinated</strong>, not the percentage. Divide {@B_total_vacc@} by the total {@B_total_n@} children, then multiply by 100.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>prt2-other-1</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans2</sans>
+        <tans>B_total_vacc/B_total_n</tans>
+        <testoptions>0.02</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt2-diagnostic-2</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>You have found the <strong>proportion</strong> correctly. Multiply by 100 to turn it into a percentage and move the bar accordingly.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>3</falsenextnode>
+        <falseanswernote>prt2-other-2</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>3</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans2</sans>
+        <tans>100*(B_total_n-B_total_vacc)/B_total_n</tans>
+        <testoptions>1</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt2-diagnostic-3</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This looks like the percentage <strong>not fully vaccinated</strong>. Use the children with <code>fully_vaccinated = 1</code> instead.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt2-other-3</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Check the denominator: use <strong>all {@B_total_n@} children receiving Programme B</strong>, not the number vaccinated or the number in just one wealth quintile. There are {@B_total_vacc@} vaccinated children. The rate is {@float(round(10*ta2)/10)@}%.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt3</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans3</sans>
+        <tans>first(mcq_correct(ta3))</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt3-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Correct. Programme A has the higher overall vaccination rate. Continue to the next graph to investigate why.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt3-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Look at the heights of the two programmes’ bars again. Programme A has the higher overall vaccination rate.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt4</name>
+      <value>0.5000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans4</sans>
+        <tans>ta5</tans>
+        <testoptions>1</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt4-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Correct. Your Programme B bar for quintile 1 is within one percentage point of the rate in your dataset.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>prt4-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans4</sans>
+        <tans>B_vacc1</tans>
+        <testoptions>1</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt4-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This looks like the <strong>number vaccinated</strong> in this quintile, not the percentage. Divide {@B_vacc1@} by all {@B_n1@} Programme B children in quintile 1, then multiply by 100.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>prt4-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans4</sans>
+        <tans>B_vacc1/B_n1</tans>
+        <testoptions>0.02</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt4-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This is the proportion, not the percentage. Multiply by 100 to set the bar height.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>3</falsenextnode>
+        <falseanswernote>prt4-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>3</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans4</sans>
+        <tans>100*(B_n1-B_vacc1)/B_n1</tans>
+        <testoptions>1</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt4-3-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This appears to be the percentage <strong>not vaccinated</strong>. Use children with <code>fully_vaccinated = 1</code>.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt4-3-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Check the group used for the denominator. This bar concerns <strong>Programme B, quintile 1</strong> only: {@B_vacc1@} vaccinated out of {@B_n1@} children. The rate is {@float(round(10*ta5)/10)@}%.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt5</name>
+      <value>0.5000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans5</sans>
+        <tans>ta7</tans>
+        <testoptions>1</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt5-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Correct. Your Programme B bar for quintile 2 is within one percentage point of the rate in your dataset.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>prt5-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans5</sans>
+        <tans>B_vacc2</tans>
+        <testoptions>1</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt5-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This looks like the <strong>number vaccinated</strong> in this quintile, not the percentage. Divide {@B_vacc2@} by all {@B_n2@} Programme B children in quintile 2, then multiply by 100.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>prt5-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans5</sans>
+        <tans>B_vacc2/B_n2</tans>
+        <testoptions>0.02</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt5-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This is the proportion, not the percentage. Multiply by 100 to set the bar height.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>3</falsenextnode>
+        <falseanswernote>prt5-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>3</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans5</sans>
+        <tans>100*(B_n2-B_vacc2)/B_n2</tans>
+        <testoptions>1</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt5-3-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This appears to be the percentage <strong>not vaccinated</strong>. Use children with <code>fully_vaccinated = 1</code>.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt5-3-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Check the group used for the denominator. This bar concerns <strong>Programme B, quintile 2</strong> only: {@B_vacc2@} vaccinated out of {@B_n2@} children. The rate is {@float(round(10*ta7)/10)@}%.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt6</name>
+      <value>0.5000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans6</sans>
+        <tans>ta9</tans>
+        <testoptions>1</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt6-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Correct. Your Programme B bar for quintile 3 is within one percentage point of the rate in your dataset.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>prt6-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans6</sans>
+        <tans>B_vacc3</tans>
+        <testoptions>1</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt6-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This looks like the <strong>number vaccinated</strong> in this quintile, not the percentage. Divide {@B_vacc3@} by all {@B_n3@} Programme B children in quintile 3, then multiply by 100.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>prt6-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans6</sans>
+        <tans>B_vacc3/B_n3</tans>
+        <testoptions>0.02</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt6-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This is the proportion, not the percentage. Multiply by 100 to set the bar height.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>3</falsenextnode>
+        <falseanswernote>prt6-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>3</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans6</sans>
+        <tans>100*(B_n3-B_vacc3)/B_n3</tans>
+        <testoptions>1</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt6-3-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This appears to be the percentage <strong>not vaccinated</strong>. Use children with <code>fully_vaccinated = 1</code>.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt6-3-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Check the group used for the denominator. This bar concerns <strong>Programme B, quintile 3</strong> only: {@B_vacc3@} vaccinated out of {@B_n3@} children. The rate is {@float(round(10*ta9)/10)@}%.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt7</name>
+      <value>0.5000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans7</sans>
+        <tans>ta11</tans>
+        <testoptions>1</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt7-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Correct. Your Programme B bar for quintile 4 is within one percentage point of the rate in your dataset.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>prt7-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans7</sans>
+        <tans>B_vacc4</tans>
+        <testoptions>1</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt7-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This looks like the <strong>number vaccinated</strong> in this quintile, not the percentage. Divide {@B_vacc4@} by all {@B_n4@} Programme B children in quintile 4, then multiply by 100.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>prt7-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans7</sans>
+        <tans>B_vacc4/B_n4</tans>
+        <testoptions>0.02</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt7-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This is the proportion, not the percentage. Multiply by 100 to set the bar height.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>3</falsenextnode>
+        <falseanswernote>prt7-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>3</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans7</sans>
+        <tans>100*(B_n4-B_vacc4)/B_n4</tans>
+        <testoptions>1</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt7-3-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This appears to be the percentage <strong>not vaccinated</strong>. Use children with <code>fully_vaccinated = 1</code>.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt7-3-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Check the group used for the denominator. This bar concerns <strong>Programme B, quintile 4</strong> only: {@B_vacc4@} vaccinated out of {@B_n4@} children. The rate is {@float(round(10*ta11)/10)@}%.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt8</name>
+      <value>0.5000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans8</sans>
+        <tans>ta13</tans>
+        <testoptions>1</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt8-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Correct. Your Programme B bar for quintile 5 is within one percentage point of the rate in your dataset.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>prt8-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans8</sans>
+        <tans>B_vacc5</tans>
+        <testoptions>1</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt8-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This looks like the <strong>number vaccinated</strong> in this quintile, not the percentage. Divide {@B_vacc5@} by all {@B_n5@} Programme B children in quintile 5, then multiply by 100.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>prt8-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans8</sans>
+        <tans>B_vacc5/B_n5</tans>
+        <testoptions>0.02</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt8-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This is the proportion, not the percentage. Multiply by 100 to set the bar height.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>3</falsenextnode>
+        <falseanswernote>prt8-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>3</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans8</sans>
+        <tans>100*(B_n5-B_vacc5)/B_n5</tans>
+        <testoptions>1</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt8-3-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This appears to be the percentage <strong>not vaccinated</strong>. Use children with <code>fully_vaccinated = 1</code>.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt8-3-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Check the group used for the denominator. This bar concerns <strong>Programme B, quintile 5</strong> only: {@B_vacc5@} vaccinated out of {@B_n5@} children. The rate is {@float(round(10*ta13)/10)@}%.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <deployedseed>1722241041</deployedseed>
+    <deployedseed>830728031</deployedseed>
+    <deployedseed>1114633813</deployedseed>
+    <deployedseed>772262201</deployedseed>
+    <deployedseed>1341233461</deployedseed>
+    <deployedseed>349862584</deployedseed>
+    <deployedseed>1220861889</deployedseed>
+    <deployedseed>1904297111</deployedseed>
+    <deployedseed>1830000406</deployedseed>
+    <deployedseed>235440781</deployedseed>
+    <deployedseed>940950539</deployedseed>
+    <deployedseed>518612876</deployedseed>
+    <deployedseed>1310941416</deployedseed>
+    <deployedseed>1525766317</deployedseed>
+    <deployedseed>53313987</deployedseed>
+    <deployedseed>948941607</deployedseed>
+    <deployedseed>635402953</deployedseed>
+    <deployedseed>1682962528</deployedseed>
+    <deployedseed>571059838</deployedseed>
+    <deployedseed>1291438536</deployedseed>
+  </question>
+
+</quiz>
