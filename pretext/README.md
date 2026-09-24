@@ -2,6 +2,10 @@
 
 This directory contains the PreTeXt version of ...
 
+The repository contains a repository of STACK questions as a submodule.
+
+If you are cloning this repository, use `git clone --recurse-submodules` (or `git clone --recursive`).
+
 ## Building the Book
 
 To build the book locally:
@@ -46,7 +50,7 @@ Images should be placed in the `source/images/` directory or the `assets/` direc
 - `source/main.ptx` - Main book file
 - `source/ch_*.ptx` - Chapter files
 - `source/images/` - Image source files
-- `assets/` - Static assets (images, data files, etc.)
+- `assets/` - Static assets (images, data files, STACK questions, etc.)
 - `publication/` - Publication configuration
 - `project.ptx` - Project configuration
 - `output/` - Generated output (not tracked in git)
@@ -56,3 +60,29 @@ Images should be placed in the `source/images/` directory or the `assets/` direc
 For more information about PreTeXt, visit:
 - PreTeXt documentation: https://pretextbook.org/
 - PreTeXt Guide: https://pretextbook.org/doc/guide/html/
+
+## STACK questions
+
+STACK questions are included as submodules in the folder `assets/stack/`.
+
+When cloning this repository, to also check out the submodule content, run `git clone --recurse-submodules` (or `git clone --recursive`) rather than merely `git clone`.
+
+### Updating the STACK questions
+
+Each commit in this PreTeXt repo has a specific commit of the submodule associated with it (i.e. a specific state of the STACK questions). To update to a newer commit, there are two options:
+
+Two options:
+1. Go into submodule subfolder, e.g. `assets/stack/Statistics-and-Probability-Open-Question-Bank`, run `git pull` to update to the latest commit of the submodule.
+2. Alternatively, anywhere else run `git submodule update --remote [NAME OF REMOTE TO PULL FROM]` (which is likely `origin`)
+Then make a new commit in the PreTeXt repo to associate the new commit with the PreTeXt repository.
+
+## Pulling latest changes
+
+If changes have happened upstream to the STACK question repo, a simple `git pull` in the PreTeXt repo will update the associated commit ID, but not update the submodule content. To update the content as well, you have three options:
+
+1. `git pull && git submodule update --init --recursive`
+	1. Update: Updates the **content** of the submodule (not just the reference commit)
+	2. init: Add new submodules, in case any were added in the latest commits
+	3. recursive: in case the submodules themselves contain submodules
+2. As of [Git 2.14](https://github.com/git/git/blob/master/Documentation/RelNotes/2.14.0.txt#L117), you can use `git pull --recurse-submodules` (and alias it to whatever you like if you want).
+3. As of [Git 2.15](https://github.com/git/git/blob/master/Documentation/RelNotes/2.15.0.txt#L358), you could set [`submodule.recurse`](https://git-scm.com/docs/git-config#Documentation/git-config.txt-submodulerecurse) to true so that `git pull` does this automatically. You can do this globally by running: `git config --global submodule.recurse true`
