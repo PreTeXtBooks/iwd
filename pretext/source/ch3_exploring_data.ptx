@@ -1470,82 +1470,123 @@
         can be completed as many times as you want.
       </p>
     </introduction>
-    
+
     <exercise xml:id="ex-ch3-estimated-mean">
       <title>Estimate the Mean and Median from Data</title>
-      <stack source="stack/03_estimated_mean.xml"
-             label="stk-estimated-mean"/>
+
+      <stack source="stack/03_estimated_mean.xml" label="stk-estimated-mean"/>
     </exercise>
 
     <exercise xml:id="ex-ch3-estimated-mode">
       <title>Estimate the Mode from Data</title>
-      <stack source="stack/03_estimated_mode.xml"
-             label="stk-estimated-mode"/>
+
+      <stack source="stack/03_estimated_mode.xml" label="stk-estimated-mode"/>
     </exercise>
 
     <exercise xml:id="ex-ch3-correlation">
       <title>Correlation with Data</title>
-      <stack source="stack/03_correlation.xml"
-             label="stk-ch3-correlation"/>
+
+      <introduction>
+        <p>
+          Correlation measures the strength and direction of a linear
+          relationship between two numerical variables.
+          The correlation coefficient, usually written takes values between (-1)
+          and (1).
+          A value close to (1) indicates a strong positive linear relationship,
+          while a value close to (-1) indicates a strong negative linear
+          relationship.
+          A value close to (0) indicates little or no linear relationship.
+          Remember that correlation describes association, not causation, and a
+          low correlation does not necessarily mean that there is no
+          relationship between the variables.
+        </p>
+      </introduction>
+
+      <stack source="stack/03_correlation.xml" label="stk-ch3-correlation"/>
     </exercise>
 
     <exercise xml:id="ex-ch3-match-dots">
       <title>Match the Dotplot to Boxplots</title>
-      <introduction>
-        <p>
-          Test
-        </p>
-      </introduction>
-      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Interpret-and-match-dotplots-to-respective-boxplots.xml"
-             label="stk-ch3-match-dots"/>
+
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Interpret-and-match-dotplots-to-respective-boxplots.xml" label="stk-ch3-match-dots"/>
     </exercise>
 
-        <exercise xml:id="ex-ch3-edit-boxplot">
-      <title>Pivot Table</title>
-      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Edit-boxplot-to-match-histogram-distribution.xml"
-             label="stk-ch3-edit-boxplot"/>
+    <exercise xml:id="ex-ch3-edit-boxplot">
+      <title>Edit a Boxplot</title>
+
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Edit-boxplot-to-match-histogram-distribution.xml" label="stk-ch3-edit-boxplot"/>
     </exercise>
 
     <exercise xml:id="ex-ch3-hist-range">
-      <title>Pivot Table</title>
-      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Data-presentations-question-1.xml"
-             label="stk-ch3-hist-range"/>
+      <title>Read a Histogram</title>
+
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Data-presentations-question-1.xml" label="stk-ch3-hist-range"/>
     </exercise>
 
     <exercise xml:id="ex-ch3-freq-table">
-      <title>Pivot Table</title>
-      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Frequency-table-for-the-time-taken-and-a-Histogram.xml"
-             label="stk-ch3-freq-table"/>
+      <title>Frequency Tables to Histogram</title>
+
+      <introduction>
+        <p>
+          When groups in a frequency table have unequal class widths, frequency
+          alone should not be used for the height of the bars in a histogram.
+          Instead, we calculate the frequency density for each class:
+          <md>
+            \text{Frequency density} = \frac{\text{Frequency}}{\text{Class width}}.
+          </md>
+          The frequency density determines the height of each bar.
+          This means that the area of each bar, rather than its height,
+          represents the frequency in that class.
+        </p>
+      </introduction>
+
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Frequency-table-for-the-time-taken-and-a-Histogram.xml" label="stk-ch3-freq-table"/>
     </exercise>
 
     <exercise xml:id="ex-ch3-stem-leaf">
-      <title>Pivot Table</title>
-      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Data-Presentation--Stem-and-Leaf-Diagram-q1.xml"
-             label="stk-ch3-stem-leaf"/>
+      <title>Stem and Leaf</title>
+
+      <introduction>
+        <p>
+          A stem-and-leaf plot is a way of displaying numerical data while
+          keeping the individual data values visible.
+          Each value is split into a stem and a leaf.
+          For example, if the data are whole numbers, (24) might be written as
+          (2 | 4), where (2) is the stem and (4) is the leaf.
+          Values with the same stem are written on the same row, and the leaves
+          are usually arranged in ascending order.
+          A key should always be included to show how to read the values, for
+          example: "2 | 4 = 24".
+          Stem-and-leaf plots allow us to see both the overall distribution of
+          the data and the original observations.
+        </p>
+      </introduction>
+
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Data-Presentation--Stem-and-Leaf-Diagram-q1.xml" label="stk-ch3-stem-leaf"/>
     </exercise>
 
     <exercise xml:id="ex-ch3-combined-mean">
-      <title>Pivot Table</title>
-      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Estimating-the-combined-mean-for-two-datasets-presented-as-dotplots.xml"
-             label="stk-ch3-combined-mean"/>
+      <title>Estimating the Combined Mean</title>
+
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Estimating-the-combined-mean-for-two-datasets-presented-as-dotplots.xml" label="stk-ch3-combined-mean"/>
     </exercise>
 
     <exercise xml:id="ex-ch3-average-yield">
-      <title>Pivot Table</title>
-      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Determing-and-comparing-the-average-yield-of-two-varieties.xml"
-             label="stk-ch3-average-yield"/>
+      <title>Determining and Comparing the Average Yield</title>
+
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Determing-and-comparing-the-average-yield-of-two-varieties.xml" label="stk-ch3-average-yield"/>
     </exercise>
 
     <exercise xml:id="ex-ch3-pivot-table-1">
-      <title>Pivot Table</title>
-      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/pivot-table-1.xml"
-             label="stk-ch3-pivot-table-1"/>
+      <title>Pivot Tables (1)</title>
+
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/pivot-table-1.xml" label="stk-ch3-pivot-table-1"/>
     </exercise>
 
     <exercise xml:id="ex-ch3-pivot-table-2">
-      <title>Pivot Table</title>
-      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/pivot-table-2-(proportion).xml"
-             label="stk-ch3-pivot-table-2"/>
+      <title>Pivot Tables (2): Working with Proportions</title>
+
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/pivot-table-2-(proportion).xml" label="stk-ch3-pivot-table-2"/>
     </exercise>
 
     <exercise xml:id="ex-explore-bill-length">
