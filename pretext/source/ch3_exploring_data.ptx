@@ -954,27 +954,37 @@
   <!--  SECTION 1: the data-first hook                                   -->
   <!-- ================================================================= -->
   <section xml:id="sec-ch3-stack">
-    <title>STACK Question Here</title>
+    <title>Practise: Exploring Data</title>
 
-    <introduction>
-      <p>
-        Insert the STACK (Pivot Table) question here
-      </p>
-    </introduction>
+    <exercise>
+      <title>Exploring a survey of Kenyan schools</title>
 
-    <exercise xml:id="ex-pivot-table">
-      <title>Pivot Table</title>
-      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Estimating-the-mean-and-median-of-data-presented-as-a-dotplot_2.xml"
-             label="stk-pivot-table"/>
+      <introduction>
+        <p>
+          Try this interactive exercise to explore data from a fictional survey
+          of schools in Kenya.
+          Build different plots to investigate relationships between variables,
+          explore the distribution of reading scores, compare groups, and see
+          how choices such as histogram bin widths and axis scales can affect
+          what you notice in the data.
+        </p>
+
+        <p>
+          This is a mastery question: each attempt generates a new dataset,
+          allowing you to practise exploring data and interpreting what
+          different visualisations reveal.
+          Use the feedback to understand any mistakes, then try again until you
+          are confident with the material.
+        </p>
+
+        <p>
+          You do not need to use any statistical software for this exercise.
+          Create and explore the plots within the interactive question itself.
+        </p>
+      </introduction>
+
+      <stack label="stack-exploring-data" source="stack/03_exploring_data.xml"/>
     </exercise>
-
-    <subsection xml:id="subsec-ch3-TODO">
-      <title>TODO</title>
-
-      <p>
-        TODO
-      </p>
-    </subsection>
   </section>
 
   <section xml:id="sec-ntsa-r-exploration">

@@ -1,0 +1,1420 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+<!-- question: 274525  -->
+  <question type="stack">
+    <name>
+      <text>Exploring data: Kenyan schools (six visual discoveries)</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<h2>Exploring a survey of Kenyan schools</h2>
+<p>Imagine that a research team has visited 60 schools in six Kenyan counties.
+They record details 
+<ul>
+<li>at the student level, such as the students' reading and mathematics assessment scores</li>
+<li>at the classroom level, such as the classroom size.</li>
+<li>at the school level, such as if the school is in an urban or rural setting, or if it is primary or secondary.</li>
+</ul>
+They calculate the average reading and mathematics scores for each school, and so have that information now at the school level.
+Similarly, they average the classroom size by school, and so have the typical classroom size per school.
+</p>
+<p>In other words, this data is at the school level: Each data point is one school, and the variables they have are the school's average reading and mathematics assessment scores, typical class size, school type, and whether it is in an urban or rural setting. The team wants to understand what the schools have in common, how they differ and which questions are worth investigating further.</p>
+<p>Your role is to explore the school-level data. Build plots to investigate the researchers' questions, then use what you see to answer. You do not need to calculate anything or write code. These are <em>synthetic teaching data</em>, not measurements from actual Kenyan schools. This means that each time you generate this question, you get new data, and hence this question can be answered as many times as you want.</p>
+
+[[jsxgraph width="95%" height="920px"]]
+var ID=[{#ids[1]#},{#ids[2]#},{#ids[3]#},{#ids[4]#},{#ids[5]#},{#ids[6]#},{#ids[7]#},{#ids[8]#},{#ids[9]#},{#ids[10]#},{#ids[11]#},{#ids[12]#},{#ids[13]#},{#ids[14]#},{#ids[15]#},{#ids[16]#},{#ids[17]#},{#ids[18]#},{#ids[19]#},{#ids[20]#},{#ids[21]#},{#ids[22]#},{#ids[23]#},{#ids[24]#},{#ids[25]#},{#ids[26]#},{#ids[27]#},{#ids[28]#},{#ids[29]#},{#ids[30]#},{#ids[31]#},{#ids[32]#},{#ids[33]#},{#ids[34]#},{#ids[35]#},{#ids[36]#},{#ids[37]#},{#ids[38]#},{#ids[39]#},{#ids[40]#},{#ids[41]#},{#ids[42]#},{#ids[43]#},{#ids[44]#},{#ids[45]#},{#ids[46]#},{#ids[47]#},{#ids[48]#},{#ids[49]#},{#ids[50]#},{#ids[51]#},{#ids[52]#},{#ids[53]#},{#ids[54]#},{#ids[55]#},{#ids[56]#},{#ids[57]#},{#ids[58]#},{#ids[59]#},{#ids[60]#}];
+var C=[{#counties[1]#},{#counties[2]#},{#counties[3]#},{#counties[4]#},{#counties[5]#},{#counties[6]#},{#counties[7]#},{#counties[8]#},{#counties[9]#},{#counties[10]#},{#counties[11]#},{#counties[12]#},{#counties[13]#},{#counties[14]#},{#counties[15]#},{#counties[16]#},{#counties[17]#},{#counties[18]#},{#counties[19]#},{#counties[20]#},{#counties[21]#},{#counties[22]#},{#counties[23]#},{#counties[24]#},{#counties[25]#},{#counties[26]#},{#counties[27]#},{#counties[28]#},{#counties[29]#},{#counties[30]#},{#counties[31]#},{#counties[32]#},{#counties[33]#},{#counties[34]#},{#counties[35]#},{#counties[36]#},{#counties[37]#},{#counties[38]#},{#counties[39]#},{#counties[40]#},{#counties[41]#},{#counties[42]#},{#counties[43]#},{#counties[44]#},{#counties[45]#},{#counties[46]#},{#counties[47]#},{#counties[48]#},{#counties[49]#},{#counties[50]#},{#counties[51]#},{#counties[52]#},{#counties[53]#},{#counties[54]#},{#counties[55]#},{#counties[56]#},{#counties[57]#},{#counties[58]#},{#counties[59]#},{#counties[60]#}];
+var R=[{#reading[1]#},{#reading[2]#},{#reading[3]#},{#reading[4]#},{#reading[5]#},{#reading[6]#},{#reading[7]#},{#reading[8]#},{#reading[9]#},{#reading[10]#},{#reading[11]#},{#reading[12]#},{#reading[13]#},{#reading[14]#},{#reading[15]#},{#reading[16]#},{#reading[17]#},{#reading[18]#},{#reading[19]#},{#reading[20]#},{#reading[21]#},{#reading[22]#},{#reading[23]#},{#reading[24]#},{#reading[25]#},{#reading[26]#},{#reading[27]#},{#reading[28]#},{#reading[29]#},{#reading[30]#},{#reading[31]#},{#reading[32]#},{#reading[33]#},{#reading[34]#},{#reading[35]#},{#reading[36]#},{#reading[37]#},{#reading[38]#},{#reading[39]#},{#reading[40]#},{#reading[41]#},{#reading[42]#},{#reading[43]#},{#reading[44]#},{#reading[45]#},{#reading[46]#},{#reading[47]#},{#reading[48]#},{#reading[49]#},{#reading[50]#},{#reading[51]#},{#reading[52]#},{#reading[53]#},{#reading[54]#},{#reading[55]#},{#reading[56]#},{#reading[57]#},{#reading[58]#},{#reading[59]#},{#reading[60]#}];
+var M=[{#maths[1]#},{#maths[2]#},{#maths[3]#},{#maths[4]#},{#maths[5]#},{#maths[6]#},{#maths[7]#},{#maths[8]#},{#maths[9]#},{#maths[10]#},{#maths[11]#},{#maths[12]#},{#maths[13]#},{#maths[14]#},{#maths[15]#},{#maths[16]#},{#maths[17]#},{#maths[18]#},{#maths[19]#},{#maths[20]#},{#maths[21]#},{#maths[22]#},{#maths[23]#},{#maths[24]#},{#maths[25]#},{#maths[26]#},{#maths[27]#},{#maths[28]#},{#maths[29]#},{#maths[30]#},{#maths[31]#},{#maths[32]#},{#maths[33]#},{#maths[34]#},{#maths[35]#},{#maths[36]#},{#maths[37]#},{#maths[38]#},{#maths[39]#},{#maths[40]#},{#maths[41]#},{#maths[42]#},{#maths[43]#},{#maths[44]#},{#maths[45]#},{#maths[46]#},{#maths[47]#},{#maths[48]#},{#maths[49]#},{#maths[50]#},{#maths[51]#},{#maths[52]#},{#maths[53]#},{#maths[54]#},{#maths[55]#},{#maths[56]#},{#maths[57]#},{#maths[58]#},{#maths[59]#},{#maths[60]#}];
+var K=[{#classsize[1]#},{#classsize[2]#},{#classsize[3]#},{#classsize[4]#},{#classsize[5]#},{#classsize[6]#},{#classsize[7]#},{#classsize[8]#},{#classsize[9]#},{#classsize[10]#},{#classsize[11]#},{#classsize[12]#},{#classsize[13]#},{#classsize[14]#},{#classsize[15]#},{#classsize[16]#},{#classsize[17]#},{#classsize[18]#},{#classsize[19]#},{#classsize[20]#},{#classsize[21]#},{#classsize[22]#},{#classsize[23]#},{#classsize[24]#},{#classsize[25]#},{#classsize[26]#},{#classsize[27]#},{#classsize[28]#},{#classsize[29]#},{#classsize[30]#},{#classsize[31]#},{#classsize[32]#},{#classsize[33]#},{#classsize[34]#},{#classsize[35]#},{#classsize[36]#},{#classsize[37]#},{#classsize[38]#},{#classsize[39]#},{#classsize[40]#},{#classsize[41]#},{#classsize[42]#},{#classsize[43]#},{#classsize[44]#},{#classsize[45]#},{#classsize[46]#},{#classsize[47]#},{#classsize[48]#},{#classsize[49]#},{#classsize[50]#},{#classsize[51]#},{#classsize[52]#},{#classsize[53]#},{#classsize[54]#},{#classsize[55]#},{#classsize[56]#},{#classsize[57]#},{#classsize[58]#},{#classsize[59]#},{#classsize[60]#}];
+var T=[{#schooltype[1]#},{#schooltype[2]#},{#schooltype[3]#},{#schooltype[4]#},{#schooltype[5]#},{#schooltype[6]#},{#schooltype[7]#},{#schooltype[8]#},{#schooltype[9]#},{#schooltype[10]#},{#schooltype[11]#},{#schooltype[12]#},{#schooltype[13]#},{#schooltype[14]#},{#schooltype[15]#},{#schooltype[16]#},{#schooltype[17]#},{#schooltype[18]#},{#schooltype[19]#},{#schooltype[20]#},{#schooltype[21]#},{#schooltype[22]#},{#schooltype[23]#},{#schooltype[24]#},{#schooltype[25]#},{#schooltype[26]#},{#schooltype[27]#},{#schooltype[28]#},{#schooltype[29]#},{#schooltype[30]#},{#schooltype[31]#},{#schooltype[32]#},{#schooltype[33]#},{#schooltype[34]#},{#schooltype[35]#},{#schooltype[36]#},{#schooltype[37]#},{#schooltype[38]#},{#schooltype[39]#},{#schooltype[40]#},{#schooltype[41]#},{#schooltype[42]#},{#schooltype[43]#},{#schooltype[44]#},{#schooltype[45]#},{#schooltype[46]#},{#schooltype[47]#},{#schooltype[48]#},{#schooltype[49]#},{#schooltype[50]#},{#schooltype[51]#},{#schooltype[52]#},{#schooltype[53]#},{#schooltype[54]#},{#schooltype[55]#},{#schooltype[56]#},{#schooltype[57]#},{#schooltype[58]#},{#schooltype[59]#},{#schooltype[60]#}];
+var U=[{#setting[1]#},{#setting[2]#},{#setting[3]#},{#setting[4]#},{#setting[5]#},{#setting[6]#},{#setting[7]#},{#setting[8]#},{#setting[9]#},{#setting[10]#},{#setting[11]#},{#setting[12]#},{#setting[13]#},{#setting[14]#},{#setting[15]#},{#setting[16]#},{#setting[17]#},{#setting[18]#},{#setting[19]#},{#setting[20]#},{#setting[21]#},{#setting[22]#},{#setting[23]#},{#setting[24]#},{#setting[25]#},{#setting[26]#},{#setting[27]#},{#setting[28]#},{#setting[29]#},{#setting[30]#},{#setting[31]#},{#setting[32]#},{#setting[33]#},{#setting[34]#},{#setting[35]#},{#setting[36]#},{#setting[37]#},{#setting[38]#},{#setting[39]#},{#setting[40]#},{#setting[41]#},{#setting[42]#},{#setting[43]#},{#setting[44]#},{#setting[45]#},{#setting[46]#},{#setting[47]#},{#setting[48]#},{#setting[49]#},{#setting[50]#},{#setting[51]#},{#setting[52]#},{#setting[53]#},{#setting[54]#},{#setting[55]#},{#setting[56]#},{#setting[57]#},{#setting[58]#},{#setting[59]#},{#setting[60]#}];
+
+var data=ID.map(function(id,i){return {id:id,c:C[i],r:R[i],m:M[i],k:K[i],t:T[i],u:U[i]};});
+var countyNames=['Nairobi','Kiambu','Nakuru','Kisumu','Mombasa','Machakos'];
+var root=document.getElementById(divid);
+root.style.width='100%';root.style.height='525px';
+var ui=document.createElement('div');
+ui.style.cssText='font:14px Arial,sans-serif;padding:12px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;margin-bottom:10px;color:#172554';
+root.parentNode.insertBefore(ui,root);
+var intro=document.createElement('div');
+intro.textContent='Choose a discovery, then build and explore its plot. These are fictional survey records for 60 schools; they are not real Kenyan school results.';
+intro.style.cssText='font-weight:600;margin-bottom:10px;line-height:1.5';
+ui.appendChild(intro);
+var row=document.createElement('div');row.style.cssText='display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px';ui.appendChild(row);
+function dropdown(parent,items,initial){
+ var el=document.createElement('select');el.style.cssText='padding:7px;border:1px solid #94a3b8;border-radius:5px;max-width:100%';
+ items.forEach(function(a){var o=document.createElement('option');o.value=a[0];o.textContent=a[1];el.appendChild(o);});
+ el.value=initial;parent.appendChild(el);return el;
+}
+var stage=dropdown(row,[
+ ['1','1. Reading and mathematics'],
+ ['2','2. Are reading scores alike?'],
+ ['3','3. Which counties are represented?'],
+ ['4','4. Look at a subset'],
+ ['5','5. Primary and secondary'],
+ ['6','6. Can a graph mislead?']
+],'1');
+var options=document.createElement('div');options.style.cssText='display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:8px 0';ui.appendChild(options);
+var build=document.createElement('button');build.type='button';build.textContent='Create plot';build.style.cssText='padding:8px 15px;background:#0f766e;color:white;border:0;border-radius:5px;cursor:pointer';ui.appendChild(build);
+var info=document.createElement('div');info.style.cssText='margin-top:9px;min-height:20px;color:#334155;line-height:1.5';ui.appendChild(info);
+var board=JXG.JSXGraph.initBoard(divid,{boundingbox:[-1,100,10,0],axis:false,showNavigation:false,showCopyright:false,pan:{enabled:false},zoom:{enabled:false},keepaspectratio:false});
+var objects=[];
+function add(kind,args,attrs){var o=board.create(kind,args,Object.assign({fixed:true,highlight:false},attrs||{}));objects.push(o);return o;}
+function segment(x1,y1,x2,y2,color,width){
+ return add('line',[[x1,y1],[x2,y2]],{straightFirst:false,straightLast:false,strokeColor:color||'#94a3b8',strokeWidth:width||1});
+}
+function label(x,y,s,opts){return add('text',[x,y,s],Object.assign({fontSize:12,strokeColor:'#334155',anchorX:'middle'},opts||{}));}
+function point(x,y,color,tip){
+ var p=add('point',[x,y],{name:'',size:2.5,fillColor:color,strokeColor:color,showInfobox:false});
+ p.on('over',function(){info.textContent=tip;});p.on('down',function(){info.textContent=tip;});
+ return p;
+}
+function range(a){return [Math.min.apply(null,a),Math.max.apply(null,a)];}
+function axes(xlo,xhi,ylo,yhi,xname,yname,ticks){
+ board.setBoundingBox([xlo,yhi,xhi,ylo],false);
+ segment(xlo+(xhi-xlo)*.10,ylo+(yhi-ylo)*.13,xhi-(xhi-xlo)*.04,ylo+(yhi-ylo)*.13,'#475569',1.5);
+ segment(xlo+(xhi-xlo)*.10,ylo+(yhi-ylo)*.13,xlo+(xhi-xlo)*.10,yhi-(yhi-ylo)*.04,'#475569',1.5);
+ label((xlo+xhi)/2,ylo+(yhi-ylo)*.005,xname,{fontSize:14});
+ label(xlo+(xhi-xlo)*.008,(ylo+yhi)/2,yname,{rotate:90,fontSize:13});
+ if(ticks){
+  var xstart=xlo+(xhi-xlo)*.10, xend=xhi-(xhi-xlo)*.04;
+  var ystart=ylo+(yhi-ylo)*.13, yend=yhi-(yhi-ylo)*.04;
+  for(var i=0;i<=4;i++){
+    var yy=ystart+(yend-ystart)*i/4;
+    segment(xstart,yy,xend,yy,'#e2e8f0',1);
+    label(xstart-(xhi-xlo)*.018,yy,String(Math.round(yy)),{anchorX:'right',fontSize:11});
+    var xx=xstart+(xend-xstart)*i/4;
+    segment(xx,ystart,xx,ystart-(yhi-ylo)*.014,'#64748b',1);
+    label(xx,ystart-(yhi-ylo)*.05,String(Math.round(xx)),{fontSize:11});
+  }
+ }
+}
+function scatter(sub,xfield,yfield,expanded){
+ var xx=sub.map(function(d){return d[xfield];}),yy=sub.map(function(d){return d[yfield];});
+ var xr=range(xx),yr=range(yy);
+ var xd=Math.max(5,xr[1]-xr[0]),yd=Math.max(5,yr[1]-yr[0]);
+ var xlo=xr[0]-xd*.34,xhi=xr[1]+xd*.15;
+ var ylo=yr[0]-yd*(expanded?.70:.32),yhi=yr[1]+yd*(expanded?.70:.15);
+ axes(xlo,xhi,ylo,yhi,xfield==='r'?'Reading score':xfield==='m'?'Mathematics score':'Class size',yfield==='m'?'Mathematics score':'Reading score',true);
+ sub.forEach(function(d){point(d[xfield],d[yfield],d.u===1?'#2563eb':'#0d9488','School '+d.id+' · '+countyNames[d.c-1]+' · '+xfield+': '+d[xfield]+' · '+yfield+': '+d[yfield]);});
+}
+function quant(s,p){var h=(s.length-1)*p,l=Math.floor(h),r=Math.ceil(h);return s[l]+(s[r]-s[l])*(h-l);}
+function box(x,s,color){
+ s=s.slice().sort(function(a,b){return a-b;});
+ var q1=quant(s,.25),q2=quant(s,.5),q3=quant(s,.75),lo=s[0],hi=s[s.length-1];
+ segment(x,lo,x,hi,color,2);
+ segment(x-.12,lo,x+.12,lo,color,2);segment(x-.12,hi,x+.12,hi,color,2);
+ add('polygon',[[x-.27,q1],[x+.27,q1],[x+.27,q3],[x-.27,q3]],{fillColor:color,fillOpacity:.23,borders:{strokeColor:color,strokeWidth:2},vertices:{visible:false},hasInnerPoints:false});
+ segment(x-.27,q2,x+.27,q2,color,3);
+}
+function boxplot(grouped){
+ var s=data.map(function(d){return d.r;}),rr=range(s);
+ board.setBoundingBox([-.1,rr[1]+10,grouped?2.7:1.7,rr[0]-14],false);
+ for(var y=30;y<=90;y+=10){segment(.05,y,grouped?2.5:1.5,y,'#e2e8f0');label(0,y,String(y),{anchorX:'right',fontSize:11});}
+ if(grouped){
+  box(.75,data.filter(function(d){return d.t===1;}).map(function(d){return d.r;}),'#2563eb');
+  box(1.85,data.filter(function(d){return d.t===2;}).map(function(d){return d.r;}),'#0d9488');
+  label(.75,rr[0]-9,'Primary',{fontSize:14});label(1.85,rr[0]-9,'Secondary',{fontSize:14});
+ }else{box(.8,s,'#2563eb');label(.8,rr[0]-9,'Reading scores',{fontSize:14});}
+}
+function histogram(binWidth){
+ var s=data.map(function(d){return d.r;}),min=30,max=90;
+ var count=Math.ceil((max-min)/binWidth),freq=Array(count).fill(0);
+ s.forEach(function(v){var k=Math.min(count-1,Math.floor((v-min)/binWidth));if(k>=0)freq[k]++;});
+ var high=Math.max.apply(null,freq);
+ board.setBoundingBox([min-9,high*1.25+2,max+5,-high*.24-2],false);
+ segment(min,0,max,0,'#475569',1.5);
+ for(var i=0;i<count;i++){
+  var left=min+i*binWidth,right=Math.min(max,left+binWidth);
+  if(freq[i])add('polygon',[[left,0],[right,0],[right,freq[i]],[left,freq[i]]],{fillColor:'#0d9488',fillOpacity:.8,borders:{strokeColor:'#fff',strokeWidth:1},vertices:{visible:false}});
+ }
+ for(var k=30;k<=90;k+=10)label(k,-high*.08,String(k),{fontSize:11});
+ label(60,-high*.18,'Reading score',{fontSize:14});
+ label(min-5,high*.55,'Count',{rotate:90,fontSize:13});
+}
+function bars(){
+ var counts=[0,0,0,0,0,0];
+ data.forEach(function(d){counts[d.c-1]++;});
+ var high=Math.max.apply(null,counts);
+ board.setBoundingBox([-.7,high+5,6.9,-5],false);
+ segment(0,0,6.5,0,'#475569',1.5);
+ counts.forEach(function(v,i){
+  var x=i+.7;
+  add('polygon',[[x-.31,0],[x+.31,0],[x+.31,v],[x-.31,v]],{fillColor:'#0d9488',fillOpacity:.85,borders:{strokeColor:'#fff'},vertices:{visible:false}});
+  label(x,v+.7,String(v),{fontSize:12});
+  label(x,-2.1,countyNames[i],{fontSize:11,rotate:-25});
+ });
+}
+var plotType=null,filter=null,bin=null,scale=null;
+function control(){
+ options.innerHTML='';
+ var s=stage.value;
+ if(s==='2'){
+  plotType=dropdown(options,[['box','Boxplot'],['hist','Histogram']],'box');
+  var lab=document.createElement('label');lab.textContent='Histogram bin width (starts at 8): ';options.appendChild(lab);
+  bin=document.createElement('input');bin.type='range';bin.min='2';bin.max='30';bin.step='1';bin.value='8';lab.appendChild(bin);
+  var btxt=document.createElement('span');btxt.textContent=' 8';lab.appendChild(btxt);
+  bin.oninput=function(){btxt.textContent=' '+bin.value;if(plotType.value==='hist')draw();};
+  plotType.onchange=draw;
+ }else if(s==='4'){
+  filter=dropdown(options,[['all','All schools'],['urban','Urban schools'],['rural','Rural schools']],'all');
+  filter.onchange=draw;
+ }else if(s==='6'){
+  scale=dropdown(options,[['tight','Close-up axes'],['wide','Expanded vertical axis']],'tight');
+  scale.onchange=draw;
+ }
+ var descriptions={
+  '1':'The researchers wonder whether schools with higher mathematics scores also tend to have higher reading scores. Put mathematics on the horizontal axis and reading on the vertical axis.',
+  '2':'The team wants to understand how reading scores are distributed. Start with a boxplot, then switch to a histogram. Try changing the number of bars to see what becomes visible.',
+  '3':'The research team visited six counties. Use a bar chart to see how many sampled schools came from each county.',
+  '4':'Does the picture change if we look only at urban or rural schools? Compare class size and reading score, then filter the schools.',
+  '5':'Do the sampled primary and secondary schools have similar reading scores? Compare their distributions using side-by-side boxplots.',
+  '6':'A colleague presents the same reading–mathematics data using a different vertical-axis range. Does the apparent strength of the relationship change?'
+ };
+ info.textContent=descriptions[s]+' Click Create plot.';
+}
+function draw(){
+ board.suspendUpdate();
+ objects.forEach(function(o){board.removeObject(o);});objects=[];
+ var s=stage.value;
+ if(s==='1')scatter(data,'m','r',false);
+ if(s==='2'){if(plotType.value==='hist')histogram(Number(bin.value));else boxplot(false);}
+ if(s==='3')bars();
+ if(s==='4'){
+  var sub=filter.value==='all'?data:data.filter(function(d){return d.u===(filter.value==='urban'?1:2);});
+  scatter(sub,'k','r',false);
+  info.textContent='Displaying '+sub.length+' of '+data.length+' schools. Filtering selects rows; it does not change their measurements.';
+ }
+ if(s==='5')boxplot(true);
+ if(s==='6')scatter(data,'m','r',scale.value==='wide');
+ board.unsuspendUpdate();board.update();
+}
+stage.onchange=function(){control();};
+build.onclick=draw;
+control();
+[[/jsxgraph]]
+
+<h3>1. Do reading and mathematics results go together?</h3>
+<p>One question the researchers are interested in is how do reading scores change as mathematics scores increase?
+Create a scatterplot and choose the description that best fits the schools in this survey.</p>
+<p>
+[[input:ans_rel]] [[validation:ans_rel]]
+</p>
+<br>
+<h3>2. Is there one typical reading score?</h3>
+<p>
+Each school has an average reading score. We can look at the spread of these reading scores by looking at a boxplot, or a histogram. Both can give different insights. The researchers wish to explore if the average reading scores are fairly evenly spread across all the schools, or if there are unusually low or high scores stretching one side of the distribution.
+</p>
+<p>
+Start with the boxplot: What does it suggest about the spread of reading scores across the schools?
+</p>
+<p>
+[[input:ans_shape]] [[validation:ans_shape]]
+</p>
+<p>
+Now, look at the histogram. This is another way to view the same reading scores: each bar shows how many schools fall within a range of scores. What does this suggest about the schools' reading scores?
+</p>
+<p>
+[[input:ans_peaks]] [[validation:ans_peaks]]
+</p>
+
+<h3>3. Where did the research team collect its data?</h3>
+<p>The research team sampled schools in six counties, but not equally. Use a bar chart to see which county contributed the most schools to this survey</p>
+<p>
+[[input:ans_max]] [[validation:ans_max]]
+</p>
+<p>Which county contributed the fewest schools?</p>
+<p>
+[[input:ans_min]] [[validation:ans_min]]
+</p>
+
+<h3>4. What if we look only at urban schools?</h3>
+<p>The researchers are curious how class size affects reading score for urban schools.
+</p>
+<p>How does urban schools differ from all schools?</p>
+<p>[[input:ans_filter]] [[validation:ans_filter]]</p>
+
+<h3>5. Do primary and secondary schools differ?</h3>
+<p>The researchers wish to compare reading scores at primary and secondary schools.</p>
+<p>Which school type has the higher median reading score in this survey?</p>
+<p>
+[[input:ans_median]] [[validation:ans_median]]</p>
+<p>Do some primary and secondary schools have reading scores in the same range, despite the difference in medians?</p>
+<p>[[input:ans_overlap]] [[validation:ans_overlap]]</p>
+
+<h3>6. Can two graphs tell different-looking stories?</h3>
+<p>A colleague redraws the same reading–mathematics scatterplot with a much wider vertical axis. Try both scales. Have the schools’ actual scores or their underlying relationship changed? [[input:ans_axis]] [[validation:ans_axis]]</p><p>Why might one version make the relationship look more striking than the other? [[input:ans_axiswhy]] [[validation:ans_axiswhy]]</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<h3>What these plots teach us</h3><p><strong>Scatterplots:</strong> A positive relationship rises as X increases; a negative one falls. A linear relationship can be approximated by a straight line, even if the observations do not lie exactly on it. No apparent relationship means no clear overall upward or downward pattern.</p><p><strong>Boxplots and histograms:</strong> A roughly symmetric distribution has balanced left and right sides. Left-skew has a longer tail towards smaller values; right-skew has a longer tail towards larger values. The reading-score data are approximately symmetric but contain two moderately separated clusters. The boxplot can conceal these clusters; the histogram begins at bin width 8. Try narrower and wider bins to see how the two concentrations become more or less visible.</p><p><strong>Bar charts:</strong> A bar chart compares frequencies of categories. Here the counties refer only to the synthetic sample, not to real county-wide school totals.</p><p><strong>Filtering:</strong> Selecting urban or rural schools displays a subset of the same dataset; it does not change their measurements. This is an introductory demonstration of filtering, not an inference about actual Kenyan schools.</p><p><strong>Grouped boxplots:</strong> Compare medians and overlap separately. A higher median does not mean that every school in one group has a higher score than every school in the other.</p><p><strong>Axis scales:</strong> Changing axis limits changes how a relationship looks, but does not change the observations.</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>12</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <stackversion>
+      <text>2026063000</text>
+    </stackversion>
+    <questionvariables>
+      <text><![CDATA[/* Synthetic data, not observations from actual Kenyan schools. */
+n:60;
+county_names:["Nairobi","Kiambu","Nakuru","Kisumu","Mombasa","Machakos"];
+county_counts:random_permutation([6,8,9,10,12,15]);
+county_raw:append(
+ makelist(1,i,1,county_counts[1]),
+ makelist(2,i,1,county_counts[2]),
+ makelist(3,i,1,county_counts[3]),
+ makelist(4,i,1,county_counts[4]),
+ makelist(5,i,1,county_counts[5]),
+ makelist(6,i,1,county_counts[6])
+);
+county_raw:random_permutation(county_raw);
+/* Thirty paired low/high scores give a symmetric distribution with two moderately separated clusters. */
+low_scores:makelist(49+rand(7),i,1,30);
+high_scores:makelist(120-low_scores[i],i,1,30);
+read_raw:append(low_scores,high_scores);
+/* Different relationship variants: positive, negative, or absent. */
+relcase:1+rand(3);
+math_raw:makelist(
+ if relcase=1 then read_raw[i]+rand(13)-6
+ elseif relcase=2 then 120-read_raw[i]+rand(13)-6
+ else 43+rand(35),
+ i,1,n
+);
+/* Both school types contain both modes, with distinct median positions. */
+type_raw:append(
+ makelist(if i<=18 then 1 else 2,i,1,30),
+ makelist(if i<=12 then 1 else 2,i,1,30)
+);
+setting_raw:makelist(if mod(i,2)=0 then 1 else 2,i,1,n);
+class_raw:makelist(20+rand(26),i,1,n);
+raw_rows:makelist(
+ [i,county_raw[i],read_raw[i],math_raw[i],class_raw[i],type_raw[i],setting_raw[i]],
+ i,1,n
+);
+rows:random_permutation(raw_rows);
+ids:makelist(rows[i][1],i,1,n);
+counties:makelist(rows[i][2],i,1,n);
+reading:makelist(rows[i][3],i,1,n);
+maths:makelist(rows[i][4],i,1,n);
+classsize:makelist(rows[i][5],i,1,n);
+schooltype:makelist(rows[i][6],i,1,n);
+setting:makelist(rows[i][7],i,1,n);
+/* Unique largest/smallest counties by construction. */
+ta_largest:lmax(county_counts);
+ta_smallest:lmin(county_counts);
+largest_id:1;
+smallest_id:1;
+for k:1 thru 6 do (
+ if county_counts[k]=ta_largest then largest_id:k,
+ if county_counts[k]=ta_smallest then smallest_id:k
+);
+/* Relationship answers: 1 positive, 2 negative, 3 none, 4 curved. */
+ta_rel:relcase;
+ta_linear:if relcase=3 then 3 else 1;
+/* Symmetric boxplot; histogram has two peaks at default bin width. */
+ta_shape:1;
+ta_peaks:2;
+ta_hidden:2;
+/* Filtering removes observations, not alters them. */
+ta_filter:1;
+/* Primary lower median, secondary higher; both groups overlap. */
+ta_median:2;
+ta_overlap:1;
+/* Rescaling does not change observations or the relationship. */
+ta_axis:2;
+ta_axiswhy:1;
+/* Dropdowns: list of [value,correct,display] triples. */
+opt_rel:[[1,is(ta_rel=1),"Reading scores tend to increase as mathematics scores increase"],
+ [2,is(ta_rel=2),"Reading scores tend to decrease as mathematics scores increase"],
+ [3,is(ta_rel=3),"Reading scores show no clear tendency to change as mathematics scores increase"],
+ [4,false,"Reading scores rise at first, then fall as mathematics scores increase"]];
+opt_shape:[[1,true,"The reading scores look spread symmetrically across all schools"],
+ [2,false,"Most scores are high, with a longer tail towards low scores"],
+ [3,false,"Most scores are low, with a longer tail towards high scores"]];
+opt_peaks:[[1,false,"Most schools have reading scores concentrated around one central value"],
+ [2,true,"There seem to be two groups of schools with different typical reading scores"],
+ [3,false,"Reading scores are spread fairly evenly across the whole range"]];
+opt_hidden:[[1,false,"The schools' reading scores change when the bars get wider"],
+ [2,true,"Wider bars can make two groups of scores look like one broad group"],
+ [3,false,"Wider bars always make the two groups easier to distinguish"]];
+opt_county_max:makelist([k,is(k=largest_id),county_names[k]],k,1,6);
+opt_county_min:makelist([k,is(k=smallest_id),county_names[k]],k,1,6);
+opt_filter:[[1,true,"Only the selected schools are shown"],
+ [2,false,"The selected schools' measurements change"],
+ [3,false,"The axes must represent different variables"]];
+opt_median:[[1,false,"Primary"],[2,true,"Secondary"],[3,false,"The medians are equal"]];
+opt_overlap:[[1,true,"Yes, their score ranges overlap"],
+ [2,false,"No, the score ranges do not overlap"]];
+opt_axis:[[1,false,"Yes, the underlying relationship changed"],
+ [2,true,"No, only the display scale changed"]];
+opt_axiswhy:[[1,true,"Axis ranges change visual impressions, not the data"],
+ [2,false,"The schools have different scores in the second plot"],
+ [3,false,"The correlation necessarily changes when axes are rescaled"]];
+/* Compact variant identifier: observations and relationship are meaningful. */
+]]></text>
+    </questionvariables>
+    <specificfeedback format="html">
+      <text>[[feedback:prt_ans_rel]] [[feedback:prt_ans_shape]] [[feedback:prt_ans_peaks]] [[feedback:prt_ans_max]] [[feedback:prt_ans_min]] [[feedback:prt_ans_filter]] [[feedback:prt_ans_median]] [[feedback:prt_ans_overlap]] [[feedback:prt_ans_axis]] [[feedback:prt_ans_axiswhy]]</text>
+    </specificfeedback>
+    <questionnote format="html">
+      <text>{@relcase@}; {@rows@}</text>
+    </questionnote>
+    <questiondescription format="html">
+      <text>Synthetic Kenyan schools: interactive scatterplots, bimodality, county frequencies, filtering, group boxplots and axis scales.</text>
+    </questiondescription>
+    <questionsimplify>1</questionsimplify>
+    <assumepositive>0</assumepositive>
+    <assumereal>0</assumereal>
+    <prtcorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:green;"><i class="fa fa-check"></i></span> Correct answer, well done.]]></text>
+    </prtcorrect>
+    <prtpartiallycorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:orange;"><i class="fa fa-adjust"></i></span> Your answer is partially correct.]]></text>
+    </prtpartiallycorrect>
+    <prtincorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:red;"><i class="fa fa-times"></i></span> Incorrect answer.]]></text>
+    </prtincorrect>
+    <decimals>.</decimals>
+    <scientificnotation>*10</scientificnotation>
+    <multiplicationsign>dot</multiplicationsign>
+    <sqrtsign>1</sqrtsign>
+    <complexno>i</complexno>
+    <inversetrig>cos-1</inversetrig>
+    <logicsymbol>lang</logicsymbol>
+    <matrixparens>[</matrixparens>
+    <isbroken>0</isbroken>
+    <variantsselectionseed></variantsselectionseed>
+    <input>
+      <name>ans_axis</name>
+      <type>dropdown</type>
+      <tans>opt_axis</tans>
+      <boxsize>8</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>ans_axiswhy</name>
+      <type>dropdown</type>
+      <tans>opt_axiswhy</tans>
+      <boxsize>8</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>ans_filter</name>
+      <type>dropdown</type>
+      <tans>opt_filter</tans>
+      <boxsize>8</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>ans_max</name>
+      <type>dropdown</type>
+      <tans>opt_county_max</tans>
+      <boxsize>8</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>ans_median</name>
+      <type>dropdown</type>
+      <tans>opt_median</tans>
+      <boxsize>8</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>ans_min</name>
+      <type>dropdown</type>
+      <tans>opt_county_min</tans>
+      <boxsize>8</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>ans_overlap</name>
+      <type>dropdown</type>
+      <tans>opt_overlap</tans>
+      <boxsize>8</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>ans_peaks</name>
+      <type>dropdown</type>
+      <tans>opt_peaks</tans>
+      <boxsize>8</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>ans_rel</name>
+      <type>dropdown</type>
+      <tans>opt_rel</tans>
+      <boxsize>8</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>ans_shape</name>
+      <type>dropdown</type>
+      <tans>opt_shape</tans>
+      <boxsize>8</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <prt>
+      <name>prt_ans_axis</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description>correct</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_axis</sans>
+        <tans>ta_axis</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_axis-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Correct. You have read the plot correctly.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>ans_axis-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description>diagnostic-1</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_axis</sans>
+        <tans>1</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_axis-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>The same schools and measurements appear in both plots. Only the vertical-axis range has changed.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>ans_axis-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Check whether the coordinates changed or only the axes.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt_ans_axiswhy</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description>correct</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_axiswhy</sans>
+        <tans>ta_axiswhy</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_axiswhy-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Correct. You have read the plot correctly.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>ans_axiswhy-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description>diagnostic-1</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_axiswhy</sans>
+        <tans>2</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_axiswhy-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>No school scores have been changed. The same coordinates are displayed using different limits.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>ans_axiswhy-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description>diagnostic-2</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_axiswhy</sans>
+        <tans>3</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_axiswhy-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Rescaling axes does not change the data or their correlation; it changes the visual impression.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>ans_axiswhy-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>The appearance of the point cloud depends partly on the range shown on each axis.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt_ans_filter</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description>correct</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_filter</sans>
+        <tans>ta_filter</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_filter-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Correct. You have read the plot correctly.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>ans_filter-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description>diagnostic-1</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_filter</sans>
+        <tans>2</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_filter-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Filtering does not change the measurements of the retained schools; it hides the rows that do not meet the selection.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>ans_filter-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description>diagnostic-2</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_filter</sans>
+        <tans>3</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_filter-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>The axes stay class size and reading score. Only the set of schools displayed changes.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>ans_filter-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Compare the number of points before and after filtering.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt_ans_hidden</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description>correct</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_hidden</sans>
+        <tans>ta_hidden</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_hidden-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Correct. Widening the bins groups more scores together, which can hide the two concentrations without changing a single observation.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>ans_hidden-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description>diagnostic-1</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_hidden</sans>
+        <tans>1</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_hidden-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>The scores do not change when the bin width changes. Only how we group them into bars changes.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>ans_hidden-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description>diagnostic-2</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_hidden</sans>
+        <tans>3</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_hidden-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Wider bars combine more observations and can conceal the separation between the two concentrations.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>ans_hidden-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Compare a narrow and a wide bin width. The data stay the same, but the visual detail changes.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt_ans_max</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description>correct</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_max</sans>
+        <tans>largest_id</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_max-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Correct. You have read the plot correctly.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>ans_max-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description>diagnostic-1</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_max</sans>
+        <tans>smallest_id</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_max-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>That is the shortest bar, not the tallest. The question asks which county has the most schools.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>ans_max-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Look for the tallest bar. These counts describe only the synthetic sample.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt_ans_median</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description>correct</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_median</sans>
+        <tans>ta_median</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_median-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Correct. You have read the plot correctly.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>ans_median-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description>diagnostic-1</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_median</sans>
+        <tans>1</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_median-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Compare the horizontal median lines inside the two boxes, not the maximum or the whiskers.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>ans_median-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description>diagnostic-2</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_median</sans>
+        <tans>3</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_median-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>The medians are not equal. Compare the lines inside the boxes.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>ans_median-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>The median is the line inside each box. Compare their vertical positions.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt_ans_min</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description>correct</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_min</sans>
+        <tans>smallest_id</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_min-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Correct. You have read the plot correctly.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>ans_min-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description>diagnostic-1</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_min</sans>
+        <tans>largest_id</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_min-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>That is the tallest bar. The question asks for the fewest schools.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>ans_min-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Look for the shortest bar.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt_ans_overlap</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description>correct</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_overlap</sans>
+        <tans>ta_overlap</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_overlap-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Correct. You have read the plot correctly.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>ans_overlap-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description>diagnostic-1</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_overlap</sans>
+        <tans>2</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_overlap-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>A higher median does not imply that all observations are higher. The two groups have overlapping score ranges.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>ans_overlap-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Look at the full whisker-to-whisker ranges, not only the medians.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt_ans_peaks</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description>correct</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_peaks</sans>
+        <tans>ta_peaks</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_peaks-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Yes. The histogram suggests two concentrations of schools with different typical reading scores. A boxplot can conceal this feature.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>ans_peaks-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description>diagnostic-1</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_peaks</sans>
+        <tans>1</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_peaks-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Try changing the histogram's bin width. With narrower bars you may see more detail; with wider bars some detail disappears. 
+</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>ans_peaks-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description>diagnostic-2</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_peaks</sans>
+        <tans>3</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_peaks-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>The bars are not equally tall across the score range. There are two main concentrations of schools. Try a narrower bin width if needed.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>ans_peaks-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Look for score ranges containing relatively many schools. Does the histogram suggest one concentration, two, or an even spread?</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt_ans_rel</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description>correct</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_rel</sans>
+        <tans>ta_rel</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_rel-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Correct. The graph matches your interpretation.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>ans_rel-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description>diagnostic-1</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_rel</sans>
+        <tans>2</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_rel-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Look at what happens to reading scores as mathematics scores increase. If they tend to rise, the relationship is positive; if they tend to fall, it is negative.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>ans_rel-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description>diagnostic-2</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_rel</sans>
+        <tans>3</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_rel-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>A curved pattern would rise and then fall, or vice versa. Look for an overall upward or downward tendency, or no clear tendency at all.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>ans_rel-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Follow the cloud of schools from lower to higher mathematics scores. Do reading scores tend to rise, fall, or show no consistent change?</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt_ans_shape</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description>correct</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_shape</sans>
+        <tans>ta_shape</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_shape-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Correct. You have read the plot correctly.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>ans_shape-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description>diagnostic-1</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_shape</sans>
+        <tans>2</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_shape-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>A longer tail towards low scores would mean a few schools have unusually low results. Compare both sides of this boxplot: they are approximately balanced.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>ans_shape-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description>diagnostic-2</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_shape</sans>
+        <tans>3</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>ans_shape-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>A longer tail towards high scores would mean a few schools have unusually high results. Compare both sides of this boxplot: they are approximately balanced.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>ans_shape-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Compare the two whiskers and the two halves of the box. They suggest a fairly balanced spread around the middle score.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <deployedseed>196960879</deployedseed>
+    <deployedseed>1316529334</deployedseed>
+    <deployedseed>445542254</deployedseed>
+    <deployedseed>1852358410</deployedseed>
+    <deployedseed>134595074</deployedseed>
+    <deployedseed>1824702218</deployedseed>
+    <deployedseed>1741542462</deployedseed>
+    <deployedseed>3301251</deployedseed>
+    <deployedseed>24695792</deployedseed>
+    <deployedseed>287423942</deployedseed>
+    <deployedseed>930411843</deployedseed>
+    <deployedseed>1142284820</deployedseed>
+    <deployedseed>1269480169</deployedseed>
+    <deployedseed>23573166</deployedseed>
+    <deployedseed>485519498</deployedseed>
+    <deployedseed>1041702133</deployedseed>
+    <deployedseed>2044785788</deployedseed>
+    <deployedseed>1580474690</deployedseed>
+    <deployedseed>746782891</deployedseed>
+    <deployedseed>1124746160</deployedseed>
+    <deployedseed>372998121</deployedseed>
+    <deployedseed>196397484</deployedseed>
+    <deployedseed>1984933947</deployedseed>
+    <deployedseed>1559001103</deployedseed>
+    <deployedseed>82359009</deployedseed>
+  </question>
+
+</quiz>
