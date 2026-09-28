@@ -1473,11 +1473,6 @@
     
     <exercise xml:id="ex-ch3-estimated-mean">
       <title>Estimate the Mean and Median from Data</title>
-      <statement>
-        <p>
-          Test
-        </p>
-      </statement>
       <stack source="stack/03_estimated_mean.xml"
              label="stk-estimated-mean"/>
     </exercise>
@@ -1496,12 +1491,11 @@
 
     <exercise xml:id="ex-ch3-match-dots">
       <title>Match the Dotplot to Boxplots</title>
-      <statement>
+      <introduction>
         <p>
           Test
         </p>
-      </statement>
-      <p>Test</p>
+      </introduction>
       <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Interpret-and-match-dotplots-to-respective-boxplots.xml"
              label="stk-ch3-match-dots"/>
     </exercise>
