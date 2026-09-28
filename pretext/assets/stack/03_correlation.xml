@@ -1,0 +1,741 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+<!-- question: 274065  -->
+  <question type="stack">
+    <name>
+      <text>Correlation with Data</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<h3>Correlation: Altitude, Temperature and Tea Yield</h3>
+
+<p>
+A researcher is investigating how altitude is associated with mean annual temperature and annual tea yield. Data have been collected from 21 tea-growing locations.
+</p>
+
+<p>
+Download the dataset using the link below.
+</p>
+
+<p>
+<a href='[[textdownload name="tea_data.csv"]]{@stack_csv_formatter(data,lab)@}[[/textdownload]]'>Download tea_data.csv</a>
+</p>
+
+<p>
+The dataset contains three variables:
+</p>
+
+<ul>
+<li>X: Altitude (metres above sea level)</li>
+<li>Y: Mean annual temperature (°C)</li>
+<li>Z: Annual tea yield (kg of made tea per hectare)</li>
+</ul>
+
+<p>
+Calculate Pearson's correlation coefficient
+between altitude and mean annual temperature.
+</p>
+
+<p>
+\(r=\) [[input:ans1]] [[validation:ans1]]
+</p>
+
+<p>
+How would you describe the relationship?
+</p>
+
+<p>
+[[input:ans2]] [[validation:ans2]]
+</p>
+
+[[feedback:prt1]]
+
+<p>
+Calculate the Pearson correlation coefficient between altitude and yield of tea.
+</p>
+
+<p>
+r = [[input:ans3]] [[validation:ans3]]
+</p>
+[[feedback:prt3]]
+
+<p>
+Which of the following best describes the relationship between altitude and tea yield?
+</p>
+
+<p>
+[[input:ans4]] [[validation:ans4]]
+</p>
+[[feedback:prt4]]]]></text>
+    </questiontext>
+    <generalfeedback format="plain_text">
+      <text><![CDATA[<h3>Worked solution: Correlation and relationships</h3>
+
+<h4>1. Altitude and mean annual temperature</h4>
+
+<p>
+The Pearson correlation coefficient is
+\(r={@rxy_display@}\).
+</p>
+
+<p>
+This indicates a
+[[if test="case=0"]]weak[[else]]strong[[/if]]
+negative linear relationship between altitude
+and mean annual temperature.
+</p>
+
+<p>
+In other words, as altitude increases,
+mean annual temperature tends to decrease.
+The closer the correlation coefficient is to
+\(-1\), the more closely the observations
+follow a downward-sloping straight line.
+We can visualise this in a scatter plot:
+</p>
+
+[[jsxgraph width="500px" height="350px"]]
+
+var xs = {#altitudes#};
+var ys = {#temps#};
+
+var xmin = Math.min.apply(null, xs);
+var xmax = Math.max.apply(null, xs);
+var ymin = Math.min.apply(null, ys);
+var ymax = Math.max.apply(null, ys);
+
+var xpad = (xmax-xmin)*0.1;
+var ypad = Math.max((ymax-ymin)*0.1, 0.5);
+
+var board = JXG.JSXGraph.initBoard(divid, {
+    boundingbox: [
+        xmin-xpad,
+        ymax+ypad,
+        xmax+xpad,
+        ymin-ypad
+    ],
+    axis: true,
+    showCopyright: false,
+    showNavigation: false
+});
+
+for (var i=0; i<xs.length; i++) {
+    board.create('point', [xs[i],ys[i]], {
+        name: '',
+        size: 3,
+        fixed: true,
+        highlight: false,
+        strokeColor: '#2563eb',
+        fillColor: '#2563eb'
+    });
+}
+
+[[/jsxgraph]]
+
+<p>
+[[if test="case=0"]]
+The points show a weak negative linear association.
+[[else]]
+The points show a strong negative linear association.
+[[/if]]
+</p>
+
+<p>
+Pearson's correlation coefficient:
+\(r={@rxy_display@}\).
+</p>
+
+<h4>2. Altitude and annual tea yield</h4>
+
+<p>
+The Pearson correlation coefficient is
+\(r={@rxz_display@}\).
+</p>
+
+<p>
+But what does this number actually tell us?
+</p>
+
+<p>
+If we plot tea yield against altitude, we
+observe an approximately
+<strong>quadratic relationship</strong>.
+Tea yield initially increases with altitude,
+reaches a maximum, and then decreases
+as altitude increases further.
+</p>
+
+<p>
+This means that a straight line cannot
+adequately describe the relationship.
+</p>
+
+<p>
+Pearson's correlation coefficient measures
+the <strong>strength and direction of
+linear association</strong>. It does not
+measure the strength of nonlinear relationships.
+If we look at this in a scatter plot we get this:
+</p>
+
+[[jsxgraph width="500px" height="350px"]]
+
+var xs = {#altitudes#};
+var ys = {#yields#};
+
+var xmin = Math.min.apply(null, xs);
+var xmax = Math.max.apply(null, xs);
+var ymin = Math.min.apply(null, ys);
+var ymax = Math.max.apply(null, ys);
+
+var xpad = (xmax-xmin)*0.1;
+var ypad = Math.max((ymax-ymin)*0.1, 1);
+
+var board = JXG.JSXGraph.initBoard(divid, {
+    boundingbox: [
+        xmin-xpad,
+        ymax+ypad,
+        xmax+xpad,
+        ymin-ypad
+    ],
+    axis: true,
+    showCopyright: false,
+    showNavigation: false
+});
+
+for (var i=0; i<xs.length; i++) {
+    board.create('point', [xs[i],ys[i]], {
+        name: '',
+        size: 3,
+        fixed: true,
+        highlight: false,
+        strokeColor: '#16a34a',
+        fillColor: '#16a34a'
+    });
+}
+
+[[/jsxgraph]]
+<p>
+The curved pattern is important:
+Pearson's correlation coefficient describes
+linear association, not the strength
+of this nonlinear relationship.
+</p>
+
+<p>
+Pearson's correlation coefficient:
+\(r={@rxz_display@}\).
+</p>
+
+<p>
+Notice that a correlation coefficient cannot
+describe the curved shape of this relationship.
+</p>
+
+<p>
+Even if the correlation coefficient is close
+to zero, there may still be a strong
+nonlinear relationship between the variables.
+Equally, a moderate positive or negative
+correlation does not necessarily mean that
+the underlying relationship is linear.
+</p>
+
+<p>
+Therefore, the correct answer is
+<strong>None of the above</strong>.
+The relationship is approximately quadratic,
+rather than weakly or strongly linear.
+</p>
+
+<hr>
+
+<h3>3. Why should we always visualise our data?</h3>
+
+<p>
+Consider the following question:
+<strong>Can two datasets have almost identical
+correlation coefficients but completely
+different relationships?</strong>
+</p>
+
+<p>
+Surprisingly, yes!
+</p>
+
+<p>
+The <strong>Datasaurus Dozen</strong>
+illustrates this beautifully.
+It consists of datasets with almost identical
+summary statistics, including their means,
+standard deviations and Pearson correlation
+coefficients.
+</p>
+
+<p>
+However, when we plot the data,
+we discover that they have dramatically
+different shapes.
+</p>
+
+<p style="text-align: center;">
+  <img
+    src="https://damassets.autodesk.net/content/dam/autodesk/research/publications-assets/gifs/same-stats-different-graphs/DinoSequentialSmaller.gif"
+    alt="Animated Datasaurus Dozen showing datasets with similar summary statistics but different shapes."
+    style="width: 550px; max-width: 100%; height: auto;"
+  >
+</p>
+
+<p>
+<strong>Look carefully at the animation.</strong>
+Despite the very different patterns, the
+correlation coefficient remains almost unchanged.
+</p>
+
+<p>
+This demonstrates an important limitation:
+<strong>a correlation coefficient alone
+cannot tell us what a relationship looks like.</strong>
+</p>
+
+<h4>Key takeaways</h4>
+
+<ul>
+  <li>
+    Pearson's correlation measures the strength
+    and direction of <strong>linear
+    association</strong>.
+  </li>
+  <li>
+    A correlation close to zero does
+    <strong>not</strong> necessarily mean
+    that there is no relationship.
+  </li>
+  <li>
+    A nonzero correlation does
+    <strong>not</strong> prove that the
+    relationship is linear.
+  </li>
+  <li>
+    Different datasets can have nearly identical
+    correlation coefficients but completely
+    different patterns.
+  </li>
+</ul>
+
+<p>
+<strong>Remember:</strong> Calculate the
+correlation coefficient, but always examine
+the scatterplot before interpreting it.
+</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <stackversion>
+      <text>2026063000</text>
+    </stackversion>
+    <questionvariables>
+      <text><![CDATA[/* Altitudes: 21 observations */
+n: 21;
+t: makelist(i-11,i,1,n);
+
+alt0: 1400+50*rand(5);
+alt_step: 65+5*rand(4);
+altitudes: makelist(alt0+alt_step*t[i],i,1,n);
+
+/* Pearson correlation function */
+corr(A,B):=block(
+    [m:length(A),ma,mb,sa,sb,sab],
+    ma:sum(A[k],k,1,m)/m,
+    mb:sum(B[k],k,1,m)/m,
+    sa:sum((A[k]-ma)^2,k,1,m),
+    sb:sum((B[k]-mb)^2,k,1,m),
+    sab:sum((A[k]-ma)*(B[k]-mb),k,1,m),
+    float(sab/sqrt(sa*sb))
+);
+
+/* Weak or strong negative correlation */
+case: rand(2);
+
+r_target:
+    if case=0
+    then -(25+rand(11))/100
+    else -(84+rand(9))/100;
+
+/* Random noise, centred and orthogonal to altitude */
+raw: makelist(rand(201)-100,i,1,n);
+rawmean: sum(raw[i],i,1,n)/n;
+slope_noise:
+    sum(t[i]*raw[i],i,1,n)/
+    sum(t[i]^2,i,1,n);
+
+u: makelist(
+    raw[i]-rawmean-slope_noise*t[i],
+    i,1,n
+);
+
+/* Scale noise to obtain the target correlation */
+slope_temp: -0.4;
+scale:
+    abs(slope_temp)*
+    sqrt(
+        (1/r_target^2-1)*
+        sum(t[i]^2,i,1,n)/
+        sum(u[i]^2,i,1,n)
+    );
+
+/* Temperatures rounded to one decimal place */
+temps: makelist(
+    float(round(10*(18+slope_temp*t[i]+scale*u[i]))/10),
+    i,1,n
+);
+
+/* Downward-opening quadratic tea yield */
+tea_slope: rand(41)-20;
+tea_noise: makelist(rand(141)-70,i,1,n);
+
+yields: makelist(
+    round(2800-12*t[i]^2+tea_slope*t[i]+tea_noise[i]),
+    i,1,n
+);
+
+/* Downloadable data */
+lab: [
+    "Altitude (m)",
+    "Mean annual temperature (deg C)",
+    "Annual tea yield (kg/ha)"
+];
+
+data: makelist(
+    [altitudes[i],temps[i],yields[i]],
+    i,1,n
+);
+
+/* Correlations calculated from the actual CSV values */
+rxy: corr(altitudes,temps);
+rxz: corr(altitudes,yields);
+
+rxy_display: float(round(1000*rxy)/1000);
+rxz_display: float(round(1000*rxz)/1000);
+
+/* Correct classifications */
+ta_xy: if case=0 then 2 else 4;
+ta_xz: 5;
+
+/* Dropdown options */
+
+/* Correct classification */
+ta_xy: if case=0 then 2 else 4;
+
+/* Dropdown options */
+options_xy: [
+    [0,false,"No relationship"],
+    [1,false,"Weak positive linear relationship"],
+    [2,if case=0 then true else false,
+       "Weak negative linear relationship"],
+    [3,false,"Strong positive linear relationship"],
+    [4,if case=1 then true else false,
+       "Strong negative linear relationship"],
+    [5,false,"None of the above"]
+];
+
+options_xz: [
+    [0,false,"No relationship"],
+    [1,false,"Weak positive linear relationship"],
+    [2,false,"Weak negative linear relationship"],
+    [3,false,"Strong positive linear relationship"],
+    [4,false,"Strong negative linear relationship"],
+    [5,true,"None of the above"]
+];]]></text>
+    </questionvariables>
+    <specificfeedback format="html">
+      <text></text>
+    </specificfeedback>
+    <questionnote format="html">
+      <text>{@ta1@}</text>
+    </questionnote>
+    <questiondescription format="html">
+      <text>{@alt0@}, {@alt_step@}, {@temps@}, {@yields@}</text>
+    </questiondescription>
+    <questionsimplify>1</questionsimplify>
+    <assumepositive>0</assumepositive>
+    <assumereal>0</assumereal>
+    <prtcorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:green;"><i class="fa fa-check"></i></span> Correct answer, well done.]]></text>
+    </prtcorrect>
+    <prtpartiallycorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:orange;"><i class="fa fa-adjust"></i></span> Your answer is partially correct.]]></text>
+    </prtpartiallycorrect>
+    <prtincorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:red;"><i class="fa fa-times"></i></span> Incorrect answer.]]></text>
+    </prtincorrect>
+    <decimals>.</decimals>
+    <scientificnotation>*10</scientificnotation>
+    <multiplicationsign>none</multiplicationsign>
+    <sqrtsign>1</sqrtsign>
+    <complexno>i</complexno>
+    <inversetrig>cos-1</inversetrig>
+    <logicsymbol>lang</logicsymbol>
+    <matrixparens>[</matrixparens>
+    <isbroken>0</isbroken>
+    <variantsselectionseed></variantsselectionseed>
+    <input>
+      <name>ans1</name>
+      <type>numerical</type>
+      <tans>rxy_display</tans>
+      <boxsize>15</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>ans2</name>
+      <type>dropdown</type>
+      <tans>options_xy</tans>
+      <boxsize>15</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>1</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>ans3</name>
+      <type>numerical</type>
+      <tans>rxz_display</tans>
+      <boxsize>15</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>ans4</name>
+      <type>dropdown</type>
+      <tans>options_xz</tans>
+      <boxsize>15</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>1</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <prt>
+      <name>prt1</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text><![CDATA[/* Classify the student's own correlation coefficient. */
+
+ecf_r: float(ans1);
+
+ecf_ta:
+    if ecf_r < -1 or ecf_r > 1 then -1
+    elseif ecf_r <= -0.6 then 4
+    elseif ecf_r <= -0.1 then 2
+    elseif ecf_r >= 0.6 then 3
+    elseif ecf_r >= 0.1 then 1
+    else -1;]]></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans1</sans>
+        <tans>rxy_display</tans>
+        <testoptions>0.002</testoptions>
+        <quiet>1</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0.5</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>1</truenextnode>
+        <trueanswernote>prt1-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>prt1-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>
+Your calculated correlation coefficient is
+not correct. Check your calculation using
+the altitude and temperature columns.
+You can still receive credit for interpreting
+your own coefficient correctly.
+</p>]]></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans2</sans>
+        <tans>ecf_ta</tans>
+        <testoptions></testoptions>
+        <quiet>1</quiet>
+        <truescoremode>+</truescoremode>
+        <truescore>0.5</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>
+Your interpretation is consistent with the
+correlation coefficient you calculated.
+</p>]]></text>
+        </truefeedback>
+        <falsescoremode>-</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt1-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>
+Check how you have interpreted your
+correlation coefficient. Consider both
+its sign and its magnitude.
+</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt3</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans3</sans>
+        <tans>rxz_display</tans>
+        <testoptions>0.002</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt3-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt3-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt4</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans4</sans>
+        <tans>0</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt4-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Not quite. A small Pearson correlation coefficient does not necessarily mean that two variables are unrelated.
+
+Plot tea yield against altitude and look at the shape of the observations. Is a straight line an appropriate description of the relationship?</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>prt4-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans4</sans>
+        <tans>ta_xz</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>+</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt4-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct! The relationship between altitude and tea yield is nonlinear and approximately quadratic.
+
+Pearson's correlation measures linear association. Its value alone cannot adequately describe this curved relationship.
+
+Tea yield initially increases with altitude, reaches a maximum, and then decreases.</text>
+        </truefeedback>
+        <falsescoremode>-</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt4-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>The relationship is not adequately described by a positive or negative linear trend.
+
+Examine the scatterplot. Does tea yield increase or decrease consistently as altitude increases, or does the direction change?</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <deployedseed>1522078927</deployedseed>
+  </question>
+
+</quiz>

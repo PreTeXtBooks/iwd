@@ -1478,24 +1478,30 @@
           Test
         </p>
       </statement>
-      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Place-the-estimated-value-of-mean-and-median-in-stacked-dotplot.xml"
+      <stack source="stack/03_estimated_mean.xml"
              label="stk-estimated-mean"/>
     </exercise>
 
     <exercise xml:id="ex-ch3-estimated-mode">
-      <title>Pivot Table</title>
-      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Place-the-estimated-value-of-mode-in-stacked-dotplot.xml"
+      <title>Estimate the Mode from Data</title>
+      <stack source="stack/03_estimated_mode.xml"
              label="stk-estimated-mode"/>
     </exercise>
 
     <exercise xml:id="ex-ch3-correlation">
-      <title>Pivot Table</title>
-      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Correlation-with-Data.xml"
+      <title>Correlation with Data</title>
+      <stack source="stack/03_correlation.xml"
              label="stk-ch3-correlation"/>
     </exercise>
 
     <exercise xml:id="ex-ch3-match-dots">
-      <title>Pivot Table</title>
+      <title>Match the Dotplot to Boxplots</title>
+      <statement>
+        <p>
+          Test
+        </p>
+      </statement>
+      <p>Test</p>
       <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Interpret-and-match-dotplots-to-respective-boxplots.xml"
              label="stk-ch3-match-dots"/>
     </exercise>
@@ -1546,18 +1552,6 @@
       <title>Pivot Table</title>
       <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/pivot-table-2-(proportion).xml"
              label="stk-ch3-pivot-table-2"/>
-    </exercise>
-
-    <exercise xml:id="ex-ch3-interpret-2-way">
-      <title>Pivot Table</title>
-      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Interpreting-a-two-way-frequency-table.xml"
-             label="stk-ch3-interpret-2-way"/>
-    </exercise>
-
-    <exercise xml:id="ex-ch3-interpret-percentages">
-      <title>Pivot Table</title>
-      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Interpreting-two-way-tables-with-frequencies-given-as-row-and-column-percentages.xml"
-             label="stk-ch3-interpret-percentages"/>
     </exercise>
 
     <exercise xml:id="ex-explore-bill-length">
