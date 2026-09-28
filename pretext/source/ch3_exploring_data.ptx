@@ -1449,15 +1449,249 @@
         categories?
         That's something we can explore too.
       </p>
+    </subsection>
 
-      <p>
-        Scatter plots are the standard way to look at how two numerical
-        variables relate to each other.
-        The Kenya accidents data doesn't really have many pairs of numerical
-        variables to compare, but we use scatter plots a lot in
-        <xref ref="ch-visualising-multidimensional-data"/>, on some richer
-        datasets.
-      </p>
+    <subsection xml:id="sec-scatterplots-correlation">
+      <title>Looking at Two Variables Together</title>
+
+      <introduction>
+        <p>
+          So far, we've mostly looked at variables one at a time.
+          But often the question we're interested in involves
+          <em>two variables at once</em>.
+        </p>
+
+        <p>
+          Think about the NTSA road crash data.
+          We might want to know whether older and younger people tend to be
+          involved in crashes at different times of day.
+          Or, with a different dataset, we might ask whether taller people tend
+          to weigh more, whether students who spend longer studying tend to get
+          higher marks, or whether farms receiving more rainfall tend to have
+          higher yields.
+        </p>
+
+        <p>
+          In each case, we're no longer interested in the distribution of just
+          one variable.
+          We're interested in whether
+          <em>two numerical variables vary together</em>.
+        </p>
+
+        <insight>
+          <title>Not every number is a numerical variable</title>
+
+          <p>
+            The NTSA data contains several columns that look like numbers, but
+            that doesn't mean it makes sense to compare them numerically.
+            For example, the cause code uses numbers as labels for different
+            causes.
+            A cause code of 20 isn't <q>twice as much</q> as a cause code of 10.
+            The numbers are just codes.
+          </p>
+
+          <p>
+            Before looking for a relationship between two variables, ask whether
+            both variables represent quantities for which their numerical values
+            have a meaningful interpretation.
+          </p>
+        </insight>
+      </introduction>
+
+      <subsubsection xml:id="ss-scatterplots">
+        <title>Seeing the Relationship</title>
+
+        <p>
+          Let's look at our flamingoes dataset.
+          Here, we do have two numerical variables that we might expect to be
+          related.
+        </p>
+
+        <p>
+          Flamingos are famous for their long legs, but not all flamingos are
+          the same size.
+          So, let's see the relationship between their <em>leg length</em> (
+          <c>leg_length_mm</c> ) and their <em>body weight</em> (
+          <c>body_mass_g</c> ).
+          Now, we can look at each variable separately, or look at averages -
+          but a scatterplot can help us to see a relationship between the
+          variables.
+          That is,
+        </p>
+
+        <question>
+          <p>
+            <em>Do flamingos with longer legs also tend to be heavier?</em>
+          </p>
+        </question>
+
+        <program language="r">
+          <code>
+            # Install the package if needed: pak::pak("pretextBooks/statsdata"
+            
+            # Call the library and the data
+            library(statsdata)
+            data("kenya_flamingos")
+
+            # Plot leg length against body mass
+            plot(kenya_flamingos$leg_length_mm, kenya_flamingos$body_mass_g)
+          </code>
+        </program>
+
+        <figure xml:id="fig-scatterplot-flamingoes">
+          <caption>
+            Scatterplot of the Flamingoes Data for Leg Length (mm) by Body Mass
+            (g)
+          </caption>
+
+          <image source="images/ch3_scatterplot.png" width="90%">
+            <description>
+              <p>
+                Plot of Leg Length by Body Mass.
+                Generally, as Leg Length increases, Body Mass does too.
+              </p>
+            </description>
+          </image>
+        </figure>
+
+        <p>
+          Pick one point on the graph.
+          Its horizontal position tells us that flamingo's leg length, while its
+          vertical position tells us its weight.
+          So, unlike a histogram or boxplot, each point contains information
+          about <em>two variables for the same observation</em>.
+        </p>
+
+        <p>
+          Now, instead of focusing on individual points, look at the pattern
+          they make together.
+          As leg length increases, what seems to happen to weight?
+          The points generally move upwards as we move from left to right.
+          Flamingos with longer legs tend to be heavier.
+          We call this a positive relationship between the two variables.
+          If the pattern went in the opposite direction, with one variable
+          generally decreasing as the other increased, we would call it a
+          negative relationship.
+        </p>
+
+        <insight>
+          <title>Look at the pattern, not just the points</title>
+
+          <p>
+            A scatterplot isn't telling us that every flamingo with longer legs
+            must be heavier than every flamingo with shorter legs.
+            Individual flamingos vary - but, we're looking here for the overall
+            pattern across all the observations.
+          </p>
+        </insight>
+
+        <p>
+          There are other things worth noticing too.
+          How closely do the points follow the overall pattern?
+          Does the pattern look roughly like a straight line, or does it curve?
+          Are there any flamingos that look very different from the others?
+        </p>
+
+        <p>
+          These are all things we can see before calculating a single statistic.
+          As always, exploring the data first helps us decide what summaries
+          will actually be useful.
+        </p>
+      </subsubsection>
+
+      <subsubsection xml:id="ss-correlation">
+        <title>Summarising the Relationship</title>
+
+        <p>
+          From the scatterplot, we can see that flamingos with longer legs tend
+          to be heavier.
+          But how strong is that relationship?
+        </p>
+
+        <p>
+          We could compare this scatterplot with another one and say that one
+          relationship <q>looks stronger</q> than another.
+          But it would be useful to have a numerical way to summarise what we
+          can see.
+        </p>
+
+        <p>
+          One commonly used summary is the correlation coefficient, which
+          describes the <em>direction</em> and <em>strength</em> of a linear
+          relationship between two numerical variables.
+        </p>
+
+        <p>
+          The correlation coefficient is always between <m>-1</m> and <m>1</m>.
+          <ul>
+            <li>
+              <p>
+                A correlation close to <m>1</m> means there is a strong
+                <em>positive</em> linear relationship: as one variable
+                increases, the other tends to increase.
+              </p>
+            </li>
+
+            <li>
+              <p>
+                A correlation close to <m>-1</m> means there is a strong
+                <em>negative</em> linear relationship: as one variable
+                increases, the other tends to decrease.
+              </p>
+            </li>
+
+            <li>
+              <p>
+                A correlation close to <m>0</m> means there is little
+                <em>linear</em> relationship between the variables.
+              </p>
+            </li>
+          </ul>
+        </p>
+
+        <p>
+          So, for our flamingos, we would expect a positive correlation:
+          longer-legged flamingos tend to be heavier.
+          The closer the points are to following a straight-line pattern, the
+          stronger that correlation will be.
+        </p>
+
+        <program language="r">
+          <code>
+        cor(kenya_flamingos$leg_length_mm, kenya_flamingos$body_mass_g, use = "complete.obs")
+          </code>
+        </program>
+        <pre>
+          [1] 0.8959963
+        </pre>
+        <p>
+          The correlation is very strong, at 0.896.
+          But notice what correlation does that the scatterplot does not, and
+          what the scatterplot does that correlation does not.
+          Correlation gives us one convenient number for summarising a linear
+          relationship.
+          The scatterplot lets us actually see the shape of that relationship,
+          the variation around it, and any unusual observations.
+        </p>
+
+        <insight>
+          <title>Correlation is about linear relationships</title>
+
+          <p>
+            A correlation close to zero does <em>not</em> necessarily mean that
+            there is no relationship between two variables.
+            It means that there is little <em>linear</em> relationship.
+          </p>
+
+          <p>
+            For example, the points could follow a strong curved pattern.
+            The two variables would clearly be related, but a correlation
+            coefficient might still be close to zero.
+            This is why we should always look at the scatterplot alongside the
+            correlation coefficient.
+          </p>
+        </insight>
+      </subsubsection>
     </subsection>
   </section>
   <exercises xml:id="exercises-exploring-data">
@@ -1485,22 +1719,6 @@
 
     <exercise xml:id="ex-ch3-correlation">
       <title>Correlation with Data</title>
-
-      <introduction>
-        <p>
-          Correlation measures the strength and direction of a linear
-          relationship between two numerical variables.
-          The correlation coefficient, usually written takes values between (-1)
-          and (1).
-          A value close to (1) indicates a strong positive linear relationship,
-          while a value close to (-1) indicates a strong negative linear
-          relationship.
-          A value close to (0) indicates little or no linear relationship.
-          Remember that correlation describes association, not causation, and a
-          low correlation does not necessarily mean that there is no
-          relationship between the variables.
-        </p>
-      </introduction>
 
       <stack source="stack/03_correlation.xml" label="stk-ch3-correlation"/>
     </exercise>
