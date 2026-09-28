@@ -1479,85 +1479,85 @@
         </p>
       </statement>
       <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Place-the-estimated-value-of-mean-and-median-in-stacked-dotplot.xml"
-             label="stk-pivot-table"/>
+             label="stk-estimated-mean"/>
     </exercise>
 
     <exercise xml:id="ex-ch3-estimated-mode">
       <title>Pivot Table</title>
       <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Place-the-estimated-value-of-mode-in-stacked-dotplot.xml"
-             label="stk-pivot-table"/>
+             label="stk-estimated-mode"/>
     </exercise>
 
     <exercise xml:id="ex-ch3-correlation">
       <title>Pivot Table</title>
       <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Correlation-with-Data.xml"
-             label="stk-pivot-table"/>
+             label="stk-ch3-correlation"/>
     </exercise>
 
     <exercise xml:id="ex-ch3-match-dots">
       <title>Pivot Table</title>
       <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Interpret-and-match-dotplots-to-respective-boxplots.xml"
-             label="stk-pivot-table"/>
+             label="stk-ch3-match-dots"/>
     </exercise>
 
         <exercise xml:id="ex-ch3-edit-boxplot">
       <title>Pivot Table</title>
       <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Edit-boxplot-to-match-histogram-distribution.xml"
-             label="stk-pivot-table"/>
+             label="stk-ch3-edit-boxplot"/>
     </exercise>
 
     <exercise xml:id="ex-ch3-hist-range">
       <title>Pivot Table</title>
       <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Data-presentations-question-1.xml"
-             label="stk-pivot-table"/>
+             label="stk-ch3-hist-range"/>
     </exercise>
 
     <exercise xml:id="ex-ch3-freq-table">
       <title>Pivot Table</title>
       <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Frequency-table-for-the-time-taken-and-a-Histogram.xml"
-             label="stk-pivot-table"/>
+             label="stk-ch3-freq-table"/>
     </exercise>
 
     <exercise xml:id="ex-ch3-stem-leaf">
       <title>Pivot Table</title>
       <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Data-Presentation--Stem-and-Leaf-Diagram-q1.xml"
-             label="stk-pivot-table"/>
+             label="stk-ch3-stem-leaf"/>
     </exercise>
 
     <exercise xml:id="ex-ch3-combined-mean">
       <title>Pivot Table</title>
       <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Estimating-the-combined-mean-for-two-datasets-presented-as-dotplots.xml"
-             label="stk-pivot-table"/>
+             label="stk-ch3-combined-mean"/>
     </exercise>
 
-    <exercise xml:id="ex-average-yield">
+    <exercise xml:id="ex-ch3-average-yield">
       <title>Pivot Table</title>
       <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Determing-and-comparing-the-average-yield-of-two-varieties.xml"
-             label="stk-pivot-table"/>
+             label="stk-ch3-average-yield"/>
     </exercise>
 
-    <exercise xml:id="ex-pivot-table-1">
+    <exercise xml:id="ex-ch3-pivot-table-1">
       <title>Pivot Table</title>
       <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/pivot-table-1.xml"
-             label="stk-pivot-table"/>
+             label="stk-ch3-pivot-table-1"/>
     </exercise>
 
-    <exercise xml:id="ex-pivot-table-2">
+    <exercise xml:id="ex-ch3-pivot-table-2">
       <title>Pivot Table</title>
       <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/pivot-table-2-(proportion).xml"
-             label="stk-pivot-table"/>
+             label="stk-ch3-pivot-table-2"/>
     </exercise>
 
-    <exercise xml:id="ex-interpret-2-way">
+    <exercise xml:id="ex-ch3-interpret-2-way">
       <title>Pivot Table</title>
       <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Interpreting-a-two-way-frequency-table.xml"
-             label="stk-pivot-table"/>
+             label="stk-ch3-interpret-2-way"/>
     </exercise>
 
-    <exercise xml:id="ex-interpret-percentages">
+    <exercise xml:id="ex-ch3-interpret-percentages">
       <title>Pivot Table</title>
       <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Interpreting-two-way-tables-with-frequencies-given-as-row-and-column-percentages.xml"
-             label="stk-pivot-table"/>
+             label="stk-ch3-interpret-percentages"/>
     </exercise>
 
     <exercise xml:id="ex-explore-bill-length">
