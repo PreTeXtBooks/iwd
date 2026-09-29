@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+<!-- question: 274537  -->
+  <question type="stack">
+    <name>
+      <text>Q2 - Variable types (R)</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<h3>Data detective: what kind of column is this?</h3><p>A survey of cassava farmers has been imported into R-Instat.
+Before producing summaries, you need to understand what the columns represent.</p><p>The extract below is <strong>illustrative</strong>. Each question version uses a different
+starting farmer ID and different ages.</p><table class="table table-bordered"><thead><tr><th>Farmer ID</th><th>Age (years)</th><th>Country</th><th>Interview note</th><th>Consumption frequency</th></tr></thead><tbody><tr><td>{@id1@}</td><td>{@age1@}</td><td>{@country1@}</td><td>Prefers boiled cassava</td><td>Sometimes</td></tr><tr><td>{@id2@}</td><td>{@age2@}</td><td>{@country2@}</td><td>Prefers fried cassava</td><td>Often</td></tr><tr><td>{@id3@}</td><td>{@age3@}</td><td>{@country1@}</td><td>Prefers boiled cassava</td><td>Rarely</td></tr><tr><td>{@id4@}</td><td>{@age4@}</td><td>{@country2@}</td><td>Prefers roasted cassava</td><td>Sometimes</td></tr></tbody></table><p>For this exercise, <em>numeric</em> means a measured quantity that is sensible to
+summarise numerically; <em>character</em> means text not yet organised into factor levels;
+and <em>factor</em> means a column with a defined set of categories.
+An <em>ordered factor</em> has categories with a meaningful order.</p><h4>A. Predict: the identifier trap</h4><p>The Farmer ID values contain only digits. Does that make their mean a meaningful
+summary of the farmers? [[input:predict]] [[validation:predict]]
+[[feedback:prtpredict]]</p><h4>B. Classify the columns</h4><p>Which kind of column is appropriate for <strong>Age (years)</strong>?
+[[input:agekind]] [[validation:agekind]] [[feedback:prtage]]</p><p>Which kind of column is appropriate for <strong>Country</strong>?
+[[input:countrykind]] [[validation:countrykind]] [[feedback:prtcountry]]</p><p>Which kind of column is appropriate for <strong>Interview note</strong>, as currently
+recorded in free text? [[input:notekind]] [[validation:notekind]]
+[[feedback:prtnote]]</p><p>Which kind of column is appropriate for <strong>Consumption frequency</strong>
+if its possible values are Rarely, Sometimes and Often?
+[[input:freqkind]] [[validation:freqkind]] [[feedback:prtfreq]]</p><h4>C. Investigate the numbers</h4><p>Calculate the mean of the four ages. Give your answer to two decimal places
+if necessary. [[input:meanage]] [[validation:meanage]]
+[[feedback:prtmean]]</p>
+[[hint title="Hint: mean age"]]
+<p>Add the four ages and divide by the number of farmers.</p>
+[[/hint]]
+<p>Why would calculating the mean of the Farmer ID column be misleading?
+[[input:idreason]] [[validation:idreason]] [[feedback:prtidreason]]</p><h4>D. Interpret</h4><p>Suppose R-Instat imported Farmer ID as a numeric column because every value
+contains digits. Which action best reflects its purpose in this dataset?
+[[input:idaction]] [[validation:idaction]] [[feedback:prtidaction]]</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<h3>Worked solution</h3><p><strong>Farmer ID</strong> identifies records. Although its values are written using
+digits and may be imported as numeric, it is not a measured quantity. Averaging
+{@id1@}, {@id2@}, {@id3@} and {@id4@} would not describe a typical farmer.</p><p><strong>Age</strong> is numeric. Its mean in this extract is:</p>
+\[
+\frac{{@age1@}+{@age2@}+{@age3@}+{@age4@}}{4}={@q_meanage@}.
+\]
+<p><strong>Country</strong> is a factor: its values belong to a defined set of
+categories. <strong>Interview note</strong> is character data because it is recorded
+as free text. <strong>Consumption frequency</strong> is an ordered factor:
+Rarely, Sometimes and Often have a meaningful order.</p><p>The key distinction is between how a column happens to be stored and what
+its values mean. Farmer ID can be kept as an identifier (for example, as character
+data or as a numeric ID excluded from numerical summaries); it should not be
+treated as a measured quantity. Factor levels help organise repeated categories
+for summaries and graphs.</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>12</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <stackversion>
+      <text>2026063000</text>
+    </stackversion>
+    <questionvariables>
+      <text><![CDATA[/* Illustrative agricultural survey; values are randomised. */
+idbase:(rand(80)+10)*10;
+id1:idbase+1;
+id2:idbase+2;
+id3:idbase+3;
+id4:idbase+4;
+
+age1:rand(14)+21;
+age2:rand(15)+35;
+age3:rand(13)+27;
+age4:rand(14)+45;
+q_meanage:(age1+age2+age3+age4)/4;
+
+/* Switch the displayed country pair between variants. */
+region:rand(2);
+country1:if region=0 then "Nigeria" else "Cameroon";
+country2:if region=0 then "Cameroon" else "Nigeria";
+
+/* The radio values are deliberately small integers.
+   Display text is provided separately for each choice. */
+tapredict:random_permutation([
+ [1,true,"No. Farmer ID labels records; its mean has no useful interpretation."],
+ [2,false,"Yes. Any column made of digits is a numerical measurement."],
+ [3,false,"Yes, but only when the IDs are consecutive."],
+ [4,false,"No, because R-Instat cannot store identifiers as numbers."]
+]);
+
+taage:random_permutation([
+ [1,true,"Numeric"],[2,false,"Character"],
+ [3,false,"Factor"],[4,false,"Ordered factor"]
+]);
+tacountry:random_permutation([
+ [1,false,"Numeric"],[2,false,"Character"],
+ [3,true,"Factor"],[4,false,"Ordered factor"]
+]);
+tanote:random_permutation([
+ [1,false,"Numeric"],[2,true,"Character"],
+ [3,false,"Factor"],[4,false,"Ordered factor"]
+]);
+tafreq:random_permutation([
+ [1,false,"Numeric"],[2,false,"Character"],
+ [3,false,"Factor without a specified order"],[4,true,"Ordered factor"]
+]);
+taidreason:random_permutation([
+ [1,true,"The values are labels, not measurements; their average has no meaningful interpretation."],
+ [2,false,"The IDs are too large for R-Instat to average."],
+ [3,false,"An average is meaningful only when every ID is identical."],
+ [4,false,"The average ID measures the average farmer age."]
+]);
+taidaction:random_permutation([
+ [1,true,"Keep Farmer ID as an identifier and exclude it from numerical summaries."],
+ [2,false,"Use the mean ID to describe the typical farmer."],
+ [3,false,"Replace the IDs with ages so the column becomes numeric."],
+ [4,false,"Delete the ID column because identifiers cannot be useful."]
+]);]]></text>
+    </questionvariables>
+    <specificfeedback format="html">
+      <text></text>
+    </specificfeedback>
+    <questionnote format="html">
+      <text>{@idbase@}-{@age1@}-{@age2@}-{@age3@}-{@age4@}-{@region@}</text>
+    </questionnote>
+    <questiondescription format="html">
+      <text></text>
+    </questiondescription>
+    <questionsimplify>1</questionsimplify>
+    <assumepositive>0</assumepositive>
+    <assumereal>0</assumereal>
+    <prtcorrect format="html">
+      <text>Correct.</text>
+    </prtcorrect>
+    <prtpartiallycorrect format="html">
+      <text>Partly correct.</text>
+    </prtpartiallycorrect>
+    <prtincorrect format="html">
+      <text>Not yet correct.</text>
+    </prtincorrect>
+    <decimals>.</decimals>
+    <scientificnotation>*10</scientificnotation>
+    <multiplicationsign>none</multiplicationsign>
+    <sqrtsign>1</sqrtsign>
+    <complexno>i</complexno>
+    <inversetrig>cos-1</inversetrig>
+    <logicsymbol>lang</logicsymbol>
+    <matrixparens>[</matrixparens>
+    <isbroken>0</isbroken>
+    <variantsselectionseed></variantsselectionseed>
+    <input>
+      <name>agekind</name>
+      <type>radio</type>
+      <tans>taage</tans>
+      <boxsize>12</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>countrykind</name>
+      <type>radio</type>
+      <tans>tacountry</tans>
+      <boxsize>12</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>freqkind</name>
+      <type>radio</type>
+      <tans>tafreq</tans>
+      <boxsize>12</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>idaction</name>
+      <type>radio</type>
+      <tans>taidaction</tans>
+      <boxsize>12</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>idreason</name>
+      <type>radio</type>
+      <tans>taidreason</tans>
+      <boxsize>12</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>meanage</name>
+      <type>numerical</type>
+      <tans>q_meanage</tans>
+      <boxsize>10</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>notekind</name>
+      <type>radio</type>
+      <tans>tanote</tans>
+      <boxsize>12</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>predict</name>
+      <type>radio</type>
+      <tans>tapredict</tans>
+      <boxsize>12</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <prt>
+      <name>prtage</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>agekind</sans>
+        <tans>1</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtage-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct: age is a numeric measurement.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prtage-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>Age is measured in years, and its numerical summaries can be meaningful.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prtcountry</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>countrykind</sans>
+        <tans>3</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtcountry-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct: country is a factor with defined categories.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prtcountry-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>Country labels identify groups; there is no natural numerical or ranked order.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prtfreq</name>
+      <value>2.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>freqkind</sans>
+        <tans>4</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtfreq-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct: Rarely, Sometimes and Often have a meaningful order.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prtfreq-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>The categories have a natural order, although their spacing is not numerical.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prtidaction</name>
+      <value>2.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>idaction</sans>
+        <tans>1</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtidaction-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct. Keep the identifier for linking and locating records, not numerical summaries.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prtidaction-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>An identifier can be useful even though its numerical average is not.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prtidreason</name>
+      <value>2.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>idreason</sans>
+        <tans>1</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtidreason-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct: a numerical-looking identifier is still a label.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prtidreason-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>Ask whether the size or difference between two IDs measures anything about the farmers.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prtmean</name>
+      <value>2.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>meanage</sans>
+        <tans>q_meanage</tans>
+        <testoptions>0.01</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtmean-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct. You have added the ages and divided by four.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prtmean-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>Add all four ages, then divide by four. Check that you did not average the IDs.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prtnote</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>notekind</sans>
+        <tans>2</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtnote-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct: the notes are currently free text (character data).</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prtnote-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>A free-text note is not yet a factor with a fixed set of levels.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prtpredict</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>predict</sans>
+        <tans>1</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtpredict-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct. Digits alone do not make an identifier a measurement.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prtpredict-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>Think about what an ID represents, rather than how it is written.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <deployedseed>946826907</deployedseed>
+    <deployedseed>919998571</deployedseed>
+    <deployedseed>983308197</deployedseed>
+    <deployedseed>1196150426</deployedseed>
+    <deployedseed>766025976</deployedseed>
+    <deployedseed>1236158364</deployedseed>
+    <deployedseed>1891664045</deployedseed>
+    <deployedseed>1202351028</deployedseed>
+    <deployedseed>1870291111</deployedseed>
+    <deployedseed>783684410</deployedseed>
+  </question>
+
+</quiz>

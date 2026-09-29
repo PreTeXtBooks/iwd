@@ -340,17 +340,18 @@
     <title>Practise: Understanding Multilevel Data</title>
 
     <exercise>
-      <title>Forest fertiliser experiment</title>
+      <title>What does each row represent?</title>
 
       <introduction>
         <p>
-          Try this interactive exercise to practise identifying the different
-          levels in a dataset and comparing average tree growth in a forest
-          fertiliser experiment.
-          This is a mastery question: each attempt generates a new dataset,
-          allowing you to practise the same concepts with different values.
-          Use the feedback to understand any mistakes, then try again until you
-          are confident with the material.
+          Data can contain several related data frames that describe different
+          observational units.
+          For example, one sheet may contain one row per household, while
+          another contains one row per individual living in those households.
+          In this activity, explore why identifying what each row represents is
+          important before calculating a summary such as a mean.
+          You will see that the same household variable can give different
+          results depending on which data frame is used.
         </p>
 
         <p>
@@ -358,31 +359,7 @@
         </p>
       </introduction>
 
-      <stack label="stack-multilevel" source="stack/02_multilevel_data.xml"/>
-    </exercise>
-
-    <exercise>
-      <title>Kenya Child-Health Programme</title>
-
-      <introduction>
-        <p>
-          Try this interactive exercise on levels in a dataset and comparing
-          vaccination rates in the Kenya Child-Health Programme.
-          Use a statistical software of your choice to find the percentage of
-          fully vaccinated children under Programme A and Programme B overall,
-          then within each of five wealth quintiles.
-          This is a mastery question: each attempt generates a new dataset,
-          allowing you to practise the same concepts with different values.
-          Use the feedback to understand any mistakes, then try again until you
-          are confident with the material.
-        </p>
-
-        <p>
-          Use any software of your choice to answer this.
-        </p>
-      </introduction>
-
-      <stack label="stack-multilevel-2" source="stack/02_multilevel_data_2.xml"/>
+      <stack label="stack-multilevel-3" source="stack/02_multilevel_data_3.xml"/>
     </exercise>
   </section>
 
@@ -1015,6 +992,52 @@
   <!-- ================================================================= -->
   <exercises xml:id="exercises-multilevel-data">
     <title>Exercises</title>
+
+    <exercise>
+      <title>Forest fertiliser experiment</title>
+
+      <introduction>
+        <p>
+          Try this interactive exercise to practise identifying the different
+          levels in a dataset and comparing average tree growth in a forest
+          fertiliser experiment.
+          This is a mastery question: each attempt generates a new dataset,
+          allowing you to practise the same concepts with different values.
+          Use the feedback to understand any mistakes, then try again until you
+          are confident with the material.
+        </p>
+
+        <p>
+          Use any software of your choice to answer this.
+        </p>
+      </introduction>
+
+      <stack label="stack-multilevel" source="stack/02_multilevel_data.xml"/>
+    </exercise>
+
+    <exercise>
+      <title>Kenya Child-Health Programme</title>
+
+      <introduction>
+        <p>
+          Try this interactive exercise on levels in a dataset and comparing
+          vaccination rates in the Kenya Child-Health Programme.
+          Use a statistical software of your choice to find the percentage of
+          fully vaccinated children under Programme A and Programme B overall,
+          then within each of five wealth quintiles.
+          This is a mastery question: each attempt generates a new dataset,
+          allowing you to practise the same concepts with different values.
+          Use the feedback to understand any mistakes, then try again until you
+          are confident with the material.
+        </p>
+
+        <p>
+          Use any software of your choice to answer this.
+        </p>
+      </introduction>
+
+      <stack label="stack-multilevel-2" source="stack/02_multilevel_data_2.xml"/>
+    </exercise>
 
     <exercise xml:id="ex-aggregation-consequences">
       <title>What gets lost when you aggregate?</title>

@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+<!-- question: 274544  -->
+  <question type="stack">
+    <name>
+      <text>Q1 - Factor Levels</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<h3>Data detective: suspicious categories</h3><p>A summary of the <code>consumptionform</code> column gives the following frequencies.
+The responses describe when respondents eat cassava.</p><table class="table table-bordered"><thead><tr><th>Response</th><th>Frequency</th></tr></thead><tbody><tr><td>Breakfast, lunch and dinner</td><td>{@a@}</td></tr><tr><td>Lunch, dinner and breakfast</td><td>{@b@}</td></tr><tr><td>Breakfast, dinner and lunch</td><td>{@c@}</td></tr><tr><td>Breakfast only</td><td>{@d@}</td></tr><tr><td>Dinner only</td><td>{@e@}</td></tr></tbody></table><p><em>This is a small teaching extract; the final frequencies are illustrative.</em></p><h4>A. Predict</h4><p>Before doing any calculations, what do you suspect about the first three responses?
+[[input:predict]] [[validation:predict]] [[feedback:prtpredict]]</p><h4>B. Investigate</h4><p>How many factor levels are shown in the original summary?
+[[input:levels]] [[validation:levels]] [[feedback:prtlevels]]</p><p>How many distinct consumption patterns do these five labels represent, once
+equivalent responses have been combined?
+[[input:patterns]] [[validation:patterns]] [[feedback:prtpatterns]]</p><p>How many respondents reported eating cassava at breakfast, lunch <em>and</em> dinner?
+[[input:combined]] [[validation:combined]] [[feedback:prtcombined]]</p>
+<h4>C. Interpret</h4><p>Which corrected frequency table preserves all the information about these
+three consumption patterns?
+[[input:tablechoice]] [[validation:tablechoice]] [[feedback:prttable]]</p><p>Why is combining the equivalent factor levels useful?
+[[input:reason]] [[validation:reason]] [[feedback:prtreason]]</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<h3>Worked solution</h3><p>The original summary displays five factor levels, but the first three labels
+all describe eating cassava at breakfast, lunch and dinner. Their word order differs,
+not their meaning.</p><p>After combining them there are three distinct consumption patterns:
+all three meals, breakfast only, and dinner only.</p><p>The corrected frequency for all three meals is
+{@a@}+{@b@}+{@c@}={@allthree@}.</p><table class="table table-bordered"><thead><tr><th>Consumption pattern</th><th>Corrected frequency</th></tr></thead><tbody><tr><td>Breakfast, lunch and dinner</td><td>{@allthree@}</td></tr><tr><td>Breakfast only</td><td>{@d@}</td></tr><tr><td>Dinner only</td><td>{@e@}</td></tr></tbody></table><p>The total number of responses stays the same:
+{@allthree@}+{@d@}+{@e@}={@total@}.
+Cleaning the factor levels prevents one consumption pattern from appearing
+as several different categories in summaries and graphs.</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>10</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <stackversion>
+      <text>2026063000</text>
+    </stackversion>
+    <questionvariables>
+      <text><![CDATA[/* The first three frequencies in the chapter are 12, 2 and 1.
+   Randomise them for practice while preserving the same data issue. */
+a:rand(9)+8;
+b:rand(3)+1;
+c:rand(3)+1;
+d:rand(8)+5;
+e:rand(8)+4;
+allthree:a+b+c;
+total:allthree+d+e;
+tapredict:random_permutation([
+ [1,true,"The first three labels describe the same consumption pattern."],
+ [2,false,"The first three labels describe three different patterns."],
+ [3,false,"The first three responses should all be deleted."],
+ [4,false,"The labels cannot be compared without knowing the respondents' ages."]
+]);
+tatable:random_permutation([
+ [1,true,"All three meals: combined frequency; breakfast only: original frequency; dinner only: original frequency."],
+ [2,false,"Keep all five original labels as separate categories."],
+ [3,false,"Keep only the first all-three-meals label and discard the other two."],
+ [4,false,"Combine breakfast only and dinner only with the all-three-meals category."]
+]);
+tareason:random_permutation([
+ [1,true,"It avoids splitting one consumption pattern across several factor levels."],
+ [2,false,"It increases the total number of survey responses."],
+ [3,false,"It proves that the respondents entered incorrect meal information."],
+ [4,false,"It makes every consumption pattern equally frequent."]
+]);]]></text>
+    </questionvariables>
+    <specificfeedback format="html">
+      <text></text>
+    </specificfeedback>
+    <questionnote format="html">
+      <text>{@a@}-{@b@}-{@c@}-{@d@}-{@e@}</text>
+    </questionnote>
+    <questiondescription format="html">
+      <text></text>
+    </questiondescription>
+    <questionsimplify>1</questionsimplify>
+    <assumepositive>0</assumepositive>
+    <assumereal>0</assumereal>
+    <prtcorrect format="html">
+      <text>Correct.</text>
+    </prtcorrect>
+    <prtpartiallycorrect format="html">
+      <text>Partly correct.</text>
+    </prtpartiallycorrect>
+    <prtincorrect format="html">
+      <text>Not yet correct.</text>
+    </prtincorrect>
+    <decimals>.</decimals>
+    <scientificnotation>*10</scientificnotation>
+    <multiplicationsign>none</multiplicationsign>
+    <sqrtsign>1</sqrtsign>
+    <complexno>i</complexno>
+    <inversetrig>cos-1</inversetrig>
+    <logicsymbol>lang</logicsymbol>
+    <matrixparens>[</matrixparens>
+    <isbroken>0</isbroken>
+    <variantsselectionseed></variantsselectionseed>
+    <input>
+      <name>combined</name>
+      <type>numerical</type>
+      <tans>allthree</tans>
+      <boxsize>12</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>levels</name>
+      <type>numerical</type>
+      <tans>5</tans>
+      <boxsize>12</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>patterns</name>
+      <type>numerical</type>
+      <tans>3</tans>
+      <boxsize>12</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>predict</name>
+      <type>radio</type>
+      <tans>tapredict</tans>
+      <boxsize>12</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>reason</name>
+      <type>radio</type>
+      <tans>tareason</tans>
+      <boxsize>12</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>tablechoice</name>
+      <type>radio</type>
+      <tans>tatable</tans>
+      <boxsize>12</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <prt>
+      <name>prtcombined</name>
+      <value>2.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>combined</sans>
+        <tans>allthree</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtcombined-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct: add the frequencies of all three equivalent labels.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prtcombined-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>Add the first three frequencies. Do not include 'breakfast only' or 'dinner only'.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prtlevels</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>levels</sans>
+        <tans>5</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtlevels-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct: the original summary displays five labels.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prtlevels-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>Count the rows of the original frequency table before cleaning.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prtpatterns</name>
+      <value>2.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>patterns</sans>
+        <tans>3</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtpatterns-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct: all three meals, breakfast only, and dinner only.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prtpatterns-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>Three labels describe the same combination of meals; the two 'only' labels are distinct.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prtpredict</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>predict</sans>
+        <tans>1</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtpredict-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Yes. The same three meals appear in a different order.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prtpredict-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>Compare the actual meals named in the first three labels, not their word order.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prtreason</name>
+      <value>2.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>reason</sans>
+        <tans>1</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtreason-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct. Equivalent responses should not appear as separate factor levels.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prtreason-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>Cleaning changes the labels and their grouped frequencies, not the number of responses.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prttable</name>
+      <value>2.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>tablechoice</sans>
+        <tans>1</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prttable-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct. Combine equivalent labels without changing the other categories.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prttable-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>A cleaned table should retain all respondents while merging only equivalent labels.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <deployedseed>502743156</deployedseed>
+    <deployedseed>581896869</deployedseed>
+    <deployedseed>2052673440</deployedseed>
+    <deployedseed>120861008</deployedseed>
+    <deployedseed>424944883</deployedseed>
+    <deployedseed>1528920659</deployedseed>
+    <deployedseed>585637820</deployedseed>
+    <deployedseed>2042191041</deployedseed>
+    <deployedseed>1732703690</deployedseed>
+    <deployedseed>1325429300</deployedseed>
+  </question>
+
+</quiz>

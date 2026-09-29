@@ -1,0 +1,569 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+<!-- question: 274541  -->
+  <question type="stack">
+    <name>
+      <text>Q3 - Mean median and an unusually high age</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<h3>What does a typical farmer's age look like?</h3><p>A small, illustrative survey records the ages of seven farmers. One respondent
+is noticeably older than the others. The ages, in ascending order, are:</p><p><strong>{@a1@}, {@a2@}, {@a3@}, {@a4@}, {@a5@}, {@a6@}, {@older@}</strong></p><h4>A. Predict</h4><p>Before calculating, which statistic do you expect to be affected more by the
+unusually high age? [[input:predict]] [[validation:predict]]
+[[feedback:prtpredict]]</p><h4>B. Calculate with all seven farmers</h4><p>Calculate the <strong>mean age</strong> of the seven farmers.
+Give your answer to two decimal places if necessary.
+[[input:mean7]] [[validation:mean7]] [[feedback:prtmean7]]</p><p>Calculate the <strong>median age</strong> of the seven farmers.
+[[input:median7]] [[validation:median7]] [[feedback:prtmedian7]]</p>
+[[hint title="Hint: mean and median"]]
+<p>The mean is the sum of the ages divided by the number of farmers.
+For seven ages in ascending order, the median is the fourth age.</p>
+[[/hint]]
+<h4>C. Investigate the unusually high age</h4><p>For comparison, suppose we temporarily leave out the oldest farmer.
+What is the <strong>mean age</strong> of the remaining six farmers?
+[[input:mean6]] [[validation:mean6]] [[feedback:prtmean6]]</p><p>What is the <strong>median age</strong> of the remaining six farmers?
+[[input:median6]] [[validation:median6]] [[feedback:prtmedian6]]</p><p>By how many years does including the oldest farmer <strong>increase the mean</strong>?
+Give your answer to two decimal places if necessary.
+[[input:meanincrease]] [[validation:meanincrease]]
+[[feedback:prtmeanincrease]]</p><h4>D. Interpret</h4><p>Which statistic better describes the age of a typical farmer <em>among
+the main group of six</em>, without being pulled upwards by the unusually
+high value? [[input:typical]] [[validation:typical]]
+[[feedback:prttypical]]</p><p>Which explanation best supports your choice?
+[[input:explain]] [[validation:explain]] [[feedback:prtexplain]]</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<h3>Worked solution</h3><p>The seven ages are {@a1@}, {@a2@}, {@a3@}, {@a4@}, {@a5@},
+{@a6@} and {@older@} years.</p><h4>With all seven farmers</h4><p>The mean is the sum of all seven ages divided by seven:</p>
+\[
+\bar{x}_7 =
+\frac{{@a1@}+{@a2@}+{@a3@}+{@a4@}+{@a5@}+{@a6@}+{@older@}}{7}
+= {@q_mean7@}.
+\]
+<p>The median is the fourth age in the ordered list:
+<strong>{@q_median7@} years</strong>.</p><h4>Without the oldest farmer</h4><p>The mean of the remaining six ages is:</p>
+\[
+\bar{x}_6 =
+\frac{{@a1@}+{@a2@}+{@a3@}+{@a4@}+{@a5@}+{@a6@}}{6}
+= {@q_mean6@}.
+\]
+<p>With six ordered ages, the median is the mean of the third and
+fourth ages:</p>
+\[
+\operatorname{median}_6
+=\frac{{@a3@}+{@a4@}}{2}
+={@q_median6@}.
+\]
+<p>Including the oldest farmer increases the mean by
+\({@q_mean7@}-{@q_mean6@}={@q_meanincrease@}\) years.
+The median changes by only
+\({@q_median7@}-{@q_median6@}={@medianincrease@}\) year.</p><p>The mean uses every value and is pulled upwards by an unusually
+high observation. The median depends on the middle position(s), so it is
+less affected by the size of the oldest age. For describing the age of
+a typical farmer in the main group of six, the median of the full
+dataset is therefore useful. The older farmer is still a valid
+observation and should not be deleted without a substantive reason.</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>12</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <stackversion>
+      <text>2026063000</text>
+    </stackversion>
+    <questionvariables>
+      <text><![CDATA[/* Six ordinary ages and one unusually high, but plausible, age.
+   All values are sorted for students. */
+base:rand(7)+20;
+a1:base;
+a2:base+2;
+a3:base+4;
+a4:base+6;
+a5:base+8;
+a6:base+10;
+older:rand(10)+70;
+
+q_mean7:(a1+a2+a3+a4+a5+a6+older)/7;
+q_median7:a4;
+q_mean6:(a1+a2+a3+a4+a5+a6)/6;
+q_median6:(a3+a4)/2;
+q_meanincrease:q_mean7-q_mean6;
+medianincrease:q_median7-q_median6;
+
+/* The first entry in each radio list is not always displayed first. */
+tapredict:random_permutation([
+ [1,true,"The mean, because it uses the actual size of every age."],
+ [2,false,"The median, because it is always the largest age."],
+ [3,false,"Both are necessarily affected by exactly the same amount."],
+ [4,false,"Neither, because the unusually high age is still a valid observation."]
+]);
+tatypical:random_permutation([
+ [1,true,"The median of the full dataset."],
+ [2,false,"The mean of the full dataset."],
+ [3,false,"The oldest farmer's age."],
+ [4,false,"The range of the ages."]
+]);
+taexplain:random_permutation([
+ [1,true,"The unusually high age pulls the mean upwards, while the median depends on the middle observation(s)."],
+ [2,false,"The median is better because the oldest farmer's age must be an error."],
+ [3,false,"The mean ignores the oldest age, so it stays close to the other six ages."],
+ [4,false,"The mean and median always give the same description of a dataset."]
+]);]]></text>
+    </questionvariables>
+    <specificfeedback format="html">
+      <text></text>
+    </specificfeedback>
+    <questionnote format="html">
+      <text>{@base@}-{@older@}</text>
+    </questionnote>
+    <questiondescription format="html">
+      <text></text>
+    </questiondescription>
+    <questionsimplify>1</questionsimplify>
+    <assumepositive>0</assumepositive>
+    <assumereal>0</assumereal>
+    <prtcorrect format="html">
+      <text>Correct.</text>
+    </prtcorrect>
+    <prtpartiallycorrect format="html">
+      <text>Partly correct.</text>
+    </prtpartiallycorrect>
+    <prtincorrect format="html">
+      <text>Not yet correct.</text>
+    </prtincorrect>
+    <decimals>.</decimals>
+    <scientificnotation>*10</scientificnotation>
+    <multiplicationsign>none</multiplicationsign>
+    <sqrtsign>1</sqrtsign>
+    <complexno>i</complexno>
+    <inversetrig>cos-1</inversetrig>
+    <logicsymbol>lang</logicsymbol>
+    <matrixparens>[</matrixparens>
+    <isbroken>0</isbroken>
+    <variantsselectionseed></variantsselectionseed>
+    <input>
+      <name>explain</name>
+      <type>radio</type>
+      <tans>taexplain</tans>
+      <boxsize>12</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>mean6</name>
+      <type>numerical</type>
+      <tans>q_mean6</tans>
+      <boxsize>10</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>mean7</name>
+      <type>numerical</type>
+      <tans>q_mean7</tans>
+      <boxsize>10</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>meanincrease</name>
+      <type>numerical</type>
+      <tans>q_meanincrease</tans>
+      <boxsize>10</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>median6</name>
+      <type>numerical</type>
+      <tans>q_median6</tans>
+      <boxsize>10</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>median7</name>
+      <type>numerical</type>
+      <tans>q_median7</tans>
+      <boxsize>10</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>predict</name>
+      <type>radio</type>
+      <tans>tapredict</tans>
+      <boxsize>12</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>typical</name>
+      <type>radio</type>
+      <tans>tatypical</tans>
+      <boxsize>12</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <prt>
+      <name>prtexplain</name>
+      <value>2.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>explain</sans>
+        <tans>1</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtexplain-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct: the median is resistant to an unusually high value.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prtexplain-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>A high value affects the sum used by the mean, but it does not move the middle position very much.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prtmean6</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>mean6</sans>
+        <tans>q_mean6</tans>
+        <testoptions>0.01</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtmean6-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct: this mean uses only the six younger farmers.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prtmean6-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>Exclude the oldest age, add the remaining six ages and divide by six.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prtmean7</name>
+      <value>2.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>mean7</sans>
+        <tans>q_mean7</tans>
+        <testoptions>0.01</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtmean7-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct: sum all seven ages and divide by seven.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prtmean7-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>Check that you included the oldest farmer and divided the total by seven.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prtmeanincrease</name>
+      <value>2.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>meanincrease</sans>
+        <tans>q_meanincrease</tans>
+        <testoptions>0.01</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtmeanincrease-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct: subtract the six-person mean from the seven-person mean.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prtmeanincrease-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>Subtract the mean without the oldest farmer from the mean with all seven.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prtmedian6</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>median6</sans>
+        <tans>q_median6</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtmedian6-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct: average the third and fourth ages in the six-value list.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prtmedian6-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>With six ordered observations, average the two middle ages (positions three and four).</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prtmedian7</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>median7</sans>
+        <tans>q_median7</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtmedian7-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct: the fourth age is the median of seven ordered observations.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prtmedian7-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>There are seven ages. The median is the fourth one, not the average of the third and fourth.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prtpredict</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>predict</sans>
+        <tans>1</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtpredict-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct: the mean uses the magnitude of the oldest age.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prtpredict-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>Think about which statistic adds all seven ages and which uses the middle position.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prttypical</name>
+      <value>2.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>typical</sans>
+        <tans>1</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prttypical-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct: the full-data median remains close to the ages in the main group.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prttypical-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>The question asks for a typical age among the main group, not a statistic most affected by the oldest age.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <deployedseed>29099460</deployedseed>
+    <deployedseed>2001833957</deployedseed>
+    <deployedseed>1931172795</deployedseed>
+    <deployedseed>1602467118</deployedseed>
+    <deployedseed>1268028217</deployedseed>
+    <deployedseed>1435852335</deployedseed>
+    <deployedseed>1009422634</deployedseed>
+    <deployedseed>1284489652</deployedseed>
+    <deployedseed>2123010187</deployedseed>
+    <deployedseed>1136624340</deployedseed>
+  </question>
+
+</quiz>

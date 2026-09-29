@@ -1717,6 +1717,12 @@
       <stack source="stack/03_estimated_mode.xml" label="stk-estimated-mode"/>
     </exercise>
 
+    <exercise xml:id="ex-ch3-outliers">
+      <title>Mean and Median when Outliers are Involved</title>
+
+      <stack source="stack/03_outliers.xml" label="stk-estimated-with-outlier"/>
+    </exercise>
+
     <exercise xml:id="ex-ch3-correlation">
       <title>Correlation with Data</title>
 

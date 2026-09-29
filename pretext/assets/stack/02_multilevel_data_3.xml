@@ -1,0 +1,589 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+<!-- question: 274539  -->
+  <question type="stack">
+    <name>
+      <text>Q10 - Multipage data - households and individuals</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<h3>Two related data frames: what are we averaging?</h3><p>A survey records four households and the people living in them. The first data frame contains one row per household.</p><table class="table table-bordered"><thead><tr><th>Household ID</th><th>Number of members</th><th>Monthly household income (units)</th></tr></thead><tbody><tr><td>H1</td><td>{@n1@}</td><td>{@inc1@}</td></tr><tr><td>H2</td><td>{@n2@}</td><td>{@inc2@}</td></tr><tr><td>H3</td><td>{@n3@}</td><td>{@inc3@}</td></tr><tr><td>H4</td><td>{@n4@}</td><td>{@inc4@}</td></tr></tbody></table><p>The second data frame has one row for each individual. It contains that person's household ID and repeats their household's income on every member's row.</p><h4>A. Identify the observational units</h4><p>What does one row of the household data frame represent? [[input:unit1]] [[validation:unit1]]</p><p>What does one row of the individual data frame represent? [[input:unit2]] [[validation:unit2]]</p><h4>B. Predict before calculating</h4><p>If we calculate the mean of the household-income column in each data frame, which result do you predict? [[input:predict]] [[validation:predict]]</p><h4>C. Investigate the data</h4><p>How many households are represented? [[input:houses]] [[validation:houses]]</p><p>How many individuals are represented? [[input:people]] [[validation:people]]</p><p>Calculate the mean household income using the household data frame. [[input:meanhouse]] [[validation:meanhouse]]</p><p>Calculate the mean of the repeated household-income column using the individual data frame. Give your answer to two decimal places if needed. [[input:meanperson]] [[validation:meanperson]]</p>
+[[hint title="Hint: repeated incomes"]]<p>In the individual data frame, multiply each household income by its number of members, add these products and divide by the total number of individuals.</p>[[/hint]]
+<h4>D. Interpret</h4><p>Why do the two means differ, and which calculation answers the question, "What is the mean income across households?" [[input:interpret]] [[validation:interpret]]</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<h3>Worked solution</h3><p>In the first data frame each row is a household; in the second each row is an individual. There are {@nh@} households and {@ni@} individuals.</p><p>Because larger households also have higher incomes in this example, repeating each household income once per person makes the individual-level mean higher than the household-level mean.</p><p><strong>Equal weight for each household:</strong></p>
+\[
+\frac{{@inc1@}+{@inc2@}+{@inc3@}+{@inc4@}}{4}={@mean_h@}.
+\]
+<p><strong>One copy of household income for each individual:</strong></p>
+\[
+\frac{{@n1@}\cdot {@inc1@}+{@n2@}\cdot {@inc2@}+{@n3@}\cdot {@inc3@}+{@n4@}\cdot {@inc4@}}{@ni@}={@mean_i@}\approx {@float(mean_i)@}.
+\]
+<p>Both are valid calculations, but they answer different questions. To find the mean income across households, give each household equal weight and use the first mean. The second is the mean household income associated with a randomly selected individual in these data.</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>10</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <stackversion>
+      <text>2026063000</text>
+    </stackversion>
+    <questionvariables>
+      <text><![CDATA[/* Four households; household size and income increase together. */
+n1:1;
+n2:rand(2)+2;
+n3:rand(2)+4;
+n4:rand(2)+6;
+base:(rand(5)+8)*100;
+inc1:base;
+inc2:base+200;
+inc3:base+400;
+inc4:base+800;
+nh:4;
+ni:n1+n2+n3+n4;
+total:inc1+inc2+inc3+inc4;
+mean_h:total/nh;
+weighted_total:n1*inc1+n2*inc2+n3*inc3+n4*inc4;
+mean_i:weighted_total/ni;
+/* Integer response codes; the optional third entry is displayed. */
+taunit1:random_permutation([[1,true,"One household"],[2,false,"One individual"],[3,false,"One income payment"]]);
+taunit2:random_permutation([[1,false,"One household"],[2,true,"One individual"],[3,false,"One income payment"]]);
+/* Increasing incomes and household sizes ensure mean_i > mean_h. */
+tapredict:random_permutation([[1,false,"The two means will be equal"],[2,true,"The individual-level mean will be higher"],[3,false,"The household-level mean will be higher"],[4,false,"There is not enough information to predict"]]);
+tainterpret:random_permutation([[1,true,"The first mean weights households equally; the second weights households according to their numbers of members."],[2,false,"Both means weight households equally."],[3,false,"The individual-level mean is automatically the correct mean because it uses more rows."],[4,false,"Repeating income once for each person does not change its mean."]]);]]></text>
+    </questionvariables>
+    <specificfeedback format="html">
+      <text>[[feedback:prtunit1]] [[feedback:prtunit2]] [[feedback:prtpredict]] [[feedback:prthouses]] [[feedback:prtpeople]] [[feedback:prtmeanhouse]] [[feedback:prtmeanperson]] [[feedback:prtinterpret]]</text>
+    </specificfeedback>
+    <questionnote format="html">
+      <text>{@n2@}-{@n3@}-{@n4@}-{@base@}</text>
+    </questionnote>
+    <questiondescription format="html">
+      <text></text>
+    </questiondescription>
+    <questionsimplify>1</questionsimplify>
+    <assumepositive>0</assumepositive>
+    <assumereal>0</assumereal>
+    <prtcorrect format="html">
+      <text>Correct.</text>
+    </prtcorrect>
+    <prtpartiallycorrect format="html">
+      <text>Partly correct.</text>
+    </prtpartiallycorrect>
+    <prtincorrect format="html">
+      <text>Not yet correct.</text>
+    </prtincorrect>
+    <decimals>.</decimals>
+    <scientificnotation>*10</scientificnotation>
+    <multiplicationsign>none</multiplicationsign>
+    <sqrtsign>1</sqrtsign>
+    <complexno>i</complexno>
+    <inversetrig>cos-1</inversetrig>
+    <logicsymbol>lang</logicsymbol>
+    <matrixparens>[</matrixparens>
+    <isbroken>0</isbroken>
+    <variantsselectionseed></variantsselectionseed>
+    <input>
+      <name>houses</name>
+      <type>numerical</type>
+      <tans>nh</tans>
+      <boxsize>12</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>interpret</name>
+      <type>radio</type>
+      <tans>tainterpret</tans>
+      <boxsize>12</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>meanhouse</name>
+      <type>numerical</type>
+      <tans>mean_h</tans>
+      <boxsize>12</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>meanperson</name>
+      <type>numerical</type>
+      <tans>mean_i</tans>
+      <boxsize>12</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>people</name>
+      <type>numerical</type>
+      <tans>ni</tans>
+      <boxsize>12</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>predict</name>
+      <type>radio</type>
+      <tans>tapredict</tans>
+      <boxsize>12</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>unit1</name>
+      <type>radio</type>
+      <tans>taunit1</tans>
+      <boxsize>12</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>unit2</name>
+      <type>radio</type>
+      <tans>taunit2</tans>
+      <boxsize>12</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <prt>
+      <name>prthouses</name>
+      <value>1.2500000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>houses</sans>
+        <tans>nh</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prthouses-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct: there are four households.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prthouses-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>Count household IDs, not the number of people.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prtinterpret</name>
+      <value>1.2500000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>interpret</sans>
+        <tans>1</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtinterpret-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct: the household-level mean is appropriate for the average across households.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prtinterpret-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>For the average across households, each household must contribute equally.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prtmeanhouse</name>
+      <value>1.2500000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>meanhouse</sans>
+        <tans>mean_h</tans>
+        <testoptions>0.01</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtmeanhouse-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct: each household is counted once.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>prtmeanhouse-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>Not quite. Let's diagnose the calculation.</text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>meanhouse</sans>
+        <tans>mean_i</tans>
+        <testoptions>0.01</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtmeanhouse-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text>You calculated the individual-weighted mean instead. For the mean across households, divide the sum of the four household incomes by four.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prtmeanhouse-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>Check that each household income appears once and that you divide by four.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prtmeanperson</name>
+      <value>1.2500000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>meanperson</sans>
+        <tans>mean_i</tans>
+        <testoptions>0.01</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtmeanperson-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct: household income is repeated for each person.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>prtmeanperson-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>Not quite. Let's diagnose the calculation.</text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>meanperson</sans>
+        <tans>mean_h</tans>
+        <testoptions>0.01</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtmeanperson-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text>This is the household-level mean. For the individual-level mean, repeat each income for every member.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>prtmeanperson-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>Check both the repeated-income total and the denominator.</text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description></description>
+        <answertest>NumAbsolute</answertest>
+        <sans>meanperson</sans>
+        <tans>weighted_total/nh</tans>
+        <testoptions>0.01</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtmeanperson-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text>You correctly repeated incomes but divided by the number of households. Divide by the total number of individuals instead.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prtmeanperson-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>Multiply each household income by its number of members and divide by the total number of people.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prtpeople</name>
+      <value>1.2500000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>people</sans>
+        <tans>ni</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtpeople-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct: add all four household sizes.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prtpeople-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>Add the number of members across the four households.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prtpredict</name>
+      <value>1.2500000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>predict</sans>
+        <tans>2</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtpredict-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Correct: larger households have higher incomes, so repeating their income raises the individual-level mean.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prtpredict-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>Here larger households have higher incomes and contribute more repeated rows, so the individual-level mean is higher.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prtunit1</name>
+      <value>1.2500000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>unit1</sans>
+        <tans>1</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtunit1-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>One row of this data frame is one household.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prtunit1-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>The household data frame has one row per household.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prtunit2</name>
+      <value>1.2500000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>unit2</sans>
+        <tans>2</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prtunit2-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text>One row of this data frame is one individual.</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prtunit2-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>The individual data frame has one row per person, not per household.</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <deployedseed>2097277752</deployedseed>
+    <deployedseed>1062495518</deployedseed>
+    <deployedseed>1661037970</deployedseed>
+    <deployedseed>158176751</deployedseed>
+    <deployedseed>292506930</deployedseed>
+    <deployedseed>639502757</deployedseed>
+    <deployedseed>829047913</deployedseed>
+    <deployedseed>546925613</deployedseed>
+    <deployedseed>1145083571</deployedseed>
+    <deployedseed>504455773</deployedseed>
+  </question>
+
+</quiz>
