@@ -13,7 +13,6 @@
 
   <introduction xml:id="intro-cleaning-recoding">
     <p>
-      test.
       In the last chapter, we explored the Kenya Road Accidents database, and
       noticed lots of problems along the way: county names spelled in two
       different ways, ages given as groups as well as numbers, and so on.

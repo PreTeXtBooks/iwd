@@ -1810,7 +1810,7 @@
     <exercise xml:id="ex-ch3-pivot-table-2">
       <title>Pivot Tables (2): Working with Proportions</title>
 
-      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/pivot-table-2-(proportion).xml" label="stk-ch3-pivot-table-2"/>
+      <stack source="stack/03_pivot_proportion_fixed.xml" label="stk-ch3-pivot-table-2"/>
     </exercise>
 
     <exercise xml:id="ex-explore-bill-length">
