@@ -17,7 +17,7 @@ Download the dataset using the link below.
 </p>
 
 <p>
-<a href='[[textdownload name="tea_data.csv"]]{@stack_csv_formatter(data,lab)@}[[/textdownload]]'>Download tea_data.csv</a>
+<a href="[[textdownload name="tea_data.csv"]]{@stack_csv_formatter(data,lab)@}[[/textdownload]]">Download tea_data.csv</a>
 </p>
 
 <p>
