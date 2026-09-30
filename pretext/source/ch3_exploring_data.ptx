@@ -1804,7 +1804,7 @@
     <exercise xml:id="ex-ch3-pivot-table-1">
       <title>Pivot Tables (1)</title>
 
-      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/pivot-table-1.xml" label="stk-ch3-pivot-table-1"/>
+      <stack source="stack/03_pivot_tables_fixed.xml" label="stk-ch3-pivot-table-1"/>
     </exercise>
 
     <exercise xml:id="ex-ch3-pivot-table-2">
