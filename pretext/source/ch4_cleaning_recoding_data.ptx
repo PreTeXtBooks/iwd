@@ -248,47 +248,41 @@
   <!-- ================================================================= -->
   <!--  SECTION 2: the STACK question that exemplifies this              -->
   <!-- ================================================================= -->
-  <section xml:id="sec-stack-crop-example">
-    <title>STACK Question Here</title>
+  <!-- ================================================================= -->
+  <!--  SECTION 1: the data-first hook                                   -->
+  <!-- ================================================================= -->
+  <section xml:id="sec-ch4-stack">
+    <title>Practise: Cleaning Data</title>
 
-    <introduction>
-      <p>
-        Obviously, the scale is nowhere near the same, but the mistake at the
-        heart of the Ebola data comes up all the time in much smaller datasets:
-        deciding what odd-looking values mean, without really noticing that
-        you're making a decision at all.
-        Before you can ask a dataset a question, you need to know whether the
-        data is ready to be asked.
-        The next exercise gives you the chance to do exactly that.
-      </p>
-    </introduction>
+    <exercise>
+      <title>Exploring a survey of farmers</title>
 
-    <subsection xml:id="subsec-ch4-stack">
-      <title>A survey of 100 farmers</title>
+      <introduction>
+        <p>
+          In this exercise, you will work with data from a simulated survey of
+          100 farmers.
+          The dataset contains information about the farmers' ages, the crop
+          varieties they planted, and the yields they obtained.
+        </p>
 
-      <p>
-        Here's a survey of 100 farmers.
-        The dataset has three variables: <c>Age</c> (the age of the farmer),
-        <c>Variety</c> (the crop variety they planted), and <c>Yield</c> (their
-        harvest yield).
-        We want to find out whether younger and older farmers tend to plant
-        different varieties, and whether that affects their yields.
-      </p>
+        <p>
+          We are interested in whether younger and older farmers plant different
+          varieties, and whether this might be related to the yields they
+          obtain.
+          Before investigating this, however, we need to make sure that the data
+          we use are appropriate for our analysis.
+          You will use filtering and simple summaries to check the data and
+          answer a series of questions.
+        </p>
 
-      <p>
-        But before we can ask that, we need to make sure the data is ready for
-        analysis.
-        Download the dataset from the STACK question, and work through the
-        questions.
-        You'll find that some of them have more than one sensible answer, and
-        that the answer depends on decisions you make about the data first.
-        That's completely normal!
-      </p>
+        <p>
+          Download the dataset provided in the question and use statistical
+          software of your choice to explore and filter the data.
+        </p>
+      </introduction>
 
-      <p>
-        TODO: insert STACK question
-      </p>
-    </subsection>
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/6-Filtering-to-Clean.xml" label="stk-ch4-cleaning-data"/>
+    </exercise>
   </section>
   <!-- ================================================================= -->
   <!--  SECTION 3: it happened again, elsewhere                          -->
