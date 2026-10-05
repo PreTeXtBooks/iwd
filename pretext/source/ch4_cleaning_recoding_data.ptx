@@ -2197,7 +2197,6 @@ kenya_accidents_database &lt;- kenya_accidents_database %&gt;%
         <p>
           Inspect the <c>TIME 24 HOURS</c> column in the Kenya Road Accidents
           database.
-        </p>
 
         <ol>
           <li>
@@ -2225,6 +2224,7 @@ kenya_accidents_database &lt;- kenya_accidents_database %&gt;%
             </p>
           </li>
         </ol>
+      </p>
       </statement>
     </exercise>
     <!-- R: recoding -->
@@ -2235,7 +2235,6 @@ kenya_accidents_database &lt;- kenya_accidents_database %&gt;%
           inconsistent entries.
           For example, <c>M/CYCLIST</c>, <c>MOTOR CYCLIST</c>, and
           <c>MOTORCYCLIST</c> all show up as separate categories.
-        </p>
 
         <ol>
           <li>
@@ -2270,6 +2269,7 @@ kenya_accidents_database &lt;- kenya_accidents_database %&gt;%
             </p>
           </li>
         </ol>
+      </p>
       </statement>
     </exercise>
     <!-- R: levels of analysis -->
@@ -2278,8 +2278,6 @@ kenya_accidents_database &lt;- kenya_accidents_database %&gt;%
         <p>
           This chapter created a separate individual-level data frame from the
           incident-level Kenya Road Accidents database.
-        </p>
-
         <ol>
           <li>
             <p>
@@ -2306,15 +2304,16 @@ kenya_accidents_database &lt;- kenya_accidents_database %&gt;%
             </p>
           </li>
         </ol>
+      </p>
       </statement>
     </exercise>
+    
     <!-- Conceptual: cleaning and exploration cycle -->
     <exercise xml:id="ex-clean-cycle">
       <statement>
         <p>
           In this chapter, we've argued that data cleaning and data exploration
           work as a cycle, with each one feeding into the other.
-        </p>
 
         <ol>
           <li>
@@ -2341,6 +2340,7 @@ kenya_accidents_database &lt;- kenya_accidents_database %&gt;%
             </p>
           </li>
         </ol>
+      </p>
       </statement>
     </exercise>
   </exercises>
