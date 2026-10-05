@@ -428,8 +428,8 @@
 
     <introduction>
       <p>
-        In <xref ref="ch-intro"/>, the first thing many readers noticed
-        about the flamingo dataset was that some birds had no recorded sex.
+        In <xref ref="ch-intro"/>, the first thing many readers noticed about
+        the flamingo dataset was that some birds had no recorded sex.
         That observation — made without any prompting, just from looking at the
         data — is exactly the right instinct.
         Missing values are not a footnote to deal with later.
@@ -1661,6 +1661,43 @@
           Which one changes, which one doesn't, and why does that matter for
           anyone reading a report built on this column?
         </p>
+      </statement>
+    </exercise>
+    <!-- R: missing values -->
+    <exercise xml:id="ex-clean-missing-values">
+      <statement>
+        <p>
+          The Kenya Road Accidents database contains missing values in several
+          columns.
+        </p>
+
+        <ol>
+          <li>
+            <p>
+              Write R code to count the number of missing values in each column.
+              Which column has the most missing values?
+            </p>
+          </li>
+
+          <li>
+            <p>
+              The <c>AGE</c> column has both true missing values and coded
+              values like <c>A</c> and <c>J</c>.
+              After converting <c>AGE</c> to numeric, how many <c>NA</c> s
+              result?
+              Are all of these genuinely unknown ages, or are some of them
+              something else?
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Explain in your own words the difference between a value that is
+              missing and a value that is unknown.
+              Does that distinction matter for this dataset?
+            </p>
+          </li>
+        </ol>
       </statement>
     </exercise>
   </exercises>

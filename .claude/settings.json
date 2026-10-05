@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "WebFetch(domain:link.springer.com)",
-      "WebFetch(domain:pmc.ncbi.nlm.nih.gov)"
+      "WebFetch(domain:pmc.ncbi.nlm.nih.gov)",
+      "Bash(pretext build *)",
+      "Bash(start \"\" \"c:\\\\Users\\\\lclem\\\\OneDrive\\\\Documents\\\\GitHub\\\\statistical_computing_I\\\\pretext\\\\output\\\\web\\\\index.html\")"
     ]
   }
 }
