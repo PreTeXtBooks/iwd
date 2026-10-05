@@ -1621,62 +1621,114 @@
 
       <program language="r">
         <code>
-        kenya_accidents_database &lt;- kenya_accidents_database %&gt;%
-          mutate(ACCIDENT_CATEGORY = case_when(
+# Create a new variable that groups accidents into broad categories
+# based on words and phrases found in the accident description.
+kenya_accidents_database &lt;- kenya_accidents_database %&gt;%
+  mutate(
+    ACCIDENT_CATEGORY = case_when(
 
-            str_detect(`BRIEF ACCIDENT DETAILS`,
-                       regex("HEAD ON|HEAD-ON", ignore_case = TRUE)) ~ 
-              "Head on collision",
+      # str_detect() checks whether the accident description contains
+      # any of the words or phrases given in the regular expression (regex).
+      # ignore_case = TRUE means that upper- and lower-case letters are
+      # treated the same.
 
-            str_detect(`BRIEF ACCIDENT DETAILS`,
-                       regex("HIT.*R(A|U)N|HIT &amp; R(A|U)N", ignore_case = TRUE)) ~ 
-              "Hit and run",
+      # Identify head-on collisions. Looking for any descriptions with the
+      # words "HEAD ON" or "HEAD-ON" to group them together.
+      str_detect(
+        `BRIEF ACCIDENT DETAILS`,
+        regex("HEAD ON|HEAD-ON", ignore_case = TRUE)
+      ) ~ "Head on collision",
 
-            str_detect(`BRIEF ACCIDENT DETAILS`,
-                       regex("LOST CONTROL|LOSE CONTROL|TYRE BURST|STEERING ROD|POWER FAIL",
-                             ignore_case = TRUE)) ~ 
-              "Lost control",
+      # Identify hit-and-run incidents.
+      # .* means that any characters can appear between the two terms.
+      str_detect(
+        `BRIEF ACCIDENT DETAILS`,
+        regex("HIT.*R(A|U)N|HIT &amp; R(A|U)N", ignore_case = TRUE)
+      ) ~ "Hit and run",
 
-            str_detect(`BRIEF ACCIDENT DETAILS`,
-                       regex("KNOCKED DOWN|KNOCK DOWN|RAN OVER|RUN OVER|KNOCKED PEDESTRIAN",
-                             ignore_case = TRUE)) ~ 
-              "Knocked down",
+      # Identify incidents where the driver lost control of the vehicle,
+      # including descriptions mentioning mechanical failures.
+      # E.g., looking for any descriptions with the
+      # words "LOST CONTROL", "LOSE CONTROL", "TYRE BURST",
+      "STEERING ROD", OR "POWER FAIL" to group them together.
+      str_detect(
+        `BRIEF ACCIDENT DETAILS`,
+        regex(
+          "LOST CONTROL|LOSE CONTROL|TYRE BURST|STEERING ROD|POWER FAIL",
+          ignore_case = TRUE
+        )
+      ) ~ "Lost control",
 
-            str_detect(`BRIEF ACCIDENT DETAILS`,
-                       regex("REAR|FROM BEHIND|FAILED TO KEEP DISTANCE",
-                             ignore_case = TRUE)) ~ 
-              "Rear collision",
+      # Identify incidents involving someone being knocked down or run over.
+      str_detect(
+        `BRIEF ACCIDENT DETAILS`,
+        regex(
+          "KNOCKED DOWN|KNOCK DOWN|RAN OVER|RUN OVER|KNOCKED PEDESTRIAN",
+          ignore_case = TRUE
+        )
+      ) ~ "Knocked down",
 
-            str_detect(`BRIEF ACCIDENT DETAILS`,
-                       regex("HIT.*M/CYCLE|HIT.*MOTOR CYCLE|HIT.*CYCLIST|HIT.*CYCLE",
-                             ignore_case = TRUE)) ~ 
-              "Vehicle hit motorcycle/cyclist",
+      # Identify rear-end collisions.
+      str_detect(
+        `BRIEF ACCIDENT DETAILS`,
+        regex(
+          "REAR|FROM BEHIND|FAILED TO KEEP DISTANCE",
+          ignore_case = TRUE
+        )
+      ) ~ "Rear collision",
 
-            str_detect(`BRIEF ACCIDENT DETAILS`,
-                       regex("OVERTOOK|OVERTAKING|OVERTAK",
-                             ignore_case = TRUE)) ~ 
-              "Overtaking incident",
+      # Identify incidents where a vehicle hit a motorcycle or cyclist.
+      str_detect(
+        `BRIEF ACCIDENT DETAILS`,
+        regex(
+          "HIT.*M/CYCLE|HIT.*MOTOR CYCLE|HIT.*CYCLIST|HIT.*CYCLE",
+          ignore_case = TRUE
+        )
+      ) ~ "Vehicle hit motorcycle/cyclist",
 
-            str_detect(`BRIEF ACCIDENT DETAILS`,
-                       regex("ROLL|OVERTURN", ignore_case = TRUE)) ~ 
-              "Rolled/overturned",
+      # Identify incidents associated with overtaking.
+      str_detect(
+        `BRIEF ACCIDENT DETAILS`,
+        regex("OVERTOOK|OVERTAKING|OVERTAK", ignore_case = TRUE)
+      ) ~ "Overtaking incident",
 
-            str_detect(`BRIEF ACCIDENT DETAILS`,
-                       regex("VEERED OFF|VEER OFF|LANDED INTO A DITCH|LANDED IN A DITCH|PLUNGED|PLUGGED INTO",
-                             ignore_case = TRUE)) ~ 
-              "Veered off road",
+      # Identify vehicles that rolled or overturned.
+      str_detect(
+        `BRIEF ACCIDENT DETAILS`,
+        regex("ROLL|OVERTURN", ignore_case = TRUE)
+      ) ~ "Rolled/overturned",
 
-            str_detect(`BRIEF ACCIDENT DETAILS`,
-                       regex("ALIGHT|ALIGHTED|JUMPED OFF|FELL DOWN AND WAS",
-                             ignore_case = TRUE)) ~ 
-              "Alighting/boarding incident",
+      # Identify vehicles that left the road, entered a ditch, or plunged
+      # off the roadway.
+      str_detect(
+        `BRIEF ACCIDENT DETAILS`,
+        regex(
+          "VEERED OFF|VEER OFF|LANDED INTO A DITCH|LANDED IN A DITCH|PLUNGED|PLUGGED INTO",
+          ignore_case = TRUE
+        )
+      ) ~ "Veered off road",
 
-            str_detect(`BRIEF ACCIDENT DETAILS`,
-                       regex("RAMMED INTO|RAMMED", ignore_case = TRUE)) ~ 
-              "Vehicle rammed into another",
+      # Identify incidents occurring while someone was getting on or off
+      # a vehicle.
+      str_detect(
+        `BRIEF ACCIDENT DETAILS`,
+        regex(
+          "ALIGHT|ALIGHTED|JUMPED OFF|FELL DOWN AND WAS",
+          ignore_case = TRUE
+        )
+      ) ~ "Alighting/boarding incident",
 
-            TRUE ~ "Other/unknown"
-          ))
+      # Identify descriptions where one vehicle rammed into another.
+      str_detect(
+        `BRIEF ACCIDENT DETAILS`,
+        regex("RAMMED INTO|RAMMED", ignore_case = TRUE)
+      ) ~ "Vehicle rammed into another",
+
+      # If none of the patterns above are found, place the accident
+      # in an "Other/unknown" category.
+      TRUE ~ "Other/unknown"
+    )
+  )
         </code>
       </program>
 
