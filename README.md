@@ -4,7 +4,7 @@ This repository contains the source for a PreTeXt book on An Introduction to Wor
 
 ## Status
 
-Chapters 3-7 are now relatively complete. Chapters 1, 2, and 8-10 still need work, which is expected to be completed over the coming weeks.
+Chapters 1-4 are now complete. Chapters 5-10 are in progress, and will be updated weekly.
 
 ## Chapter structure
 
