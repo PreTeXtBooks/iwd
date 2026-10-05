@@ -1,0 +1,1372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+<!-- question: 274491  -->
+  <question type="stack">
+    <name>
+      <text>River pollution: Handling factors</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<h3>River pollution: does land use matter?</h3>
+<p>An environmental scientist collected samples at 24 river sites, classified as forest, agricultural or industrial. All pollutant concentrations are measured in mg/L.</p>
+<p>Download the CSV. Its columns are Site, Distance_km, Land_use and Concentration_mg_L.</p>
+<p>
+<a href = "[[textdownload name="river_pollution_land_use.csv"]]{@stack_csv_formatter(data,lab)@}[[/textdownload]]">Download the data</a>
+</p>
+
+<h4>A. Recognising factors</h4>
+<p>Which variable identifies the type of surrounding land use?</p>
+<p>[[input:ans_factor]] [[validation:ans_factor]]</p>
+
+<p>How many levels does this factor have?</p>
+<p>[[input:ans_levels]] [[validation:ans_levels]]</p>
+
+<h4>B. Comparing groups</h4>
+<p>Calculate the mean concentration for each land-use category. Give each answer to two decimal places.</p>
+<p>Forest: [[input:ans_forest]] [[validation:ans_forest]] mg/L</p>
+<p>Agricultural: [[input:ans_agricultural]] [[validation:ans_agricultural]] mg/L</p>
+<p>Industrial: [[input:ans_industrial]] [[validation:ans_industrial]] mg/L</p>
+
+<h4>C. Choosing a graph</h4>
+<p>You want to compare the <strong>distribution of pollutant concentrations across the three land-use categories</strong> (Forest, Agricultural and Industrial). Which graph is most appropriate for this purpose?</p>
+<p>Select an option to preview that graph immediately. You can change your selection before submitting your answer.</p>
+<p>[[input:ans_graph]] [[validation:ans_graph]]</p><p><strong>Preview of your selected graph:</strong></p>
+[[jsxgraph width="650px" height="390px" input-ref-ans_graph="graphInputId"]]
+/* The input-ref attribute provides the exact Moodle element ID. */
+var select=document.getElementById(graphInputId);
+var groups=[{#forest_clean#},{#agricultural_clean#},{#industrial_clean#}];
+var distances={#distances#};
+var concentrations={#clean_conc#};
+var names=['Forest','Agricultural','Industrial'];
+var colours=['#2563eb','#16a34a','#dc2626'];
+var board=null;
+
+function average(a) {
+ var s=0;
+ for(var i=0;i<a.length;i++){s+=a[i];}
+ return s/a.length;
+}
+function quantile(a,p){
+ var v=a.slice().sort(function(x,y){return x-y;});
+ var h=(v.length-1)*p,j=Math.floor(h);
+ return v[j]+(v[Math.min(j+1,v.length-1)]-v[j])*(h-j);
+}
+function newBoard(bounds,axes){
+ if(board){JXG.JSXGraph.freeBoard(board);}
+ board=JXG.JSXGraph.initBoard(divid,{
+  boundingbox:bounds,axis:axes,showCopyright:false,
+  showNavigation:false,keepaspectratio:false
+ });
+ return board;
+}
+function drawChoice(){
+ /* STACK dropdown values are the first entries of ta_graph: 1,2,3,4. */
+ var choice=select ? String(select.value) : '';
+ var all=concentrations;
+ var lo=Math.min.apply(null,all),hi=Math.max.apply(null,all);
+ var pad=Math.max(1,(hi-lo)*0.16);
+ var b,i,g,x,a,mean;
+
+ if(choice==='1'){
+  var xmin=Math.min.apply(null,distances),xmax=Math.max.apply(null,distances);
+  var xp=Math.max(1,(xmax-xmin)*0.08);
+  b=newBoard([xmin-xp,hi+pad,xmax+xp,lo-pad],true);
+  for(i=0;i<distances.length;i++){
+   b.create('point',[distances[i],concentrations[i]],{
+    name:'',size:3,fixed:true,highlight:false,
+    strokeColor:'#2563eb',fillColor:'#2563eb'
+   });
+  }
+ } else if(choice==='2'){
+  var bins=6,w=(hi-lo)/bins;
+  if(w===0){w=1;}
+  var counts=[0,0,0,0,0,0];
+  for(i=0;i<all.length;i++){
+   var idx=Math.max(0,Math.min(5,Math.floor((all[i]-lo)/w)));
+   counts[idx]++;
+  }
+  var top=Math.max.apply(null,counts)+2;
+  b=newBoard([lo-w*0.3,top,lo+6*w+w*0.3,-1],true);
+  for(i=0;i<6;i++){
+   x=lo+i*w;
+   b.create('polygon',[[x,0],[x+w,0],[x+w,counts[i]],[x,counts[i]]],{
+    fillColor:'#2563eb',fillOpacity:0.35,
+    borders:{strokeColor:'#2563eb',strokeWidth:1},
+    vertices:{visible:false},fixed:true,highlight:false
+   });
+  }
+ } else if(choice==='3'){
+  b=newBoard([0.35,hi+pad,3.65,lo-pad],false);
+  for(g=0;g<3;g++){
+   a=groups[g];x=g+1;
+   var q1=quantile(a,0.25),med=quantile(a,0.5),q3=quantile(a,0.75);
+   var mn=Math.min.apply(null,a),mx=Math.max.apply(null,a);
+   b.create('segment',[[x,mn],[x,mx]],{
+    strokeColor:colours[g],strokeWidth:2,fixed:true,highlight:false
+   });
+   b.create('segment',[[x-0.15,mn],[x+0.15,mn]],{
+    strokeColor:colours[g],strokeWidth:2,fixed:true,highlight:false
+   });
+   b.create('segment',[[x-0.15,mx],[x+0.15,mx]],{
+    strokeColor:colours[g],strokeWidth:2,fixed:true,highlight:false
+   });
+   b.create('polygon',[[x-0.26,q1],[x+0.26,q1],[x+0.26,q3],[x-0.26,q3]],{
+    fillColor:colours[g],fillOpacity:0.18,
+    borders:{strokeColor:colours[g],strokeWidth:2},
+    vertices:{visible:false},fixed:true,highlight:false
+   });
+   b.create('segment',[[x-0.26,med],[x+0.26,med]],{
+    strokeColor:colours[g],strokeWidth:3,fixed:true,highlight:false
+   });
+   b.create('text',[x,lo-pad*0.7,names[g]],{
+    anchorX:'middle',fixed:true,fontSize:13
+   });
+  }
+ } else if(choice==='4'){
+  var means=groups.map(average);
+  var ml=Math.min.apply(null,means),mh=Math.max.apply(null,means);
+  var mp=Math.max(1,(mh-ml)*0.3);
+  b=newBoard([0.4,mh+mp,3.6,ml-mp],false);
+  for(g=0;g<3;g++){
+   b.create('point',[g+1,means[g]],{
+    name:'',size:4,fixed:true,highlight:false,
+    strokeColor:'#2563eb',fillColor:'#2563eb'
+   });
+   b.create('text',[g+1,ml-mp*0.7,names[g]],{
+    anchorX:'middle',fixed:true,fontSize:13
+   });
+   if(g>0){
+    b.create('segment',[[g,means[g-1]],[g+1,means[g]]],{
+     strokeColor:'#2563eb',strokeWidth:2,fixed:true,highlight:false
+    });
+   }
+  }
+ } else {
+  b=newBoard([0,5,10,0],false);
+  b.create('text',[5,2.5,'Select a graph above to preview it.'],{
+   anchorX:'middle',fixed:true,fontSize:15
+  });
+ }
+}
+if(select){
+ select.addEventListener('change',drawChoice);
+}
+drawChoice();
+[[/jsxgraph]]
+
+     
+<h4>D. Understanding the dataset</h4>
+<p>Which statement correctly describes the structure of this dataset?</p><p>[[input:ans_structure]] [[validation:ans_structure]]</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<h3>Worked solution</h3><p><strong>Land_use</strong> is a factor with three levels: Forest, Agricultural and Industrial. Concentration and distance are numerical variables.</p><p>All concentrations are already in mg/L. Calculate the mean within each land-use category.</p><table class="table table-bordered"><thead><tr><th>Land use</th><th>Mean (mg/L)</th></tr></thead><tbody><tr><td>Forest</td><td>{@ta_mean_forest@}</td></tr><tr><td>Agricultural</td><td>{@ta_mean_agricultural@}</td></tr><tr><td>Industrial</td><td>{@ta_mean_industrial@}</td></tr></tbody></table><h4>Comparing the three factor levels: side-by-side boxplots</h4><p>Each boxplot summarises the distribution of pollutant concentrations within one land-use category. The coloured box extends from the lower to the upper quartile; the line inside it marks the median. Whiskers here extend to the minimum and maximum. The <strong>black diamond marks the mean</strong> calculated above.</p>
+[[jsxgraph width="650px" height="410px"]]
+var groups=[{#forest_clean#},{#agricultural_clean#},{#industrial_clean#}];
+var labels=['Forest','Agricultural','Industrial'];
+var colours=['#2563eb','#16a34a','#dc2626'];
+var all=groups[0].concat(groups[1],groups[2]);
+var lo=Math.min.apply(null,all),hi=Math.max.apply(null,all);
+var pad=Math.max(1,(hi-lo)*0.18);
+var board=JXG.JSXGraph.initBoard(divid,{
+ boundingbox:[0.35,hi+pad,3.65,lo-pad],
+ axis:false,showCopyright:false,showNavigation:false,
+ keepaspectratio:false
+});
+function quantile(a,p){
+ var v=a.slice().sort(function(x,y){return x-y;});
+ var h=(v.length-1)*p,j=Math.floor(h);
+ return v[j]+(v[Math.min(j+1,v.length-1)]-v[j])*(h-j);
+}
+for(var g=0;g<3;g++){
+ var a=groups[g],x=g+1;
+ var q1=quantile(a,0.25),med=quantile(a,0.5),q3=quantile(a,0.75);
+ var mn=Math.min.apply(null,a),mx=Math.max.apply(null,a);
+ var total=0;
+ for(var i=0;i<a.length;i++){total+=a[i];}
+ var mean=total/a.length;
+ board.create('segment',[[x,mn],[x,mx]],{
+  strokeColor:colours[g],strokeWidth:2,fixed:true,highlight:false
+ });
+ board.create('segment',[[x-0.15,mn],[x+0.15,mn]],{
+  strokeColor:colours[g],strokeWidth:2,fixed:true,highlight:false
+ });
+ board.create('segment',[[x-0.15,mx],[x+0.15,mx]],{
+  strokeColor:colours[g],strokeWidth:2,fixed:true,highlight:false
+ });
+ board.create('polygon',[[x-0.26,q1],[x+0.26,q1],[x+0.26,q3],[x-0.26,q3]],{
+  fillColor:colours[g],fillOpacity:0.18,
+  borders:{strokeColor:colours[g],strokeWidth:2},
+  vertices:{visible:false},fixed:true,highlight:false
+ });
+ board.create('segment',[[x-0.26,med],[x+0.26,med]],{
+  strokeColor:colours[g],strokeWidth:3,fixed:true,highlight:false
+ });
+ board.create('point',[x,mean],{
+  name:'',face:'diamond',size:5,fixed:true,highlight:false,
+  strokeColor:'#111827',fillColor:'#111827'
+ });
+ board.create('text',[x,lo-pad*0.68,labels[g]],{
+  anchorX:'middle',fixed:true,fontSize:13
+ });
+}
+board.create('text',[0.42,hi+pad*0.65,'Concentration (mg/L)'],{
+ fixed:true,fontSize:13
+});
+[[/jsxgraph]]
+<p><strong>Why boxplots?</strong> Land use is a factor: its three levels define separate groups. Side-by-side boxplots allow us to compare their medians, spreads and ranges. The black diamonds connect this graph to the three group means calculated earlier. A scatterplot of distance against concentration addresses a different question; a histogram combines the groups; connecting categorical groups with a line suggests an artificial continuity.</p><h4>6. Observations, variables and factor levels</h4><p>The CSV contains <strong>24 observations</strong> (one per sampling site), <strong>four variables</strong> (Site, Distance_km, Land_use and Concentration_mg_L), and <strong>three levels</strong> of Land_use (Forest, Agricultural and Industrial).</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>6</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <stackversion>
+      <text>2026063000</text>
+    </stackversion>
+    <questionvariables>
+      <text><![CDATA[/* River pollution: factors, all concentrations in mg/L */
+n:24;
+group_id:append(makelist(1,k,1,8),makelist(2,k,1,8),makelist(3,k,1,8));
+group_names:["Forest","Agricultural","Industrial"];
+land_use:makelist(group_names[group_id[k]],k,1,n);
+
+/* Distances are irregular and unrelated to group assignment. */
+distance_pool:makelist((15*k+rand(7)-3)/10,k,1,n);
+distances:random_permutation(distance_pool);
+
+forest_base:(18+rand(9))/10;
+agricultural_base:(48+rand(13))/10;
+industrial_base:(90+rand(21))/10;
+clean_conc:makelist(
+ if group_id[k]=1 then (round(10*forest_base)+rand(13)-6)/10
+ else if group_id[k]=2 then (round(10*agricultural_base)+rand(21)-10)/10
+ else (round(10*industrial_base)+rand(31)-15)/10,
+ k,1,n
+);
+forest_clean:makelist(clean_conc[k],k,1,8);
+agricultural_clean:makelist(clean_conc[k],k,9,16);
+industrial_clean:makelist(clean_conc[k],k,17,24);
+
+ta_mean_forest:float(round(100*sum(forest_clean[k],k,1,8)/8)/100);
+ta_mean_agricultural:float(round(100*sum(agricultural_clean[k],k,1,8)/8)/100);
+ta_mean_industrial:float(round(100*sum(industrial_clean[k],k,1,8)/8)/100);
+
+/* Randomise rows without separating observations from their labels. */
+row_order:random_permutation(makelist(k,k,1,n));
+sites:makelist(sconcat("S",row_order[k]),k,1,n);
+
+lab:["Site","Distance_km","Land_use","Concentration_mg_L"];
+
+data:makelist(
+ [
+  sites[k],
+  float(distances[row_order[k]]),
+  land_use[row_order[k]],
+  float(clean_conc[row_order[k]])
+ ],
+ k,1,n
+);
+ta_factor:[
+ [1,false,"Distance_km"],
+ [2,true,"Land_use"],
+ [3,false,"Concentration"],
+ [4,false,"Site"]
+];
+ta_graph:[
+ [1,false,"Scatterplot of distance against concentration"],
+ [2,false,"Histogram of all concentrations"],
+ [3,true,"Side-by-side boxplots of concentration by land use"],
+ [4,false,"Line graph connecting the three land-use categories"]
+];
+ta_levels:3;
+/* Diagnostic means: pooling groups or dividing by all 24 sites */
+overall_mean:float(round(100*sum(clean_conc[k],k,1,n)/n)/100);
+forest_div24:float(round(100*sum(forest_clean[k],k,1,8)/24)/100);
+agricultural_div24:float(round(100*sum(agricultural_clean[k],k,1,8)/24)/100);
+industrial_div24:float(round(100*sum(industrial_clean[k],k,1,8)/24)/100);
+ta_structure:[
+ [1,true,"24 observations, four variables and three levels of Land_use"],
+ [2,false,"Three observations, one for each land-use category"],
+ [3,false,"Eight observations and 24 levels of Land_use"],
+ [4,false,"24 variables and three observations"]
+];
+
+
+/* Diagnostic sums */
+forest_sum:float(sum(forest_clean[k],k,1,8));
+agricultural_sum:float(sum(agricultural_clean[k],k,1,8));
+industrial_sum:float(sum(industrial_clean[k],k,1,8));
+
+/* Sum of all 24 observations */
+overall_sum:float(sum(clean_conc[k],k,1,n));
+
+/* Means rounded to two decimal places */
+mean_forest:ta_mean_forest;
+mean_agricultural:ta_mean_agricultural;
+mean_industrial:ta_mean_industrial;]]></text>
+    </questionvariables>
+    <specificfeedback format="html">
+      <text>[[feedback:prt1]] [[feedback:prt2]] [[feedback:prt3]] [[feedback:prt4]] [[feedback:prt5]] [[feedback:prt6]] [[feedback:prt7]]</text>
+    </specificfeedback>
+    <questionnote format="html">
+      <text>{@data@}</text>
+    </questionnote>
+    <questiondescription format="html">
+      <text></text>
+    </questiondescription>
+    <questionsimplify>1</questionsimplify>
+    <assumepositive>0</assumepositive>
+    <assumereal>0</assumereal>
+    <prtcorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:green;"><i class="fa fa-check"></i></span> Correct answer, well done.]]></text>
+    </prtcorrect>
+    <prtpartiallycorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:orange;"><i class="fa fa-adjust"></i></span> Your answer is partially correct.]]></text>
+    </prtpartiallycorrect>
+    <prtincorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:red;"><i class="fa fa-times"></i></span> Incorrect answer.]]></text>
+    </prtincorrect>
+    <decimals>.</decimals>
+    <scientificnotation>*10</scientificnotation>
+    <multiplicationsign>dot</multiplicationsign>
+    <sqrtsign>1</sqrtsign>
+    <complexno>i</complexno>
+    <inversetrig>cos-1</inversetrig>
+    <logicsymbol>lang</logicsymbol>
+    <matrixparens>[</matrixparens>
+    <isbroken>0</isbroken>
+    <variantsselectionseed></variantsselectionseed>
+    <input>
+      <name>ans_agricultural</name>
+      <type>numerical</type>
+      <tans>ta_mean_agricultural</tans>
+      <boxsize>12</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>ans_factor</name>
+      <type>dropdown</type>
+      <tans>ta_factor</tans>
+      <boxsize>15</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>ans_forest</name>
+      <type>numerical</type>
+      <tans>ta_mean_forest</tans>
+      <boxsize>12</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>ans_graph</name>
+      <type>dropdown</type>
+      <tans>ta_graph</tans>
+      <boxsize>30</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>ans_industrial</name>
+      <type>numerical</type>
+      <tans>ta_mean_industrial</tans>
+      <boxsize>12</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>ans_levels</name>
+      <type>numerical</type>
+      <tans>ta_levels</tans>
+      <boxsize>8</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>ans_structure</name>
+      <type>dropdown</type>
+      <tans>ta_structure</tans>
+      <boxsize>70</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <prt>
+      <name>prt1</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description>Identify land-use factor</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_factor</sans>
+        <tans>2</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Correct. Land_use is the factor used to group sites.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt1-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Land_use groups the sampling sites into Forest, Agricultural and Industrial. Distance and concentration are numerical; Site is an identifier.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt2</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description>Three factor levels</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_levels</sans>
+        <tans>3</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt2-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Correct: Forest, Agricultural and Industrial.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt2-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Count the distinct land-use categories, not the number of sites.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt3</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description>Correct group mean</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans_forest</sans>
+        <tans>ta_mean_forest</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt3-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Correct. This is the mean concentration for the forest sites.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>prt3-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description>ta_mean_agricultural</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans_forest</sans>
+        <tans>ta_mean_agricultural</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt3-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This is the agricultural mean, but the question asks for the forest mean. Select sites by their Land_use category.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>prt3-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description>ta_mean_industrial</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans_forest</sans>
+        <tans>ta_mean_industrial</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt3-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This is the industrial mean, but the question asks for the forest mean. Select sites by their Land_use category.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>3</falsenextnode>
+        <falseanswernote>prt3-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>3</name>
+        <description>forest_sum</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans_forest</sans>
+        <tans>forest_sum</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt3-3-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This is the sum of concentrations for the eight forest sites. Divide by eight to calculate their mean.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>4</falsenextnode>
+        <falseanswernote>prt3-3-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>4</name>
+        <description>overall_mean</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans_forest</sans>
+        <tans>overall_mean</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt3-4-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This is the mean across all 24 sites. Use only the eight forest sites.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>5</falsenextnode>
+        <falseanswernote>prt3-4-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>5</name>
+        <description>forest_div24</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans_forest</sans>
+        <tans>forest_div24</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt3-5-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>You divided the forest total by 24. There are eight sites in this category, so divide by eight.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>6</falsenextnode>
+        <falseanswernote>prt3-5-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>6</name>
+        <description>overall_sum</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans_forest</sans>
+        <tans>overall_sum</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt3-6-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This is the sum of concentrations across all 24 sites, not a group mean.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>7</falsenextnode>
+        <falseanswernote>prt3-6-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>7</name>
+        <description>first_eight_mean</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans_forest</sans>
+        <tans>first_eight_mean</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt3-7-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This matches the mean of a consecutive block of eight CSV rows. The rows are shuffled: filter by Land_use rather than row position.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt3-7-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Check which rows belong to the forest category, add their concentrations and divide by eight.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt4</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description>Correct group mean</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans_agricultural</sans>
+        <tans>ta_mean_agricultural</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt4-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Correct. This is the mean concentration for the agricultural sites.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>prt4-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description>ta_mean_forest</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans_agricultural</sans>
+        <tans>ta_mean_forest</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt4-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This is the forest mean, but the question asks for the agricultural mean. Select sites by their Land_use category.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>prt4-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description>ta_mean_industrial</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans_agricultural</sans>
+        <tans>ta_mean_industrial</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt4-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This is the industrial mean, but the question asks for the agricultural mean. Select sites by their Land_use category.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>3</falsenextnode>
+        <falseanswernote>prt4-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>3</name>
+        <description>agricultural_sum</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans_agricultural</sans>
+        <tans>agricultural_sum</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt4-3-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This is the sum of concentrations for the eight agricultural sites. Divide by eight to calculate their mean.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>4</falsenextnode>
+        <falseanswernote>prt4-3-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>4</name>
+        <description>overall_mean</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans_agricultural</sans>
+        <tans>overall_mean</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt4-4-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This is the mean across all 24 sites. Use only the eight agricultural sites.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>5</falsenextnode>
+        <falseanswernote>prt4-4-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>5</name>
+        <description>agricultural_div24</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans_agricultural</sans>
+        <tans>agricultural_div24</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt4-5-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>You divided the agricultural total by 24. There are eight sites in this category, so divide by eight.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>6</falsenextnode>
+        <falseanswernote>prt4-5-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>6</name>
+        <description>overall_sum</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans_agricultural</sans>
+        <tans>overall_sum</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt4-6-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This is the sum of concentrations across all 24 sites, not a group mean.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>7</falsenextnode>
+        <falseanswernote>prt4-6-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>7</name>
+        <description>middle_eight_mean</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans_agricultural</sans>
+        <tans>middle_eight_mean</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt4-7-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This matches the mean of a consecutive block of eight CSV rows. The rows are shuffled: filter by Land_use rather than row position.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt4-7-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Check which rows belong to the agricultural category, add their concentrations and divide by eight.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt5</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description>Correct group mean</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans_industrial</sans>
+        <tans>ta_mean_industrial</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt5-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Correct. This is the mean concentration for the industrial sites.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>prt5-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description>ta_mean_forest</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans_industrial</sans>
+        <tans>ta_mean_forest</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt5-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This is the forest mean, but the question asks for the industrial mean. Select sites by their Land_use category.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>prt5-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description>ta_mean_agricultural</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans_industrial</sans>
+        <tans>ta_mean_agricultural</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt5-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This is the agricultural mean, but the question asks for the industrial mean. Select sites by their Land_use category.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>3</falsenextnode>
+        <falseanswernote>prt5-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>3</name>
+        <description>industrial_sum</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans_industrial</sans>
+        <tans>industrial_sum</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt5-3-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This is the sum of concentrations for the eight industrial sites. Divide by eight to calculate their mean.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>4</falsenextnode>
+        <falseanswernote>prt5-3-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>4</name>
+        <description>overall_mean</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans_industrial</sans>
+        <tans>overall_mean</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt5-4-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This is the mean across all 24 sites. Use only the eight industrial sites.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>5</falsenextnode>
+        <falseanswernote>prt5-4-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>5</name>
+        <description>industrial_div24</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans_industrial</sans>
+        <tans>industrial_div24</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt5-5-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>You divided the industrial total by 24. There are eight sites in this category, so divide by eight.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>6</falsenextnode>
+        <falseanswernote>prt5-5-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>6</name>
+        <description>overall_sum</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans_industrial</sans>
+        <tans>overall_sum</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt5-6-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This is the sum of concentrations across all 24 sites, not a group mean.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>7</falsenextnode>
+        <falseanswernote>prt5-6-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>7</name>
+        <description>last_eight_mean</description>
+        <answertest>NumAbsolute</answertest>
+        <sans>ans_industrial</sans>
+        <tans>last_eight_mean</tans>
+        <testoptions>0.011</testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt5-7-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>This matches the mean of a consecutive block of eight CSV rows. The rows are shuffled: filter by Land_use rather than row position.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt5-7-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Check which rows belong to the industrial category, add their concentrations and divide by eight.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt6</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description>Graph choice 3</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_graph</sans>
+        <tans>3</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt6-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p><strong>You selected side-by-side boxplots.</strong> These compare the medians, spreads and ranges of concentration separately for each factor level. The worked solution also marks each group mean.</p>[[jsxgraph width="650px" height="380px"]]
+var groups=[{#forest_clean#},{#agricultural_clean#},{#industrial_clean#}];
+var labels=['Forest','Agricultural','Industrial'];
+var colors=['#2563eb','#16a34a','#dc2626'];
+
+var all=groups[0].concat(groups[1],groups[2]);
+var lo=Math.min.apply(null,all),hi=Math.max.apply(null,all),pad=Math.max(1,(hi-lo)*0.16);
+var board=JXG.JSXGraph.initBoard(divid,{boundingbox:[0.4,hi+pad,3.7,lo-pad],axis:false,showNavigation:false,showCopyright:false});
+function quantile(a,p){var v=a.slice().sort(function(x,y){return x-y;});var h=(v.length-1)*p,j=Math.floor(h);return v[j]+(v[Math.min(j+1,v.length-1)]-v[j])*(h-j);}
+for(var k=0;k<3;k++){
+ var a=groups[k],x=k+1,q1=quantile(a,0.25),med=quantile(a,0.5),q3=quantile(a,0.75);
+ var mn=Math.min.apply(null,a),mx=Math.max.apply(null,a);
+ board.create('segment',[[x,mn],[x,mx]],{strokeColor:colors[k],strokeWidth:2,fixed:true});
+ board.create('segment',[[x-0.16,mn],[x+0.16,mn]],{strokeColor:colors[k],strokeWidth:2,fixed:true});
+ board.create('segment',[[x-0.16,mx],[x+0.16,mx]],{strokeColor:colors[k],strokeWidth:2,fixed:true});
+ board.create('polygon',[[x-0.28,q1],[x+0.28,q1],[x+0.28,q3],[x-0.28,q3]],{
+  fillColor:colors[k],fillOpacity:0.18,borders:{strokeColor:colors[k],strokeWidth:2},
+  vertices:{visible:false},fixed:true,highlight:false
+ });
+ board.create('segment',[[x-0.28,med],[x+0.28,med]],{strokeColor:colors[k],strokeWidth:3,fixed:true});
+ board.create('text',[x,lo-pad*0.65,labels[k]],{anchorX:'middle',fixed:true,fontSize:13});
+}
+board.create('text',[0.48,hi+pad*0.6,'Concentration (mg/L)'],{fixed:true,fontSize:13});
+
+[[/jsxgraph]]]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>prt6-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description>Graph choice 1</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_graph</sans>
+        <tans>1</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt6-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p><strong>You selected a scatterplot.</strong> This shows concentration against distance, not the distribution within each land-use category.</p>[[jsxgraph width="650px" height="380px"]]
+var xs={#distances#},ys={#clean_conc#};
+var xmin=Math.min.apply(null,xs),xmax=Math.max.apply(null,xs);
+var ymin=Math.min.apply(null,ys),ymax=Math.max.apply(null,ys);
+var xp=(xmax-xmin)*0.1,yp=Math.max(1,(ymax-ymin)*0.12);
+var board=JXG.JSXGraph.initBoard(divid,{boundingbox:[xmin-xp,ymax+yp,xmax+xp,ymin-yp],axis:true,showNavigation:false,showCopyright:false});
+for(var i=0;i<xs.length;i++){board.create('point',[xs[i],ys[i]],{name:'',size:3,fixed:true,highlight:false,strokeColor:'#2563eb',fillColor:'#2563eb'});}
+
+[[/jsxgraph]]]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>prt6-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description>Graph choice 2</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_graph</sans>
+        <tans>2</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt6-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p><strong>You selected a histogram.</strong> This shows the overall distribution of concentration, but combines all three land-use categories.</p>[[jsxgraph width="650px" height="380px"]]
+var ys={#clean_conc#},lo=Math.min.apply(null,ys),hi=Math.max.apply(null,ys),bins=6;
+var w=(hi-lo)/bins; if(w===0){w=1;}
+var counts=[0,0,0,0,0,0];
+for(var i=0;i<ys.length;i++){var b=Math.min(5,Math.floor((ys[i]-lo)/w));counts[b]++;}
+var top=Math.max.apply(null,counts)+2;
+var board=JXG.JSXGraph.initBoard(divid,{boundingbox:[lo-w*0.2,top,lo+6*w+w*0.2,-1],axis:true,showNavigation:false,showCopyright:false});
+for(var j=0;j<6;j++){var x=lo+j*w;
+ board.create('polygon',[[x,0],[x+w,0],[x+w,counts[j]],[x,counts[j]]],{
+ fillColor:'#2563eb',fillOpacity:0.4,borders:{strokeColor:'#2563eb'},
+ vertices:{visible:false},fixed:true,highlight:false});
+}
+
+[[/jsxgraph]]]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>3</falsenextnode>
+        <falseanswernote>prt6-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>3</name>
+        <description>Graph choice 4</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_graph</sans>
+        <tans>4</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt6-3-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p><strong>You selected a line graph.</strong> This connects category means, but the land-use categories have no natural continuous ordering; the connecting lines can be misleading.</p>[[jsxgraph width="650px" height="380px"]]
+var groups=[{#forest_clean#},{#agricultural_clean#},{#industrial_clean#}];
+var labels=['Forest','Agricultural','Industrial'];
+var colors=['#2563eb','#16a34a','#dc2626'];
+
+var means=groups.map(function(a){return a.reduce(function(x,y){return x+y;},0)/a.length;});
+var lo=Math.min.apply(null,means),hi=Math.max.apply(null,means),pad=Math.max(1,(hi-lo)*0.2);
+var board=JXG.JSXGraph.initBoard(divid,{boundingbox:[0.5,hi+pad,3.5,lo-pad],axis:false,showNavigation:false,showCopyright:false});
+for(var i=0;i<3;i++){
+ board.create('point',[i+1,means[i]],{name:'',size:4,fixed:true,highlight:false,strokeColor:'#2563eb',fillColor:'#2563eb'});
+ board.create('text',[i+1,lo-pad*0.6,labels[i]],{anchorX:'middle',fixed:true,fontSize:13});
+ if(i>0){board.create('segment',[[i,means[i-1]],[i+1,means[i]]],{strokeColor:'#2563eb',strokeWidth:2,fixed:true});}
+}
+
+[[/jsxgraph]]]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt6-3-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Choose one of the available graph types.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt7</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description>Observations, variables and factor levels</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans_structure</sans>
+        <tans>1</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt7-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>Correct. Each row is one sampling site (24 observations). The columns are Site, Distance_km, Land_use and Concentration_mg_L (four variables). Land_use has three levels.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt7-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>Each row is one observation, each column is a variable, and Forest, Agricultural and Industrial are the three levels of Land_use. The dataset has 24 rows and four columns.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <deployedseed>1243036846</deployedseed>
+    <deployedseed>1212837887</deployedseed>
+    <deployedseed>1754449082</deployedseed>
+    <deployedseed>169773527</deployedseed>
+    <deployedseed>338512437</deployedseed>
+    <deployedseed>2060084231</deployedseed>
+    <deployedseed>868715598</deployedseed>
+    <deployedseed>1621679815</deployedseed>
+    <deployedseed>1752400571</deployedseed>
+    <deployedseed>1815984867</deployedseed>
+  </question>
+
+</quiz>

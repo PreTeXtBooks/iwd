@@ -49,11 +49,16 @@ kenya_accidents_database <- kenya_accidents_database %>%
     ),
     
     # Convert to a proper time type (hhmm format)
-    TIME_PARSED = hm(paste0(
+    TIME_PARSED = lubridate::hm(paste0(
       str_sub(`TIME 24 HOURS`, 1, 2), ":",
       str_sub(`TIME 24 HOURS`, 3, 4)
     ))
   )
+
+kenya_accidents_database %>%
+  group_by(`TIME 24 HOURS`, TIME_PARSED) %>%
+  count() %>%
+  View()
 
 # BASE/SUB BASE:
 rpivotTable(kenya_accidents_database,

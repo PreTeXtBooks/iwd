@@ -13,20 +13,22 @@
 
   <introduction xml:id="intro-cleaning-recoding">
     <p>
-      In the last chapter, we explored the Kenya Road Accidents database, and
-      noticed lots of problems along the way: county names spelled in two
-      different ways, ages given as groups as well as numbers, and so on.
-      We made a note of them, and moved on.
-      Now it's time to actually do something about them!
+      In <xref ref="ch-exploring-data"/>, we explored the Kenya Road Accidents
+      database.
+      While exploring, we spotted several problems in the data; for example,
+      county names spelled in two different ways or ages given as a mixture of
+      numbers and letters.
+      Now it's time to actually do something about these types of issues!
     </p>
 
     <p>
       Data cleaning is all the work that goes into getting a dataset ready for
-      analysis.
-      That means fixing inconsistencies, dealing with missing values, recoding
-      variables into more useful forms, and checking that the data really
-      contains what it says it contains.
-      It's so easy to underestimate how much this matters.
+      analysis; such as fixing inconsistencies, recoding variables into more
+      useful forms, and checking that the data really contains what it says it
+      contains.
+      Dealing with missing values is also a data cleaning issue, covered in more
+      detail in <xref ref="ch-handling-missing-values"/> It's so easy to
+      underestimate how much this matters.
       While you're cleaning, you're making decisions all the time: what counts
       as a duplicate, what a blank cell means, how to group a free-text
       description.
@@ -51,12 +53,10 @@
     <introduction>
       <p>
         Between 2014 and 2016, the largest Ebola epidemic ever recorded swept
-        through Guinea, Liberia, and Sierra Leone, and killed more than 11,000
-        people.
+        through Guinea, Liberia, and Sierra Leone, killing over 11,000 people.
         When you're fighting an epidemic on that scale, you need to know, as
-        close to real time as you possibly can, where new cases are appearing,
-        how fast they're growing, and who each infected person has been in
-        contact with.
+        close to real time, where new cases are appearing, how fast they're
+        growing, and who each infected person has been in contact with.
       </p>
 
       <p>
@@ -77,12 +77,15 @@
       <title>Getting the data out</title>
 
       <p>
-        Just think about the conditions this data was collected in.
-        Information about each patient's daily symptoms and treatment was
-        recorded at their bedside, inside the high-risk zone, where clinicians
-        were wearing full personal protective equipment (PPE) the whole time.
+        One area of data collected was on the patient's daily symptoms and
+        treatment.
+        Just think about the conditions this data was collected in - such data
+        was recorded at their bedside, inside the high-risk zone, where
+        clinicians were wearing full personal protective equipment (PPE) the
+        whole time.
         Between patients, the standard practice was to wash gloved hands in
-        chlorine solution, without drying them.
+        chlorine solution, without drying them, to ensure the clinician didn't
+        catch ebola.
         That chlorine gradually soaked into the paper, and made the forms harder
         and harder to read.
         And because any paper in the high-risk zone could be contaminated, none
@@ -92,28 +95,42 @@
       <p>
         So how do you get the data out?
         Staff had three options.
-        They could read the values out across the fence to a colleague, who
-        copied them down on the other side.
-        They could photograph the forms from across the barrier.
-        Or they could send someone back into the zone, in full PPE, just to
-        photograph paperwork with a waterproof camera that could be
-        decontaminated afterwards.
+        <ul>
+          <li>
+            <p>
+              They could read the values out across the fence to a colleague,
+              who copied them down on the other side.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              They could photograph the forms from across the barrier.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Or they could send someone back into the zone, in full PPE, just
+              to photograph paperwork with a waterproof camera that could be
+              decontaminated afterwards.
+            </p>
+          </li>
+        </ul>
         Every one of these options was error-prone in its own way.
         Numbers could be misheard across the fence, photos could be blurry, and
-        values could be skipped when copying them out.
-        So you had forms that were hard to read to begin with, followed by a
-        copying step that added even more chances for errors.
+        values could be skipped or misprinted when copying them out.
+        So not only were the forms hard to read to begin with, but a copying
+        step added even more chances for errors.
         And any error that got through without being spotted became part of the
         dataset, and so part of the analysis.
       </p>
 
       <p>
-        The organisation did take steps to limit these errors, like setting up
-        data validation in Excel, and running audits.
-        Their first quality audit compared a random sample of patient records,
-        field by field, with the original scanned charts.
-        The error rates were so high that large sections of the dataset had to
-        be re-entered by hand.
+        To limit these errors, the organisation ran audits on a random sample of
+        patient records, field by field, with the original scanned charts.
+        The first such quality control audit found an error rate so high that
+        large sections of the dataset had to be re-entered by hand.
         There weren't the resources to redo everything, so they re-entered the
         triage data for all patients, but only re-entered the more detailed
         daily treatment data for patients who were confirmed to have Ebola.
@@ -135,7 +152,31 @@
       <title>Inconsistency across treatment units</title>
 
       <p>
-        Some variables, like whether the patient had recently eaten bush meat,
+        Each treatment unit collected its data independently, but some questions
+        could only be answered by looking across all five units together.
+        Out of everyone admitted with Ebola, how many died?
+        If someone was identified as a contact of a patient at one unit, did
+        they later turn up as a patient at another?
+        These are exactly the questions you need answered quickly in an
+        epidemic, but a lack of data cleaning made them slow and unreliable to
+        answer.
+      </p>
+
+      <p>
+        Some variables were recorded inconsistently.
+        For example, <q>red injected eyes</q>, <q>conjunctivitis</q>, and
+        <q>hemorrhagic eyes</q> were all used for the same symptom.
+        Hence, before anyone could analyse the data, these had to be
+        <term>recoded</term> by hand into one consistent variable.
+        Without that recoding, if you'd counted the patients with eye symptoms,
+        you'd have got the wrong answer, because the same information had been
+        recorded in three different ways.
+        This is an inconsistent values problem: the data is there, but you can't
+        use it until it's been standardised.
+      </p>
+
+      <p>
+        Other variables, like whether the patient had recently eaten bush meat,
         or where they'd travelled, were recorded at one unit but not at another.
         So when it came to combining the datasets, someone had to decide what to
         do about those gaps.
@@ -145,21 +186,8 @@
         And those assumptions really matter!
         A patient who was never asked about bush meat is very different from a
         patient who was asked and said no.
-        We look at missing data in much more detail in <xref
-        ref="ch-handling-missing-values"/>.
-      </p>
-
-      <p>
-        Other variables were recorded inconsistently.
-        For example, <q>red injected eyes</q>, <q>conjunctivitis</q>, and
-        <q>hemorrhagic eyes</q> were all used for the same symptom.
-        Before anyone could analyse the data, these had to be
-        <term>recoded</term> by hand into one consistent variable.
-        Without that recoding, if you'd counted the patients with eye symptoms,
-        you'd have got the wrong answer, because the same information had been
-        recorded in three different ways.
-        This is an <term>inconsistent values</term> problem: the data is there,
-        but you can't use it until it's been standardised.
+        We look at missing data in much more detail in
+        <xref ref="ch-handling-missing-values"/>.
       </p>
 
       <p>
@@ -173,32 +201,18 @@
       </p>
 
       <p>
+        Looking back, the organisation's own assessment was really honest:
+        <q>much time and effort could have been saved through closer oversight
+        and real-time quality assurance assessments in the field.</q>
+      </p>
+
+      <p>
         These are all problems that <term>data cleaning</term> deals with.
         Data cleaning is the process of finding and fixing problems in a dataset
         before you analyse it: standardising inconsistent values, handling
         missing data, correcting errors that crept in during collection or
         copying, and making sure that data from different sources can be
         combined reliably.
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-ebola-consequences">
-      <title>What the inconsistency cost</title>
-
-      <p>
-        Each treatment unit collected its data independently, but some questions
-        could only be answered by looking across all five units together.
-        Out of everyone admitted with Ebola, how many died?
-        If someone was identified as a contact of a patient at one unit, did
-        they later turn up as a patient at another?
-        These are exactly the questions you need answered quickly in an
-        epidemic, and inconsistent data made them slow and unreliable to answer.
-      </p>
-
-      <p>
-        Looking back, the organisation's own assessment was really honest:
-        <q>much time and effort could have been saved through closer oversight
-        and real-time quality assurance assessments in the field.</q>
       </p>
 
       <insight xml:id="insight-ebola-cleaning">
@@ -227,7 +241,7 @@
         <q>Successful Implementation of a Multicountry Clinical 
     Surveillance and Data Collection System for Ebola Virus Disease 
     in West Africa: Findings and Lessons Learned.</q>
-        <em>Global Health: Science and Practice</em>, 4(3), 394 <ndash/> 409.
+        <em>Global Health: Science and Practice</em>, 4(3), 394-409.
       </p>
     </subsection>
   </section>
@@ -355,8 +369,8 @@
         Between 25 September and 2 October 2020, 15,841 positive test results
         were lost this way.
         The people behind those results weren't told in time, and the people
-        they'd been in contact with weren't traced and asked to isolate, while
-        the outbreak in England was actively growing.
+        they'd been in contact with weren't traced and asked to isolate - all
+        the while, the outbreak in England was actively growing.
       </p>
 
       <p>
@@ -389,8 +403,8 @@
         <q>Excel: Why 
   using Microsoft's tool caused Covid-19 results to be lost,</q>
         BBC, 5 October 2020,
-        <url href="https://www.bbc.co.uk/news/technology-54423988"/>;
-        <url href="https://www.theregister.com/2020/10/05/excel_england_coronavirus_contact_error/" visual="The Register, 5 October 2020"/>.
+        <url href="https://www.bbc.co.uk/news/technology-54423988">https://www.bbc.co.uk/news/technology-54423988</url>;
+        <url href="https://www.theregister.com/2020/10/05/excel_england_coronavirus_contact_error/">https://www.theregister.com/2020/10/05/excel_england_coronavirus_contact_error/</url>.
       </p>
     </subsection>
 
@@ -398,7 +412,7 @@
       <title>Gene names: recoding you didn't ask for</title>
 
       <p>
-        The last example was about data silently disappearing.
+        The example above was about data silently disappearing.
         This one is about data quietly turning into something else.
         And it happened, largely unnoticed, across an entire scientific field,
         for more than a decade!
@@ -472,13 +486,9 @@
       </p>
 
       <p>
-        Two things really stand out to us here.
-        First, nobody decided to recode <c>SEPT2</c> into a date.
-        The software did it for them, and it went unnoticed for years at a time,
-        across a whole discipline.
-        Second, this wasn't a new problem.
-        It had been documented, with workarounds, as early as 2004, over a
-        decade before Ziemann et al. looked into it.
+        This was a problem that had been documented, with workarounds, as early
+        as 2004, over a decade before Ziemann et al.
+        looked into it.
         People knew about the problem, and a fix had been suggested.
         And yet the corruption carried on anyway.
       </p>
@@ -575,7 +585,7 @@
         Using different tools together (for example, R for your analysis, and
         Excel or another spreadsheet viewer for a visual sanity check) is a
         really good habit to get into.
-        Different software is good at different things.
+        Different software are good at different things.
       </p>
 
       <p>
@@ -615,7 +625,23 @@
         View()
         </code>
       </program>
-
+      <pre>
+        # for unique(kenya_accidents_database$`TIME 24 HOURS`)
+          [1] "0630" "0830" "1330" "2100" "1900" "2130" "1200" "1930" "2030" "0040"
+ [11] "0300" "1150" "0330" "1700" "0800" "1015" "1030" "1300" "0640" "0900"
+ [21] "2225" "0115" "0545" "0720" "1525" "1230" "1100" "0000" "1120" "1500"
+ [31] "1830" "2330" "2200" "2230" "0110" "1920" "2245" "2010" "2045" "0645"
+ [41] "0220" "2015" "0930" "1800" "1210" "1730" "0100" "2350" "2000" "2020"
+ [51] "1945" "1215" "1130" "2140" "1250" "1240" "0400" "2040" "0730" "0230"
+ [61] "0950" "2025" "2120" "2345" "0810" "0915" "1530" "2055" "0030" "1710"
+ [71] "0700" "1925" "1630" "0745" "1004" "1000" "1400" "0500" "1430" "1610"
+ [81] "2300" "2340" "0725" "1345" "1540" "0815" "1820" "0355" "0610" "1600"
+ [91] "1720" "0200" "0945" "2315" "2050" "1245" "1750" "0615" "2035" "1455"
+[101] "1950" "0001" "1520" "1620" "2139" "0130" "1615" "1714" "2145" "0129"
+[111] "1201" "1246" "1605" "1420" "0010" "0120" "0530" "2215" "1550" "1105"
+[121] "1350" "1140" "1955" "0600" "0940" "0904" "1845" "2205" "2142" "0140"
+[131] "1645" "0310" "0045" "0240" "0715" "1515" "2110"
+      </pre>
       <p>
         Whichever one you use, a few things stand out straight away.
       </p>
@@ -623,7 +649,7 @@
       <p>
         First, there are missing values.
         In the pivot table, these show up as a column labelled <c>NULL</c>,
-        which is how <c>rpivotTable</c> displays <c>NA</c>s.
+        which is how <c>rpivotTable</c> displays <c>NA</c> s.
         With <c>unique()</c> or the count table, they show up as <c>NA</c>.
         Either way, we can see that for some crashes, we don't have the time.
       </p>
@@ -639,10 +665,10 @@
       <p>
         Third, and this is the really interesting one, there are times that look
         wrong.
-        Most entries have four digits (<c>1030</c>, <c>1130</c>, <c>1915</c>),
+        Most entries have four digits ( <c>1030</c>, <c>1130</c>, <c>1915</c> ),
         which is what you'd expect for 24-hour time.
-        But some have only three digits (<c>140</c>, <c>630</c>), two digits
-        (<c>10</c>, <c>45</c>), or even just one (<c>1</c>).
+        But some have only three digits ( <c>140</c>, <c>630</c> ), two digits (
+        <c>10</c>, <c>45</c> ), or even just one ( <c>1</c> ).
         What's going on?
         Are these typos?
         Does <c>140</c> mean <c>1400</c>, or <c>0140</c>?
@@ -682,14 +708,14 @@
           # e.g. "140" -&gt; "0140", "10" -&gt; "0010", NA -&gt; "0000"
           `TIME 24 HOURS` = case_when(
             is.na(`TIME 24 HOURS`) ~ "0000",
-            TRUE ~ str_pad(`TIME 24 HOURS`, width = 4, 
-                           side = "left", pad = "0")
+            TRUE ~ stringr::str_pad(`TIME 24 HOURS`, width = 4, 
+                                    side = "left", pad = "0")
           ),
 
           # Convert to a proper time type (hhmm format)
-          TIME_PARSED = hm(paste0(
-            str_sub(`TIME 24 HOURS`, 1, 2), ":",
-            str_sub(`TIME 24 HOURS`, 3, 4)
+          TIME_PARSED = lubridate::hm(paste0(
+            stringr::str_sub(`TIME 24 HOURS`, 1, 2), ":",
+            stringr::str_sub(`TIME 24 HOURS`, 3, 4)
           ))
         )
         </code>
@@ -710,10 +736,25 @@
         </code>
       </program>
 
+      <figure xml:id="fig-ch4_time_parsed">
+        <caption>
+          A snippet of a table showing the number of incidents in
+          <c>TIME 24 HOURS</c> and in <c>TIME_PARSED</c>.
+        </caption>
+
+        <image source="images/ch4_time_parsed.png" width="90%">
+          <description>
+            <p>
+              A snippet of a table showing the number of incidents in
+              <c>TIME 24 HOURS</c> and in <c>TIME_PARSED</c>.
+            </p>
+          </description>
+        </image>
+      </figure>
+
       <p>
-        If any value of <c>TIME 24 HOURS</c> has two or more <c>TIME_PARSED</c>
-        entries, then the padding or parsing has done something unexpected, and
-        we'd need to look into it.
+        We can look at the two variables against each other to check that
+        nothing unexpected has happened.
         If everything looks right, we can move on.
       </p>
 
@@ -769,11 +810,11 @@
       </figure>
 
       <p>
-        One thing to watch out for: the <c>NA</c>s we set to <c>0000</c> will
+        One thing to watch out for: the <c>NA</c> s we set to <c>0000</c> will
         now look like crashes at midnight.
         If you're analysing time-of-day patterns, it's a good idea to either
-        leave them out or flag them separately, because they're values we've
-        filled in, and we don't actually know those times.
+        leave them out or flag them separately, and we don't actually know those
+        times.
       </p>
     </subsection>
 
@@ -781,10 +822,9 @@
       <title>Fixing county names</title>
 
       <p>
-        The time column had implausible values: entries we had to interpret
+        The time column had implausible values - entries we had to interpret
         before we could use them.
-        <c>COUNTY</c> has a different kind of problem.
-        Here, the values are inconsistent.
+        <c>COUNTY</c> has a different kind of problem - inconsistent values.
         If the same county is spelled two different ways, any analysis you run
         will treat it as two different counties.
         A pivot table on <c>COUNTY</c> makes these really easy to spot, because
@@ -801,10 +841,33 @@
       <p>
         Two problems jump out straight away: <c>KERCHO</c> and <c>KERICHO</c>
         are listed separately, and so are <c>MURANGA</c> and <c>MURANG'A</c>.
-        These are obviously the same counties, entered in different ways (see
-        the left image in <xref ref="fig-ch4-counties-1"/>).
+        These are the same counties, entered in different ways (see the left
+        image in <xref ref="fig-ch4-counties-1"/> ).
         We can fix them with <c>case_when()</c>:
       </p>
+
+      <program language="r">
+        <code>
+        kenya_accidents_database &lt;- kenya_accidents_database %&gt;%
+          mutate(COUNTY = case_when(
+            COUNTY == "KERCHO"  ~ "KERICHO",
+            COUNTY == "MURANGA" ~ "MURANG'A",
+            TRUE ~ COUNTY
+          ))
+        </code>
+      </program>
+
+      <p>
+        Now pull up the pivot table again, and the duplicates should be gone
+        (see the right image in <xref ref="fig-ch4-counties-1"/> ).
+        It's worth doing this check, instead of assuming the fix worked.
+      </p>
+
+      <program language="r">
+        <code>
+        rpivotTable(kenya_accidents_database, rows = "COUNTY")
+        </code>
+      </program>
 
       <figure xml:id="fig-ch4-counties-1">
         <caption>
@@ -832,30 +895,6 @@
           </description>
         </image>
       </figure>
-
-      <program language="r">
-        <code>
-        kenya_accidents_database &lt;- kenya_accidents_database %&gt;%
-          mutate(COUNTY = case_when(
-            COUNTY == "KERCHO"  ~ "KERICHO",
-            COUNTY == "MURANGA" ~ "MURANG'A",
-            TRUE ~ COUNTY
-          ))
-        </code>
-      </program>
-
-      <p>
-        Now pull up the pivot table again, and the duplicates should be gone
-        (see the right image in <xref ref="fig-ch4-counties-1"/>).
-        It's really worth doing this check every time, instead of just assuming
-        the fix worked.
-      </p>
-
-      <program language="r">
-        <code>
-        rpivotTable(kenya_accidents_database, rows = "COUNTY")
-        </code>
-      </program>
     </subsection>
 
     <subsection xml:id="ss-cleaning-base">
@@ -863,15 +902,16 @@
 
       <p>
         The <c>BASE/SUB BASE</c> column has the same problem: different
-        spellings of the same place, and some entries starting with <c>DTEO</c>,
-        as you can see in <xref ref="fig-ch4_img2_base"/>.
-        We think <c>DTEO</c> stands for the District Traffic Enforcement Officer
-        responsible for that area, which would make <c>DTEO DAGORETTI</c> the
-        same as <c>DAGORETTI</c>.
-        But in practice, you'd want to check this with someone who knows the
-        data before removing it, just in case the prefix means something that
-        matters for your analysis.
-        For this example, we'll assume it doesn't:
+        spellings of the same place.
+        For example, in <xref ref="fig-ch4_img2_base"/> we can see
+        <c>DAGORETTI</c> and <c>DAGORETI</c>, which are the same
+        <c>BASE/SUB-BASE</c>, just misspelt.
+        Further, some entries start with <c>DTEO</c>.
+        A check finds that <c>DTEO</c> stands for the District Traffic
+        Enforcement Officer responsible for that area, which would make
+        <c>DTEO DAGORETTI</c> the same as <c>DAGORETTI</c>.
+        We can fix using <c>case_when</c>, just as we did in
+        <xref ref="ss-cleaning-county"/>
       </p>
 
       <figure xml:id="fig-ch4_img2_base">
@@ -918,7 +958,7 @@
       </program>
 
       <p>
-        Now we can use the relationship between <c>BASE/SUB BASE</c> and
+        We can use the relationship between <c>BASE/SUB BASE</c> and
         <c>COUNTY</c> as another quality check.
         A county can have lots of sub-bases, but we'd expect each sub-base to
         belong to just one county.
@@ -940,13 +980,9 @@
           shown).
           This view reveals two problems.
           First, NAKURU base has 12 total incidents: 11 in Nakuru county and 1
-          in <c>MAKURU</c>, which is almost certainly a typo.
+          in "MAKURU", which is almost certainly a typo.
           Second, NYANDO base has 4 incidents recorded in Homa Bay and 4 in
           Kisumu.
-          A quick lookup confirms that Nyando is in Kisumu county, but it is
-          worth asking whether the Homa Bay entries are a typo, or whether there
-          is a separate place with a similar name in Homa Bay that was also
-          recorded as NYANDO.
         </caption>
 
         <image source="images/ch4_img2_counties_2.png" width="90%">
@@ -970,11 +1006,6 @@
         If we sort by count, we can see that <c>NAKURU</c> has 12 cases: 11 in
         Nakuru county, and 1 in <c>MAKURU</c>.
         That's almost certainly a typo, so we fix it the same way as before.
-        We love this example, because it shows how cleaning one variable can
-        reveal a problem in another.
-        We weren't even looking at <c>COUNTY</c> at this point, we were looking
-        at <c>BASE/SUB BASE</c>, but the cross-tabulation brought it to the
-        surface.
       </p>
 
       <program language="r">
@@ -991,7 +1022,7 @@
         We can also see that <c>NYANDO</c> appears in both Homa Bay and Kisumu
         counties.
         A quick check tells us that Nyando is in Kisumu county, so the Homa Bay
-        entries are probably errors.
+        entries are potentially errors.
         But it's worth going back to the original source before correcting them.
         Could it be that <c>NYANDO</c> is the mistake, and Homa Bay is right?
         The data alone can't tell us.
@@ -1033,7 +1064,7 @@
       <figure xml:id="fig-ch4-dates">
         <caption>
           Number of fatal road accidents per day, Kenya Road Accidents database,
-          April <ndash/> June 2016.
+          April-June 2016.
           Note the complete absence of data in May, suggesting this month was
           not included in the extract rather than that no crashes occurred.
         </caption>
@@ -1090,7 +1121,7 @@
       <figure xml:id="fig-ch4-weekday">
         <caption>
           Number of fatal road accidents by day of week, Kenya Road Accidents
-          database, April <ndash/> June 2016.
+          database, April-June 2016.
           Saturday has by far the highest count, followed by Friday, while
           Monday has the fewest.
         </caption>
@@ -1131,13 +1162,15 @@
       <title>Moving to the individual level (Advanced)</title>
 
       <p>
-        Some variables in this dataset describe the incident, like the road, the
-        time, the county, and the cause.
-        Others describe the individual victim, like their age, gender, and
-        category.
-        But the data we downloaded is at the incident level, and sometimes
-        several victims are squashed into a single row (see <xref
-        ref="table-kenya-accidents-snippet"/> for a snippet of the data).
+        This data is at the incidence level, meaning that each row is it's own
+        crash.
+        Some variables describe the incident itself, like the road, the time,
+        the county, and the cause.
+        But other variables describe the individual victims, like their age,
+        gender, and category.
+        In incidences with multiple victims, these "victim" variables are
+        squashed into a single row (see
+        <xref ref="table-kenya-accidents-snippet"/> for a snippet of the data).
         As we saw in <xref ref="ch-multilevel-data"/>, mixing levels like this
         makes analysis harder, and can lead to mistakes.
       </p>
@@ -1145,8 +1178,8 @@
       <table xml:id="table-kenya-accidents-snippet">
         <title>
           A snippet of rows from the Kenya Road Accidents database after initial
-          cleaning (Note that <c>NO.</c> is the number of individuals involved in the
-          crash)
+          cleaning (Note that <c>NO.</c> is the number of individuals involved
+          in the crash)
         </title>
 
         <tabular halign="left">
@@ -1270,7 +1303,6 @@
         A cleaner approach is to create two linked data frames: one at the
         incident level, and one at the individual level.
         Why?
-        It comes down to what each variable actually describes.
         Some variables belong to the crash itself (the road, the time, the
         county, the cause code, the date), and these are the same for everyone
         involved in that crash.
@@ -1305,12 +1337,14 @@
       </program>
 
       <p>
-        The <c>GENDER</c> column has entries like <c>"2M &amp; 2F"</c> or <c>"4F
-        &amp; INF"</c>, where several people are packed into one cell.
+        The <c>GENDER</c> column has entries like <c>"2M &amp; 2F"</c> or
+        <c>"4F
+        &amp; INF"</c>, where several people are packed into one
+        cell.
         To get one row per person, we need to expand these.
         This kind of string-splitting is fiddly, so it's perfectly reasonable to
         write a helper function (or ask an AI tool to draft one, and then check
-        it really carefully):
+        it carefully):
       </p>
 
       <program language="r">
@@ -1353,12 +1387,20 @@
 
       <p>
         The <c>AGE</c> column is a real mix: numeric ages, the letter <c>A</c>
-        (adult), the letter <c>J</c> (junior), and entries like <c>"5
+        (adult), the letter <c>J</c> (junior or juvenilles), and entries like
+        <c>"5
         MONTHS"</c>.
-        We clean these in two steps.
-        First, we convert ages in months to decimal years.
-        Then we create a categorical <c>AGE_GROUP</c> variable that keeps the
-        <c>A</c> and <c>J</c> information:
+        We clean these by creating two variables.
+        One is age in years.
+        For this, our letters ( <c>A</c> and <c>J</c> ) will be lost as we do
+        not know these individuals' exact age.
+        But, we can convert ages in months to decimal years.
+        The other is to create a categorical <c>AGE_GROUP</c> variable.
+        In this variable, we convert ages over 18 to <c>A</c>, and less than 18
+        to <c>J</c>.
+        This also retains the <c>A</c> and <c>J</c> information we already have.
+        Both variables have their own merits, given in further detail in
+        <xref ref="ch-handling-factors"/>
       </p>
 
       <program language="r">
@@ -1408,7 +1450,9 @@
 
       <program language="r">
         <code>
-    rpivotTable(kenya_individual_level, rows = "AGE_GROUP", cols = "AGE")
+    rpivotTable(kenya_individual_level, 
+                rows = "AGE_GROUP",
+                cols = "AGE")
         </code>
       </program>
 
@@ -1482,7 +1526,7 @@
       <figure xml:id="fig-ch4-age-bar">
         <caption>
           Distribution of victim ages in the Kenya Road Accidents database,
-          April <ndash/> June 2016.
+          April-June 2016.
         </caption>
 
         <image source="images/ch4_age_bar.png" width="80%">
@@ -1504,9 +1548,9 @@
         loses real information.
         A 19-year-old and a 70-year-old are very different road users!
         A sensible middle ground might be broader age bands, like 18 <ndash/>
-        30, 31 <ndash/> 40, and so on, which keep meaningful differences without
-        pretending to a precision that was never there.
-        The right choice depends on the question you're trying to answer.
+        30, 31-40, and so on, which keep meaningful differences.
+        As always, the right choice depends on the question you're trying to
+        answer.
       </p>
 
       <p>
@@ -1537,14 +1581,35 @@
 
       <p>
         The <c>BRIEF ACCIDENT DETAILS</c> column has 148 different free-text
-        descriptions.
-        Lots of them describe the same kind of event (a head-on collision, a hit
-        and run, losing control), just written differently each time.
+        descriptions, with some shown in the pivot table in
+        <xref ref="fig-ch4_accident_details_table"/> A lot of them describe the
+        same kind of event, just written differently each time.
         To make this column useful, we need to recode it into a smaller set of
         categories.
       </p>
 
+      <figure xml:id="fig-ch4_accident_details_table">
+        <caption>
+          Pivot table showing the original brief accident descriptions.
+          We can see some values being treated as different groups due to slight
+          textual tweaks (e.g., "HIT &amp; RAN"; "HIT AND RAN"; "HIT &amp; RUN";
+          "HIT AND RUN)
+        </caption>
+
+        <image source="images/ch4_accident_details_table.png" width="90%">
+          <description>
+            <p>
+              A pivot table showing the original brief accident descriptions in
+              the left column, with total counts on the right.
+            </p>
+          </description>
+        </image>
+      </figure>
+
       <p>
+        Some groupings are obvious, (e.g., "HIT &amp; RAN"; "HIT AND RAN"; "HIT
+        &amp; RUN"; "HIT AND RUN" should all be the same group).
+        But, others can be less obvious.
         This is the kind of task where generative AI tools can be really
         helpful.
         We don't want AI making the decisions for us, but it's great for
@@ -1619,9 +1684,11 @@
         When we reviewed the result in a pivot table, with both
         <c>ACCIDENT_CATEGORY</c> and <c>BRIEF ACCIDENT DETAILS</c> in the rows,
         we found a handful of entries in the wrong category.
-        For example, <c>"THE VEHICLE OVERTOOK A M/CYCLE AND LOST CONTROL VEERING
-        OFF THE ROAD &amp; ROLLED"</c> had been put in Lost control, but it's
-        really better described as an overtaking incident.
+        For example,
+        <c>"THE VEHICLE OVERTOOK A M/CYCLE AND LOST CONTROL VEERING
+        OFF THE ROAD &amp; ROLLED"</c>
+        had been put in Lost control, but it's really better described as an
+        overtaking incident as the overtaking caused the loss of control.
         And <c>"THE MOTOR CYCLE HIT THE UNKNOWN M/V LOOSING CONTROL"</c> (spot
         the typo!) wasn't picked up by the lost control pattern at all.
         We fix these in a second pass.
@@ -1702,9 +1769,9 @@
       </p>
 
       <p>
-        And then we check the result by pulling up the pivot table again, with
-        both <c>ACCIDENT_CATEGORY</c> and <c>BRIEF ACCIDENT DETAILS</c> in the
-        rows:
+        We can check the result by pulling up the pivot table again, with both
+        <c>ACCIDENT_CATEGORY</c> and <c>BRIEF ACCIDENT DETAILS</c> in the rows
+        to check we are happy with the categories:
       </p>
 
       <program language="r">
@@ -1755,9 +1822,11 @@
         doing.
         What really matters is that you make those choices on purpose, and
         openly.
-        And notice that we haven't overwritten the original <c>BRIEF ACCIDENT
-        DETAILS</c> column, so if you or a collaborator disagrees with a
-        category, the original text is still there to go back to.
+        And notice that we haven't overwritten the original
+        <c>BRIEF ACCIDENT
+        DETAILS</c> column, so if you or a
+        collaborator disagrees with a category, the original text is still there
+        to go back to.
       </p>
     </subsection>
 
@@ -1792,7 +1861,7 @@
       <figure xml:id="fig-ch4-bar-accident-weekday">
         <caption>
           Proportion of each accident category by day of week, Kenya Road
-          Accidents database, April <ndash/> June 2016.
+          Accidents database, April-June 2016.
         </caption>
 
         <image source="images/ch4_bar_accident_weekday.png" width="90%">
@@ -1840,7 +1909,7 @@
       <figure xml:id="fig-ch4-bar-accident-weekday-2">
         <caption>
           Proportion of each day of week within each accident category, Kenya
-          Road Accidents database, April <ndash/> June 2016.
+          Road Accidents database, April-June 2016.
         </caption>
 
         <image source="images/ch4_bar_accident_weekday_2.png" width="90%">
@@ -1878,7 +1947,7 @@
         Notice that we created both <c>ACCIDENT_CATEGORY</c> and <c>weekday</c>
         while cleaning.
         The exploration we just did was only possible because of that cleaning.
-        And it works the other way round too, because exploring is what led us
+        And it works the other way round too - because exploring is what led us
         to clean.
         We only noticed May was missing because we plotted the dates.
         We only saw how many variants needed combining because we looked at the
@@ -1948,6 +2017,9 @@
             <cell>Wrong level of analysis</cell>
             <cell>Multiple observations encoded in a single row</cell>
             <cell>
+              Victim data at the incident level does not make much sense if you
+              wish to then analyse information on the victims, because one
+              incident can have multiple victims.
               <c>"2M &amp; 2F"</c> in <c>GENDER</c>;
               <c>"7 PASSENGERS 1 DRIVER"</c> in <c>VICTIM</c>
             </cell>
@@ -2012,8 +2084,8 @@
       <statement>
         <p>
           In <xref ref="ss-ebola-collection"/>, patient data had to be read out
-          across a fence, photographed, or copied from damaged forms, and many of
-          the errors were only found in an audit months later.
+          across a fence, photographed, or copied from damaged forms, and many
+          of the errors were only found in an audit months later.
           Suggest one practical check, applied at the point of data entry rather
           than afterwards, that could have caught transcription errors while the
           data was still being used to make decisions during the outbreak.
@@ -2066,8 +2138,8 @@
         <p>
           The next few exercises use the Kenya Road Accidents database from this
           chapter.
-          Download it from <url
-          href="https://data.humdata.org/dataset/kenya-road-accidents-database">data.humdata.org/dataset/kenya-road-accidents-database</url>
+          Download it from
+          <url href="https://data.humdata.org/dataset/kenya-road-accidents-database">data.humdata.org/dataset/kenya-road-accidents-database</url>
           and load it into R before you start.
         </p>
 
@@ -2076,34 +2148,6 @@
           column.
         </p>
 
-        <ol>
-          <li>
-            <p>
-              Use <c>sort(unique(kenya_accidents_database$COUNTY))</c> to list
-              all unique county values.
-              How many distinct values are there?
-            </p>
-          </li>
-
-          <li>
-            <p>
-              Identify at least two pairs of values that appear to refer to the
-              same county but are recorded inconsistently.
-            </p>
-          </li>
-
-          <li>
-            <p>
-              Write R code using <c>case_when()</c> to standardise those values,
-              and verify the result by running <c>sort(unique(...))</c> again.
-            </p>
-          </li>
-        </ol>
-      </statement>
-    </exercise>
-    <!-- R: implausible values -->
-    <exercise xml:id="ex-clean-time-values">
-      <statement>
         <p>
           Inspect the <c>TIME 24 HOURS</c> column in the Kenya Road Accidents
           database.
@@ -2137,43 +2181,6 @@
         </ol>
       </statement>
     </exercise>
-    <!-- R: missing values -->
-    <exercise xml:id="ex-clean-missing-values">
-      <statement>
-        <p>
-          The Kenya Road Accidents database contains missing values in several
-          columns.
-        </p>
-
-        <ol>
-          <li>
-            <p>
-              Write R code to count the number of missing values in each column.
-              Which column has the most missing values?
-            </p>
-          </li>
-
-          <li>
-            <p>
-              The <c>AGE</c> column has both true missing values and coded
-              values like <c>A</c> and <c>J</c>.
-              After converting <c>AGE</c> to numeric, how many <c>NA</c> s
-              result?
-              Are all of these genuinely unknown ages, or are some of them
-              something else?
-            </p>
-          </li>
-
-          <li>
-            <p>
-              Explain in your own words the difference between a value that is
-              missing and a value that is unknown.
-              Does that distinction matter for this dataset?
-            </p>
-          </li>
-        </ol>
-      </statement>
-    </exercise>
     <!-- R: recoding -->
     <exercise xml:id="ex-clean-victim-recode">
       <statement>
@@ -2189,14 +2196,21 @@
             <p>
               Use <c>sort(unique(kenya_accidents_database$VICTIM))</c> to list
               all distinct victim categories.
+              How many distinct values are there?
             </p>
           </li>
 
           <li>
             <p>
-              Write R code using <c>case_when()</c> and <c>str_detect()</c> to
-              recode the <c>VICTIM</c> column into a smaller set of clean
-              categories.
+              Identify at least two pairs of values that appear to refer to the
+              same victim type, but are recorded inconsistently.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Write R code using <c>case_when()</c> to standardise those values,
+              and verify the result by running <c>sort(unique(...))</c> again.
               State clearly what categories you chose and why.
             </p>
           </li>
