@@ -283,6 +283,42 @@
 
       <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/6-Filtering-to-Clean.xml" label="stk-ch4-cleaning-data"/>
     </exercise>
+
+    <exercise>
+      <title>River Pollution and Distance Downstream</title>
+
+      <introduction>
+        <p>
+          In this exercise, you will explore data collected by an environmental
+          scientist investigating pollution in a river.
+          Water samples were collected at 20 sites downstream from a pollution
+          source, with the distance from the source and pollutant concentration
+          recorded at each site.
+        </p>
+
+        <p>
+          We are interested in whether pollutant concentration is related to
+          distance downstream, and what this relationship might tell us about
+          how pollution changes along the river.
+        </p>
+
+        <p>
+          Download the dataset provided in the question and use statistical
+          software of your choice to explore the relationship between the two
+          variables.
+          Pay attention to the measurement units and ensure that concentrations
+          are comparable before carrying out your analysis.
+        </p>
+
+        <p>
+          You will calculate Pearson's correlation coefficient and use it to
+          describe the direction and strength of the linear relationship between
+          distance downstream and pollutant concentration.
+        </p>
+      </introduction>
+
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/Correlation-with-Data-II-(Data-Shapes).xml" label="stk-river-pollution-correlation"/>
+    </exercise>
   </section>
   <!-- ================================================================= -->
   <!--  SECTION 3: it happened again, elsewhere                          -->
@@ -2197,34 +2233,33 @@ kenya_accidents_database &lt;- kenya_accidents_database %&gt;%
         <p>
           Inspect the <c>TIME 24 HOURS</c> column in the Kenya Road Accidents
           database.
+          <ol>
+            <li>
+              <p>
+                How many distinct values does the column contain?
+                Use <c>group_by()</c> and <c>count()</c> to list them with their
+                frequencies.
+              </p>
+            </li>
 
-        <ol>
-          <li>
-            <p>
-              How many distinct values does the column contain?
-              Use <c>group_by()</c> and <c>count()</c> to list them with their
-              frequencies.
-            </p>
-          </li>
+            <li>
+              <p>
+                Identify at least three values that appear implausible or
+                ambiguous, and explain what you think each one might actually
+                represent.
+              </p>
+            </li>
 
-          <li>
-            <p>
-              Identify at least three values that appear implausible or
-              ambiguous, and explain what you think each one might actually
-              represent.
-            </p>
-          </li>
-
-          <li>
-            <p>
-              Apply the leading-zero padding fix described in this chapter and
-              convert the result to an hour variable using <c>lubridate</c>.
-              Plot the distribution of crashes by hour and describe what you
-              see.
-            </p>
-          </li>
-        </ol>
-      </p>
+            <li>
+              <p>
+                Apply the leading-zero padding fix described in this chapter and
+                convert the result to an hour variable using <c>lubridate</c>.
+                Plot the distribution of crashes by hour and describe what you
+                see.
+              </p>
+            </li>
+          </ol>
+        </p>
       </statement>
     </exercise>
     <!-- R: recoding -->
@@ -2235,41 +2270,41 @@ kenya_accidents_database &lt;- kenya_accidents_database %&gt;%
           inconsistent entries.
           For example, <c>M/CYCLIST</c>, <c>MOTOR CYCLIST</c>, and
           <c>MOTORCYCLIST</c> all show up as separate categories.
+          <ol>
+            <li>
+              <p>
+                Use <c>sort(unique(kenya_accidents_database$VICTIM))</c> to list
+                all distinct victim categories.
+                How many distinct values are there?
+              </p>
+            </li>
 
-        <ol>
-          <li>
-            <p>
-              Use <c>sort(unique(kenya_accidents_database$VICTIM))</c> to list
-              all distinct victim categories.
-              How many distinct values are there?
-            </p>
-          </li>
+            <li>
+              <p>
+                Identify at least two pairs of values that appear to refer to
+                the same victim type, but are recorded inconsistently.
+              </p>
+            </li>
 
-          <li>
-            <p>
-              Identify at least two pairs of values that appear to refer to the
-              same victim type, but are recorded inconsistently.
-            </p>
-          </li>
+            <li>
+              <p>
+                Write R code using <c>case_when()</c> to standardise those
+                values, and verify the result by running
+                <c>sort(unique(...))</c> again.
+                State clearly what categories you chose and why.
+              </p>
+            </li>
 
-          <li>
-            <p>
-              Write R code using <c>case_when()</c> to standardise those values,
-              and verify the result by running <c>sort(unique(...))</c> again.
-              State clearly what categories you chose and why.
-            </p>
-          </li>
-
-          <li>
-            <p>
-              After recoding, use <c>count()</c> to summarise the distribution
-              of victim categories.
-              Does the pattern match what Muguro et al.
-              found in the five-year dataset?
-            </p>
-          </li>
-        </ol>
-      </p>
+            <li>
+              <p>
+                After recoding, use <c>count()</c> to summarise the distribution
+                of victim categories.
+                Does the pattern match what Muguro et al.
+                found in the five-year dataset?
+              </p>
+            </li>
+          </ol>
+        </p>
       </statement>
     </exercise>
     <!-- R: levels of analysis -->
@@ -2278,69 +2313,69 @@ kenya_accidents_database &lt;- kenya_accidents_database %&gt;%
         <p>
           This chapter created a separate individual-level data frame from the
           incident-level Kenya Road Accidents database.
-        <ol>
-          <li>
-            <p>
-              In your own words, explain why keeping age and gender in the
-              incident-level data frame creates problems for analysis.
-            </p>
-          </li>
+          <ol>
+            <li>
+              <p>
+                In your own words, explain why keeping age and gender in the
+                incident-level data frame creates problems for analysis.
+              </p>
+            </li>
 
-          <li>
-            <p>
-              After expanding the data to the individual level using the code
-              from this chapter, how many rows does
-              <c>kenya_individual_level</c> have?
-              Why is this different from the number of rows in
-              <c>kenya_accidents_database</c>?
-            </p>
-          </li>
+            <li>
+              <p>
+                After expanding the data to the individual level using the code
+                from this chapter, how many rows does
+                <c>kenya_individual_level</c> have?
+                Why is this different from the number of rows in
+                <c>kenya_accidents_database</c>?
+              </p>
+            </li>
 
-          <li>
-            <p>
-              Using the individual-level data frame, produce a bar chart of
-              <c>GENDER</c> and describe what you see.
-              Are there any categories that suggest further cleaning is needed?
-            </p>
-          </li>
-        </ol>
-      </p>
+            <li>
+              <p>
+                Using the individual-level data frame, produce a bar chart of
+                <c>GENDER</c> and describe what you see.
+                Are there any categories that suggest further cleaning is
+                needed?
+              </p>
+            </li>
+          </ol>
+        </p>
       </statement>
     </exercise>
-    
     <!-- Conceptual: cleaning and exploration cycle -->
     <exercise xml:id="ex-clean-cycle">
       <statement>
         <p>
           In this chapter, we've argued that data cleaning and data exploration
           work as a cycle, with each one feeding into the other.
+          <ol>
+            <li>
+              <p>
+                Give one example from this chapter where exploration revealed
+                something that needed cleaning.
+              </p>
+            </li>
 
-        <ol>
-          <li>
-            <p>
-              Give one example from this chapter where exploration revealed
-              something that needed cleaning.
-            </p>
-          </li>
+            <li>
+              <p>
+                Give one example where cleaning made a new kind of exploration
+                possible that was not possible before.
+              </p>
+            </li>
 
-          <li>
-            <p>
-              Give one example where cleaning made a new kind of exploration
-              possible that was not possible before.
-            </p>
-          </li>
-
-          <li>
-            <p>
-              In the Kenya Road Accidents data, the <c>CAUSE CODE</c> column
-              contains numeric codes whose meaning is only partially documented.
-              Describe one way you might use exploration to try to work out what
-              the undocumented codes mean, without access to the original
-              codebook.
-            </p>
-          </li>
-        </ol>
-      </p>
+            <li>
+              <p>
+                In the Kenya Road Accidents data, the <c>CAUSE CODE</c> column
+                contains numeric codes whose meaning is only partially
+                documented.
+                Describe one way you might use exploration to try to work out
+                what the undocumented codes mean, without access to the original
+                codebook.
+              </p>
+            </li>
+          </ol>
+        </p>
       </statement>
     </exercise>
   </exercises>

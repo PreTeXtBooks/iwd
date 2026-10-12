@@ -8,16 +8,14 @@
 
   <introduction xml:id="intro-visualising-multidimensional">
     <p>
-      <xref ref="ch-cleaning-recoding"/> was all about getting to a point where
-      you can trust your data.
+      <xref ref="ch-cleaning-recoding"/> was about getting to a point where you
+      can trust your data.
       This chapter is about actually <em>seeing</em> it.
-      Even once a dataset is clean and correctly coded, if it has more than two
-      or three variables, it's still just a table.
-      And honestly, a table with more than a few hundred rows tells a person
-      almost nothing!
+      Even once a dataset is clean and correctly coded, it is still limited on
+      what it can tell you in that format.
       As soon as a dataset has some real structure to it (groups, locations,
-      time, several measurements for each case), the question changes from <q>is
-      this value right?</q> to <q>how do I look at several things at once?</q>
+      time, several measurements for each case), we can start to look at it in
+      many dimensions.
     </p>
   </introduction>
   <!-- ================================================================= -->
@@ -29,7 +27,10 @@
     <introduction>
       <p>
         What does twenty years of elephant movement look like as data?
-        Let's have a look.
+        Gathuku and Wittemyer's (2025) studied elephants range and movement from
+        2001 to 2021 in Northern Kenya.
+        One such graphic of the elephants movements is given in
+        <xref ref="fig-gathuku-elephant-gps"/>.
       </p>
 
       <figure xml:id="fig-gathuku-elephant-gps">
@@ -40,7 +41,7 @@
           Each dot represents a single GPS fix; the density and spread of points
           reveals the elephants' collective use of the landscape over two
           decades.
-          Reproduced unchanged from Gathuku and Wittemyer (2025),
+          Image unchanged from Gathuku and Wittemyer (2025),
           <em>Landscape Ecology</em>, 40, 212,
           <url href="https://doi.org/10.1007/s10980-025-02222-w"/>, under CC
           BY-NC-ND 4.0.
@@ -68,37 +69,32 @@
         Each orange dot on this map is one GPS location, recorded by a collar
         fitted to one of 110 African savanna elephants tracked across the
         Laikipia-Samburu ecosystem in northern Kenya.
-        There are 3,850,840 of them, collected over twenty years, between 2001
-        and 2021.
-        And before anyone has done any statistical analysis at all, this map
-        already shows us where the elephants went, as a group, across a
-        landscape of national parks, private ranches, community conservancies,
-        and farmland.
-        You can see where the dots are concentrated, where the gaps are, and the
-        corridors along the rivers, all at a glance.
-        No table of GPS coordinates could ever show you that.
-      </p>
-
-      <p>
-        This is the dataset at the heart of Gathuku and Wittemyer's (2025) study
-        of what drives how far elephants range, and how they move, in northern
-        Kenya.
-        We think it's a brilliant place to start thinking about why
-        visualisation matters so much once your data has more than one or two
-        variables (or <q>dimensions</q>).
+        There are 3,850,840 dots, collected between 2001 and 2021.
+        Before any statistical analysis is performed, this map shows us where
+        the elephants went, as a group, across a landscape of national parks,
+        private ranches, community conservancies, and farmland.
+        You can see where the dots are concentrated (darker dots), where the
+        gaps are (no dots!), and the corridors along the rivers, all at a
+        glance.
+        Looking at a table of GPS coordinates, it would be difficult to spot
+        these patterns.
+        Yet, when we visualise the same data on a map, they become immediately
+        apparent.
       </p>
     </introduction>
 
     <subsection xml:id="ss-elephants-dimensions">
-      <title>More than just location</title>
+      <title>Beyond location</title>
 
       <p>
-        Nobody is going to scroll through 3,850,840 rows looking for a pattern!
-        At that scale, a spreadsheet is somewhere to store data, and you can't
-        really use it to look at the data.
+        I can't see how someone could spot a pattern by scrolling through
+        3,850,840 rows
+        <fn>Although never say never, I'd love to be proven wrong.</fn>.
+        At that scale, a dataset is for storage and can't really be used to spot
+        patterns.
         And the GPS coordinates are only part of the story.
         Each location was also linked to information about the individual
-        elephant, like its sex and identity.
+        elephant, like their sex and identity.
         It was also linked to measurements of the environment around that
         location, such as:
         <ul>
@@ -138,13 +134,10 @@
       </p>
 
       <p>
-        If you want to understand what drives how much space an elephant uses,
-        and whether it keeps coming back to the same areas over time, you need
-        to look at all of these variables (or dimensions) together, because one
-        at a time won't cut it.
-        A table with 3,850,840 rows and a dozen columns isn't going to answer
-        that question for you, but visualisation is a really good place to
-        start.
+        To really understand what drives elephants movements, we want to look at
+        all of these variables (or dimensions) together, because they all
+        intertwine.
+        Visualisation is a really good place to start.
       </p>
     </subsection>
 
@@ -166,7 +159,7 @@
 
       <p>
         Rainfall variability had the same effect.
-        The more unpredictable the rainfall, the bigger the elephants' yearly
+        The less predictable the rainfall, the bigger the elephants' yearly
         ranges, as they travelled further to track resources that were spread
         unevenly across the landscape.
       </p>
@@ -187,14 +180,17 @@
         There were clear differences between the sexes too.
         Females tended to be more faithful to their ranges over time, coming
         back to the same areas year after year more consistently than males.
-        This probably reflects the more stable social structure of female-led
-        family groups, who rely on what they've learned over the years about
-        where to find reliable water and food in a familiar area.
+        This is consistent with previous research on elephant behaviour, which
+        has found that females typically live in stable, family groups led by an
+        older matriarch.
+        These groups benefit from the knowledge and experience of older
+        elephants, particularly when it comes to locating reliable sources of
+        food and water.
       </p>
 
       <p>
         Two of the figures in the paper show these patterns in ways that summary
-        statistics on their own just can't.
+        statistics on their own can't.
       </p>
 
       <figure xml:id="fig-gathuku-violin-annual">
@@ -235,7 +231,7 @@
         95% isopleth (the wider area it ranges over).
         And within each panel, there are two different mathematical methods for
         estimating home range size (AKDE and MCP).
-        Don't worry about the details of those methods here.
+        The details of those methods go beyond the scope of this book.
         What we want you to notice is what the figure is doing.
         It shows four variables at once: home range size on the vertical axis,
         the range definition in the columns, the estimation method within each
@@ -249,6 +245,8 @@
         Now imagine this as a table of means and standard deviations instead.
         That table would give you the averages, but it wouldn't show you the
         shape of the distribution, or how much the sexes overlap.
+        In all four comparisons, females tend to range over fewer kilometres
+        than males, on average.
       </p>
 
       <figure xml:id="fig-gathuku-violin-overlap">
@@ -284,9 +282,9 @@
 
       <p>
         The second figure adds a different dimension: consistency over time.
-        Instead of asking where an elephant went, it asks: <q>how much did the
-        same elephant's range in one period overlap with its range in the
-        next?</q>
+        This looks at the elephants range, rather than their location itself,
+        namely, how much overlap is there is a single elephants range in one
+        period compared to another?
         An index close to 1 means the elephant used almost exactly the same
         area, and close to 0 means it moved somewhere quite different.
         Again, don't worry about the technical details of how this index is
@@ -305,11 +303,9 @@
         <p>
           Water drives range size, human activity restricts movement, and
           females are more faithful to their ranges than males.
-          But you can't see any of these findings in a single column of the
-          dataset, or even in the GPS locations on their own.
-          Each pattern only shows up once you look at location <em>together</em>
-          with the landscape variables, sex, season, and time, in the same
-          visualisation.
+          These patterns only show up once you look at location
+          <em>together</em> with the landscape variables, sex, season, and time,
+          in the same visualisation.
         </p>
       </insight>
 
@@ -369,8 +365,7 @@
 
       <p>
         In this chapter, you'll learn how to build exactly that kind of view:
-        visualisations that show you several variables at once, instead of one
-        table or one chart for each variable.
+        visualisations that show you several variables at once.
       </p>
 
       <p>
@@ -393,24 +388,19 @@
 
     <introduction>
       <p>
-        The elephant study needed computers, GPS satellites, and twenty years of
-        fieldwork.
-        But the idea that some questions can only be answered by showing several
-        things at once is much, much older.
-        Long before computers existed, people kept running into the same
-        problem: a table of numbers that held the answer but couldn't show it,
-        and a simple chart that showed something, but not enough.
+        The elephant study is a modern example of visualising
+        multidimensionality, but the concept of showing several variables at
+        once to understand data goes back hundreds of years.
       </p>
 
       <p>
-        The three examples below all go back more than 150 years, and we love
-        them.
-        Each one was drawn by hand, in ink, on paper.
-        Each one changed how people thought about something really important: a
-        military disaster, a public health crisis, and a disease outbreak.
-        And each one worked for exactly the same reason.
-        It showed something that had been in the data all along, but that nobody
-        could see until someone found the right way to draw it.
+        In this chapter we give three examples which go back more than 150
+        years.
+        Each visualisation was drawn by hand, in ink, on paper.
+        Each one showed something that had been in the data all along, but that
+        nobody could see until someone found the right way to draw it.
+        Visualising it in the right way successfully changed peoples perceptions
+        on the situation.
       </p>
     </introduction>
 
@@ -420,9 +410,9 @@
       <p>
         Charles Joseph Minard was a retired French civil engineer, 88 years old,
         when he published a single lithograph that Edward Tufte later called
-        <q>possibly the best statistical graphic ever drawn.</q>
-        It shows Napoleon's disastrous invasion of Russia in 1812, and the
-        retreat that followed.
+        <q>possibly the best statistical graphic ever drawn.</q> It shows
+        Napoleon's disastrous invasion of Russia in 1812, and the retreat that
+        followed.
       </p>
 
       <figure xml:id="fig-minard">
@@ -433,8 +423,9 @@
       1812<ndash/>1813</em>
           (1869).
           The width of each band represents troop numbers at one millimetre per
-          ten thousand men; the lower strip shows temperature along the retreat
-          route.
+          ten thousand men.
+          The tanned shows the journey to Moscow, and black on the retreat; the
+          lower strip shows temperature along the retreat route.
           Public domain.
           Image via
           <url href="https://flowingdata.com/2008/07/17/is-minards-map-of-napoleons-march-the-greatest-statistical-graphic-ever/">FlowingData</url>.
@@ -462,15 +453,11 @@
       </figure>
 
       <p>
-        If you tried to show this with bar charts of monthly troop losses, you'd
-        need several separate charts: one for the size of the army, one for
-        where it was, one for which way it was going, and one for the
-        temperature that killed so many soldiers on the retreat.
-        Minard fitted all of it into one image.
+        Minard fitted the scale of the disasterous invasion into one image.
         A tan band traces the army's advance east towards Moscow, and its width
         is scaled at exactly one millimetre per ten thousand men.
-        It's drawn straight onto a map, so you see where the army was and how
-        big it was at the same time.
+        It's drawn straight onto a map, so can you see the army size at each
+        location on their journey.
         A black band, on the same scale, traces the retreat.
         And underneath the map, a separate strip plots the temperature against
         the date along the retreat route, so you can read the collapse in troop
@@ -490,9 +477,12 @@
       </p>
 
       <p>
-        A table of monthly casualty figures had the same information in it, and
-        had been around for decades.
-        But Minard made it visible to anyone who looked.
+        The scale of the disaster was already known through historical accounts
+        and military records.
+        However, Minard's map brought this information together in a way that
+        made the enormous loss of life immediately apparent, where readers could
+        see the devastating decline of Napoleon's army across the campaign in a
+        single visualisation.
       </p>
 
       <p>
@@ -512,10 +502,33 @@
       <title>Nightingale's Coxcomb (1858)</title>
 
       <p>
-        In 1858, Florence Nightingale published a report built almost entirely
-        around one fact that she needed British officials to stop ignoring.
-        Most of the soldiers who died in the Crimean War didn't die in battle.
-        They died of preventable disease, in military hospitals.
+        The Crimean War (1853-1856) was fought between Russia and an alliance
+        that included Britain, France, and the Ottoman Empire.
+        Thousands of British soldiers were sent to fight, but the conditions in
+        military hospitals were often appalling.
+        Florence Nightingale, a British nurse and pioneering statistician,
+        travelled to the Crimea in 1854 to care for wounded soldiers.
+        She found that most soldiers who were dying were not dying from injuries
+        sustained in battle, but from preventable diseases - made worse by
+        overcrowding, poor sanitation, and inadequate medical care.
+        Nightingale recognised that improving hospital conditions could save
+        lives.
+      </p>
+
+      <p>
+        So, she collected and analysed data on the causes of soldiers' deaths
+        and used this evidence to argue for changes to military healthcare.
+        But how could she communicate the scale of the problem?
+        She could have presented tables showing the numbers of soldiers dying
+        from different causes each month.
+        Instead, she created a striking visualisation, now commonly known as the
+        Nightingale rose diagram.
+        Published in 1858, the diagram used coloured areas to represent deaths
+        from preventable diseases, battle wounds and other causes.
+        The large blue areas made it immediately apparent that disease accounted
+        for far more deaths than battle injuries.
+        The visualisation also showed how mortality rates fell following
+        improvements in sanitation.
       </p>
 
       <figure xml:id="fig-nightingale">
@@ -563,16 +576,13 @@
       </figure>
 
       <p>
-        Nightingale could have just reported a single mortality rate.
-        Instead, she built what became known as the <term>coxcomb</term>, or
-        rose diagram: two circular charts, one for each year of the war, each
+        The graphic had two circular charts, one for each year of the war, each
         split into twelve monthly wedges.
         The area of each wedge was scaled to the number of deaths that month,
         and each wedge was split by colour into three causes: preventable
         disease, wounds from battle, and everything else.
-        Just like Minard's map, the power here comes from a pattern developing
-        over time, and you can only see it because time, cause, and the number
-        of deaths are all shown in the same image.
+        So, she had time, cause, and the number of deaths all shown in the same
+        image.
       </p>
 
       <p>
@@ -592,9 +602,8 @@
       </p>
 
       <p>
-        Nightingale was a trained statistician, trying to persuade a government
-        that had shown very little interest in reading tables of army death
-        rates.
+        This is huge!
+        A visualisation that saved lives!
         Her diagram is credited with directly influencing the sanitary reforms
         that followed, both in the military and more widely.
       </p>
@@ -616,8 +625,8 @@
       <p>
         In late August 1854, cholera broke out in Soho, London, and killed over
         600 people in just a few weeks.
-        At the time, most people believed cholera spread through bad air
-        (<q>miasma</q>), rather than through water.
+        At the time, most people believed cholera spread through bad air (
+        <q>miasma</q> ), rather than through water.
       </p>
 
       <figure xml:id="fig-snow">
@@ -660,10 +669,12 @@
       </figure>
 
       <p>
-        The physician John Snow suspected they were wrong.
-        So he tested his idea by taking a street map of the neighbourhood,
-        marking a dot for every recorded death at the address where it happened,
-        and marking every local water pump.
+        The physician John Snow suspected they were wrong, so he created a
+        visualisation with the location of deaths and location of the water
+        pumps mapped onto it.
+        He took a street map of the neighbourhood, and marked a dot for every
+        recorded death at the address where it happened, and marked every local
+        water pump.
         The map showed a clear pattern: deaths clustered around one pump, on
         Broad Street, and thinned out the further away you got from it.
         Meanwhile, households with their own water supply had almost no cases,
@@ -672,17 +683,20 @@
       </p>
 
       <p>
-        You could have found the same information in a table of addresses and
-        death counts.
-        But the map shows you how close each death was to each pump, and that's
-        what made the difference.
+        As with our other cases, this information was always in the data.
+        But the map shows you the proximity of each death to each pump, and
+        that's what made the difference.
         Snow presented it to the local parish council, and the handle was taken
         off the Broad Street pump.
         The outbreak was already slowing down by then, so removing the handle
         didn't end it on its own.
-        But the map gave the first clear evidence that cholera spread through
-        contaminated water, and not through the air.
-        That was later confirmed when an inspection found that the pump's water
+        Snow's map provided powerful visual evidence supporting his theory that
+        cholera was transmitted through contaminated water, rather than through
+        the air, as was widely believed at the time.
+        Together with his other investigations, the map helped strengthen the
+        case for understanding how cholera spread and ultimately contributed to
+        improvements in public health.
+        It was later confirmed when an inspection found that the pump's water
         supply was right next to a leaking cesspit.
       </p>
 
@@ -699,21 +713,80 @@
   <!--  SECTION 3: the STACK question that exemplifies this              -->
   <!-- ================================================================= -->
   <section xml:id="sec-ch5-stack">
-    <title>STACK Question Here</title>
+    <title>Practise: Visualising Multidimensionality</title>
 
-    <introduction>
-      <p>
-        TODO - add in our stack question on visualising multidimensional data
-      </p>
-    </introduction>
+    <exercise>
+      <title>Exploring a Forest Dataset</title>
 
-    <subsection xml:id="subsec-ch5-stack">
-      <title>TODO</title>
+      <introduction>
+        <p>
+          In this exercise, you will explore a randomised forest dataset, where
+          each row represents one tree.
+          The dataset contains information about individual trees, including
+          their height, growth and diameter.
+        </p>
 
-      <p>
-        TODO: insert STACK question
-      </p>
-    </subsection>
+        <p>
+          You will use an interactive graph to explore the data.
+          Starting with a blank graph, choose variables for both axes, then
+          experiment with colour, point size and treatment panels to investigate
+          patterns and relationships in the data.
+        </p>
+
+        <p>
+          Use the dropdown menus and checkboxes above the graph to choose your
+          visual mappings.
+          Each point is labelled with its Tree_ID.
+          You can click on a point or use the "Inspect exact measurements"
+          dropdown to see the measurements for an individual tree.
+        </p>
+
+        <p>
+          You can also download the CSV dataset provided in the question.
+          The numerical mapping fields below the graph will record your
+          selections automatically, so please use the visual controls rather
+          than typing into these fields.
+        </p>
+      </introduction>
+
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Grammar-of-Graphics-Scatterplot.xml" label="stk-forest-exploration"/>
+    </exercise>
+
+    <exercise>
+      <title>Exploring Changes in School Libraries</title>
+
+      <introduction>
+        <p>
+          In this exercise, you will explore data collected from school
+          libraries across three villages.
+          Researchers counted the number of books in each library in Year 1 and
+          Year 2, visiting the same schools in both years.
+        </p>
+
+        <p>
+          We are interested in understanding how the number of books changed
+          between the two years, and whether these changes were similar across
+          the three villages.
+        </p>
+
+        <p>
+          You will use an interactive graph to investigate the data.
+          The graph starts with two boxplots, one for each year.
+          You can then add individual schools, connect paired measurements, and
+          use colour to distinguish between villages.
+        </p>
+
+        <p>
+          Experiment with the different layers to explore what the boxplots tell
+          us about the data, and what additional information becomes visible
+          when we look at individual schools.
+          You can also inspect exact values to investigate particular
+          observations.
+        </p>
+      </introduction>
+
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Grammar-of-Graphics-Hidden-changes-across-two-years.xml" label="stk-school-library-exploration"/>
+    </exercise>
   </section>
   <!-- ================================================================= -->
   <!--  SECTION 4: Gapminder                                             -->
@@ -722,6 +795,17 @@
     <title>Building Up Dimensions in R</title>
 
     <introduction>
+      <p>
+        Hans Rosling (1948-2017) was a Swedish physician, statistician and
+        public health educator who became internationally known for his engaging
+        use of data visualisation.
+        He co-founded the Gapminder Foundation, which aims to make global
+        statistics more accessible and understandable.
+        Through animated graphs, Rosling showed how countries have changed over
+        time in areas such as health, income, and life expectancy, challenging
+        common misconceptions about global development.
+      </p>
+
       <p>
         Hans Rosling's Gapminder data makes the same point as the elephants, but
         with a dataset that's small enough to really get your hands on.
@@ -736,9 +820,8 @@
       </p>
 
       <p>
-        On its own, a single row doesn't tell you anything very interesting.
-        But you can build this data up, one variable (or dimension) at a time,
-        into a single animated chart, and that's exactly what we're going to do.
+        You can build this data up, one variable (or dimension) at a time, into
+        a single animated chart, and that's exactly what we're going to do.
         We'll start with a blank canvas, and add one dimension at a time.
       </p>
 
@@ -752,10 +835,12 @@
         install.packages("gapminder")
         install.packages("ggplot2")
         install.packages("dplyr")
+        install.packages("viridis")
 
         library(gapminder)
         library(ggplot2)
         library(dplyr)
+        library(viridis)
         </code>
       </program>
 
@@ -790,7 +875,7 @@
         These are categorical variables with a fixed set of levels, which we
         look at properly in <xref ref="ch-handling-factors"/>.
         <c>year</c> isn't continuous: it jumps in five-year steps, so it goes
-        1952, 1957, 1962, and so on.
+        1952, 1957, 1962, and so on to 2007.
         <c>gdpPercap</c> is inflation-adjusted, which means you can compare
         values from different years in real terms.
         And <c>pop</c> is a raw count, which, as we'll see, varies so hugely
@@ -837,10 +922,19 @@
       <title>Two dimensions: does money buy a longer life?</title>
 
       <p>
-        Let's start with the most basic question we can ask: is a country's
-        income related to how long its people live?
-        <c>ggplot2</c> uses a system called the <q>Grammar of Graphics</q>,
-        where you build a plot up in layers.
+        We want a research question to explore this data.
+        So let's see if a country's income is related to lifespan.
+      </p>
+
+      <p>
+        The R package <c>ggplot2</c> is based on a system called the
+        <q>Grammar of Graphics</q>, which allows us to build visualisations by
+        combining different components, or layers.
+        In the grammar of graphics, we can decide how variables are represented,
+        add points or lines, and adjust the appearance of our graph.
+        This approach was inspired by the work of Leland Wilkinson (2005), who
+        introduced the Grammar of Graphics as a framework for constructing
+        statistical visualisations.
         The first layer is always the same.
         You tell R which dataset to use, and which variables go with which
         visual properties.
@@ -891,8 +985,8 @@
       <figure xml:id="fig-gapminder-2d">
         <caption>
           GDP per capita against life expectancy for 142 countries in 2007.
-          The relationship is positive but curved: richer countries tend to
-          have longer life expectancies, but with diminishing returns at higher
+          The relationship is positive but curved: richer countries tend to have
+          longer life expectancies, but with diminishing returns at higher
           incomes.
         </caption>
 
@@ -920,6 +1014,7 @@
         A log scale fixes this by spreading out the lower end and squashing the
         upper end, so the pattern across the whole range becomes much easier to
         read.
+        This is easily added with the layer <c>scale_x_log10</c>.
       </p>
 
       <p>
@@ -1002,10 +1097,10 @@
           <description>
             <p>
               A scatterplot with the same axes as before.
-              Points are now coloured by continent. African points (red)
-              cluster toward the lower left of the chart, European and Oceanian
-              points cluster toward the upper right, and American and Asian
-              points are spread across the middle.
+              Points are now coloured by continent.
+              African points (red) cluster toward the lower left of the chart,
+              European and Oceanian points cluster toward the upper right, and
+              American and Asian points are spread across the middle.
               A colour legend identifies each continent.
             </p>
           </description>
@@ -1023,13 +1118,22 @@
       </p>
 
       <p>
-        It's also really important to think about accessibility.
-        Colour on its own can be hard to tell apart for readers who are
-        colourblind.
+        Choosing appropriate colours is also an important part of making
+        visualisations accessible.
+        Some colour combinations can be difficult to distinguish, particularly
+        for people with colour vision deficiencies.
         If we add <c>shape = continent</c> as well as <c>colour = continent</c>,
         each continent gets its own colour <em>and</em> its own point shape.
         That way, the chart still works when it's printed in black and white, or
         when it's read by someone with colour blindness.
+        There is also an R package, <c>viridis</c> which provides a selection of
+        colour palettes designed to address this.
+        These palettes are perceptually uniform, meaning that differences
+        between colours appear relatively consistent across the scale.
+        They are also designed to remain distinguishable for people with common
+        forms of colour blindness and when printed in greyscale.
+        The original viridis palette was developed by Stéfan van der Walt and
+        Nathaniel Smith.
       </p>
 
       <program language="r">
@@ -1039,6 +1143,7 @@
                                    shape = continent)) +
           geom_point() +
           scale_x_log10() +
+          viridis::scale_colour_viridis(discrete = TRUE) +
           labs(x = "GDP per capita (log scale)", y = "Life expectancy")
         </code>
       </program>
@@ -1056,10 +1161,10 @@
           <description>
             <p>
               A scatterplot with the same axes as before.
-              Points are now coloured by continent. African points (red,
-              circle) cluster toward the lower left of the chart, European and
-              Oceanian points cluster toward the upper right, and American and
-              Asian points are spread across the middle.
+              Points are now coloured by continent.
+              African points (purple, circle) cluster toward the lower left of
+              the chart, European and Oceanian points cluster toward the upper
+              right, and American and Asian points are spread across the middle.
               A colour and shape legend identifies each continent.
             </p>
           </description>
@@ -1081,12 +1186,12 @@
       <p>
         We can add a fourth variable using point size.
         If we map <c>pop</c> onto <c>size</c>, each point's area is proportional
-        to the country's population, and our scatterplot becomes a bubble chart.
+        to the country's population.
         We also add <c>alpha = 0.7</c> inside <c>geom_point()</c>.
         <c>alpha</c> controls how transparent the points are, where 1 is
         completely solid and 0 is invisible.
         At 0.7, you can still see overlapping points through each other, which
-        really helps when big bubbles sit on top of smaller ones.
+        really helps when big points sit on top of smaller ones.
       </p>
 
       <program language="r">
@@ -1096,6 +1201,7 @@
                                    size = pop)) +
           geom_point(alpha = 0.7) +
           scale_x_log10() +
+          viridis::scale_colour_viridis(discrete = TRUE) +
           scale_size_continuous(range = c(1, 15)) +
           labs(x = "GDP per capita (log scale)", y = "Life expectancy",
                size = "Population")
@@ -1128,21 +1234,21 @@
       </figure>
 
       <p>
-        China and India have similar incomes and life expectancies to several
-        smaller countries, but now they really stand out, just because of their
-        size.
-        But where's Kenya?
-        The African cluster is dense, and it's hard to pick out individual
-        countries.
-        So let's add labels for a few countries we're interested in.
+        We can see two large populations in Asia, with similar incomes and life
+        expectancies to several smaller countries, but now they really stand
+        out, just because of their size.
+        These are presumably China and India, but we can confirm this by adding
+        labels in.
+        Similarly, the African cluster is dense, and it's hard to pick out
+        individual countries.
+        There might be certain countries of interest (such as Kenya!) so, let's
+        add labels for a few countries we're interested in.
         This is a really useful general trick for drawing attention to
         particular points, without labelling everything.
       </p>
 
       <program language="r">
         <code>
-        library(dplyr)
-
         # Countries to label
         label_countries &lt;- c("Kenya", "Nigeria", "South Africa", 
                               "Ethiopia", "China", "India")
@@ -1154,10 +1260,11 @@
                                    colour = continent, shape = continent,
                                    size = pop)) +
           geom_point(alpha = 0.7) +
-          geom_text(data = gapminder_labels, 
+          geom_label(data = gapminder_labels, 
                     aes(label = country), 
                     size = 3, nudge_y = 1, show.legend = FALSE) +
           scale_x_log10() +
+          viridis::scale_colour_viridis(discrete = TRUE) +
           scale_size_continuous(range = c(1, 10)) +
           labs(x = "GDP per capita (log scale)", y = "Life expectancy",
                size = "Population")
@@ -1205,6 +1312,7 @@
                               size = pop)) +
           geom_point(alpha = 0.7) +
           scale_x_log10() +
+          viridis::scale_colour_viridis(discrete = TRUE) +
           scale_size_continuous(range = c(1, 10)) +
           facet_wrap(~ year) +
           labs(x = "GDP per capita (log scale)", y = "Life expectancy",
@@ -1252,7 +1360,7 @@
         Themes control the background, gridlines, fonts, and the other parts of
         the chart that aren't data.
         <c>theme_bw()</c> gives a clean white background with grey gridlines,
-        which lots of people find easier to read than the default grey
+        which some people <fn>me</fn> find easier to read than the default grey
         background.
       </p>
 
@@ -1263,6 +1371,7 @@
                               size = pop)) +
           geom_point(alpha = 0.7) +
           scale_x_log10() +
+          viridis::scale_colour_viridis(discrete = TRUE) +
           scale_size_continuous(range = c(1, 10)) +
           facet_wrap(~ year) +
           labs(x = "GDP per capita (log scale)", y = "Life expectancy",
@@ -1270,6 +1379,25 @@
           theme_bw()
         </code>
       </program>
+
+      <figure xml:id="fig-gapminder-5d-theme">
+        <caption>
+          GDP per capita (log scale) against life expectancy for 142 countries,
+          faceted by year from 1952 to 2007.
+          Read left to right, top to bottom: life expectancy climbs steadily in
+          almost every country, even where income barely moves.
+          This is the same as the figure above, but with a theme added.
+        </caption>
+
+        <image source="images/ch5_gapminder_5d_theme.png" width="100%">
+          <description>
+            <p>
+              The same image as the figure above, but with a theme added so that
+              it has a clean white background with grey gridlines.
+            </p>
+          </description>
+        </image>
+      </figure>
 
       <p>
         And if you want a proper animation, with countries moving smoothly
@@ -1284,7 +1412,6 @@
         <code>
         # install.packages("gganimate")
         library(gganimate)
-        library(dplyr)
 ggplot(gapminder, aes(x = gdpPercap, 
                       y = lifeExp,
                       colour = continent, 
@@ -1293,12 +1420,14 @@ ggplot(gapminder, aes(x = gdpPercap,
                       group = country)) +
   geom_point(alpha = 0.7) +
   scale_x_log10() +
+  viridis::scale_colour_viridis(discrete = TRUE) +
   scale_size_continuous(range = c(1, 10)) +
   labs(x = "GDP per capita (log scale)", 
        y = "Life expectancy",
        size = "Population") + 
       transition_time(year) +
-    labs(title = "Year: {frame_time}")
+  theme_bw() +
+  labs(title = "Year: {frame_time}")
         </code>
       </program>
 
@@ -1326,9 +1455,9 @@ ggplot(gapminder, aes(x = gdpPercap,
           in life expectancy that really stands out against the general upward
           trend.
           And in 1992, it happens again, even more dramatically.
-          Before assuming these are errors in the data, remember what we talked
-          about in <xref ref="ch-cleaning-recoding"/>: a value that looks
-          implausible isn't always wrong.
+          Before assuming these are errors in the data, remember from
+          <xref ref="ch-cleaning-recoding"/>: a value that looks implausible
+          isn't always wrong.
           Sometimes, it's the data telling you something real.
         </p>
 
@@ -1380,9 +1509,8 @@ ggplot(gapminder, aes(x = gdpPercap,
           They're both real, terrible events, showing up in the data as a sudden
           reversal against a trend that was moving the other way almost
           everywhere else.
-          This is one of the things multidimensional visualisation makes
-          possible: an anomaly that could easily be buried in a table of 1,704
-          rows becomes obvious as soon as you can see all the countries moving
+          These anomalies could easily be buried in a table of 1,704 rows, but
+          they become obvious as soon as you can see all the countries moving
           together over time.
           And asking whether that anomaly is a mistake or something real is
           exactly the right question.
@@ -1445,14 +1573,22 @@ ggplot(gapminder, aes(x = gdpPercap,
         showing information in the same image.
         The elephant study from the start of the chapter used exactly the same
         idea: GPS location, water availability, human modification, sex, and
-        time, all held together in one analysis, instead of one table per
-        variable.
+        time in a single visualisation.
       </p>
 
       <p>
-        <term>Source:</term> Bryan, J. <c>gapminder</c> R package, data curated
-        by the Gapminder Foundation (<url href="https://www.gapminder.org"
-        visual="gapminder.org"/>), based on the work of Hans Rosling.
+        <term>Source:</term> Bryan, J.
+        <c>gapminder</c> R package, data curated by the Gapminder Foundation (
+        <url href="https://www.gapminder.org" visual="gapminder.org"/> ), based
+        on the work of Hans Rosling.
+      </p>
+
+      <p>
+        Wilkinson, L.
+        (2005).
+        <em>The Grammar of Graphics</em> (2nd ed.).
+        Springer.
+        <url href="https://doi.org/10.1007/0-387-28695-0"/>.
       </p>
     </subsection>
   </section>
@@ -1475,8 +1611,8 @@ ggplot(gapminder, aes(x = gdpPercap,
         </p>
 
         <p>
-          The engineers who built the rocket boosters were worried.
-          The night before the launch, temperatures were forecast to drop to
+          The night before the launch, the engineers who built the rocket
+          boosters were worried since temperatures were forecast to drop to
           between −3°C and −2°C (26 to 29°F).
           Engineers at Morton Thiokol, the company that made the solid rocket
           boosters, argued that the launch should be delayed.
@@ -1573,8 +1709,8 @@ ggplot(gapminder, aes(x = gdpPercap,
 
         <hint>
           <p>
-            Use <c>xlim()</c> and <c>ylim()</c> to stretch the axes far enough to
-            include the forecast temperature, and <c>annotate()</c> with
+            Use <c>xlim()</c> and <c>ylim()</c> to stretch the axes far enough
+            to include the forecast temperature, and <c>annotate()</c> with
             <c>geom = "rect"</c> to draw the shaded region.
           </p>
         </hint>
@@ -1633,8 +1769,10 @@ ggplot(gapminder, aes(x = gdpPercap,
             <image source="images/ch5_challenger_original.png" width="80%">
               <description>
                 <p>
-                  A black and white chart titled <q>History of O-Ring Damage in
-                  Field Joints (Cont)</q>, from Morton Thiokol.
+                  A black and white chart titled
+                  <q>History of O-Ring Damage in
+                  Field Joints (Cont)</q>,
+                  from Morton Thiokol.
                   It shows 48 small drawings of rocket boosters in two rows, a
                   pair labelled A and B for each of 24 solid rocket motors.
                   The O-ring temperature in degrees Fahrenheit is written
@@ -1684,7 +1822,8 @@ ggplot(gapminder, aes(x = gdpPercap,
           <p>
             This case is sometimes used to argue that better visualisation would
             have prevented the disaster.
-            Robison et al. (2002) argue that it was more complicated than that.
+            Robison et al.
+            (2002) argue that it was more complicated than that.
             In their view, the engineers did communicate their concerns clearly,
             but organisational and political pressures overrode their
             objections.
@@ -1703,8 +1842,9 @@ ggplot(gapminder, aes(x = gdpPercap,
             There's no single right answer here.
             The chart in Part B makes the relationship between temperature and
             damage obvious, which is a real improvement on what was shown.
-            But Robison et al. make an important point: managers knew about the
-            engineers' concerns.
+            But Robison et al.
+            make an important point: managers knew about the engineers'
+            concerns.
             A clearer chart might have made the engineers' argument stronger,
             but there was also organisational pressure to launch, from schedule
             delays, public visibility, and budgets.
@@ -1717,34 +1857,31 @@ ggplot(gapminder, aes(x = gdpPercap,
       </task>
 
       <p>
-        <term>Sources:</term> Tufte, E.R. (1997).
+        <term>Sources:</term> Tufte, E.R.
+        (1997).
         <em>Visual Explanations: Images and Quantities, Evidence and
-        Narrative.</em> Graphics Press.
-        Robison, W. et al. (2002).
+        Narrative.</em>
+        Graphics Press.
+        Robison, W.
+        et al.
+        (2002).
         <q>Representation and Misrepresentation: Tufte and the Morton Thiokol
         Engineers on the Challenger.</q>
-        <em>Science and Engineering Ethics</em>, 8, 59<ndash/>81.
+        <em>Science and Engineering Ethics</em>, 8, 59 <ndash/> 81.
         Data from the <c>DAAG</c> R package.
-        Case study adapted from Helveston, J.P. (2019), George Washington
-        University,
+        Case study adapted from Helveston, J.P.
+        (2019), George Washington University,
         <url href="https://p4a.seas.gwu.edu/2019-Fall/challengerExplosion.html"/>,
         CC BY 4.0.
       </p>
     </exercise>
 
-    <exercise xml:id="ex-viz-elephants-variables">
+    <exercise xml:id="ex-viz-gapminder-label">
       <statement>
         <p>
-          <xref ref="sec-following-the-giants"/> links each elephant's GPS
-          locations to several other variables: vegetation (NDVI), rainfall and
-          how variable it was, surface and permanent water, how rugged the
-          terrain was, human modification of the landscape, sex, and time.
-          The findings we described came from water, rainfall variability, human
-          modification, sex, and time.
-          Pick one of the variables that didn't come up in those findings
-          (vegetation, or terrain ruggedness), and describe in a sentence or two
-          what mapping it onto colour, size, or facets might show you that the
-          findings we described wouldn't.
+          Adapt the code in <xref ref="ss-gapminder-5d"/> to add a label to the
+          animation for a country of your choice.
+          How does that country change over the fifty-five years?
         </p>
       </statement>
     </exercise>
@@ -1758,16 +1895,6 @@ ggplot(gapminder, aes(x = gdpPercap,
           lake as facets).
           What does this combined view show you that summarising each column
           separately wouldn't?
-        </p>
-      </statement>
-    </exercise>
-
-    <exercise xml:id="ex-viz-gapminder-label">
-      <statement>
-        <p>
-          Adapt the code in <xref ref="ss-gapminder-5d"/> to add a label to the
-          animation for a country of your choice.
-          How does that country change over the fifty-five years?
         </p>
       </statement>
     </exercise>
@@ -1793,9 +1920,49 @@ ggplot(gapminder, aes(x = gdpPercap,
           Is there a point where adding another variable to the same chart makes
           it harder to read, instead of easier?
           Argue for a specific upper limit, and say what you'd do with a sixth
-          or seventh variable, instead of cramming it into the same plot.
+          or seventh variable.
         </p>
       </statement>
     </exercise>
   </exercises>
+
+  <exercise>
+    <title>Working with the Grammar of Graphics</title>
+
+    <introduction>
+      <p>
+        In this exercise, you will explore simulated datasets with one outcome
+        variable, alongside several explanatory variables that may be related to
+        the outcome.
+      </p>
+
+      <p>
+        We are interested in understanding which factors might influence the
+        outcome, and how visualisations can help us identify relationships
+        between an outcome and multiple explanatory variables.
+      </p>
+
+      <p>
+        There are six questions available, each using a different simulated
+        dataset.
+        You can try whichever questions interest you.
+      </p>
+
+      <p>
+        Each question provides an example visualisation and a dataset to
+        download.
+        The downloaded data are different from those used to create the example
+        graphic.
+        Using statistical software of your choice, recreate a similar
+        visualisation with the new data.
+      </p>
+    </introduction>
+
+    <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Facets-I.xml" label="stk-visualisation-1"/>
+    <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Facets-II.xml" label="stk-visualisation-2"/>
+    <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Facets-III.xml" label="stk-visualisation-3"/>
+    <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Visualising Multidimensionality I.xml" label="stk-visualisation-4"/>
+    <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Visualising Multidimensionality II.xml" label="stk-visualisation-5"/>
+    <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Visualising Multidimensionality III.xml" label="stk-visualisation-6"/>
+  </exercise>
 </chapter>
