@@ -1740,7 +1740,7 @@ kenya_accidents_database &lt;- kenya_accidents_database %&gt;%
       # including descriptions mentioning mechanical failures.
       # E.g., looking for any descriptions with the
       # words "LOST CONTROL", "LOSE CONTROL", "TYRE BURST",
-      "STEERING ROD", OR "POWER FAIL" to group them together.
+      # "STEERING ROD", OR "POWER FAIL" to group them together.
       str_detect(
         `BRIEF ACCIDENT DETAILS`,
         regex(
