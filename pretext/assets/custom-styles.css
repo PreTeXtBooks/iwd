@@ -102,6 +102,13 @@ pre,
   border-left: 4px solid var(--brand-orange);
 }
 
+/* Tables: shade every other row, so that a cell which wraps onto several
+   lines still reads as part of its own row. The header row is made of th
+   cells, so it is never shaded. */
+table.tabular tr:nth-child(even) > td {
+  background-color: #E8EEF0; /* light slate */
+}
+
 /* Match this theme's dark mode strategy (:root.dark-mode) */
 :root.dark-mode {
   --page-color: #0a0a0a;
@@ -133,4 +140,8 @@ pre,
 :root.dark-mode .insight.insight-like {
   background-color: #4A3022;
   border-left-color: var(--brand-orange);
+}
+
+:root.dark-mode table.tabular tr:nth-child(even) > td {
+  background-color: #1E2628;
 }
