@@ -672,7 +672,27 @@
 [121] "1350" "1140" "1955" "0600" "0940" "0904" "1845" "2205" "2142" "0140"
 [131] "1645" "0310" "0045" "0240" "0715" "1515" "2110"
       </pre>
+
+      <figure xml:id="fig-ch4-time-pivot">
+        <caption>Live pivot table of <c>TIME 24 HOURS</c>, before any cleaning</caption>
+
+        <interactive iframe="interactive/ch4_pivot_time.html" width="100%" aspect="1:1">
+          <static>
+            <image source="images/ch4_pivot_time.png" width="100%">
+              <description>
+                <p>
+                  A pivot table with TIME 24 HOURS in the rows and the number of crashes at each time. The times run from 1, 10 and 30 up to 2350, followed by UNKNOWN TIME with 2 crashes and null with 2.
+                </p>
+              </description>
+            </image>
+          </static>
+        </interactive>
+      </figure>
+
       <p>
+        The pivot table is in <xref ref="fig-ch4-time-pivot"/>, and it's live,
+        like every pivot table in this section: drag the variables about, and
+        click the arrows, to explore the data at each stage of the cleaning.
         Whichever one you use, a few things stand out straight away.
       </p>
 
@@ -868,6 +888,22 @@
         </code>
       </program>
 
+      <figure xml:id="fig-ch4-county-pivot-before">
+        <caption>Live pivot table of <c>COUNTY</c>, before cleaning</caption>
+
+        <interactive iframe="interactive/ch4_pivot_county_before.html" width="100%" aspect="1:1">
+          <static>
+            <image source="images/ch4_pivot_county_before.png" width="100%">
+              <description>
+                <p>
+                  A pivot table with COUNTY in the rows, listed alphabetically, and the number of crashes in each. KERCHO and KERICHO appear as separate rows, and so do MURANG'A and MURANGA.
+                </p>
+              </description>
+            </image>
+          </static>
+        </interactive>
+      </figure>
+
       <p>
         Two problems jump out straight away: <c>KERCHO</c> and <c>KERICHO</c>
         are listed separately, and so are <c>MURANGA</c> and <c>MURANG'A</c>.
@@ -898,6 +934,22 @@
         rpivotTable(kenya_accidents_database, rows = "COUNTY")
         </code>
       </program>
+
+      <figure xml:id="fig-ch4-county-pivot-after">
+        <caption>Live pivot table of <c>COUNTY</c>, after cleaning</caption>
+
+        <interactive iframe="interactive/ch4_pivot_county_after.html" width="100%" aspect="1:1">
+          <static>
+            <image source="images/ch4_pivot_county_after.png" width="100%">
+              <description>
+                <p>
+                  A pivot table with COUNTY in the rows and the number of crashes in each. KERICHO now has 6 crashes and MURANG'A 6, and KERCHO and MURANGA no longer appear.
+                </p>
+              </description>
+            </image>
+          </static>
+        </interactive>
+      </figure>
 
       <figure xml:id="fig-ch4-counties-1">
         <caption>
@@ -1015,21 +1067,25 @@
           Kisumu.
         </caption>
 
-        <image source="images/ch4_img2_counties_2.png" width="90%">
-          <description>
-            <p>
-              A pivot table cross-tabulating Base/Sub-base values in rows
-              against County in columns, with counts in each cell.
-              Only selected county columns are shown.
-              Key observations visible in the table: NAKURU base has 11
-              incidents in Nakuru county and 1 in Makuru county, totalling 12;
-              Embakasi base has 11 incidents all in Nairobi county; Nyando base
-              has 4 incidents in Homa Bay and 4 in Kisumu, totalling 8; Makindu
-              base has 8 incidents all in Makueni county; Starehe base has 8
-              incidents all in Nairobi county.
-            </p>
-          </description>
-        </image>
+        <interactive iframe="interactive/ch4_pivot_base_county.html" width="100%" aspect="1:1">
+          <static>
+            <image source="images/ch4_img2_counties_2.png" width="90%">
+              <description>
+                <p>
+                  A pivot table cross-tabulating Base/Sub-base values in rows
+                  against County in columns, with counts in each cell.
+                  Only selected county columns are shown.
+                  Key observations visible in the table: NAKURU base has 11
+                  incidents in Nakuru county and 1 in Makuru county, totalling 12;
+                  Embakasi base has 11 incidents all in Nairobi county; Nyando base
+                  has 4 incidents in Homa Bay and 4 in Kisumu, totalling 8; Makindu
+                  base has 8 incidents all in Makueni county; Starehe base has 8
+                  incidents all in Nairobi county.
+                </p>
+              </description>
+            </image>
+          </static>
+        </interactive>
       </figure>
 
       <p>
@@ -1510,22 +1566,26 @@
           among those with a numeric age.
         </caption>
 
-        <image source="images/ch4_agegroup_by_age.png" width="100%">
-          <description>
-            <p>
-              A pivot table with AGE_GROUP in rows and numeric AGE values as
-              column headers.
-              The ADULT row contains counts only for ages 18 and above, with
-              values such as 3 at age 18, 5 at age 19, and increasing counts at
-              ages 25, 30, and 35.
-              The JUNIOR row contains counts only for ages below 18, including
-              ages 0.25, 0.42, 0.75, 1.5, and whole numbers from 3 to 17.
-              The null row is empty throughout.
-              The Totals row matches the sum of ADULT and JUNIOR for each age,
-              confirming no observations were missed or miscategorised.
-            </p>
-          </description>
-        </image>
+        <interactive iframe="interactive/ch4_pivot_agegroup_age.html" width="100%" aspect="1:1">
+          <static>
+            <image source="images/ch4_agegroup_by_age.png" width="100%">
+              <description>
+                <p>
+                  A pivot table with AGE_GROUP in rows and numeric AGE values as
+                  column headers.
+                  The ADULT row contains counts only for ages 18 and above, with
+                  values such as 3 at age 18, 5 at age 19, and increasing counts at
+                  ages 25, 30, and 35.
+                  The JUNIOR row contains counts only for ages below 18, including
+                  ages 0.25, 0.42, 0.75, 1.5, and whole numbers from 3 to 17.
+                  The null row is empty throughout.
+                  The Totals row matches the sum of ADULT and JUNIOR for each age,
+                  confirming no observations were missed or miscategorised.
+                </p>
+              </description>
+            </image>
+          </static>
+        </interactive>
       </figure>
 
       <p>
@@ -1870,28 +1930,32 @@ kenya_accidents_database &lt;- kenya_accidents_database %&gt;%
           categorisation.
         </caption>
 
-        <image source="images/ch4_accidents_check.png" width="90%">
-          <description>
-            <p>
-              A pivot table showing accident categories in the left column
-              alongside the original brief accident descriptions in the middle
-              column, with total counts on the right.
-              Categories shown include: Alighting/boarding incident (4 entries,
-              e.g.
-              "The victim alighted while the vehicle was in motion"); Head on
-              collision (63 entries across 10 descriptions, dominated by "HEAD
-              ON COLLISION" with 51 incidents); Hit and run (54 entries across 4
-              descriptions, dominated by "HIT AND RUN" with 46 incidents); and
-              Knocked down (partial, showing 16 descriptions including
-              pedestrians, cyclists, and motorcyclists being knocked down by
-              various vehicles).
-              The table illustrates how the free-text descriptions have been
-              grouped into consistent categories, while also revealing remaining
-              spelling variants within categories such as "HIT AND RAN" and "HIT
-              &amp; RAN" alongside "HIT AND RUN".
-            </p>
-          </description>
-        </image>
+        <interactive iframe="interactive/ch4_pivot_accident_categories.html" width="100%" aspect="1:1">
+          <static>
+            <image source="images/ch4_accidents_check.png" width="90%">
+              <description>
+                <p>
+                  A pivot table showing accident categories in the left column
+                  alongside the original brief accident descriptions in the middle
+                  column, with total counts on the right.
+                  Categories shown include: Alighting/boarding incident (4 entries,
+                  e.g.
+                  "The victim alighted while the vehicle was in motion"); Head on
+                  collision (63 entries across 10 descriptions, dominated by "HEAD
+                  ON COLLISION" with 51 incidents); Hit and run (54 entries across 4
+                  descriptions, dominated by "HIT AND RUN" with 46 incidents); and
+                  Knocked down (partial, showing 16 descriptions including
+                  pedestrians, cyclists, and motorcyclists being knocked down by
+                  various vehicles).
+                  The table illustrates how the free-text descriptions have been
+                  grouped into consistent categories, while also revealing remaining
+                  spelling variants within categories such as "HIT AND RAN" and "HIT
+                  &amp; RAN" alongside "HIT AND RUN".
+                </p>
+              </description>
+            </image>
+          </static>
+        </interactive>
       </figure>
 
       <p>

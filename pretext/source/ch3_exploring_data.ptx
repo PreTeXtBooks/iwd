@@ -1139,31 +1139,45 @@
         Switch the display from table to a heatmap, and it really stands out.
       </p>
 
+      <p>
+        The pivot tables below are live, so you can try all of this right here
+        in the book: drag the variables in and out of the rows and columns,
+        click the arrows, and change <c>Table</c> to <c>Heatmap</c>.
+      </p>
+
       <figure xml:id="fig-pivot-tables">
         <caption>Pivot table of accidents by County</caption>
-        <image source="images/ch3_pivot_1.png" width="100%">
-          <description>
-            <p>
-              Pivot table of accidents by County.
-              The table shows the number of incidents for each county, with
-              Nairobi having the highest count.
-            </p>
-          </description>
-        </image>
+        <interactive iframe="interactive/ch3_pivot_county.html" width="100%" aspect="1:1">
+          <static>
+            <image source="images/ch3_pivot_1.png" width="100%">
+              <description>
+                <p>
+                  Pivot table of accidents by County.
+                  The table shows the number of incidents for each county, with
+                  Nairobi having the highest count.
+                </p>
+              </description>
+            </image>
+          </static>
+        </interactive>
       </figure>
 
       <figure xml:id="fig-pivot-tables-2">
         <caption>Pivot table of accidents by County and Date</caption>
-        <image source="images/ch3_pivot_2.png" width="100%">
-          <description>
-            <p>
-              Pivot table of accidents by County and Date.
-              The table shows the number of incidents for each county on each
-              date, with Nairobi, Kiambu, and Nakuru having incidents on almost
-              every day.
-            </p>
-          </description>
-        </image>
+        <interactive iframe="interactive/ch3_pivot_county_date.html" width="100%" aspect="1:1">
+          <static>
+            <image source="images/ch3_pivot_2.png" width="100%">
+              <description>
+                <p>
+                  Pivot table of accidents by County and Date.
+                  The table shows the number of incidents for each county on each
+                  date, with Nairobi, Kiambu, and Nakuru having incidents on almost
+                  every day.
+                </p>
+              </description>
+            </image>
+          </static>
+        </interactive>
       </figure>
 
       <p>
@@ -1179,16 +1193,20 @@
 
       <figure xml:id="fig-pivot-tables-3">
         <caption>Pivot table of accidents by County and Victim</caption>
-        <image source="images/ch3_pivot_3.png" width="100%">
-          <description>
-            <p>
-              Pivot table of accidents by County and Victim.
-              The table shows the number of incidents for each county by victim
-              type, with pedestrians being the most common victims in Nairobi,
-              and Makueni having a different distribution.
-            </p>
-          </description>
-        </image>
+        <interactive iframe="interactive/ch3_pivot_county_victim.html" width="100%" aspect="1:1">
+          <static>
+            <image source="images/ch3_pivot_3.png" width="100%">
+              <description>
+                <p>
+                  Pivot table of accidents by County and Victim.
+                  The table shows the number of incidents for each county by victim
+                  type, with pedestrians being the most common victims in Nairobi,
+                  and Makueni having a different distribution.
+                </p>
+              </description>
+            </image>
+          </static>
+        </interactive>
       </figure>
 
       <p>
