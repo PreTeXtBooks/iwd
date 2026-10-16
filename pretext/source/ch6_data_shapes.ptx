@@ -2631,5 +2631,11 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </p>
       </statement>
     </exercise>
+
+    <exercise>
+      <title>When a Join Gets It Wrong: Kenya's Voter Register</title>
+
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/When-a-Join-Gets-It-Wrong-Kenya-s-Voter-Register.xml" label="stk-ch6-joining-q"/>
+    </exercise>
   </exercises>
 </chapter>
