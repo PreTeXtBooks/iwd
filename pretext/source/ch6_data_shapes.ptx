@@ -156,23 +156,15 @@
 
       <p>
         On top of the Epi Info database, district teams also kept a second,
-        completely separate line list in Excel.
-        This was built mainly from lab sample results, and held some of the same
-        information: age, sex, location, and the dates each sample was
-        collected, received, and tested.
+        completely separate dataset in Excel built mainly from lab sample
+        results.
+        This held some of the same information: age, sex, location, and the
+        dates each sample was collected, received, and tested.
         Teams used it because it was quicker for producing daily reports and
         charts.
         So a single patient might now be in the national database (possibly
         twice!) and in a district spreadsheet, with no reliable way to tell
         which entries in the two systems were the same person.
-      </p>
-
-      <p>
-        None of this is a data quality problem in the way we talked about in
-        <xref ref="ch-cleaning-recoding"/>.
-        The problem was structural: two systems collecting overlapping
-        information about the same people, with no agreed identifier, and no
-        process for reconciling them.
       </p>
     </subsection>
 
@@ -191,14 +183,35 @@
       </p>
 
       <p>
-        And each centre had to manage a constant daily stream of information on
-        top of the case forms.
-        Live alerts, recording who had been seen and whether a sample had been
-        taken.
-        Death alerts, noting whether a swab had been collected and a burial team
-        sent out.
-        Quarantined households, and whether they had food.
-        Confirmed positive counts from health facilities.
+        Each centre had to manage a constant daily stream of information on top
+        of the case forms:
+        <ul>
+          <li>
+            <p>
+              Live alerts, recording who had been seen and whether a sample had
+              been taken.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Death alerts, noting whether a swab had been collected and a
+              burial team sent out.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Quarantined households, and whether they had food.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Confirmed positive counts from health facilities.
+            </p>
+          </li>
+        </ul>
         Most centres tracked all of this on manual dashboards (physical displays
         showing what was happening in their district right now), and then copied
         the numbers into Excel sheets or Word documents.
@@ -314,8 +327,8 @@
         Those deaths were real, and they were caused by Ebola, but they never
         made it into the count of confirmed deaths.
         If your count of deaths is too low, and you divide it by the count of
-        cases, the fraction comes out too small.
-        The outbreak looks less deadly than it really is.
+        cases, the fraction comes out too small, and the outbreak looks less
+        deadly than it really is.
       </p>
 
       <p>
@@ -330,15 +343,14 @@
         So at any moment, the cases with a known outcome included a bigger share
         of deaths than they would once everyone's outcome was known.
         Only using known outcomes pushes the fraction too high.
-        Now the outbreak looks more deadly than it really is.
+        Now the outbreak looks <em>more</em> deadly than it really is.
       </p>
 
       <p>
         And underneath both of these calculations, there was a third
         complication.
-        Even before Ebola arrived, malaria accounted for roughly 38% of hospital
-        admissions in Sierra Leone, and about 30% of deaths in children under
-        five.
+        Before Ebola, malaria accounted for roughly 38% of hospital admissions
+        in Sierra Leone, and about 30% of deaths in children under five.
         In their early stages, malaria and Ebola have similar symptoms.
         That overlap probably delayed the recognition of some real Ebola cases,
         and it also meant that some malaria deaths risked being counted as Ebola
@@ -377,14 +389,15 @@
       <p>
         Owada et al.
         (2016) are really direct about the cause.
-        <q>Lack of consistency</q> in how data was structured across districts
+        The <q>Lack of consistency</q> in how data was structured across
+        districts
         <q>caused problems with merging and aggregating cases to report critical
         information.</q>
-        And that critical information sounds almost mundane.
-        How many new alerts today?
+        That "critical information" sounds almost mundane (How many new alerts
+        today?
         How many new confirmed cases?
         How many blood tests were processed, and what did they show?
-        How many deaths were there in each district?
+        How many deaths were there in each district?).
         But these are the numbers that decide where treatment units get built,
         where contact tracers get sent, and where the response is losing ground.
         When the files underneath can't be combined automatically, just
@@ -459,9 +472,9 @@
 
     <introduction>
       <p>
-        In the rest of this chapter, we work through these shape problems in R,
-        using a few different datasets (flamingos, the Kenya road accidents
-        data, and the Kenya census).
+        In this section, we work through these shape problems in R, using a few
+        different datasets (flamingos, the Kenya road accidents data, and the
+        Kenya census).
         Along the way, we also look at some real examples of each problem out in
         the wild.
       </p>
@@ -1278,9 +1291,34 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           </title>
 
           <p>
-            A clean append needs both datasets to agree on three things: the
-            same column names for the same variables, the same data types for
-            each column, and the same definition of what a row is.
+            A clean append needs both datasets to agree on three things between
+            the two data frames:
+            <ul>
+              <li>
+                <p>
+                  the (exact) same column names for the variables to append.
+                  Two records that look identical to a person can be completely
+                  different to a computer, if the column names, spacing, or
+                  exact text differ by even one character.
+                </p>
+              </li>
+
+              <li>
+                <p>
+                  the same data types for each column (e.g., both have to be
+                  numeric, or factors, etc.)
+                </p>
+              </li>
+
+              <li>
+                <p>
+                  the same definition of what a row is.
+                  This is very important!
+                  <xref ref="subsec-ss-shapes-definitions"/> goes into this in
+                  more detail.
+                </p>
+              </li>
+            </ul>
             When any of those breaks, you either get an error (which at least
             tells you something's gone wrong), or a silent expansion, with extra
             columns appearing and types being quietly changed, which might not.
@@ -1290,106 +1328,99 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
             used in both years.
           </p>
         </insight>
-      </subsubsection>
 
-      <subsubsection xml:id="ss-binding-by-rows">
-        <title>
-          Binding by Rows: Stacking Farmer Lists for Fertiliser Vouchers
-        </title>
-
-        <p>
-          Every planting season, the Kenyan government subsidises fertiliser for
-          smallholder farmers, and distributes it through National Cereals and
-          Produce Board (NCPB) depots.
-          A farmer registers once, and gets a voucher by SMS.
-          They turn up at the depot with their phone and their ID, the clerk
-          checks them against the system, and they walk away with fertiliser at
-          a fraction of the market price.
-          For a smallholder farmer, that price difference really matters.
-          It can be the difference between planting a full acre and planting
-          half of one.
-        </p>
-
-        <p>
-          Behind that one lookup at the depot counter, there's a whole chain of
-          everyday data work.
-          Registration lists have to be combined into one national list, and
-          that list has to be checked against each farmer's ID and phone details
-          before a voucher is issued.
-        </p>
-
-        <p>
-          One way to build a national registry is to take every local list of
-          registered farmers, and stack them into one table, one after another.
-          For that to work cleanly, every list has to agree on its columns: the
-          same column names, meaning the same things, all the way down.
-          If one office's spreadsheet calls a column <c>phone_number</c>, and
-          another calls the same thing <c>mobile_no</c>, the software won't stop
-          and ask you what to do.
-          It'll create a new column for the name it hasn't seen before, and fill
-          it with <term>NA</term> ( <q>not available</q>, the standard way
-          software marks a gap in the data) everywhere that column doesn't
-          apply.
-          A registry that should have five clean columns quietly grows extra
-          ones that nobody asked for, and a farmer's real phone number can end
-          up in one of two different columns, depending on which office
-          registered them.
-        </p>
-
-        <insight xml:id="insight-schema-drift">
-          <title>Computers Only Match Characters</title>
+        <example xml:id="subsec-ss-shapes-definitions">
+          <title>Same Column Name, Different Definition</title>
 
           <p>
-            Two records that look identical to a person can be completely
-            different to a computer, if the column names, spacing, or exact text
-            differ by even one character.
-            An append needs every table to agree on its columns before you stack
-            them.
-            Ideally, it also needs a rule for what counts as
-            <q>the same
-            real-world thing twice</q>, before it lets a
-            duplicate in.
+            Someone who died at the scene would count as a road fatality in both
+            countries.
+            But someone who survived the crash and died in hospital six months
+            later would count in Uganda, but not in Kenya.
           </p>
-        </insight>
 
-        <p>
-          <term>Sources:</term> Kenyans.co.ke (9 February 2023).
-          <q>Govt Gives Out Vouchers for Fertilizers; How to Apply.</q>
-          <url href="https://www.kenyans.co.ke/news/85395-govt-gives-out-vouchers-fertilizers-how-apply" visual="kenyans.co.ke"/>.
-          Ministry of Agriculture and Livestock Development (2025).
-          <q>Launch of the 2025 Long Rains National Fertilizer Subsidy
-          Programme.</q>
-          <url href="https://kilimo.go.ke/cs-dr-andrew-karanja-has-presided-over-the-launch-of-the-2025-long-rains-national-fertilizer-subsidy-programme-nfsp-at-the-ncpb-gpc-depot-nairobi/" visual="kilimo.go.ke"/>.
-        </p>
-      </subsubsection>
+          <p>
+            If we simply appended these datasets, we would be combining data
+            collected under different definitions, even though the columns
+            appeared to match perfectly.
+            This could make Uganda's road fatality figures appear higher than
+            Kenya's, not necessarily because its roads are more dangerous, but
+            because deaths are counted differently.
+          </p>
 
-      <subsubsection xml:id="subsec-ss-shapes-definitions">
-        <title>Same Column Name, Different Definition</title>
+          <p>
+            The <c>bind_rows()</c> operation would work technically, but the
+            resulting data could lead us to misleading conclusions.
+            This is why checking that columns have the same names and data types
+            is not enough.
+            We also need to understand
+            <alert>what the values actually represent</alert> before combining
+            datasets.
+          </p>
 
-        <p>
-          Now suppose we wanted to append our 2016 Kenya road crash data to some
-          equivalent data from Uganda, so we could compare them.
-          The two datasets might have the same column names, the same data
-          types, and the same structure (a row per crash, with columns for time,
-          location, victim category, and cause), so <c>bind_rows()</c> would run
-          without any errors.
-          But Kenya and Uganda define a road fatality differently.
-          In Kenya, the NTSA seems to only record deaths at the scene, with no
-          follow-up at hospitals to find out whether people later died of their
-          injuries (Muguro et al., 2020).
-          In Uganda, a road crash counts as fatal if someone dies at the scene,
-          or within a year and a day of the crash because of their injuries
-          (Nankunda and Evdorides, 2025).
-          So someone who died at the scene would count as a road fatality in
-          both countries.
-          But someone who survived the crash and died in hospital six months
-          later would count in Uganda, and not in Kenya.
-          The combined data would be a mix of values collected under different
-          rules, with nothing to tell you which is which.
-          The append would work technically, and fail analytically.
-        </p>
+          <p>
+            Now suppose we wanted to append our 2016 Kenya road crash data to
+            some equivalent data from Uganda, so we could compare them.
+            The two datasets might have the same column names, the same data
+            types, and the same structure (a row per crash, with columns for
+            time, location, victim category, and cause), so <c>bind_rows()</c>
+            would run without any errors.
+            But Kenya and Uganda define a road fatality differently.
+          </p>
 
-        <insight xml:id="insight-variable-definitions">
+          <p>
+            In Kenya, the NTSA only records deaths at the scene, with no
+            follow-up at hospitals to find out whether people later died of
+            their injuries (Muguro et al., 2020).
+          </p>
+
+          <p>
+            In Uganda, a road crash counts as fatal if someone dies at the
+            scene, or within a year and a day of the crash because of their
+            injuries (Nankunda and Evdorides, 2025).
+          </p>
+
+          <p>
+            Someone who died at the scene would count as a road fatality in both
+            countries.
+            But someone who survived the crash and died in hospital six months
+            later would count in Uganda, but not in Kenya.
+          </p>
+
+          <p>
+            If we simply appended these datasets, we would be combining data
+            collected under different definitions, even though the columns
+            appeared to match perfectly.
+            This could make Uganda's road fatality figures appear higher than
+            Kenya's, not necessarily because its roads are more dangerous, but
+            <term>because deaths are counted differently!</term>
+          </p>
+
+          <p>
+            The <c>bind_rows()</c> operation would work technically, but the
+            resulting data could lead us to misleading conclusions.
+            This is why checking that columns have the same names and data types
+            is not enough.
+            We also need to understand
+            <alert>what the values actually represent</alert> before combining
+            datasets.
+          </p>
+
+          <p>
+            <term>Sources:</term> Muguro et al.
+            (2020), cited in <xref ref="ch-exploring-data"/>, on the Kenya NTSA
+            fatality definition.
+            Nankunda, C.
+            and Evdorides, H.
+            (2025).
+            <q>Data Availability for Road Crash Valuation in Low- and Middle-Income
+          Countries: A Case Study in Uganda.</q>
+            <em>Future Transportation</em>, 5(1), 29.
+            <url href="https://doi.org/10.3390/futuretransp5010029" visual="doi.org/10.3390/futuretransp5010029"/>.
+          </p>
+        </example>
+
+        <warning xml:id="insight-variable-definitions">
           <title>Same Name, Different Meaning</title>
 
           <p>
@@ -1405,20 +1436,7 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
             Two columns can have exactly the same name, and still mean different
             things.
           </p>
-        </insight>
-
-        <p>
-          <term>Sources:</term> Muguro et al.
-          (2020), cited in <xref ref="ch-exploring-data"/>, on the Kenya NTSA
-          fatality definition.
-          Nankunda, C.
-          and Evdorides, H.
-          (2025).
-          <q>Data Availability for Road Crash Valuation in Low- and Middle-Income
-          Countries: A Case Study in Uganda.</q>
-          <em>Future Transportation</em>, 5(1), 29.
-          <url href="https://doi.org/10.3390/futuretransp5010029" visual="doi.org/10.3390/futuretransp5010029"/>.
-        </p>
+        </warning>
       </subsubsection>
     </subsection>
 
@@ -1581,236 +1599,230 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
 
         <p>
           But when we look at the result, there's a problem.
-          Here are the first five rows of the joined dataset, with the accident
-          columns (from the accidents data) and the population columns (from the
-          census):
+          Here are the first five rows of the joined dataset, first the accident
+          columns (from the accidents data), then the population columns (from
+          the census):
         </p>
 
         <table xml:id="table-ch6-joined-sample">
           <title>
-            First five rows of the joined dataset, showing accident columns
-            (from the accidents data) and population columns (from the census).
-            Row 2 has <c>NA</c> for all census columns because
-            <c>TAITA TAVETA</c> did not yet match the census name
-            <c>TAITA/TAVETA</c>.
+            First five rows of the joined dataset, accident columns (from the
+            accidents data).
+            Row 2 is <c>TAITA TAVETA</c>, which did not yet match the census
+            name <c>TAITA/TAVETA</c>.
           </title>
 
-          <tabular halign="right">
+          <tabular halign="left">
+            <col halign="right"/>
             <col halign="left"/>
-            <col halign="right"/>
-            <col halign="right"/>
-            <col halign="right"/>
-            <col halign="right"/>
-            <col halign="right"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
             <row header="yes" bottom="minor">
-              <cell>Variable</cell>
-              <cell>Row 1</cell>
-              <cell>Row 2</cell>
-              <cell>Row 3</cell>
-              <cell>Row 4</cell>
-              <cell>Row 5</cell>
-            </row>
-
-            <row>
+              <cell>Row</cell>
               <cell>TIME 24 HOURS</cell>
-              <cell>630</cell>
-              <cell>830</cell>
-              <cell>1330</cell>
-              <cell>2100</cell>
-              <cell>1900</cell>
-            </row>
-
-            <row>
               <cell>BASE/SUB BASE</cell>
-              <cell>KITUI</cell>
-              <cell>VOI</cell>
-              <cell>MARIAKANI</cell>
-              <cell>ONGATA RONGAI</cell>
-              <cell>MATUU</cell>
-            </row>
-
-            <row>
               <cell>COUNTY</cell>
-              <cell>MAKUENI</cell>
-              <cell>TAITA TAVETA</cell>
-              <cell>KILIFI</cell>
-              <cell>NAKURU</cell>
-              <cell>MACHAKOS</cell>
-            </row>
-
-            <row>
               <cell>ROAD</cell>
-              <cell>KITUI-ITHOKWE</cell>
-              <cell>MOMBASA-NAIROBI</cell>
-              <cell>MOMBASA-NAIROBI</cell>
-              <cell>NAKURU-NAIROBI</cell>
-              <cell>MATUU-MWINGI</cell>
-            </row>
-
-            <row>
               <cell>PLACE</cell>
-              <cell>KITUI SCHOOL</cell>
-              <cell>IKANGA</cell>
-              <cell>KATOLANI</cell>
-              <cell>MAASAI LODGE</cell>
-              <cell>KIVANDINI</cell>
+              <cell>BRIEF ACCIDENT DETAILS</cell>
+              <cell>GENDER</cell>
+              <cell>AGE</cell>
+              <cell>CAUSE CODE</cell>
+              <cell>VICTIM</cell>
+              <cell>NO.</cell>
+              <cell>Date DD/MM/YYYY</cell>
             </row>
 
             <row>
-              <cell>BRIEF ACCIDENT DETAILS</cell>
+              <cell>1</cell>
+              <cell>630</cell>
+              <cell>KITUI</cell>
+              <cell>MAKUENI</cell>
+              <cell>KITUI-ITHOKWE</cell>
+              <cell>KITUI SCHOOL</cell>
               <cell>HEAD ON COLLISION</cell>
+              <cell>M</cell>
+              <cell>26</cell>
+              <cell>7</cell>
+              <cell>M/CYCLIST</cell>
+              <cell>1</cell>
+              <cell>2016-06-25</cell>
+            </row>
+
+            <row>
+              <cell>2</cell>
+              <cell>830</cell>
+              <cell>VOI</cell>
+              <cell>TAITA TAVETA</cell>
+              <cell>MOMBASA-NAIROBI</cell>
+              <cell>IKANGA</cell>
               <cell>HEAD ON COLLISION</cell>
+              <cell>M</cell>
+              <cell>28</cell>
+              <cell>25</cell>
+              <cell>M/CYCLIST</cell>
+              <cell>1</cell>
+              <cell>2016-06-25</cell>
+            </row>
+
+            <row>
+              <cell>3</cell>
+              <cell>1330</cell>
+              <cell>MARIAKANI</cell>
+              <cell>KILIFI</cell>
+              <cell>MOMBASA-NAIROBI</cell>
+              <cell>KATOLANI</cell>
               <cell>THE UNKNOWN M/V HIT THE MOTOR CYCLE</cell>
+              <cell>M</cell>
+              <cell>A &amp; J</cell>
+              <cell>98</cell>
+              <cell>M/CYCLIST</cell>
+              <cell>1</cell>
+              <cell>2016-06-25</cell>
+            </row>
+
+            <row>
+              <cell>4</cell>
+              <cell>2100</cell>
+              <cell>ONGATA RONGAI</cell>
+              <cell>NAKURU</cell>
+              <cell>NAKURU-NAIROBI</cell>
+              <cell>MAASAI LODGE</cell>
               <cell>
                 THE VEHICLE KNOCKED DOWN A PEDESTRIAN WHO WAS CROSSING THE ROAD
               </cell>
+              <cell>M</cell>
+              <cell>65</cell>
+              <cell>29</cell>
+              <cell>PEDESTRIAN</cell>
+              <cell>1</cell>
+              <cell>2016-06-25</cell>
+            </row>
+
+            <row>
+              <cell>5</cell>
+              <cell>1900</cell>
+              <cell>MATUU</cell>
+              <cell>MACHAKOS</cell>
+              <cell>MATUU-MWINGI</cell>
+              <cell>KIVANDINI</cell>
               <cell>
                 THE VEHICLE OVERTOOK A M/CYCLE AND LOST CONTROL VEERING OFF THE
                 ROAD &amp; ROLLED
               </cell>
-            </row>
-
-            <row>
-              <cell>GENDER</cell>
               <cell>M</cell>
-              <cell>M</cell>
-              <cell>M</cell>
-              <cell>M</cell>
-              <cell>M</cell>
-            </row>
-
-            <row>
-              <cell>AGE</cell>
-              <cell>26</cell>
-              <cell>28</cell>
-              <cell>A &amp; J</cell>
-              <cell>65</cell>
               <cell>A</cell>
-            </row>
-
-            <row>
-              <cell>CAUSE CODE</cell>
-              <cell>7</cell>
-              <cell>25</cell>
-              <cell>98</cell>
-              <cell>29</cell>
               <cell>10</cell>
-            </row>
-
-            <row>
-              <cell>VICTIM</cell>
-              <cell>M/CYCLIST</cell>
-              <cell>M/CYCLIST</cell>
-              <cell>M/CYCLIST</cell>
-              <cell>PEDESTRIAN</cell>
               <cell>PASSENGER</cell>
-            </row>
-
-            <row>
-              <cell>NO.</cell>
               <cell>1</cell>
-              <cell>1</cell>
-              <cell>1</cell>
-              <cell>1</cell>
-              <cell>1</cell>
-            </row>
-
-            <row>
-              <cell>Date DD/MM/YYYY</cell>
-              <cell>2016-06-25</cell>
-              <cell>2016-06-25</cell>
-              <cell>2016-06-25</cell>
-              <cell>2016-06-25</cell>
               <cell>2016-06-25</cell>
             </row>
+          </tabular>
+        </table>
 
-            <row bottom="minor">
-              <cell><em>Census columns below</em></cell>
-              <cell/>
-              <cell/>
-              <cell/>
-              <cell/>
-              <cell/>
-            </row>
+        <table xml:id="table-ch6-joined-sample-census">
+          <title>
+            The same five rows, showing the population columns (from the
+            census).
+            Row 2 has <c>NA</c> for all census columns because
+            <c>TAITA TAVETA</c> did not match.
+          </title>
 
-            <row>
+          <tabular halign="left">
+            <col halign="right"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <row header="yes" bottom="minor">
+              <cell>Row</cell>
               <cell>Population</cell>
-              <cell>987,653</cell>
-              <cell>NA</cell>
-              <cell>1,453,787</cell>
-              <cell>2,162,202</cell>
-              <cell>1,421,932</cell>
-            </row>
-
-            <row>
               <cell>Male</cell>
-              <cell>489,691</cell>
-              <cell>NA</cell>
-              <cell>704,089</cell>
-              <cell>1,077,272</cell>
-              <cell>710,707</cell>
-            </row>
-
-            <row>
               <cell>Female</cell>
-              <cell>497,942</cell>
-              <cell>NA</cell>
-              <cell>749,673</cell>
-              <cell>1,084,835</cell>
-              <cell>711,191</cell>
-            </row>
-
-            <row>
               <cell>Intersex</cell>
-              <cell>20</cell>
-              <cell>NA</cell>
-              <cell>25</cell>
-              <cell>95</cell>
-              <cell>34</cell>
-            </row>
-
-            <row>
               <cell>Households</cell>
-              <cell>244,669</cell>
-              <cell>NA</cell>
-              <cell>298,472</cell>
-              <cell>616,046</cell>
-              <cell>402,466</cell>
-            </row>
-
-            <row>
               <cell>Households (Conventional)</cell>
-              <cell>243,979</cell>
-              <cell>NA</cell>
-              <cell>297,990</cell>
-              <cell>598,237</cell>
-              <cell>399,523</cell>
-            </row>
-
-            <row>
               <cell>Households (Group Quarters)</cell>
-              <cell>690</cell>
-              <cell>NA</cell>
-              <cell>482</cell>
-              <cell>17,809</cell>
-              <cell>2,943</cell>
-            </row>
-
-            <row>
               <cell>Land Area (Sq Km)</cell>
-              <cell>8,176.67</cell>
-              <cell>NA</cell>
-              <cell>12,553.27</cell>
-              <cell>7,504.91</cell>
-              <cell>6,037.27</cell>
+              <cell>Density (per Sq Km)</cell>
             </row>
 
             <row>
-              <cell>Density (per Sq Km)</cell>
+              <cell>1</cell>
+              <cell>987,653</cell>
+              <cell>489,691</cell>
+              <cell>497,942</cell>
+              <cell>20</cell>
+              <cell>244,669</cell>
+              <cell>243,979</cell>
+              <cell>690</cell>
+              <cell>8,176.67</cell>
               <cell>120.79</cell>
+            </row>
+
+            <row>
+              <cell>2</cell>
               <cell>NA</cell>
+              <cell>NA</cell>
+              <cell>NA</cell>
+              <cell>NA</cell>
+              <cell>NA</cell>
+              <cell>NA</cell>
+              <cell>NA</cell>
+              <cell>NA</cell>
+              <cell>NA</cell>
+            </row>
+
+            <row>
+              <cell>3</cell>
+              <cell>1,453,787</cell>
+              <cell>704,089</cell>
+              <cell>749,673</cell>
+              <cell>25</cell>
+              <cell>298,472</cell>
+              <cell>297,990</cell>
+              <cell>482</cell>
+              <cell>12,553.27</cell>
               <cell>115.81</cell>
+            </row>
+
+            <row>
+              <cell>4</cell>
+              <cell>2,162,202</cell>
+              <cell>1,077,272</cell>
+              <cell>1,084,835</cell>
+              <cell>95</cell>
+              <cell>616,046</cell>
+              <cell>598,237</cell>
+              <cell>17,809</cell>
+              <cell>7,504.91</cell>
               <cell>288.11</cell>
+            </row>
+
+            <row>
+              <cell>5</cell>
+              <cell>1,421,932</cell>
+              <cell>710,707</cell>
+              <cell>711,191</cell>
+              <cell>34</cell>
+              <cell>402,466</cell>
+              <cell>399,523</cell>
+              <cell>2,943</cell>
+              <cell>6,037.27</cell>
               <cell>235.53</cell>
             </row>
           </tabular>
@@ -2414,40 +2426,7 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
       </subsubsection>
 
       <subsubsection xml:id="ss-merging-keys">
-        <title>Merging and the Idea of a Key: The Homa Bay Health System</title>
-
-        <p>
-          Homa Bay County, on the shore of Lake Victoria, has a high HIV burden,
-          and a well-established HIV care programme.
-          Like facilities across much of Kenya, health facilities there run on
-          electronic medical record (EMR) systems.
-          But a 2025 study of Homa Bay's digital health landscape found that its
-          one county referral hospital was running seven of these systems, side
-          by side!
-          Three of the seven, all built specifically for HIV care, do share a
-          common patient identifier.
-          The other four cover general outpatient care, inpatient stays, the
-          laboratory, and faith-based providers.
-          These don't connect to any of the HIV systems, and don't reliably
-          connect to each other either.
-        </p>
-
-        <p>
-          To make that concrete, let's picture a patient.
-          She's hypothetical, but based on the study's findings, and not on a
-          specific case it reported.
-          She's HIV-positive and pregnant.
-          Her HIV care is recorded in the HIV system.
-          Her antenatal visits are outside HIV care, so they're logged somewhere
-          else.
-          And if she's admitted to hospital, her inpatient stay goes somewhere
-          else again.
-          This isn't a stretch: the study's interviews describe exactly this
-          pattern, with people
-          <q>assigned multiple numbers for different
-          purposes, i.e., at the inpatient, outpatient and antenatal
-          clinics.</q>
-        </p>
+        <title>Merging and the Idea of a Key</title>
 
         <p>
           Every operation that merges tables relies on the same quiet
@@ -2455,60 +2434,146 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           reliably means <q>this same real-world thing</q>, everywhere it
           appears.
           That column is called a <term>key</term>.
-          Homa Bay's hospital records show what happens when that's only true
-          for part of a system.
-          We saw exactly how this can go wrong in the illustrative example, when
-          county names failed to match
+          In our join of the accidents and the census, the key was the county
+          name, and it only worked once the names matched in both tables.
+          A good key has to be there in every table you want to link, and it has
+          to identify the same thing in each one.
+          So what happens when there isn't a key at all?
+          Here's an example from Kenya's health system.
         </p>
 
-        <p>
-          The 2025 study found that in most of the county's EMR systems, patient
-          identifiers were created by hand, and in 97% of facilities, they were
-          allocated by hand at the patient's first visit.
-          There was no county-wide identifier linking a person across every
-          system they might come into contact with.
-          Within HIV care, a shared identifier does exist, and it does its job.
-          But step outside HIV care, and there's no column anywhere in the
-          hospital that reliably means <q>this same person</q> across the rest
-          of the systems she might use.
-        </p>
+        <example xml:id="ex-homa-bay-keys">
+          <title>The Homa Bay Health System</title>
 
-        <p>
-          The problem is that there's nothing to <term>join</term> or
-          <term>merge</term> most of those correct records on.
-          If you stack or link the non-HIV systems anyway, without a shared key,
-          one of two things happens.
-          Either the same person gets silently counted more than once across
-          different systems, inflating whatever gets reported to the county or
-          the ministry at the end of the month.
-          Or a clinician treating her for a complication in her pregnancy has no
-          way of seeing, from where they're sitting, that she's on HIV treatment
-          at all, even though that exact information exists, correctly recorded,
-          in the system next door.
-        </p>
+          <p>
+            Homa Bay County, on the shore of Lake Victoria, has a high HIV
+            burden and a well-established HIV care programme.
+            Like health facilities across much of Kenya, its county referral
+            hospital runs on electronic medical record (EMR) systems.
+            A 2025 study of Homa Bay's digital health landscape found that this
+            one hospital was running seven of them, side by side!
+            Three are built for HIV care, and those three share a patient
+            identifier.
+            The other four cover general outpatient care, inpatient stays, the
+            laboratory, and faith-based providers.
+            They don't connect to the HIV systems, and they don't reliably
+            connect to each other either.
+          </p>
+
+          <p>
+            To see why that matters, let's picture a patient.
+            She's hypothetical, but based on what the study found.
+            She's HIV-positive and pregnant, so over a few months she ends up in
+            three different systems, and each one gives her its own number:
+          </p>
+
+          <table xml:id="table-ch6-homa-bay-patient">
+            <title>
+              One hypothetical patient, recorded in three systems.
+              The numbers are made up.
+            </title>
+
+            <tabular halign="left">
+              <col halign="left"/>
+              <col halign="left"/>
+              <col halign="left"/>
+              <row header="yes" bottom="minor">
+                <cell>System</cell>
+                <cell>Her patient number</cell>
+                <cell>What it records</cell>
+              </row>
+
+              <row>
+                <cell>HIV care</cell>
+                <cell>HIV-0412</cell>
+                <cell>HIV treatment</cell>
+              </row>
+
+              <row>
+                <cell>Antenatal clinic</cell>
+                <cell>ANC-7731</cell>
+                <cell>Pregnancy visits</cell>
+              </row>
+
+              <row>
+                <cell>Inpatient ward</cell>
+                <cell>IP-20958</cell>
+                <cell>Hospital admission</cell>
+              </row>
+            </tabular>
+          </table>
+
+          <p>
+            It's one woman, but three numbers.
+            This isn't a stretch.
+            The study's interviews describe exactly this pattern, with people
+            <q>assigned multiple numbers for different purposes, i.e., at the
+            inpatient, outpatient and antenatal clinics.</q>
+            In most of the county's systems, patient numbers were created by
+            hand, and in 97% of facilities they were allocated by hand at the
+            patient's first visit.
+            Nothing linked a person across every system they might use.
+          </p>
+
+          <p>
+            And that's the point - there is no key!
+            No column anywhere in this table, or in the hospital, means
+            <q>this same person</q> across all three systems.
+            (Within HIV care there is one, and it works fine.
+            It just stops at the edge of HIV care.) A computer can't tell that
+            these three rows belong to the same woman, so we can't
+            <term>join</term> or <term>merge</term> them.
+            If we stack the records together anyway, one of two things goes
+            wrong:
+            <ul>
+              <li>
+                <p>
+                  She's counted three times, which inflates the numbers reported
+                  to the county or the ministry at the end of the month.
+                </p>
+              </li>
+
+              <li>
+                <p>
+                  Or a clinician treating her for a complication in her
+                  pregnancy can't see that she's on HIV treatment, even though
+                  that information is recorded, correctly, in the system next
+                  door.
+                </p>
+              </li>
+            </ul>
+          </p>
+
+          <p>
+            Notice that nobody entered anything wrong here.
+            Every one of those records is correct.
+            The data is just stuck, because there's nothing to link it on.
+          </p>
+
+          <p>
+            <term>Sources:</term> Chepkirui, M., Dellicour, S., Musuva, R., et
+            al.
+            (2025).
+            Missed opportunities for digital health data use in healthcare
+            decision-making: A cross-sectional digital health landscape
+            assessment in Homa Bay county, Kenya.
+            <foreign>PLOS Digital Health</foreign>, 4(6), e0000870.
+            https://doi.org/10.1371/journal.pdig.0000870
+          </p>
+        </example>
 
         <insight xml:id="insight-homa-bay-no-key">
           <title>You Cannot Join What Was Never Given a Shared Key</title>
 
           <p>
-            A join, a stack, a reshape: every one of these operations assumes
-            there's already a key linking your tables together.
+            Merging or reshaping assumes there's already a key linking your
+            tables together.
             When separate systems are built independently, without agreeing in
             advance how a person, place, or thing will be identified across all
             of them, no amount of clever code can recover that link later.
             The key has to be designed in before the data is collected.
           </p>
         </insight>
-
-        <p>
-          <term>Sources:</term> Chepkirui, M., Dellicour, S., Musuva, R., et al.
-          (2025).
-          Missed opportunities for digital health data use in healthcare
-          decision-making: A cross-sectional digital health landscape assessment
-          in Homa Bay county, Kenya.
-          <foreign>PLOS Digital Health</foreign>, 4(6), e0000870.
-          https://doi.org/10.1371/journal.pdig.0000870
-        </p>
       </subsubsection>
     </subsection>
   </section>
@@ -2517,22 +2582,6 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
   <!-- ================================================================= -->
   <exercises xml:id="exercises-data-shapes">
     <title>Exercises</title>
-
-    <exercise xml:id="ex-shapes-jhu-daily">
-      <statement>
-        <p>
-          <xref ref="insight-jhu-shapes-lesson"/> says that a new column had to
-          be added to the wide dataset every single day.
-          Describe, in words, what would go wrong for someone's code if it
-          referred to date columns by a fixed position (for example,
-          <q>column
-          47</q> ) instead of by name.
-          Would switching to long format, on its own, have fixed that particular
-          problem?
-          Why, or why not?
-        </p>
-      </statement>
-    </exercise>
 
     <exercise xml:id="ex-reshape-census-data">
       <statement>
@@ -2572,8 +2621,6 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           <c>species</c> as columns, instead of counts.
           Which version, this one or the <c>counts_wide</c> table of counts,
           would you send to someone who wanted to read it in an email?
-          And which would you give to someone who wanted to plot it in
-          <c>ggplot2</c>?
         </p>
       </statement>
     </exercise>
@@ -2591,122 +2638,6 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           What breaks, and why?
         </p>
       </statement>
-    </exercise>
-
-    <exercise xml:id="ex-shapes-iebc-keys">
-      <title>What If the Key Is Wrong? The IEBC Voter Register</title>
-
-      <introduction>
-        <p>
-          Before national elections in Kenya, the Independent Electoral and
-          Boundaries Commission (IEBC) has to check its master voter register
-          against other government records.
-          It checks against identity records, to catch invalid or duplicate
-          registrations, and against death records, to remove voters who have
-          died.
-          Checking one table against another like this is a <term>lookup</term>,
-          or <term>join</term>, and the sensible key to join on is each person's
-          National ID number.
-          The register also needs its own duplicates removing every so often, a
-          step usually called <term>deduplication</term>: finding rows that are
-          the same person entered twice, and collapsing them into one.
-          Both of these jobs depend on one thing: a key that's correct for every
-          row, and unique to one person.
-        </p>
-
-        <p>
-          In 2022, KPMG audited the register.
-          Their preliminary report found 481,711 duplicate records, 246,465
-          deceased voters still on the register, and 226,143 voters registered
-          with ID numbers that didn't validly belong to them.
-        </p>
-      </introduction>
-
-      <task>
-        <statement>
-          <p>
-            Imagine a system falls back on matching people using full name and
-            date of birth, instead of a clean, unique ID.
-            Ten voters in the register share one name and date of birth, and a
-            second table has three other people with that same name and date of
-            birth.
-            How many rows will a join between the two tables give you?
-            Why is that a problem for a lookup?
-            And what would happen to those ten voters if the same matching rule
-            was used in a deduplication step?
-          </p>
-        </statement>
-      </task>
-
-      <task>
-        <statement>
-          <p>
-            We saw a harmless version of one-to-many matching in our own join.
-            The <c>NAIROBI CITY</c> row appears once in the 2019 census data,
-            but 71 times in the accidents data, once for each crash recorded in
-            Nairobi.
-            The left join matched all 71 crash rows to the same census row.
-            Why was that exactly what we wanted there, but would be a serious
-            problem in a voter register?
-            What does this tell you about checking the number of rows before and
-            after a join?
-          </p>
-        </statement>
-      </task>
-
-      <task>
-        <statement>
-          <p>
-            Now suppose the key is a clean, unique ID, but one system stores it
-            as a plain number, another stores it as text with the leading zero
-            kept, and a third has a stray space typed at the end.
-            To a person, these are obviously the same ID.
-            Why does a join or a deduplication step never find the match?
-            What would you do to the key columns before joining?
-          </p>
-        </statement>
-      </task>
-
-      <task>
-        <statement>
-          <p>
-            Go back to the three KPMG findings: duplicate records, deceased
-            voters still on the register, and ID numbers that belong to someone
-            else.
-            For each one, say which key problem is the most likely cause: a key
-            that isn't unique, a key that's untidy, or a key that's simply
-            wrong.
-            Remember that deceased voters can only be removed if the join
-            against the death records actually finds a match.
-          </p>
-        </statement>
-      </task>
-
-      <task>
-        <statement>
-          <p>
-            Write a short rule of thumb, in your own words, for what you should
-            check after every join and every deduplication step before you trust
-            the result.
-          </p>
-        </statement>
-      </task>
-
-      <conclusion>
-        <p>
-          <term>Sources:</term> KPMG (2022).
-          <foreign>Preliminary audit report on the Register of Voters</foreign>,
-          prepared for the Independent Electoral and Boundaries Commission
-          (IEBC), as reported in the IEBC press release of 8 June 2022 (
-          <url href="https://www.iebc.or.ke/uploads/resources/cWyBL8fhHH.pdf" visual="iebc.or.ke"/>
-          ) and in <foreign>Citizen Digital</foreign>,
-          <q>IEBC announces delay in publishing final voters' register as 1M names
-          flagged</q>
-          (
-          <url href="https://www.citizen.digital/article/iebc-announces-delay-in-publishing-final-voters-register-as-1m-names-flagged-n299750" visual="citizen.digital"/>
-          ).
-        </p>
-      </conclusion>
     </exercise>
   </exercises>
 </chapter>

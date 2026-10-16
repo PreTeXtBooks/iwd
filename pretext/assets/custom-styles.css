@@ -71,13 +71,13 @@ pre,
    These blocks are set to always-render inline (not knowled) via
    publication.ptx, so these fills always show. */
 .warning.remark-like {
-  background-color: #FDECE0; /* light orange */
+  background-color: hsl(343, 88%, 94%); /* light orange */
   padding: 0.75rem 1rem 0.75rem 1.5rem;
   border-radius: 4px;
 }
 
 .example.example-like {
-  background-color: #F2F2F2; /* light grey */
+  background-color: #eaf5e2; /* light green */
   padding: 0.75rem 1rem 0.75rem 1.5rem;
   border-radius: 4px;
 }
