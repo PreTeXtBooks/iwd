@@ -450,19 +450,11 @@
   <section xml:id="sec-ch6-stack">
     <title>STACK Question Here</title>
 
-    <introduction>
-      <p>
-        TODO
-      </p>
-    </introduction>
+    <exercise>
+      <title>Exploring a survey of farmers</title>
 
-    <subsection xml:id="subsec-ch6-stack">
-      <title>TODO</title>
-
-      <p>
-        TODO: insert STACK question
-      </p>
-    </subsection>
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/appending-data.xml" label="stk-ch6-data-shapes"/>
+    </exercise>
   </section>
   <!-- ================================================================= -->
   <!--  SECTION 3: Applying and looking at different shapes              -->

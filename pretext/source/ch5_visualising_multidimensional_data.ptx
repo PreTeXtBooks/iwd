@@ -718,72 +718,11 @@
     <exercise>
       <title>Exploring a Forest Dataset</title>
 
-      <introduction>
-        <p>
-          In this exercise, you will explore a randomised forest dataset, where
-          each row represents one tree.
-          The dataset contains information about individual trees, including
-          their height, growth and diameter.
-        </p>
-
-        <p>
-          You will use an interactive graph to explore the data.
-          Starting with a blank graph, choose variables for both axes, then
-          experiment with colour, point size and treatment panels to investigate
-          patterns and relationships in the data.
-        </p>
-
-        <p>
-          Use the dropdown menus and checkboxes above the graph to choose your
-          visual mappings.
-          Each point is labelled with its Tree_ID.
-          You can click on a point or use the "Inspect exact measurements"
-          dropdown to see the measurements for an individual tree.
-        </p>
-
-        <p>
-          You can also download the CSV dataset provided in the question.
-          The numerical mapping fields below the graph will record your
-          selections automatically, so please use the visual controls rather
-          than typing into these fields.
-        </p>
-      </introduction>
-
       <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Grammar-of-Graphics-Scatterplot.xml" label="stk-forest-exploration"/>
     </exercise>
 
     <exercise>
       <title>Exploring Changes in School Libraries</title>
-
-      <introduction>
-        <p>
-          In this exercise, you will explore data collected from school
-          libraries across three villages.
-          Researchers counted the number of books in each library in Year 1 and
-          Year 2, visiting the same schools in both years.
-        </p>
-
-        <p>
-          We are interested in understanding how the number of books changed
-          between the two years, and whether these changes were similar across
-          the three villages.
-        </p>
-
-        <p>
-          You will use an interactive graph to investigate the data.
-          The graph starts with two boxplots, one for each year.
-          You can then add individual schools, connect paired measurements, and
-          use colour to distinguish between villages.
-        </p>
-
-        <p>
-          Experiment with the different layers to explore what the boxplots tell
-          us about the data, and what additional information becomes visible
-          when we look at individual schools.
-          You can also inspect exact values to investigate particular
-          observations.
-        </p>
-      </introduction>
 
       <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Grammar-of-Graphics-Hidden-changes-across-two-years.xml" label="stk-school-library-exploration"/>
     </exercise>

@@ -257,65 +257,11 @@
     <exercise>
       <title>Exploring a survey of farmers</title>
 
-      <introduction>
-        <p>
-          In this exercise, you will work with data from a simulated survey of
-          100 farmers.
-          The dataset contains information about the farmers' ages, the crop
-          varieties they planted, and the yields they obtained.
-        </p>
-
-        <p>
-          We are interested in whether younger and older farmers plant different
-          varieties, and whether this might be related to the yields they
-          obtain.
-          Before investigating this, however, we need to make sure that the data
-          we use are appropriate for our analysis.
-          You will use filtering and simple summaries to check the data and
-          answer a series of questions.
-        </p>
-
-        <p>
-          Download the dataset provided in the question and use statistical
-          software of your choice to explore and filter the data.
-        </p>
-      </introduction>
-
       <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/6-Filtering-to-Clean.xml" label="stk-ch4-cleaning-data"/>
     </exercise>
 
     <exercise>
       <title>River Pollution and Distance Downstream</title>
-
-      <introduction>
-        <p>
-          In this exercise, you will explore data collected by an environmental
-          scientist investigating pollution in a river.
-          Water samples were collected at 20 sites downstream from a pollution
-          source, with the distance from the source and pollutant concentration
-          recorded at each site.
-        </p>
-
-        <p>
-          We are interested in whether pollutant concentration is related to
-          distance downstream, and what this relationship might tell us about
-          how pollution changes along the river.
-        </p>
-
-        <p>
-          Download the dataset provided in the question and use statistical
-          software of your choice to explore the relationship between the two
-          variables.
-          Pay attention to the measurement units and ensure that concentrations
-          are comparable before carrying out your analysis.
-        </p>
-
-        <p>
-          You will calculate Pearson's correlation coefficient and use it to
-          describe the direction and strength of the linear relationship between
-          distance downstream and pollutant concentration.
-        </p>
-      </introduction>
 
       <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/Correlation-with-Data-II-(Data-Shapes).xml" label="stk-river-pollution-correlation"/>
     </exercise>
@@ -672,16 +618,20 @@
 [121] "1350" "1140" "1955" "0600" "0940" "0904" "1845" "2205" "2142" "0140"
 [131] "1645" "0310" "0045" "0240" "0715" "1515" "2110"
       </pre>
-
       <figure xml:id="fig-ch4-time-pivot">
-        <caption>Live pivot table of <c>TIME 24 HOURS</c>, before any cleaning</caption>
+        <caption>
+          Live pivot table of <c>TIME 24 HOURS</c>, before any cleaning
+        </caption>
 
         <interactive iframe="interactive/ch4_pivot_time.html" width="100%" aspect="1:1">
           <static>
             <image source="images/ch4_pivot_time.png" width="100%">
               <description>
                 <p>
-                  A pivot table with TIME 24 HOURS in the rows and the number of crashes at each time. The times run from 1, 10 and 30 up to 2350, followed by UNKNOWN TIME with 2 crashes and null with 2.
+                  A pivot table with TIME 24 HOURS in the rows and the number of
+                  crashes at each time.
+                  The times run from 1, 10 and 30 up to 2350, followed by
+                  UNKNOWN TIME with 2 crashes and null with 2.
                 </p>
               </description>
             </image>
@@ -890,13 +840,15 @@
 
       <figure xml:id="fig-ch4-county-pivot-before">
         <caption>Live pivot table of <c>COUNTY</c>, before cleaning</caption>
-
         <interactive iframe="interactive/ch4_pivot_county_before.html" width="100%" aspect="1:1">
           <static>
             <image source="images/ch4_pivot_county_before.png" width="100%">
               <description>
                 <p>
-                  A pivot table with COUNTY in the rows, listed alphabetically, and the number of crashes in each. KERCHO and KERICHO appear as separate rows, and so do MURANG'A and MURANGA.
+                  A pivot table with COUNTY in the rows, listed alphabetically,
+                  and the number of crashes in each.
+                  KERCHO and KERICHO appear as separate rows, and so do MURANG'A
+                  and MURANGA.
                 </p>
               </description>
             </image>
@@ -937,13 +889,15 @@
 
       <figure xml:id="fig-ch4-county-pivot-after">
         <caption>Live pivot table of <c>COUNTY</c>, after cleaning</caption>
-
         <interactive iframe="interactive/ch4_pivot_county_after.html" width="100%" aspect="1:1">
           <static>
             <image source="images/ch4_pivot_county_after.png" width="100%">
               <description>
                 <p>
-                  A pivot table with COUNTY in the rows and the number of crashes in each. KERICHO now has 6 crashes and MURANG'A 6, and KERCHO and MURANGA no longer appear.
+                  A pivot table with COUNTY in the rows and the number of
+                  crashes in each.
+                  KERICHO now has 6 crashes and MURANG'A 6, and KERCHO and
+                  MURANGA no longer appear.
                 </p>
               </description>
             </image>
@@ -1076,11 +1030,11 @@
                   against County in columns, with counts in each cell.
                   Only selected county columns are shown.
                   Key observations visible in the table: NAKURU base has 11
-                  incidents in Nakuru county and 1 in Makuru county, totalling 12;
-                  Embakasi base has 11 incidents all in Nairobi county; Nyando base
-                  has 4 incidents in Homa Bay and 4 in Kisumu, totalling 8; Makindu
-                  base has 8 incidents all in Makueni county; Starehe base has 8
-                  incidents all in Nairobi county.
+                  incidents in Nakuru county and 1 in Makuru county, totalling
+                  12; Embakasi base has 11 incidents all in Nairobi county;
+                  Nyando base has 4 incidents in Homa Bay and 4 in Kisumu,
+                  totalling 8; Makindu base has 8 incidents all in Makueni
+                  county; Starehe base has 8 incidents all in Nairobi county.
                 </p>
               </description>
             </image>
@@ -1574,13 +1528,14 @@
                   A pivot table with AGE_GROUP in rows and numeric AGE values as
                   column headers.
                   The ADULT row contains counts only for ages 18 and above, with
-                  values such as 3 at age 18, 5 at age 19, and increasing counts at
-                  ages 25, 30, and 35.
-                  The JUNIOR row contains counts only for ages below 18, including
-                  ages 0.25, 0.42, 0.75, 1.5, and whole numbers from 3 to 17.
+                  values such as 3 at age 18, 5 at age 19, and increasing counts
+                  at ages 25, 30, and 35.
+                  The JUNIOR row contains counts only for ages below 18,
+                  including ages 0.25, 0.42, 0.75, 1.5, and whole numbers from 3
+                  to 17.
                   The null row is empty throughout.
-                  The Totals row matches the sum of ADULT and JUNIOR for each age,
-                  confirming no observations were missed or miscategorised.
+                  The Totals row matches the sum of ADULT and JUNIOR for each
+                  age, confirming no observations were missed or miscategorised.
                 </p>
               </description>
             </image>
@@ -1936,21 +1891,21 @@ kenya_accidents_database &lt;- kenya_accidents_database %&gt;%
               <description>
                 <p>
                   A pivot table showing accident categories in the left column
-                  alongside the original brief accident descriptions in the middle
-                  column, with total counts on the right.
-                  Categories shown include: Alighting/boarding incident (4 entries,
-                  e.g.
-                  "The victim alighted while the vehicle was in motion"); Head on
-                  collision (63 entries across 10 descriptions, dominated by "HEAD
-                  ON COLLISION" with 51 incidents); Hit and run (54 entries across 4
-                  descriptions, dominated by "HIT AND RUN" with 46 incidents); and
-                  Knocked down (partial, showing 16 descriptions including
-                  pedestrians, cyclists, and motorcyclists being knocked down by
-                  various vehicles).
+                  alongside the original brief accident descriptions in the
+                  middle column, with total counts on the right.
+                  Categories shown include: Alighting/boarding incident (4
+                  entries, e.g.
+                  "The victim alighted while the vehicle was in motion"); Head
+                  on collision (63 entries across 10 descriptions, dominated by
+                  "HEAD ON COLLISION" with 51 incidents); Hit and run (54
+                  entries across 4 descriptions, dominated by "HIT AND RUN" with
+                  46 incidents); and Knocked down (partial, showing 16
+                  descriptions including pedestrians, cyclists, and
+                  motorcyclists being knocked down by various vehicles).
                   The table illustrates how the free-text descriptions have been
-                  grouped into consistent categories, while also revealing remaining
-                  spelling variants within categories such as "HIT AND RAN" and "HIT
-                  &amp; RAN" alongside "HIT AND RUN".
+                  grouped into consistent categories, while also revealing
+                  remaining spelling variants within categories such as "HIT AND
+                  RAN" and "HIT &amp; RAN" alongside "HIT AND RUN".
                 </p>
               </description>
             </image>
