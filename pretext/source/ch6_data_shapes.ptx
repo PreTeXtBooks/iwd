@@ -34,7 +34,6 @@
       it.
     </p>
   </introduction>
-  
   <!-- ================================================================= -->
   <!--  SECTION 1: The opener, on its own, told in full                  -->
   <!-- ================================================================= -->
@@ -45,14 +44,13 @@
       <p>
         In <xref ref="ch-cleaning-recoding"/>, we followed one organisation
         managing data across five Ebola treatment units.
-        That story was about data quality: forms damaged by chlorine, values
-        misheard across a fence, and the same symptom written down under three
-        different names.
-        Every one of those problems was inside a single record.
+        That story was about data cleaning.
       </p>
 
       <p>
-        Owada et al. (2016) describe a different problem, in Sierra Leone.
+        Owada et al.
+        (2016) describe a different problem during the ebola crisis that
+        occurred in Sierra Leone.
         Here, the information needed to run the response did exist.
         But it had been recorded in shapes that didn't fit together, so it
         couldn't be combined.
@@ -73,15 +71,53 @@
         district databases could be merged into one national database.
       </p>
 
+      <figure xml:id="fig-ebola-data-flow">
+        <caption>
+          How a case was supposed to travel.
+          A surveillance officer fills in a paper form, a data manager enters it
+          into the district's Epi Info VHF database, and the district databases
+          are merged into one national database.
+        </caption>
+
+        <image source="images/ch6_ebola_data_flow.png" width="90%">
+          <description>
+            <p>
+              A flow diagram with three rows.
+              In each row, a paper case investigation form points to an Epi Info
+              VHF database for one of three districts, A, B and C.
+              Arrows from all three district databases point to a single
+              national Ebola database, labelled as the districts merged.
+            </p>
+          </description>
+        </image>
+      </figure>
+
       <p>
         In practice, it wasn't that simple.
         Three main things went wrong.
-        First, most district data managers had never used the software before.
-        Second, once duplicate records had been created, they were hard to find,
-        and even harder to merge.
-        And third, the paper forms often reached the district response centres
-        days after the case had been investigated, so the national database was
-        never fully up to date, even late in the outbreak.
+        <ol>
+          <li>
+            <p>
+              First, most district data managers had never used the software
+              before.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Second, once duplicate records had been created, they were hard to
+              find, and even harder to merge.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              And third, the paper forms often reached the district response
+              centres days after the case had been investigated, so the national
+              database was never fully up to date, even late in the outbreak.
+            </p>
+          </li>
+        </ol>
       </p>
 
       <p>
@@ -93,6 +129,30 @@
         So one person, with one infection, now had two rows in the same
         database, and nothing to link them or show they were the same person.
       </p>
+
+      <figure xml:id="fig-ebola-duplicate-record">
+        <caption>
+          Left: the lab result is added to the patient's existing record, so
+          there is one person and one row.
+          Right: the lab result is entered as a new record, so the same person
+          now has two rows with different IDs, and nothing links them.
+          The values shown are made up, to illustrate the problem.
+        </caption>
+
+        <image source="images/ch6_ebola_duplicate_record.png" width="95%">
+          <description>
+            <p>
+              Two small tables side by side.
+              On the left, a table with one row for patient 1042 changes its lab
+              result from pending to positive, still as one row.
+              On the right, the same starting table gains a second row with a
+              new ID, 1187, the same age and sex, and a positive result.
+              A bracket marks the two rows as the same person with nothing
+              linking them.
+            </p>
+          </description>
+        </image>
+      </figure>
 
       <p>
         On top of the Epi Info database, district teams also kept a second,
@@ -154,6 +214,31 @@
         separate sheets.
       </p>
 
+      <figure xml:id="fig-ebola-district-shapes">
+        <caption>
+          Three districts, three shapes.
+          In district A each row is a patient.
+          In district B each row is a day, with counts of new cases and deaths.
+          In district C confirmed and suspected cases are on separate sheets.
+          The values shown are made up.
+        </caption>
+
+        <image source="images/ch6_ebola_district_shapes.png" width="95%">
+          <description>
+            <p>
+              Three example tables.
+              District A has one row per patient, with columns for ID, age, sex
+              and status.
+              District B has one row per day, with columns for date, new cases
+              and new deaths.
+              District C has two small tables on separate sheets, one listing
+              confirmed cases and one listing suspected cases, each with ID and
+              age.
+            </p>
+          </description>
+        </image>
+      </figure>
+
       <p>
         We want to be really clear that no district was doing anything wrong
         here.
@@ -175,6 +260,31 @@
         So before the national team could count anything at all, someone had to
         answer one question: what shape should this data be in?
       </p>
+
+      <figure xml:id="fig-ebola-stacking">
+        <caption>
+          What happens when a patient-level table and a day-level table are
+          stacked.
+          The result has gaps wherever a column does not apply, and its rows
+          mean two different things, so counts and averages from it are
+          meaningless.
+        </caption>
+
+        <image source="images/ch6_ebola_stacking.png" width="95%">
+          <description>
+            <p>
+              Two small tables, district A with one row per patient and district
+              B with one row per day, are stacked into one table.
+              The combined table has the columns of both.
+              The first two rows have patient values and NA in the date and
+              count columns, and the last two rows have day values and NA in the
+              patient columns.
+              Text beneath asks whether a row is a patient or a day, what the
+              average age of the table is, and how many cases there are.
+            </p>
+          </description>
+        </image>
+      </figure>
     </subsection>
 
     <subsection xml:id="ss-ebola-cfr">
@@ -265,7 +375,8 @@
       <title>Shape is a decision made before the data arrives</title>
 
       <p>
-        Owada et al. (2016) are really direct about the cause.
+        Owada et al.
+        (2016) are really direct about the cause.
         <q>Lack of consistency</q> in how data was structured across districts
         <q>caused problems with merging and aggregating cases to report critical
         information.</q>
@@ -282,7 +393,8 @@
 
       <p>
         And the loss went beyond the response at the time.
-        The authors conclude that <q>much of the data has never found its way
+        The authors conclude that
+        <q>much of the data has never found its way
         into any structured database and may never be recoverable.</q>
         That's data that was collected at real cost, and real risk, in formats
         that each worked fine on their own, but couldn't be used together.
@@ -382,6 +494,33 @@
           Knowing when to use each one, and how to move between them, is a
           really useful skill when you're working with data.
         </p>
+
+        <figure xml:id="fig-wide-vs-long">
+          <caption>
+            The same flamingo counts in wide and long format.
+            In wide format there is one row per lake and one column per species.
+            In long format there is one row per lake and species combination,
+            with the species names stored as values in a column.
+            <c>pivot_longer()</c> goes from wide to long, and
+            <c>pivot_wider()</c> goes back.
+          </caption>
+
+          <image source="images/ch6_wide_vs_long.png" width="90%">
+            <description>
+              <p>
+                A wide table with columns for lake, Greater Flamingo and Lesser
+                Flamingo and three rows, one each for Bogoria, Elementaita and
+                Nakuru.
+                Beside it, a long table with columns for lake, species and n and
+                six rows, one for each lake and species pair.
+                Counts for Greater Flamingo are shaded blue and counts for
+                Lesser Flamingo are shaded orange in both tables.
+                Arrows labelled pivot_longer and pivot_wider point between the
+                two tables.
+              </p>
+            </description>
+          </image>
+        </figure>
       </introduction>
 
       <subsubsection xml:id="subsubsec-shapes-long-to-wide">
@@ -421,6 +560,7 @@
         #&gt; 6      Nakuru  Lesser Flamingo 126
           </code>
         </program>
+
         <p>
           <c>counts_long</c> is exactly the shape a computer wants: one row for
           each lake and species combination, and one column holding the count.
@@ -444,6 +584,7 @@
         #&gt; 3      Nakuru               26             126
           </code>
         </program>
+
         <p>
           Now the table is really easy to read by eye, but it's no longer in a
           shape that <c>ggplot2</c> can plot directly.
@@ -480,6 +621,7 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
   labs(x = "Lake", y = "Count", fill = "Species")
           </code>
         </program>
+
         <figure>
           <caption>
             A bar chart with three bars comparing the number of flamingoes at
@@ -509,172 +651,140 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           expect it.
           Wide format serves a person scanning a table by eye, or a spreadsheet
           formula that expects species to be in fixed columns.
-          If you know which one a task actually needs before you write any code,
-          you can save yourself exactly the kind of repeated reshaping that cost
-          Gassen a day's work when JHU's columns shifted under him, and the kind
-          of merging failure that hurt Sierra Leone's Ebola response.
-          We look at the JHU example next.
-        </p>
-      </subsubsection>
-
-      <subsubsection xml:id="sec-jhu-shapes">
-        <title>A Format That Grew a New Column Every Day</title>
-
-        <p>
-          In January 2020, a small team at Johns Hopkins University's Center for
-          Systems Science and Engineering (CSSE) launched a public COVID-19
-          dashboard, which they described that May in a peer-reviewed paper
-          (Dong, Du, and Gardner, 2020).
-          Within weeks, it had become one of the most-used sources of COVID-19
-          data in the world: the map that news outlets, governments, and
-          researchers everywhere were pulling numbers from.
-          The data behind it was published openly, and it started out
-          <term>wide</term>: one row for each country or region, and one column
-          for every date, holding that location's total case count so far on
-          that day.
         </p>
 
-        <p>
-          <alert>A table with no final column</alert>
-        </p>
-
-        <p>
-          Most wide tables have a fixed set of columns that you know in advance.
-          This one didn't.
-          Every single day the pandemic went on, the dataset needed one more
-          column than the day before, for as long as anyone was tracking the
-          outbreak.
-          Anyone who wanted to do more than look at the day's totals (plot a
-          trend, work out a weekly change, or merge in a country's population to
-          calculate a rate) first had to reshape the table from wide to long.
-          And they had to do it again every time a new day's column was added.
-          Wide format wasn't <em>hard</em> to use.
-          It was hard to use <em>again and again, at a growing scale, with no
-          end in sight.</em>
-        </p>
-
-        <figure xml:id="fig-covid-wide-format">
-          <caption>
-            Confirmed COVID-19 cases worldwide, 22 January to 2 February 2020.
-            Each row represents a country or region, while each date is stored
-            as a separate column.
-            As more days are added, the dataset quickly becomes very wide.
-            This is one of three datasets in the original collection: Confirmed
-            Cases, Deaths, and Recovered.
-          </caption>
-
-          <image source="images/covid_wide_format.png" width="60%">
-            <description>
-              <p>
-                A screenshot of a wide COVID-19 dataset.
-                Rows represent countries and regions, with columns for location,
-                latitude and longitude followed by daily confirmed case counts
-                from 22 January 2020 onwards.
-                The many date columns illustrate how the dataset becomes
-                increasingly wide as observations are recorded for each new day.
-                This is the "Confirmed Cases" dataset; equivalent datasets were
-                provided for deaths and recovered cases.
-              </p>
-            </description>
-          </image>
-        </figure>
-
-        <p>
-          <alert>Reshaping it themselves, and having the ground move</alert>
-        </p>
-
-        <p>
-          For a dashboard that people glanced at once a day, wide format worked
-          perfectly.
-          But some people needed to do more than glance at the data, so they
-          reshaped it themselves.
-        </p>
-
-        <p>
-          On 23 March 2020, the researcher Joachim Gassen published R code that
-          took JHU's wide file and reshaped it to long (one row per country per
-          date), specifically so it could be merged with other data.
-          A wide table with a different date in every column has no single
-          column that two datasets can agree to join on, but a long table does.
-          Gassen's code went a step further, and attached standardised
-          <term>ISO3c</term> country codes to every row.
-          Without a shared identifier like that, nobody could reliably bring in
-          each country's population to turn raw case counts into a rate per
-          person.
-        </p>
-
-        <figure xml:id="fig-covid-long-format">
-          <caption>
-            The same confirmed-case numbers as
-            <xref ref="fig-covid-wide-format"/>, reshaped to long format: one
-            row per country per date, with a standardised country code attached
-            for merging.
-          </caption>
-
-          <image source="images/covid_long_format.png" width="60%">
-            <description>
-              <p>
-                A long-format COVID-19 dataset with one row per country per
-                date.
-                Columns include a standardised ISO3c country code, country name,
-                date, and confirmed case count, instead of one column per date.
-              </p>
-            </description>
-          </image>
-        </figure>
-
-        <p>
-          His reshaping lasted about a day.
-          On 24 March 2020, Gassen published a follow-up post: <q>Just hours
-          after my old blog post about tidying Johns Hopkins CSSE Covid-19 data
-          the team has changed their time-series table data structure.</q>
-          JHU had restructured the columns in their wide file, adding latitude
-          and longitude, and reorganising how US states were broken down.
-          It was a real improvement, but it broke every piece of code written
-          for the old column layout, including Gassen's.
-          He rewrote his code and republished it the same day.
-        </p>
-
-        <insight xml:id="insight-jhu-shapes-lesson">
-          <title>
-            Reshaping is a job that keeps coming back
-          </title>
+        <example xml:id="sec-jhu-shapes">
+          <title>A Format That Grew a New Column Every Day</title>
 
           <p>
-            JHU never made its published file long, and it didn't need to,
-            because wide really was the right shape for a dashboard people
-            checked once a day.
-            The people who needed it long (to merge, to calculate rates, to plot
-            trends across countries) had to reshape it themselves.
-            And because they didn't control the source format, a change nobody
-            warned them about broke their reshaping within a day of them
-            publishing it.
-            So think of wide and long as two shapes serving two different
-            readers, rather than a right and a wrong version of the same table.
-            And whoever needs the other shape is the one who ends up doing the
-            reshaping, again and again, for as long as the source keeps changing
-            underneath them.
+            In January 2020, a small team at Johns Hopkins University's Center
+            for Systems Science and Engineering (CSSE) launched a public
+            COVID-19 dashboard, which they described that May in a peer-reviewed
+            paper (Dong, Du, and Gardner, 2020).
+            Within weeks, it had become one of the most-used sources of COVID-19
+            data in the world: the map that news outlets, governments, and
+            researchers everywhere were pulling numbers from.
+            The data behind it was published openly, and it started out
+            <term>wide</term>: one row for each country or region, and one
+            column for every date, holding that location's total case count so
+            far on that day.
           </p>
-        </insight>
 
-        <p>
-          <term>Sources:</term> Dong, E., Du, H.
-          and Gardner, L.
-          (2020).
-          <q>An interactive web-based dashboard to track COVID-19 in real
+          <p>
+            <alert>A table with no final column</alert>
+          </p>
+
+          <p>
+            Most wide tables have a fixed set of columns that you know in
+            advance.
+            This one didn't.
+            Every single day the pandemic went on, the dataset needed one more
+            column than the day before, for as long as anyone was tracking the
+            outbreak.
+            Anyone who wanted to do more than look at the day's totals (plot a
+            trend, work out a weekly change, or merge in a country's population
+            to calculate a rate) first had to reshape the table from wide to
+            long.
+            And they had to do it again every time a new day's column was added.
+            Wide format wasn't <em>hard</em> to use.
+            It was hard to use
+            <em>again and again, at a growing scale, with no
+          end in sight.</em>
+          </p>
+
+          <figure xml:id="fig-covid-wide-format">
+            <caption>
+              Confirmed COVID-19 cases worldwide, 22 January to 2 February 2020.
+              Each row represents a country or region, while each date is stored
+              as a separate column.
+              As more days are added, the dataset quickly becomes very wide.
+              This is one of three datasets in the original collection:
+              Confirmed Cases, Deaths, and Recovered.
+            </caption>
+
+            <image source="images/covid_wide_format.png" width="60%">
+              <description>
+                <p>
+                  A screenshot of a wide COVID-19 dataset.
+                  Rows represent countries and regions, with columns for
+                  location, latitude and longitude followed by daily confirmed
+                  case counts from 22 January 2020 onwards.
+                  The many date columns illustrate how the dataset becomes
+                  increasingly wide as observations are recorded for each new
+                  day.
+                  This is the "Confirmed Cases" dataset; equivalent datasets
+                  were provided for deaths and recovered cases.
+                </p>
+              </description>
+            </image>
+          </figure>
+
+          <p>
+            <alert>Reshaping it themselves, and having the ground move</alert>
+          </p>
+
+          <p>
+            For a dashboard that people glanced at once a day, wide format
+            worked perfectly.
+            But some people needed to do more than glance at the data, so they
+            reshaped it themselves.
+          </p>
+
+          <p>
+            On 23 March 2020, the researcher Joachim Gassen published R code
+            that took JHU's wide file and reshaped it to long (one row per
+            country per date), specifically so it could be merged with other
+            data.
+            A wide table with a different date in every column has no single
+            column that two datasets can agree to join on, but a long table
+            does.
+            Gassen's code went a step further, and attached standardised
+            <term>ISO3c</term> country codes to every row.
+            Without a shared identifier like that, nobody could reliably bring
+            in each country's population to turn raw case counts into a rate per
+            person.
+          </p>
+
+          <figure xml:id="fig-covid-long-format">
+            <caption>
+              The same confirmed-case numbers as
+              <xref ref="fig-covid-wide-format"/>, reshaped to long format: one
+              row per country per date, with a standardised country code
+              attached for merging.
+            </caption>
+
+            <image source="images/covid_long_format.png" width="60%">
+              <description>
+                <p>
+                  A long-format COVID-19 dataset with one row per country per
+                  date.
+                  Columns include a standardised ISO3c country code, country
+                  name, date, and confirmed case count, instead of one column
+                  per date.
+                </p>
+              </description>
+            </image>
+          </figure>
+
+          <p>
+            <term>Sources:</term> Dong, E., Du, H.
+            and Gardner, L.
+            (2020).
+            <q>An interactive web-based dashboard to track COVID-19 in real
         time.</q>
-          <em>The Lancet Infectious Diseases</em>, 20(5), 533 <ndash/> 534.
-          Gassen, J.
-          (23 March 2020).
-          <q>Tidying the John Hopkins Covid-19 data.</q> Blog post.
-          Gassen, J.
-          (24 March 2020).
-          <q>Tidying the new Johns Hopkins Covid-19
+            <em>The Lancet Infectious Diseases</em>, 20(5), 533 <ndash/> 534.
+            Gassen, J.
+            (23 March 2020).
+            <q>Tidying the John Hopkins Covid-19 data.</q> Blog post.
+            Gassen, J.
+            (24 March 2020).
+            <q>Tidying the new Johns Hopkins Covid-19
         time-series datasets.</q>
-          Blog post.
-          Data repository:
-          <url href="https://github.com/CSSEGISandData/COVID-19" visual="github.com/CSSEGISandData/COVID-19"/>.
-        </p>
+            Blog post.
+            Data repository:
+            <url href="https://github.com/CSSEGISandData/COVID-19" visual="github.com/CSSEGISandData/COVID-19"/>.
+          </p>
+        </example>
       </subsubsection>
     </subsection>
 
@@ -697,9 +807,9 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         <title>Appending the 2016 and 2017 Kenya Road Accidents Data</title>
 
         <p>
-          In <xref ref="ch-exploring-data"/> and <xref
-          ref="ch-cleaning-recoding"/>, we worked with the Kenya Road Accidents
-          database for April to June 2016.
+          In <xref ref="ch-exploring-data"/> and
+          <xref ref="ch-cleaning-recoding"/>, we worked with the Kenya Road
+          Accidents database for April to June 2016.
           It turns out the same Excel file has a second sheet, with data from
           2017.
           This is a natural appending problem: two datasets recording the same
@@ -762,11 +872,31 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           The two datasets share 12 columns, with the same names and the same
           data types: <c>TIME 24 HOURS</c>, <c>COUNTY</c>, <c>GENDER</c>,
           <c>AGE</c>, and so on.
-          The 2016 data has a 13th column (<c>...13</c>), which we found out in
-          <xref ref="ch-cleaning-recoding"/> is just a stray note.
-          The 2017 data has two extra columns that 2016 doesn't have, <c>MV
-          INVOLVED</c> (the vehicle registration number) and <c>NAME OF
-          VICTIM</c>, plus its own stray column (<c>...15</c>).
+          The 2016 data has a 13th column ( <c>...13</c> ), which we found out
+          in <xref ref="ch-cleaning-recoding"/> is just a stray note.
+          The 2017 data has three extra columns that 2016 doesn't have:
+          <ul>
+            <li>
+              <p>
+                <c>MV
+          INVOLVED</c> (the vehicle registration number)
+              </p>
+            </li>
+
+            <li>
+              <p>
+                <c>NAME OF
+          VICTIM</c> (the name of the individual(s)
+                in the incident)
+              </p>
+            </li>
+
+            <li>
+              <p>
+                its own stray column ( <c>...15</c> ).
+              </p>
+            </li>
+          </ul>
           We drop the stray columns from both before we go any further.
         </p>
 
@@ -816,14 +946,113 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
 
         <p>
           It works!
-          Notice that the columns that only exist in the 2017 data (<c>MV
-          INVOLVED</c> and <c>NAME OF VICTIM</c>) are in the combined dataset,
-          filled with <c>NA</c> for all the 2016 rows.
+          Notice that the columns that only exist in the 2017 data (
+          <c>MV
+          INVOLVED</c> and <c>NAME OF VICTIM</c> ) are in the
+          combined dataset, filled with <c>NA</c> for all the 2016 rows.
           <c>bind_rows()</c> handles this really nicely: it creates a column for
           every column in either dataset, and fills the gaps with missing
           values.
           No data is lost, and there are no errors.
         </p>
+
+        <p>
+          Here is what that looks like at the join between the two years.
+          The table shows six of the columns for the last three rows of the 2016
+          data (rows 376 to 378) and the first three rows of the 2017 data (rows
+          379 to 381).
+        </p>
+
+        <table xml:id="table-ch6-bind-rows-result">
+          <title>
+            Six columns from the result of
+            <c>bind_rows(kenya_accidents_2016,
+            kenya_accidents_2017)</c>,
+            showing the last three rows from 2016 and the first three rows from
+            2017.
+            <c>MV INVOLVED</c> and <c>NAME OF VICTIM</c> only exist in the 2017
+            data, so they are <c>NA</c> for every 2016 row.
+          </title>
+
+          <tabular halign="right">
+            <col halign="left"/>
+            <col halign="right"/>
+            <col halign="right"/>
+            <col halign="right"/>
+            <col halign="right"/>
+            <col halign="right"/>
+            <col halign="right"/>
+            <row header="yes" bottom="minor">
+              <cell>Variable</cell>
+              <cell>Row 376</cell>
+              <cell>Row 377</cell>
+              <cell>Row 378</cell>
+              <cell>Row 379</cell>
+              <cell>Row 380</cell>
+              <cell>Row 381</cell>
+            </row>
+
+            <row>
+              <cell>TIME 24 HOURS</cell>
+              <cell>2040</cell>
+              <cell>1830</cell>
+              <cell>2230</cell>
+              <cell>745</cell>
+              <cell>1430</cell>
+              <cell>1515</cell>
+            </row>
+
+            <row>
+              <cell>COUNTY</cell>
+              <cell>KAJIADO</cell>
+              <cell>NAIROBI</cell>
+              <cell>NAIROBI</cell>
+              <cell>KISUMU</cell>
+              <cell>NAROK</cell>
+              <cell>KERICHO</cell>
+            </row>
+
+            <row>
+              <cell>VICTIM</cell>
+              <cell>P/PASSENGER</cell>
+              <cell>PASSENGER</cell>
+              <cell>PEDESTRIAN</cell>
+              <cell>PASSENGER</cell>
+              <cell>PEDESTRIAN</cell>
+              <cell>DRIVER</cell>
+            </row>
+
+            <row>
+              <cell>Date DD/MM/YYYY</cell>
+              <cell>2016-04-01</cell>
+              <cell>2016-04-01</cell>
+              <cell>2016-04-01</cell>
+              <cell>2017-11-06</cell>
+              <cell>2017-11-06</cell>
+              <cell>2017-11-06</cell>
+            </row>
+
+            <row>
+              <cell>MV INVOLVED</cell>
+              <cell>NA</cell>
+              <cell>NA</cell>
+              <cell>NA</cell>
+              <cell>KBS 163T/ZD 9531 AXIOR TRAILER</cell>
+              <cell>KBS 518A HONDA CRV</cell>
+              <cell>KTCB 472K JOHN DEER</cell>
+            </row>
+
+            <row>
+              <cell>NAME OF VICTIM</cell>
+              <cell>NA</cell>
+              <cell>NA</cell>
+              <cell>NA</cell>
+              <cell>UNKNOWN</cell>
+              <cell>UNKNOWN</cell>
+              <cell>UNKNOWN</cell>
+            </row>
+          </tabular>
+        </table>
 
         <p>
           We can check the append worked by counting the rows from each year.
@@ -860,11 +1089,13 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           combined dataset doesn't have 12 + 14 = 26 columns.
           It has 14, because most of the columns are shared, so they only appear
           once.
-          The two extra columns from 2017 (<c>MV INVOLVED</c> and <c>NAME OF
-          VICTIM</c>) are added to the shared set, giving 14 in total.
+          The two extra columns from 2017 ( <c>MV INVOLVED</c> and
+          <c>NAME OF
+          VICTIM</c> ) are added to the shared set, giving
+          14 in total.
           If a column appeared in one dataset but not the other, and it really
           was a different variable (and not just a naming inconsistency), you'd
-          expect to see it as an extra column, filled with <c>NA</c>s for the
+          expect to see it as an extra column, filled with <c>NA</c> s for the
           dataset that didn't have it.
           So checking the number of columns after an append, and looking closely
           at any columns you didn't expect, is a quick way to catch naming
@@ -963,8 +1194,8 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           In both datasets, <c>Date DD/MM/YYYY</c> is read in as a
           <c>POSIXct</c> datetime object.
           But suppose we convert it to a simpler <c>Date</c> type in the 2016
-          data as part of cleaning, like we did in <xref
-          ref="ch-cleaning-recoding"/>, and leave the 2017 data as it is:
+          data as part of cleaning, like we did in
+          <xref ref="ch-cleaning-recoding"/>, and leave the 2017 data as it is:
         </p>
 
         <program language="r">
@@ -1005,9 +1236,9 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         <p>
           Not every type mismatch gets sorted out so nicely.
           Convert <c>AGE</c> to numeric in the 2016 data with
-          <c>as.numeric()</c>, like we did in <xref
-          ref="ch-cleaning-recoding"/>, and leave it as character in the 2017
-          data.
+          <c>as.numeric()</c>, like we did in
+          <xref ref="ch-cleaning-recoding"/>, and leave it as character in the
+          2017 data.
           We'll do this on a copy of the 2016 data, so the original stays as it
           is for later in the chapter.
           This time, you get an error when you try to append:
@@ -1096,7 +1327,7 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           another calls the same thing <c>mobile_no</c>, the software won't stop
           and ask you what to do.
           It'll create a new column for the name it hasn't seen before, and fill
-          it with <term>NA</term> (<q>not available</q>, the standard way
+          it with <term>NA</term> ( <q>not available</q>, the standard way
           software marks a gap in the data) everywhere that column doesn't
           apply.
           A registry that should have five clean columns quietly grows extra
@@ -1114,8 +1345,10 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
             differ by even one character.
             An append needs every table to agree on its columns before you stack
             them.
-            Ideally, it also needs a rule for what counts as <q>the same
-            real-world thing twice</q>, before it lets a duplicate in.
+            Ideally, it also needs a rule for what counts as
+            <q>the same
+            real-world thing twice</q>, before it lets a
+            duplicate in.
           </p>
         </insight>
 
@@ -1175,9 +1408,12 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </insight>
 
         <p>
-          <term>Sources:</term> Muguro et al. (2020), cited in
-          <xref ref="ch-exploring-data"/>, on the Kenya NTSA fatality definition.
-          Nankunda, C. and Evdorides, H. (2025).
+          <term>Sources:</term> Muguro et al.
+          (2020), cited in <xref ref="ch-exploring-data"/>, on the Kenya NTSA
+          fatality definition.
+          Nankunda, C.
+          and Evdorides, H.
+          (2025).
           <q>Data Availability for Road Crash Valuation in Low- and Middle-Income
           Countries: A Case Study in Uganda.</q>
           <em>Future Transportation</em>, 5(1), 29.
@@ -1202,7 +1438,8 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           more people use them?
           The 2019 Kenya census tells us how many people live in each county.
           Put the two datasets together, and they can answer a question that
-          neither one could answer alone: <em>which counties have the most
+          neither one could answer alone:
+          <em>which counties have the most
           dangerous roads for the size of their population?</em>
           And the answer, it turns out, isn't Nairobi!
         </p>
@@ -1216,9 +1453,9 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           Census is available directly from the Kenya National Bureau of
           Statistics (KNBS) website, and also from the Humanitarian Data
           Exchange (HDX), which is where the accidents data came from too.
-          <url
-          href="https://www.knbs.or.ke/wp-content/uploads/2023/09/2019-Kenya-population-and-Housing-Census-Population-households-density-by-county.xlsx">Download
-          the county-level Excel file</url> and load it into R:
+          <url href="https://www.knbs.or.ke/wp-content/uploads/2023/09/2019-Kenya-population-and-Housing-Census-Population-households-density-by-county.xlsx">Download
+          the county-level Excel file</url>
+          and load it into R:
         </p>
 
         <program language="r">
@@ -1840,23 +2077,26 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
 
           <p>
             We've gained 10 rows!
-            These are the counties from the census that don't have any recorded
-            crashes in the accidents data: Tana River, Lamu, Wajir, and others.
-            A <c>full_join()</c> has added them as empty rows, with <c>NA</c>
-            for every accident column.
-            We don't want these.
-            Our question is about crash rates, and a county with no crashes in
-            this extract hasn't necessarily had no crashes at all.
-            It just means no fatal crash was recorded there in this three-month
-            period.
+            These are counties that appear in the census data but not in our
+            incidents data, including Tana River, Lamu, and Wajir.
+            The `full_join()` has included these counties, with `NA` values for
+            all the accident-related columns.
+            (Note that just because a county doesn't appear in our accidents
+            data doesn't mean there have never been any crashes there.
+            It simply means that no fatal crashes were recorded in our dataset
+            during this three-month period).
+            Since we're interested in the counties in our accidents data, we
+            don't need to add these extra rows.
+            Instead, we can use a <c>left_join()</c> to keep all the counties
+            from our accidents data and bring in the corresponding census
+            information.
           </p>
 
           <p>
-            What we want here is a <c>left_join()</c>.
-            This keeps every row from the left dataset (the accidents data),
-            brings in the matching information from the right dataset (the
-            census), and throws away any rows on the right that don't have a
-            match on the left.
+            <c>left_join()</c> keeps every row from the left dataset (the
+            accidents data), brings in the matching information from the right
+            dataset (the census), and throws away any rows on the right that
+            don't have a match on the left.
             In other words, every crash gets population data attached, and no
             new rows are added.
           </p>
@@ -2099,8 +2339,8 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
                 highest to lowest rate.
                 Makueni has the longest bar at around 2.6 crashes per 100,000,
                 followed by Embu at around 1.6.
-                Nairobi City is shown in orange and ranks third, just behind Embu,
-                at around 1.6.
+                Nairobi City is shown in orange and ranks third, just behind
+                Embu, at around 1.6.
                 Nakuru and Kiambu follow closely.
                 The bars shorten progressively down to Nandi at the bottom with
                 fewer than 0.2 crashes per 100,000.
@@ -2121,8 +2361,8 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           But Nairobi has a population of over 4.4 million people, Makueni has
           just under one million, and Embu has just over 600,000.
           Once we take population into account, Embu's 10 crashes work out as a
-        slightly higher rate per person than Nairobi's 71 (both are around 1.6
-        per 100,000, with Embu just ahead).
+          slightly higher rate per person than Nairobi's 71 (both are around 1.6
+          per 100,000, with Embu just ahead).
           And Makueni's 26 crashes, in a much smaller population than Nairobi's,
           give the highest rate of all, at around 2.6 per 100,000.
         </p>
@@ -2134,11 +2374,13 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           most populous counties, with the most crashes).
           A government working from crash rates would prioritise Makueni and
           Embu too.
-          The ranking changes because the question changes, from <em>where do
-          the most crashes happen?</em> to <em>where are people most at
-          risk?</em>
-          And the only reason we can ask that second question is because we
-          merged in the population data.
+          The ranking changes because the question changes, from
+          <em>where do
+          the most crashes happen?</em> to
+          <em>where are people most at
+          risk?</em> And the only reason
+          we can ask that second question is because we merged in the population
+          data.
         </p>
 
         <insight xml:id="insight-merge-lesson">
@@ -2147,9 +2389,11 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           <p>
             This whole merge depended on the county names matching perfectly
             between the two datasets.
-            A mismatch of even one character (<c>NAIROBI</c> and <c>NAIROBI
-            CITY</c>, or <c>TAITA TAVETA</c> and <c>TAITA/TAVETA</c>) silently
-            drops that county from the joined result.
+            A mismatch of even one character ( <c>NAIROBI</c> and
+            <c>NAIROBI
+            CITY</c>, or <c>TAITA TAVETA</c> and
+            <c>TAITA/TAVETA</c> ) silently drops that county from the joined
+            result.
             Without a matching key, R has no way to connect them.
             Checking the quality of your join is what tells a merge that worked
             apart from a merge that only looked like it worked.
@@ -2199,7 +2443,8 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           And if she's admitted to hospital, her inpatient stay goes somewhere
           else again.
           This isn't a stretch: the study's interviews describe exactly this
-          pattern, with people <q>assigned multiple numbers for different
+          pattern, with people
+          <q>assigned multiple numbers for different
           purposes, i.e., at the inpatient, outpatient and antenatal
           clinics.</q>
         </p>
@@ -2212,8 +2457,8 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           That column is called a <term>key</term>.
           Homa Bay's hospital records show what happens when that's only true
           for part of a system.
-          TODO: we saw exactly how this can go wrong in the illustrative
-          example, when county names failed to match
+          We saw exactly how this can go wrong in the illustrative example, when
+          county names failed to match
         </p>
 
         <p>
@@ -2265,123 +2510,6 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           https://doi.org/10.1371/journal.pdig.0000870
         </p>
       </subsubsection>
-
-      <subsubsection xml:id="ss-key-errors">
-        <title>What If the Key Is Wrong? The IEBC Voter Register</title>
-
-        <p>
-          Before national elections in Kenya, the Independent Electoral and
-          Boundaries Commission (IEBC) has to check its master voter register
-          against other government records.
-          It checks against identity records, to catch invalid or duplicate
-          registrations, and against death records, to remove voters who have
-          died.
-          Checking one table against another like this is a <term>lookup</term>,
-          or <term>join</term>, and the sensible key to join on is each person's
-          National ID number.
-          The register also needs its own duplicates removing every so often, a
-          step usually called <term>deduplication</term>: finding rows that are
-          the same person entered twice, and collapsing them into one.
-        </p>
-
-        <p>
-          Both of these jobs depend completely on one thing: a key that's
-          correct for every row, and unique to one person.
-          Get that wrong, and a register can break in two opposite directions at
-          the same time.
-        </p>
-
-        <p>
-          <term>A key that isn't actually unique inflates the numbers.</term>
-          If a system ever falls back on matching people using something other
-          than a clean, unique identifier (say, full name and date of birth
-          together), things can go wrong in a way that's easy to miss.
-          Imagine ten voters share a name and date of birth, and a second table
-          has three other people with that same name and date of birth.
-          A join won't pick one sensible match.
-          It matches every one of the ten against every one of the three, and
-          gives you thirty rows, when there should have been one real match at
-          most.
-          Now run that same overly broad matching rule through a deduplication
-          step, and it goes wrong the other way.
-          Anyone who happens to share those details with someone else gets
-          treated as their duplicate, and is quietly deleted, even though
-          they're two completely different, completely real people.
-        </p>
-
-        <p>
-          We actually saw a harmless version of this in our own join.
-          The <c>NAIROBI CITY</c> row appears exactly once in the 2019 census
-          data.
-          But it appears 71 times in the accidents data, once for each crash
-          recorded in Nairobi.
-          The left join correctly matched all 71 of those crash rows to the same
-          census row, repeating Nairobi's population 71 times in the joined
-          dataset.
-          That's exactly what we wanted!
-          But one record matching many would be a serious problem in a voter
-          register.
-          Whether repeated matches are right or disastrous depends entirely on
-          what the key represents, and what the join is meant to do.
-        </p>
-
-        <p>
-          <term>A key that's untidy hides real matches.</term>
-          Even with a clean, unique identifier as the key, small formatting
-          differences can break things.
-          One system stores an ID as a plain number.
-          Another stores the same ID as text, with a leading zero kept on the
-          front.
-          A third has a stray space accidentally typed at the end.
-          To a person, these are obviously the same ID.
-          To a join or a deduplication step, they're three unrelated pieces of
-          text, and no match is ever found.
-        </p>
-
-        <p>
-          So what did KPMG's 2022 audit of the IEBC register actually find?
-          Their preliminary report found <term>481,711</term> duplicate records
-          on the register.
-          It also found 246,465 deceased voters still on the register, and
-          226,143 voters registered with ID numbers that didn't validly belong
-          to them.
-          Every one of these is a key problem.
-          Duplicate records are what you get when the same person ends up on the
-          register twice, and the deduplication step doesn't catch it.
-          Deceased voters can only be removed if the join against death records
-          actually finds a match.
-          And an ID number that belongs to someone else is a key that's simply
-          wrong, so any join on it links the wrong people together.
-        </p>
-
-        <insight xml:id="insight-cartesian-explosion">
-          <title>A Key Is Either Too Broad or Too Untidy, Rarely Neither</title>
-
-          <p>
-            A join should never make your row count bigger than you expected.
-            If it does, the key you joined on isn't unique on at least one side.
-            A deduplication step should only ever remove rows you can point to
-            as real duplicates.
-            If entries you know are different disappear, your key was too broad.
-            And if a join or deduplication misses matches that are obviously the
-            same to a person, check the spacing, the leading zeros, and whether
-            both sides store the value as the same type, before you trust the
-            result.
-          </p>
-        </insight>
-
-        <p>
-          <term>Sources:</term> KPMG (2022).
-          <foreign>Preliminary audit report on the Register of Voters</foreign>,
-          prepared for the Independent Electoral and Boundaries Commission
-          (IEBC), as reported in the IEBC press release of 8 June 2022
-          (<url href="https://www.iebc.or.ke/uploads/resources/cWyBL8fhHH.pdf" visual="iebc.or.ke"/>)
-          and in <foreign>Citizen Digital</foreign>,
-          <q>IEBC announces delay in publishing final voters' register as 1M names
-          flagged</q>
-          (<url href="https://www.citizen.digital/article/iebc-announces-delay-in-publishing-final-voters-register-as-1m-names-flagged-n299750" visual="citizen.digital"/>).
-        </p>
-      </subsubsection>
     </subsection>
   </section>
   <!-- ================================================================= -->
@@ -2396,8 +2524,9 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           <xref ref="insight-jhu-shapes-lesson"/> says that a new column had to
           be added to the wide dataset every single day.
           Describe, in words, what would go wrong for someone's code if it
-          referred to date columns by a fixed position (for example, <q>column
-          47</q>) instead of by name.
+          referred to date columns by a fixed position (for example,
+          <q>column
+          47</q> ) instead of by name.
           Would switching to long format, on its own, have fixed that particular
           problem?
           Why, or why not?
@@ -2429,7 +2558,8 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           afterwards.
           Suggest one practical rule that Sierra Leone's district response
           centres could have agreed on in advance (about column names, row
-          structure, or file format) that would have prevented the merging problem described in <xref ref="ss-ebola-districts"/>.
+          structure, or file format) that would have prevented the merging
+          problem described in <xref ref="ss-ebola-districts"/>.
         </p>
       </statement>
     </exercise>
@@ -2440,8 +2570,8 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           Using <xref ref="ss-shapes-long-to-wide"/> as a model, build a wide
           table of the mean <c>body_mass_g</c>, with <c>lake</c> as rows and
           <c>species</c> as columns, instead of counts.
-          Which version, this one or the <c>counts_wide</c> table of counts, would you
-          send to someone who wanted to read it in an email?
+          Which version, this one or the <c>counts_wide</c> table of counts,
+          would you send to someone who wanted to read it in an email?
           And which would you give to someone who wanted to plot it in
           <c>ggplot2</c>?
         </p>
@@ -2451,9 +2581,9 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
     <exercise xml:id="ex-shapes-gapminder-wide">
       <statement>
         <p>
-          The <c>gapminder</c> data from <xref
-          ref="ch-visualising-multidimensional-data"/> is in long format: one
-          row per country per year.
+          The <c>gapminder</c> data from
+          <xref ref="ch-visualising-multidimensional-data"/> is in long format:
+          one row per country per year.
           Use <c>pivot_wider()</c> to build a table with one row per country,
           and one column per year, holding <c>lifeExp</c>.
           Now try plotting directly from this wide version, using the same
@@ -2461,6 +2591,122 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           What breaks, and why?
         </p>
       </statement>
+    </exercise>
+
+    <exercise xml:id="ex-shapes-iebc-keys">
+      <title>What If the Key Is Wrong? The IEBC Voter Register</title>
+
+      <introduction>
+        <p>
+          Before national elections in Kenya, the Independent Electoral and
+          Boundaries Commission (IEBC) has to check its master voter register
+          against other government records.
+          It checks against identity records, to catch invalid or duplicate
+          registrations, and against death records, to remove voters who have
+          died.
+          Checking one table against another like this is a <term>lookup</term>,
+          or <term>join</term>, and the sensible key to join on is each person's
+          National ID number.
+          The register also needs its own duplicates removing every so often, a
+          step usually called <term>deduplication</term>: finding rows that are
+          the same person entered twice, and collapsing them into one.
+          Both of these jobs depend on one thing: a key that's correct for every
+          row, and unique to one person.
+        </p>
+
+        <p>
+          In 2022, KPMG audited the register.
+          Their preliminary report found 481,711 duplicate records, 246,465
+          deceased voters still on the register, and 226,143 voters registered
+          with ID numbers that didn't validly belong to them.
+        </p>
+      </introduction>
+
+      <task>
+        <statement>
+          <p>
+            Imagine a system falls back on matching people using full name and
+            date of birth, instead of a clean, unique ID.
+            Ten voters in the register share one name and date of birth, and a
+            second table has three other people with that same name and date of
+            birth.
+            How many rows will a join between the two tables give you?
+            Why is that a problem for a lookup?
+            And what would happen to those ten voters if the same matching rule
+            was used in a deduplication step?
+          </p>
+        </statement>
+      </task>
+
+      <task>
+        <statement>
+          <p>
+            We saw a harmless version of one-to-many matching in our own join.
+            The <c>NAIROBI CITY</c> row appears once in the 2019 census data,
+            but 71 times in the accidents data, once for each crash recorded in
+            Nairobi.
+            The left join matched all 71 crash rows to the same census row.
+            Why was that exactly what we wanted there, but would be a serious
+            problem in a voter register?
+            What does this tell you about checking the number of rows before and
+            after a join?
+          </p>
+        </statement>
+      </task>
+
+      <task>
+        <statement>
+          <p>
+            Now suppose the key is a clean, unique ID, but one system stores it
+            as a plain number, another stores it as text with the leading zero
+            kept, and a third has a stray space typed at the end.
+            To a person, these are obviously the same ID.
+            Why does a join or a deduplication step never find the match?
+            What would you do to the key columns before joining?
+          </p>
+        </statement>
+      </task>
+
+      <task>
+        <statement>
+          <p>
+            Go back to the three KPMG findings: duplicate records, deceased
+            voters still on the register, and ID numbers that belong to someone
+            else.
+            For each one, say which key problem is the most likely cause: a key
+            that isn't unique, a key that's untidy, or a key that's simply
+            wrong.
+            Remember that deceased voters can only be removed if the join
+            against the death records actually finds a match.
+          </p>
+        </statement>
+      </task>
+
+      <task>
+        <statement>
+          <p>
+            Write a short rule of thumb, in your own words, for what you should
+            check after every join and every deduplication step before you trust
+            the result.
+          </p>
+        </statement>
+      </task>
+
+      <conclusion>
+        <p>
+          <term>Sources:</term> KPMG (2022).
+          <foreign>Preliminary audit report on the Register of Voters</foreign>,
+          prepared for the Independent Electoral and Boundaries Commission
+          (IEBC), as reported in the IEBC press release of 8 June 2022 (
+          <url href="https://www.iebc.or.ke/uploads/resources/cWyBL8fhHH.pdf" visual="iebc.or.ke"/>
+          ) and in <foreign>Citizen Digital</foreign>,
+          <q>IEBC announces delay in publishing final voters' register as 1M names
+          flagged</q>
+          (
+          <url href="https://www.citizen.digital/article/iebc-announces-delay-in-publishing-final-voters-register-as-1m-names-flagged-n299750" visual="citizen.digital"/>
+          ).
+        </p>
+      </conclusion>
     </exercise>
   </exercises>
 </chapter>
