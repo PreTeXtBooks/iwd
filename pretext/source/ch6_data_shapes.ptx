@@ -448,10 +448,10 @@
   <!--  SECTION 2: the STACK question that exemplifies this              -->
   <!-- ================================================================= -->
   <section xml:id="sec-ch6-stack">
-    <title>STACK Question Here</title>
+    <title>Practise: Appending Data</title>
 
     <exercise>
-      <title>Exploring a survey of farmers</title>
+      <title>Appending Data</title>
 
       <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/appending-data.xml" label="stk-ch6-data-shapes"/>
     </exercise>
