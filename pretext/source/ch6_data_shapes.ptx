@@ -74,7 +74,7 @@
       <figure xml:id="fig-ebola-data-flow">
         <caption>
           How a case was supposed to travel.
-          A surveillance officer fills in a paper form, a data manager enters it
+          Surveillance officers fill in paper forms, a data manager enters them
           into the district's Epi Info VHF database, and the district databases
           are merged into one national database.
         </caption>
@@ -83,8 +83,8 @@
           <description>
             <p>
               A flow diagram with three rows.
-              In each row, a paper case investigation form points to an Epi Info
-              VHF database for one of three districts, A, B and C.
+              In each row, three paper case investigation forms all point to the
+              Epi Info VHF database for one of three districts, A, B and C.
               Arrows from all three district databases point to a single
               national Ebola database, labelled as the districts merged.
             </p>
@@ -93,36 +93,16 @@
       </figure>
 
       <p>
-        In practice, it wasn't that simple.
-        Three main things went wrong.
-        <ol>
-          <li>
-            <p>
-              First, most district data managers had never used the software
-              before.
-            </p>
-          </li>
-
-          <li>
-            <p>
-              Second, once duplicate records had been created, they were hard to
-              find, and even harder to merge.
-            </p>
-          </li>
-
-          <li>
-            <p>
-              And third, the paper forms often reached the district response
-              centres days after the case had been investigated, so the national
-              database was never fully up to date, even late in the outbreak.
-            </p>
-          </li>
-        </ol>
+        In practice, it wasn't that simple, in part because most district data
+        managers had never used the software before, but also because the paper
+        forms often reached the district response centres days after the case
+        had been investigated, so the national database was never fully up to
+        date, even late in the outbreak.
       </p>
 
       <p>
-        But the failure with the biggest consequences was much quieter than any
-        of these.
+        The failure with the biggest consequences was much quieter than any of
+        these.
         When a blood sample came back from the lab, the result was often entered
         as a brand new record, instead of being added to that patient's existing
         record.
@@ -298,89 +278,87 @@
           </description>
         </image>
       </figure>
-    </subsection>
 
-    <subsection xml:id="ss-ebola-cfr">
-      <title>The number that was wrong in both directions</title>
+      <insight xml:id="ss-ebola-cfr">
+        <title>The number that was wrong in both directions</title>
 
-      <p>
-        To see what this cost, let's follow a single number.
-        Out of everyone who caught Ebola, what fraction died?
-        Epidemiologists call this the <term>case fatality rate</term>, and in an
-        outbreak, it's about as fundamental as numbers get.
-        It tells you how deadly the disease is in this population, whether
-        treatment is helping, and whether things are getting better or worse.
-        It's confirmed deaths divided by confirmed cases.
-      </p>
+        <p>
+          To see what this cost, let's follow a single number.
+          Out of everyone who caught Ebola, what fraction died?
+          Epidemiologists call this the <term>case fatality rate</term>, and in
+          an outbreak, it's about as fundamental as numbers get.
+          It tells you how deadly the disease is in this population, whether
+          treatment is helping, and whether things are getting better or worse.
+          It's confirmed deaths divided by confirmed cases.
+        </p>
 
-      <p>
-        Both halves of that fraction were unreliable, and they went wrong in
-        ways that pushed the answer in opposite directions.
-      </p>
+        <p>
+          <md>
+            \text{CFR} =
+    \frac{\text{Number of confirmed deaths}}
+         {\text{Number of confirmed cases}}
+    \times 100\%
+          </md>
+        </p>
 
-      <p>
-        Let's start with deaths.
-        To confirm that a death was caused by Ebola, you needed a post-mortem
-        mouth swab.
-        In areas where traditional burial practices carried on, that swab often
-        wasn't taken.
-        Those deaths were real, and they were caused by Ebola, but they never
-        made it into the count of confirmed deaths.
-        If your count of deaths is too low, and you divide it by the count of
-        cases, the fraction comes out too small, and the outbreak looks less
-        deadly than it really is.
-      </p>
+        <p>
+          Both halves of that fraction were unreliable, and they went wrong in
+          ways that pushed the answer in opposite directions.
+        </p>
 
-      <p>
-        So let's try to correct for that.
-        One sensible fix is to only use cases where we know the outcome
-        (recovered or died), and ignore everyone who's still being treated.
-        That takes out the patients whose outcome hasn't been decided yet.
-        But deaths and recoveries weren't recorded on the same timescale.
-        A death could be entered on the day it happened.
-        A recovery could only be entered once the patient's hospital stay had
-        completely finished, which took a lot longer.
-        So at any moment, the cases with a known outcome included a bigger share
-        of deaths than they would once everyone's outcome was known.
-        Only using known outcomes pushes the fraction too high.
-        Now the outbreak looks <em>more</em> deadly than it really is.
-      </p>
+        <p>
+          Let's start with deaths.
+          To confirm that a death was caused by Ebola, you needed a post-mortem
+          mouth swab.
+          In areas where traditional burial practices carried on, that swab
+          often wasn't taken.
+          Those deaths were real, and they were caused by Ebola, but they never
+          made it into the count of confirmed deaths.
+          If the count of deaths (the numerator) is too low, and you divide it
+          by the count of cases, the fraction comes out too small, and the
+          outbreak looks less deadly than it really is.
+        </p>
 
-      <p>
-        And underneath both of these calculations, there was a third
-        complication.
-        Before Ebola, malaria accounted for roughly 38% of hospital admissions
-        in Sierra Leone, and about 30% of deaths in children under five.
-        In their early stages, malaria and Ebola have similar symptoms.
-        That overlap probably delayed the recognition of some real Ebola cases,
-        and it also meant that some malaria deaths risked being counted as Ebola
-        deaths.
-        So the same confusion was moving the numbers in both directions, in
-        different places, at the same time.
-      </p>
+        <p>
+          So let's try to correct for that.
+          One sensible fix is to only use cases where we know the outcome
+          (recovered or died), and ignore everyone who's still being treated.
+          That takes out the patients whose outcome hasn't been decided yet.
+          But deaths and recoveries weren't recorded on the same timescale.
+          A death could be entered on the day it happened.
+          A recovery could only be entered once the patient's hospital stay had
+          completely finished, which took a lot longer.
+          So at any moment, the cases with a known outcome included a bigger
+          share of deaths than they would once everyone's outcome was known.
+          Only using known outcomes pushes the fraction too high.
+          Now the outbreak looks <em>more</em> deadly than it really is.
+        </p>
 
-      <p>
-        Both answers were systematically biased, in opposite directions, by the
-        same underlying problem: records about the same patient couldn't be
-        reliably linked and combined.
-        The death that needed to go on top of the fraction was sitting somewhere
-        in the lab records.
-        The case it belonged to was sitting somewhere in the case database.
-        Without a shared identifier to connect them, there was no way to
-        calculate the fraction correctly.
-      </p>
+        <p>
+          And underneath both of these calculations, there was a third
+          complication.
+          Before Ebola, malaria accounted for roughly 38% of hospital admissions
+          in Sierra Leone, and about 30% of deaths in children under five.
+          In their early stages, malaria and Ebola have similar symptoms.
+          That overlap probably delayed the recognition of some real Ebola
+          cases, and it also meant that some malaria deaths risked being counted
+          as Ebola deaths.
+          So the same confusion was moving the numbers in both directions, in
+          different places, at the same time.
+        </p>
 
-      <p>
-        The national team came to the obvious conclusion.
-        The system that was supposed to hold the complete picture couldn't be
-        trusted to give them one.
-        So for the rest of the outbreak, they stopped relying on the case
-        database for routine reporting, and used lab data for their day-to-day
-        situation reports instead.
-        The case data was never fully reconciled.
-        When the outbreak ended, lots of suspected cases were left permanently
-        unclassified, never confirmed as Ebola, and never ruled out.
-      </p>
+        <p>
+          The national team came to the obvious conclusion.
+          The system that was supposed to hold the complete picture couldn't be
+          trusted to give them one.
+          So for the rest of the outbreak, they stopped relying on the case
+          database for routine reporting, and used lab data for their day-to-day
+          situation reports instead.
+          The case data was never fully reconciled.
+          When the outbreak ended, lots of suspected cases were left permanently
+          unclassified, never confirmed as Ebola, and never ruled out.
+        </p>
+      </insight>
     </subsection>
 
     <subsection xml:id="ss-ebola-shape-lesson">
@@ -393,8 +371,8 @@
         districts
         <q>caused problems with merging and aggregating cases to report critical
         information.</q>
-        That "critical information" sounds almost mundane (How many new alerts
-        today?
+        That <q>critical information</q> sounds almost mundane (How many new
+        alerts today?
         How many new confirmed cases?
         How many blood tests were processed, and what did they show?
         How many deaths were there in each district?).
@@ -691,10 +669,17 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
             to calculate a rate) first had to reshape the table from wide to
             long.
             And they had to do it again every time a new day's column was added.
-            Wide format wasn't <em>hard</em> to use.
-            It was hard to use
-            <em>again and again, at a growing scale, with no
-          end in sight.</em>
+          </p>
+
+          <p>
+            With each column representing a date, there was no straightforward
+            way to record different measures, such as confirmed cases, deaths,
+            and recoveries, in the same table.
+            Instead, the data were split across three separate datasets: one for
+            confirmed cases, one for deaths, and one for recoveries.
+            Anyone wanting to compare these measures, or calculate something
+            like the case fatality rate, first had to bring the datasets
+            together.
           </p>
 
           <figure xml:id="fig-covid-wide-format">
@@ -740,14 +725,26 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
             that took JHU's wide file and reshaped it to long (one row per
             country per date), specifically so it could be merged with other
             data.
+            <term>Merging</term> means bringing together information from two
+            datasets by matching rows that refer to the same thing.
+            For example, the JHU data contained the number of COVID-19 cases in
+            each country, but not each country's population.
+            By merging it with a second dataset containing population figures,
+            researchers could calculate cases per 100,000 people, making
+            comparisons between countries of very different sizes more
+            meaningful.
+          </p>
+
+          <p>
+            To merge datasets, however, they need a shared identifier, something
+            that tells us which rows belong together.
             A wide table with a different date in every column has no single
-            column that two datasets can agree to join on, but a long table
-            does.
-            Gassen's code went a step further, and attached standardised
+            date column to match against another dataset, but a long table does.
+            Gassen's code went a step further, attaching standardised
             <term>ISO3c</term> country codes to every row.
-            Without a shared identifier like that, nobody could reliably bring
-            in each country's population to turn raw case counts into a rate per
-            person.
+            These three-letter codes, such as GHA for Ghana and KEN for Kenya,
+            allow countries to be matched across datasets even when their names
+            are written differently.
           </p>
 
           <figure xml:id="fig-covid-long-format">
@@ -971,89 +968,88 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         <table xml:id="table-ch6-bind-rows-result">
           <title>
             Six columns from the result of
-            <c>bind_rows(kenya_accidents_2016,
-            kenya_accidents_2017)</c>,
+            <c>bind_rows(kenya_accidents_2016, kenya_accidents_2017)</c>,
             showing the last three rows from 2016 and the first three rows from
             2017.
             <c>MV INVOLVED</c> and <c>NAME OF VICTIM</c> only exist in the 2017
             data, so they are <c>NA</c> for every 2016 row.
           </title>
 
-          <tabular halign="right">
+          <tabular halign="left">
+            <col halign="right"/>
+            <col halign="right"/>
             <col halign="left"/>
-            <col halign="right"/>
-            <col halign="right"/>
-            <col halign="right"/>
-            <col halign="right"/>
-            <col halign="right"/>
-            <col halign="right"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
+            <col halign="left"/>
             <row header="yes" bottom="minor">
-              <cell>Variable</cell>
-              <cell>Row 376</cell>
-              <cell>Row 377</cell>
-              <cell>Row 378</cell>
-              <cell>Row 379</cell>
-              <cell>Row 380</cell>
-              <cell>Row 381</cell>
-            </row>
-
-            <row>
+              <cell>Row</cell>
               <cell>TIME 24 HOURS</cell>
-              <cell>2040</cell>
-              <cell>1830</cell>
-              <cell>2230</cell>
-              <cell>745</cell>
-              <cell>1430</cell>
-              <cell>1515</cell>
-            </row>
-
-            <row>
               <cell>COUNTY</cell>
-              <cell>KAJIADO</cell>
-              <cell>NAIROBI</cell>
-              <cell>NAIROBI</cell>
-              <cell>KISUMU</cell>
-              <cell>NAROK</cell>
-              <cell>KERICHO</cell>
-            </row>
-
-            <row>
               <cell>VICTIM</cell>
-              <cell>P/PASSENGER</cell>
-              <cell>PASSENGER</cell>
-              <cell>PEDESTRIAN</cell>
-              <cell>PASSENGER</cell>
-              <cell>PEDESTRIAN</cell>
-              <cell>DRIVER</cell>
-            </row>
-
-            <row>
               <cell>Date DD/MM/YYYY</cell>
-              <cell>2016-04-01</cell>
-              <cell>2016-04-01</cell>
-              <cell>2016-04-01</cell>
-              <cell>2017-11-06</cell>
-              <cell>2017-11-06</cell>
-              <cell>2017-11-06</cell>
-            </row>
-
-            <row>
               <cell>MV INVOLVED</cell>
-              <cell>NA</cell>
-              <cell>NA</cell>
-              <cell>NA</cell>
-              <cell>KBS 163T/ZD 9531 AXIOR TRAILER</cell>
-              <cell>KBS 518A HONDA CRV</cell>
-              <cell>KTCB 472K JOHN DEER</cell>
+              <cell>NAME OF VICTIM</cell>
             </row>
 
             <row>
-              <cell>NAME OF VICTIM</cell>
+              <cell>376</cell>
+              <cell>2040</cell>
+              <cell>KAJIADO</cell>
+              <cell>P/PASSENGER</cell>
+              <cell>2016-04-01</cell>
               <cell>NA</cell>
               <cell>NA</cell>
+            </row>
+
+            <row>
+              <cell>377</cell>
+              <cell>1830</cell>
+              <cell>NAIROBI</cell>
+              <cell>PASSENGER</cell>
+              <cell>2016-04-01</cell>
               <cell>NA</cell>
+              <cell>NA</cell>
+            </row>
+
+            <row bottom="minor">
+              <cell>378</cell>
+              <cell>2230</cell>
+              <cell>NAIROBI</cell>
+              <cell>PEDESTRIAN</cell>
+              <cell>2016-04-01</cell>
+              <cell>NA</cell>
+              <cell>NA</cell>
+            </row>
+
+            <row>
+              <cell>379</cell>
+              <cell>745</cell>
+              <cell>KISUMU</cell>
+              <cell>PASSENGER</cell>
+              <cell>2017-11-06</cell>
+              <cell>KBS 163T/ZD 9531 AXIOR TRAILER</cell>
               <cell>UNKNOWN</cell>
+            </row>
+
+            <row>
+              <cell>380</cell>
+              <cell>1430</cell>
+              <cell>NAROK</cell>
+              <cell>PEDESTRIAN</cell>
+              <cell>2017-11-06</cell>
+              <cell>KBS 518A HONDA CRV</cell>
               <cell>UNKNOWN</cell>
+            </row>
+
+            <row>
+              <cell>381</cell>
+              <cell>1515</cell>
+              <cell>KERICHO</cell>
+              <cell>DRIVER</cell>
+              <cell>2017-11-06</cell>
+              <cell>KTCB 472K JOHN DEER</cell>
               <cell>UNKNOWN</cell>
             </row>
           </tabular>
@@ -1107,27 +1103,26 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           mismatches before they cause problems later.
         </p>
 
-        <p>
-          <alert>When the column names don't match</alert>
-        </p>
+        <remark>
+          <title>When the column names don't match</title>
 
-        <p>
-          A clean append depends on both datasets using the same column names
-          for the same variables.
-          In the Ebola response, one problem could easily have been different
-          districts using different names for the same field, and then the files
-          couldn't be combined correctly.
-          We can recreate that problem on purpose.
-        </p>
+          <p>
+            A clean append depends on both datasets using the same column names
+            for the same variables.
+            In the Ebola response, one problem could easily have been different
+            districts using different names for the same field, and then the
+            files couldn't be combined correctly.
+            We can recreate that problem on purpose.
+          </p>
 
-        <p>
-          Let's pretend the 2016 data had been collected with a column called
-          <c>SEX</c> instead of <c>GENDER</c>.
-          We can simulate that by renaming it:
-        </p>
+          <p>
+            Let's pretend the 2016 data had been collected with a column called
+            <c>SEX</c> instead of <c>GENDER</c>.
+            We can simulate that by renaming it:
+          </p>
 
-        <program language="r">
-          <code>
+          <program language="r">
+            <code>
         kenya_accidents_2016 &lt;- dplyr::rename(kenya_accidents_2016, 
                                                "SEX" = "GENDER")
         names(kenya_accidents_2016)
@@ -1137,15 +1132,15 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         #&gt;  [7] "SEX"                    "AGE"                   
         #&gt;  [9] "CAUSE CODE"             "VICTIM"                
         #&gt; [11] "NO."                    "Date DD/MM/YYYY"
-          </code>
-        </program>
+            </code>
+          </program>
 
-        <p>
-          So what happens when we append now?
-        </p>
+          <p>
+            So what happens when we append now?
+          </p>
 
-        <program language="r">
-          <code>
+          <program language="r">
+            <code>
         bind_rows(kenya_accidents_2016, kenya_accidents_2017)
         #&gt; # A tibble: 10 × 16
         #&gt;    `TIME 24 HOURS` `BASE/SUB BASE` COUNTY  ROAD  PLACE
@@ -1157,36 +1152,37 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         #&gt; #   SEX &lt;chr&gt;, AGE &lt;chr&gt;, CAUSE CODE &lt;dbl&gt;, VICTIM &lt;chr&gt;,
         #&gt; #   NO. &lt;dbl&gt;, Date DD/MM/YYYY &lt;dttm&gt;, MV INVOLVED &lt;chr&gt;,
         #&gt; #   NAME OF VICTIM &lt;chr&gt;, GENDER &lt;chr&gt;
-          </code>
-        </program>
+            </code>
+          </program>
 
-        <p>
-          There's no error, but look carefully at the columns.
-          <c>SEX</c> and <c>GENDER</c> both appear in the combined dataset, as
-          separate columns.
-          R has no way of knowing that <c>SEX</c> in the 2016 data and
-          <c>GENDER</c> in the 2017 data are the same variable.
-          As far as R is concerned, they're two different column names, so they
-          become two different columns.
-          The 2016 rows have values in <c>SEX</c> and <c>NA</c> in
-          <c>GENDER</c>, and the 2017 rows have values in <c>GENDER</c> and
-          <c>NA</c> in <c>SEX</c>.
-          All the information is still there, but it's now split across two
-          columns that should be one.
-          Any analysis of sex or gender would need to bring them back together
-          first.
-        </p>
+          <p>
+            There's no error, but look carefully at the columns.
+            <c>SEX</c> and <c>GENDER</c> both appear in the combined dataset, as
+            separate columns.
+            R has no way of knowing that <c>SEX</c> in the 2016 data and
+            <c>GENDER</c> in the 2017 data are the same variable.
+            As far as R is concerned, they're two different column names, so
+            they become two different columns.
+            The 2016 rows have values in <c>SEX</c> and <c>NA</c> in
+            <c>GENDER</c>, and the 2017 rows have values in <c>GENDER</c> and
+            <c>NA</c> in <c>SEX</c>.
+            All the information is still there, but it's now split across two
+            columns that should be one.
+            Any analysis of sex or gender would need to bring them back together
+            first.
+          </p>
 
-        <p>
-          The best fix is to make the column names match before you append:
-        </p>
+          <p>
+            The best fix is to make the column names match before you append:
+          </p>
 
-        <program language="r">
-          <code>
+          <program language="r">
+            <code>
         kenya_accidents_2016 &lt;- dplyr::rename(kenya_accidents_2016, 
                                                "GENDER" = "SEX")
-          </code>
-        </program>
+            </code>
+          </program>
+        </remark>
 
         <p>
           <alert>When the column types don't match</alert>
@@ -1325,42 +1321,6 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           <title>Same Column Name, Different Definition</title>
 
           <p>
-            Someone who died at the scene would count as a road fatality in both
-            countries.
-            But someone who survived the crash and died in hospital six months
-            later would count in Uganda, but not in Kenya.
-          </p>
-
-          <p>
-            If we simply appended these datasets, we would be combining data
-            collected under different definitions, even though the columns
-            appeared to match perfectly.
-            This could make Uganda's road fatality figures appear higher than
-            Kenya's, not necessarily because its roads are more dangerous, but
-            because deaths are counted differently.
-          </p>
-
-          <p>
-            The <c>bind_rows()</c> operation would work technically, but the
-            resulting data could lead us to misleading conclusions.
-            This is why checking that columns have the same names and data types
-            is not enough.
-            We also need to understand
-            <alert>what the values actually represent</alert> before combining
-            datasets.
-          </p>
-
-          <p>
-            Now suppose we wanted to append our 2016 Kenya road crash data to
-            some equivalent data from Uganda, so we could compare them.
-            The two datasets might have the same column names, the same data
-            types, and the same structure (a row per crash, with columns for
-            time, location, victim category, and cause), so <c>bind_rows()</c>
-            would run without any errors.
-            But Kenya and Uganda define a road fatality differently.
-          </p>
-
-          <p>
             In Kenya, the NTSA only records deaths at the scene, with no
             follow-up at hospitals to find out whether people later died of
             their injuries (Muguro et al., 2020).
@@ -1396,6 +1356,16 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
             We also need to understand
             <alert>what the values actually represent</alert> before combining
             datasets.
+          </p>
+
+          <p>
+            Now suppose we wanted to append our 2016 Kenya road crash data to
+            some equivalent data from Uganda, so we could compare them.
+            The two datasets might have the same column names, the same data
+            types, and the same structure (a row per crash, with columns for
+            time, location, victim category, and cause), so <c>bind_rows()</c>
+            would run without any errors.
+            But Kenya and Uganda define a road fatality differently.
           </p>
 
           <p>
@@ -1591,15 +1561,12 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
 
         <p>
           But when we look at the result, there's a problem.
-          Here are the first five rows of the joined dataset, first the accident
-          columns (from the accidents data), then the population columns (from
-          the census):
+          Here are the first five rows of the joined dataset:
         </p>
 
         <table xml:id="table-ch6-joined-sample">
           <title>
-            First five rows of the joined dataset, accident columns (from the
-            accidents data).
+            First five rows of the joined dataset.
             Row 2 is <c>TAITA TAVETA</c>, which did not yet match the census
             name <c>TAITA/TAVETA</c>.
           </title>
@@ -1624,14 +1591,14 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
               <cell>BASE/SUB BASE</cell>
               <cell>COUNTY</cell>
               <cell>ROAD</cell>
-              <cell>PLACE</cell>
-              <cell>BRIEF ACCIDENT DETAILS</cell>
-              <cell>GENDER</cell>
-              <cell>AGE</cell>
-              <cell>CAUSE CODE</cell>
-              <cell>VICTIM</cell>
-              <cell>NO.</cell>
-              <cell>Date DD/MM/YYYY</cell>
+              <cell>...</cell>
+              <cell>Population</cell>
+              <cell>Male</cell>
+              <cell>Female</cell>
+              <cell>Intersex</cell>
+              <cell>Households</cell>
+              <cell>Land Area (Sq Km)</cell>
+              <cell>Density (per Sq Km)</cell>
             </row>
 
             <row>
@@ -1641,13 +1608,14 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
               <cell>MAKUENI</cell>
               <cell>KITUI-ITHOKWE</cell>
               <cell>KITUI SCHOOL</cell>
-              <cell>HEAD ON COLLISION</cell>
-              <cell>M</cell>
-              <cell>26</cell>
-              <cell>7</cell>
-              <cell>M/CYCLIST</cell>
-              <cell>1</cell>
-              <cell>2016-06-25</cell>
+              <cell>...</cell>
+              <cell>987,653</cell>
+              <cell>489,691</cell>
+              <cell>497,942</cell>
+              <cell>20</cell>
+              <cell>244,669</cell>
+              <cell>8,176.67</cell>
+              <cell>120.79</cell>
             </row>
 
             <row>
@@ -1657,13 +1625,14 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
               <cell>TAITA TAVETA</cell>
               <cell>MOMBASA-NAIROBI</cell>
               <cell>IKANGA</cell>
-              <cell>HEAD ON COLLISION</cell>
-              <cell>M</cell>
-              <cell>28</cell>
-              <cell>25</cell>
-              <cell>M/CYCLIST</cell>
-              <cell>1</cell>
-              <cell>2016-06-25</cell>
+              <cell>...</cell>
+              <cell>NA</cell>
+              <cell>NA</cell>
+              <cell>NA</cell>
+              <cell>NA</cell>
+              <cell>NA</cell>
+              <cell>NA</cell>
+              <cell>NA</cell>
             </row>
 
             <row>
@@ -1673,13 +1642,14 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
               <cell>KILIFI</cell>
               <cell>MOMBASA-NAIROBI</cell>
               <cell>KATOLANI</cell>
-              <cell>THE UNKNOWN M/V HIT THE MOTOR CYCLE</cell>
-              <cell>M</cell>
-              <cell>A &amp; J</cell>
-              <cell>98</cell>
-              <cell>M/CYCLIST</cell>
-              <cell>1</cell>
-              <cell>2016-06-25</cell>
+              <cell>...</cell>
+              <cell>1,453,787</cell>
+              <cell>704,089</cell>
+              <cell>749,673</cell>
+              <cell>25</cell>
+              <cell>298,472</cell>
+              <cell>12,553.27</cell>
+              <cell>115.81</cell>
             </row>
 
             <row>
@@ -1689,15 +1659,14 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
               <cell>NAKURU</cell>
               <cell>NAKURU-NAIROBI</cell>
               <cell>MAASAI LODGE</cell>
-              <cell>
-                THE VEHICLE KNOCKED DOWN A PEDESTRIAN WHO WAS CROSSING THE ROAD
-              </cell>
-              <cell>M</cell>
-              <cell>65</cell>
-              <cell>29</cell>
-              <cell>PEDESTRIAN</cell>
-              <cell>1</cell>
-              <cell>2016-06-25</cell>
+              <cell>...</cell>
+              <cell>2,162,202</cell>
+              <cell>1,077,272</cell>
+              <cell>1,084,835</cell>
+              <cell>95</cell>
+              <cell>616,046</cell>
+              <cell>7,504.91</cell>
+              <cell>288.11</cell>
             </row>
 
             <row>
@@ -1707,113 +1676,12 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
               <cell>MACHAKOS</cell>
               <cell>MATUU-MWINGI</cell>
               <cell>KIVANDINI</cell>
-              <cell>
-                THE VEHICLE OVERTOOK A M/CYCLE AND LOST CONTROL VEERING OFF THE
-                ROAD &amp; ROLLED
-              </cell>
-              <cell>M</cell>
-              <cell>A</cell>
-              <cell>10</cell>
-              <cell>PASSENGER</cell>
-              <cell>1</cell>
-              <cell>2016-06-25</cell>
-            </row>
-          </tabular>
-        </table>
-
-        <table xml:id="table-ch6-joined-sample-census">
-          <title>
-            The same five rows, showing the population columns (from the
-            census).
-            Row 2 has <c>NA</c> for all census columns because
-            <c>TAITA TAVETA</c> did not match.
-          </title>
-
-          <tabular halign="left">
-            <col halign="right"/>
-            <col halign="left"/>
-            <col halign="left"/>
-            <col halign="left"/>
-            <col halign="left"/>
-            <col halign="left"/>
-            <col halign="left"/>
-            <col halign="left"/>
-            <col halign="left"/>
-            <col halign="left"/>
-            <row header="yes" bottom="minor">
-              <cell>Row</cell>
-              <cell>Population</cell>
-              <cell>Male</cell>
-              <cell>Female</cell>
-              <cell>Intersex</cell>
-              <cell>Households</cell>
-              <cell>Households (Conventional)</cell>
-              <cell>Households (Group Quarters)</cell>
-              <cell>Land Area (Sq Km)</cell>
-              <cell>Density (per Sq Km)</cell>
-            </row>
-
-            <row>
-              <cell>1</cell>
-              <cell>987,653</cell>
-              <cell>489,691</cell>
-              <cell>497,942</cell>
-              <cell>20</cell>
-              <cell>244,669</cell>
-              <cell>243,979</cell>
-              <cell>690</cell>
-              <cell>8,176.67</cell>
-              <cell>120.79</cell>
-            </row>
-
-            <row>
-              <cell>2</cell>
-              <cell>NA</cell>
-              <cell>NA</cell>
-              <cell>NA</cell>
-              <cell>NA</cell>
-              <cell>NA</cell>
-              <cell>NA</cell>
-              <cell>NA</cell>
-              <cell>NA</cell>
-              <cell>NA</cell>
-            </row>
-
-            <row>
-              <cell>3</cell>
-              <cell>1,453,787</cell>
-              <cell>704,089</cell>
-              <cell>749,673</cell>
-              <cell>25</cell>
-              <cell>298,472</cell>
-              <cell>297,990</cell>
-              <cell>482</cell>
-              <cell>12,553.27</cell>
-              <cell>115.81</cell>
-            </row>
-
-            <row>
-              <cell>4</cell>
-              <cell>2,162,202</cell>
-              <cell>1,077,272</cell>
-              <cell>1,084,835</cell>
-              <cell>95</cell>
-              <cell>616,046</cell>
-              <cell>598,237</cell>
-              <cell>17,809</cell>
-              <cell>7,504.91</cell>
-              <cell>288.11</cell>
-            </row>
-
-            <row>
-              <cell>5</cell>
+              <cell>...</cell>
               <cell>1,421,932</cell>
               <cell>710,707</cell>
               <cell>711,191</cell>
               <cell>34</cell>
               <cell>402,466</cell>
-              <cell>399,523</cell>
-              <cell>2,943</cell>
               <cell>6,037.27</cell>
               <cell>235.53</cell>
             </row>
@@ -2017,6 +1885,25 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
         </program>
 
         <p>
+          Now we've applied all the county name corrections, let's check that
+          there are no mismatches left:
+        </p>
+
+        <program language="r">
+          <code>
+    setdiff(unique(kenya_accidents_2016$COUNTY),
+            unique(kenya_census_2019$County))
+    #&gt; character(0)
+          </code>
+        </program>
+
+        <p>
+          Every county name in the accidents data now has an exact match in the
+          census.
+          Only now does it make sense to run the join again.
+        </p>
+
+        <p>
           We can also check the other direction: which census counties don't
           have any crashes in the accidents data?
         </p>
@@ -2037,23 +1924,6 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           These are counties with no recorded fatal crashes in this three-month
           extract, which is plausible for counties that are sparsely populated
           or remote.
-          It's the first list that needed fixing.
-          Now we've applied all the county name corrections, let's check that
-          there are no mismatches left:
-        </p>
-
-        <program language="r">
-          <code>
-    setdiff(unique(kenya_accidents_2016$COUNTY),
-            unique(kenya_census_2019$County))
-    #&gt; character(0)
-          </code>
-        </program>
-
-        <p>
-          Every county name in the accidents data now has an exact match in the
-          census.
-          Only now does it make sense to run the join again.
         </p>
 
         <paragraphs>
@@ -2083,8 +1953,8 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
             We've gained 10 rows!
             These are counties that appear in the census data but not in our
             incidents data, including Tana River, Lamu, and Wajir.
-            The `full_join()` has included these counties, with `NA` values for
-            all the accident-related columns.
+            The <c>full_join()</c> has included these counties, with <c>NA</c>
+            values for all the accident-related columns.
             (Note that just because a county doesn't appear in our accidents
             data doesn't mean there have never been any crashes there.
             It simply means that no fatal crashes were recorded in our dataset
@@ -2097,10 +1967,10 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           </p>
 
           <p>
-            <c>left_join()</c> keeps every row from the left dataset (the
-            accidents data), brings in the matching information from the right
-            dataset (the census), and throws away any rows on the right that
-            don't have a match on the left.
+            <c>left_join()</c> keeps every row from the first (i.e., left)
+            dataset given in the R code (the accidents data), brings in the
+            matching information from the right dataset (the census), and throws
+            away any rows on the right that don't have a match on the left.
             In other words, every crash gets population data attached, and no
             new rows are added.
           </p>
@@ -2135,7 +2005,6 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
 
           <tabular halign="left">
             <col halign="right"/>
-            <col halign="right"/>
             <col halign="left"/>
             <col halign="left"/>
             <col halign="left"/>
@@ -2143,13 +2012,9 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
             <col halign="left"/>
             <col halign="left"/>
             <col halign="left"/>
-            <col halign="right"/>
             <col halign="left"/>
-            <col halign="right"/>
-            <col halign="right"/>
-            <col halign="right"/>
-            <col halign="right"/>
-            <col halign="right"/>
+            <col halign="left"/>
+            <col halign="left"/>
             <row header="yes" bottom="minor">
               <cell>Row</cell>
               <cell>TIME</cell>
@@ -2157,12 +2022,7 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
               <cell>COUNTY</cell>
               <cell>ROAD</cell>
               <cell>PLACE</cell>
-              <cell>ACCIDENT DETAILS</cell>
-              <cell>GENDER</cell>
-              <cell>AGE</cell>
-              <cell>CAUSE</cell>
-              <cell>VICTIM</cell>
-              <cell>NO.</cell>
+              <cell>...</cell>
               <cell>Population</cell>
               <cell>Male</cell>
               <cell>Female</cell>
@@ -2176,12 +2036,7 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
               <cell>MAKUENI</cell>
               <cell>KITUI-ITHOKWE</cell>
               <cell>KITUI SCHOOL</cell>
-              <cell>HEAD ON COLLISION</cell>
-              <cell>M</cell>
-              <cell>26</cell>
-              <cell>7</cell>
-              <cell>M/CYCLIST</cell>
-              <cell>1</cell>
+              <cell>...</cell>
               <cell>987,653</cell>
               <cell>489,691</cell>
               <cell>497,942</cell>
@@ -2195,12 +2050,7 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
               <cell>TAITA/TAVETA</cell>
               <cell>MOMBASA-NAIROBI</cell>
               <cell>IKANGA</cell>
-              <cell>HEAD ON COLLISION</cell>
-              <cell>M</cell>
-              <cell>28</cell>
-              <cell>25</cell>
-              <cell>M/CYCLIST</cell>
-              <cell>1</cell>
+              <cell>...</cell>
               <cell>340,671</cell>
               <cell>173,337</cell>
               <cell>167,327</cell>
@@ -2214,12 +2064,7 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
               <cell>KILIFI</cell>
               <cell>MOMBASA-NAIROBI</cell>
               <cell>KATOLANI</cell>
-              <cell>The unknown M/V hit the motor cycle</cell>
-              <cell>M</cell>
-              <cell>A &amp; J</cell>
-              <cell>98</cell>
-              <cell>M/CYCLIST</cell>
-              <cell>1</cell>
+              <cell>...</cell>
               <cell>1,453,787</cell>
               <cell>704,089</cell>
               <cell>749,673</cell>
@@ -2233,12 +2078,7 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
               <cell>NAKURU</cell>
               <cell>NAKURU-NAIROBI</cell>
               <cell>MAASAI LODGE</cell>
-              <cell>The vehicle knocked down a pedestrian</cell>
-              <cell>M</cell>
-              <cell>65</cell>
-              <cell>29</cell>
-              <cell>PEDESTRIAN</cell>
-              <cell>1</cell>
+              <cell>...</cell>
               <cell>2,162,202</cell>
               <cell>1,077,272</cell>
               <cell>1,084,835</cell>
@@ -2252,12 +2092,7 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
               <cell>MACHAKOS</cell>
               <cell>MATUU-MWINGI</cell>
               <cell>KIVANDINI</cell>
-              <cell>The vehicle overtook a M/cycle and lost control</cell>
-              <cell>M</cell>
-              <cell>A</cell>
-              <cell>10</cell>
-              <cell>PASSENGER</cell>
-              <cell>1</cell>
+              <cell>...</cell>
               <cell>1,421,932</cell>
               <cell>710,707</cell>
               <cell>711,191</cell>
@@ -2534,12 +2369,6 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
                 </p>
               </li>
             </ul>
-          </p>
-
-          <p>
-            Notice that nobody entered anything wrong here.
-            Every one of those records is correct.
-            The data is just stuck, because there's nothing to link it on.
           </p>
 
           <p>

@@ -421,32 +421,38 @@
     </p>
   </section>
   <!-- ================================================================= -->
-  <!--  SECTION 3: applied to the flamingo data                          -->
+  <!--  SECTION 3: applied to the africa_indicators data                 -->
   <!-- ================================================================= -->
   <section xml:id="sec-missing-data-r">
-    <title>Missing Data in Practice: the Flamingo Dataset</title>
+    <title>Missing Data in Practice: African Development Indicators</title>
 
     <introduction>
       <p>
-        In <xref ref="ch-intro"/>, the first thing many readers noticed about
-        the flamingo dataset was that some birds had no recorded sex.
-        That observation — made without any prompting, just from looking at the
-        data — is exactly the right instinct.
-        Missing values are not a footnote to deal with later.
-        They are part of the data, and understanding them is part of the
-        analysis.
-        This section works through how to find missing values, understand their
-        pattern, and decide what to do about them.
+        The viral load study had something most of us never get: a team who
+        went and found out why each result was missing.
+        In practice, we usually have the dataset and nothing else, so we have to
+        work out what we can from the data itself.
+        This section does that, using the <c>africa_indicators</c> dataset.
+      </p>
+
+      <p>
+        It holds World Bank development indicators for the 54 African countries,
+        one row per country per year from 2010 to 2023.
+        There are 756 rows, with population, GDP per capita, life expectancy,
+        under-5 mortality, HIV prevalence, births attended by skilled health
+        staff, primary school enrolment and the poverty rate.
+        We chose it because the missing values are real, they are everywhere,
+        and (as we'll see) they are missing for very different reasons.
       </p>
 
       <program language="r">
         <code>
-        library(statsbooks)
+        library(statsdata)
         library(dplyr)
         library(ggplot2)
         library(naniar)
 
-        data(kenya_flamingos)
+        data(africa_indicators)
         </code>
       </program>
     </introduction>
@@ -455,106 +461,124 @@
       <title>Finding missing values</title>
 
       <p>
-        The first step is to establish where missing values exist and how many
-        there are.
+        The first step is to find out where the missing values are, and how
+        many there are.
         In R, <c>is.na()</c> returns <c>TRUE</c> for each missing value and
-        <c>FALSE</c> for each non-missing value.
-        Wrapping it in <c>sum()</c> counts the missing values in a single
-        column:
+        <c>FALSE</c> for each value that is there.
+        Wrapping it in <c>sum()</c> counts the missing values in a column:
       </p>
 
       <program language="r">
         <code>
-        # Is sex missing for the first six birds?
-        is.na(kenya_flamingos$sex)
-        #&gt; [1] FALSE FALSE FALSE FALSE FALSE  TRUE ...
+        # Is births_skilled missing for the first six rows (Algeria, 2010-2015)?
+        head(is.na(africa_indicators$births_skilled))
+        #&gt; [1]  TRUE  TRUE  TRUE FALSE  TRUE  TRUE
 
-        # How many missing values in sex?
-        sum(is.na(kenya_flamingos$sex))
-        #&gt; [1] 33
+        # How many missing values in primary_enrolment?
+        sum(is.na(africa_indicators$primary_enrolment))
+        #&gt; [1] 219
         </code>
       </program>
 
       <p>
-        To check every column at once, <c>colSums(is.na())</c> applies this
-        across the whole dataset:
+        To check every column at once, <c>colSums(is.na())</c> does the same
+        thing across the whole dataset:
       </p>
 
       <program language="r">
         <code>
-        colSums(is.na(kenya_flamingos))
-        #&gt;          lake       species bill_length_mm  bill_depth_mm 
-        #&gt;             0             0             0              0 
-        #&gt;  leg_length_mm   body_mass_g           sex          year 
-        #&gt;             0             0            33              0
+        colSums(is.na(africa_indicators))
+        #&gt;              iso3           country            region      income_group
+        #&gt;                 0                 0                 0                 0
+        #&gt;              year        population    gdp_per_capita   life_expectancy
+        #&gt;                 0                 0                20                 0
+        #&gt;  under5_mortality    hiv_prevalence    births_skilled primary_enrolment
+        #&gt;                 0                56               583               219
+        #&gt;      poverty_rate
+        #&gt;               634
         </code>
       </program>
 
       <p>
-        Only <c>sex</c> has missing values — 33 of them out of 344 rows, which
-        is about 10% of the dataset.
-        Every other column is complete.
-        This is already useful information: the missing data problem here is
-        contained to one variable, which makes it more manageable.
+        Five of the thirteen columns have missing values, and they are nothing
+        like each other.
+        <c>gdp_per_capita</c> has 20 missing values out of 756 (under 3%),
+        while <c>poverty_rate</c> has 634 (84%).
+        That difference already tells us that "the dataset has missing values"
+        isn't one problem.
+        It's at least five.
       </p>
 
       <p>
-        The <c>naniar</c> package provides visual tools for exploring
-        missingness.
-        <c>vis_miss()</c> draws a heatmap of the dataset with missing values
-        shown in a contrasting colour, making the pattern immediately visible:
+        The <c>naniar</c> package gives us some visual tools.
+        <c>vis_miss()</c> draws a heatmap of the whole dataset, with missing
+        values in a dark colour:
       </p>
 
       <program language="r">
         <code>
-        vis_miss(kenya_flamingos)
+        vis_miss(africa_indicators)
         </code>
       </program>
 
-      <figure xml:id="fig-flamingo-vis-miss">
+      <figure xml:id="fig-africa-vis-miss">
         <caption>
-          Missingness heatmap for the flamingo dataset.
-          Each row is one bird; each column is one variable.
-          Missing values are shown in dark.
-          Only <c>sex</c> has missing values, and they are scattered through the
-          dataset rather than concentrated in one place.
+          Missingness heatmap for the <c>africa_indicators</c> dataset.
+          Each row is one country in one year, and each column is one variable.
+          Missing values are dark.
+          <c>births_skilled</c> and <c>poverty_rate</c> are mostly missing,
+          <c>primary_enrolment</c> is patchy, and <c>gdp_per_capita</c> and
+          <c>hiv_prevalence</c> have a few solid blocks.
         </caption>
 
         <image source="images/ch-missing-vis-miss.png" width="90%">
           <description>
             <p>
-              TODO: A heatmap with one row per bird and one column per variable.
-              All columns appear light grey except for the sex column, which has
-              dark marks scattered throughout indicating missing values.
-              A summary at the top shows the percentage missing for each column.
+              A heatmap with one row per country-year and one column per
+              variable.
+              Most columns are entirely light grey.
+              The births_skilled and poverty_rate columns are mostly dark,
+              primary_enrolment has scattered dark stripes, and gdp_per_capita
+              and hiv_prevalence each have a few short dark blocks.
+              The percentage missing is printed in each column label.
             </p>
           </description>
         </image>
       </figure>
 
       <p>
-        <c>gg_miss_var()</c> gives a bar chart of missing values by variable,
-        which is more useful when there are many columns:
+        Look at the blocks in <c>gdp_per_capita</c> and <c>hiv_prevalence</c>.
+        A block is a run of consecutive rows, and since the rows are sorted by
+        country, a block means one country that has no value in any year.
+        That isn't what scattered, unlucky gaps look like!
+      </p>
+
+      <p>
+        <c>gg_miss_var()</c> gives a bar chart of the number of missing values
+        per variable, which is easier to read when there are lots of columns:
       </p>
 
       <program language="r">
         <code>
-        gg_miss_var(kenya_flamingos)
+        gg_miss_var(africa_indicators)
         </code>
       </program>
 
-      <figure xml:id="fig-flamingo-gg-miss-var">
+      <figure xml:id="fig-africa-gg-miss-var">
         <caption>
-          Number of missing values per variable in the flamingo dataset.
-          Only <c>sex</c> has any missing values.
+          Number of missing values per variable in the
+          <c>africa_indicators</c> dataset.
         </caption>
 
         <image source="images/ch-missing-gg-miss-var.png" width="80%">
           <description>
             <p>
-              TODO: A horizontal bar chart with variable names on the y-axis and
-              number of missing values on the x-axis.
-              All variables show zero missing values except sex, which shows 33.
+              A horizontal bar chart with variable names on the vertical axis
+              and the number of missing values on the horizontal axis.
+              poverty_rate is longest at 634, then births_skilled at 583,
+              primary_enrolment at 219, hiv_prevalence at 56 and
+              gdp_per_capita at 20.
+              All other variables have none.
             </p>
           </description>
         </image>
@@ -565,317 +589,500 @@
       <title>Patterns of missingness</title>
 
       <p>
-        Knowing that 33 values are missing is the start, not the end.
-        The next question is whether those missing values are scattered randomly
-        through the dataset, or whether they cluster in a way that tells you
-        something.
-        Missing values that are random are less dangerous than missing values
-        that follow a pattern — because a pattern means the birds with missing
-        sex are systematically different from the birds with recorded sex, and
-        any analysis that drops the missing rows will be subtly biased.
+        Knowing how many values are missing is the start, not the end.
+        The next question is whether they're scattered randomly through the
+        data, or whether they cluster.
+        If they cluster, the rows with missing values are different from the
+        rows without, and any analysis that drops them is quietly answering a
+        different question.
       </p>
 
       <p>
-        Are the missing values equally distributed across species?
+        We'll take <c>primary_enrolment</c> first.
+        Is it missing equally across income groups?
       </p>
 
       <program language="r">
         <code>
-        kenya_flamingos %&gt;%
-          group_by(species) %&gt;%
-          summarise(
-            n_total   = n(),
-            n_missing = sum(is.na(sex)),
-            pct_missing = round(n_missing / n_total * 100, 1)
-          )
-        #&gt; # A tibble: 2 x 4
-        #&gt;   species          n_total n_missing pct_missing
-        #&gt;   &lt;chr&gt;              &lt;int&gt;     &lt;int&gt;       &lt;dbl&gt;
-        #&gt; 1 Greater Flamingo      80        14        17.5
-        #&gt; 2 Lesser Flamingo      264        19         7.2
-        </code>
-      </program>
-
-      <p>
-        Missing values are more common among Greater Flamingos (17.5%) than
-        Lesser Flamingos (7.2%).
-        This is not random — it is related to species.
-        Greater Flamingos may be harder to sex visually, or they may have been
-        measured under conditions that made sexing more difficult.
-        Either way, if we simply dropped the rows with missing sex, our
-        remaining dataset would underrepresent Greater Flamingos relative to
-        Lesser Flamingos.
-      </p>
-
-      <p>
-        What about across lakes?
-      </p>
-
-      <program language="r">
-        <code>
-        kenya_flamingos %&gt;%
-          group_by(lake) %&gt;%
+        africa_indicators %&gt;%
+          group_by(income_group) %&gt;%
           summarise(
             n_total     = n(),
-            n_missing   = sum(is.na(sex)),
+            n_missing   = sum(is.na(primary_enrolment)),
             pct_missing = round(n_missing / n_total * 100, 1)
           )
-        #&gt; # A tibble: 3 x 4
-        #&gt;   lake        n_total n_missing pct_missing
-        #&gt;   &lt;chr&gt;         &lt;int&gt;     &lt;int&gt;       &lt;dbl&gt;
-        #&gt; 1 Bogoria         114        14        12.3
-        #&gt; 2 Elementaita      68         8        11.8
-        #&gt; 3 Nakuru          162        11         6.8
+        #&gt; # A tibble: 4 x 4
+        #&gt;   income_group        n_total n_missing pct_missing
+        #&gt;   &lt;fct&gt;                 &lt;int&gt;     &lt;int&gt;       &lt;dbl&gt;
+        #&gt; 1 Low income              294        92        31.3
+        #&gt; 2 Lower middle income     336        81        24.1
+        #&gt; 3 Upper middle income     112        46        41.1
+        #&gt; 4 High income              14         0         0
         </code>
       </program>
 
       <p>
-        Nakuru has a lower proportion of missing sex values than the other two
-        lakes.
-        Again, this suggests the missingness is not random — something about the
-        conditions at Bogoria and Elementaita made sexing harder.
-      </p>
-
-      <p>
-        We can also ask whether the birds with missing sex are physically
-        different from those with recorded sex.
-        If missingness is related to body size — perhaps smaller birds are
-        harder to sex — then dropping the missing rows would systematically
-        remove smaller birds from the dataset:
+        Not equally at all.
+        Upper-middle-income countries are missing 41% of their values, against
+        24% for lower-middle-income countries.
+        (Only one country, Seychelles, is high income, and it reports every
+        year, so we wouldn't read too much into that 0%.)
+        What about over time?
       </p>
 
       <program language="r">
         <code>
-        kenya_flamingos %&gt;%
-          mutate(sex_missing = is.na(sex)) %&gt;%
-          group_by(sex_missing) %&gt;%
-          summarise(
-            mean_mass     = mean(body_mass_g, na.rm = TRUE),
-            mean_bill     = mean(bill_length_mm, na.rm = TRUE),
-            n             = n()
-          )
-        #&gt; # A tibble: 2 x 4
-        #&gt;   sex_missing mean_mass mean_bill     n
-        #&gt;   &lt;lgl&gt;           &lt;dbl&gt;     &lt;dbl&gt; &lt;int&gt;
-        #&gt; 1 FALSE           1931.      104.   311
-        #&gt; 2 TRUE            1898.      102.    33
-        </code>
-      </program>
-
-      <p>
-        Birds with missing sex are slightly lighter and have slightly shorter
-        bills on average than birds with recorded sex.
-        The difference is small, but it exists.
-        The missing values are not completely random — they are subtly related
-        to the birds' physical characteristics.
-      </p>
-
-      <p>
-        We can visualise this with <c>naniar</c> 's <c>ggplot_na_level()</c> —
-        or more simply, by plotting body mass with missing values flagged:
-      </p>
-
-      <program language="r">
-        <code>
-        ggplot(kenya_flamingos,
-               aes(x = species,
-                   y = body_mass_g,
-                   colour = is.na(sex))) +
-          geom_jitter(width = 0.2, alpha = 0.6) +
-          scale_colour_manual(
-            values = c("FALSE" = "#44575E", "TRUE" = "#F37021"),
-            labels = c("FALSE" = "Sex recorded",
-                       "TRUE"  = "Sex missing")) +
-          labs(x = "Species",
-               y = "Body mass (g)",
-               colour = NULL,
-               title = "Body mass by species, with missing sex highlighted") +
+        africa_indicators %&gt;%
+          group_by(year) %&gt;%
+          summarise(pct_missing = mean(is.na(primary_enrolment)) * 100) %&gt;%
+          ggplot(aes(x = year, y = pct_missing)) +
+          geom_col(fill = "#F37021") +
+          scale_x_continuous(breaks = 2010:2023) +
+          labs(x = "Year", y = "Countries with no value (%)") +
           theme_bw()
         </code>
       </program>
 
-      <figure xml:id="fig-flamingo-missing-mass">
+      <figure xml:id="fig-africa-enrolment-year">
         <caption>
-          Body mass by species, with birds whose sex was not recorded shown in
-          orange.
-          Birds with missing sex are scattered across the body mass range for
-          each species, but are slightly more common among lighter birds.
+          The percentage of countries with no primary enrolment figure, by year.
+          Missingness rises from 2016 onwards, to around 40% in 2019 and 2020.
         </caption>
 
-        <image source="images/ch-missing-mass.png" width="90%">
+        <image source="images/ch-missing-enrolment-year.png" width="90%">
           <description>
             <p>
-              TODO: A jittered dot plot with species on the x-axis and body mass
-              in grams on the y-axis.
-              Dark teal points represent birds with recorded sex; orange points
-              represent birds with missing sex.
-              Orange points are scattered throughout both species columns but
-              appear slightly more concentrated toward the lower end of the body
-              mass range.
+              A bar chart with year from 2010 to 2023 on the horizontal axis and
+              the percentage of countries with no primary enrolment value on the
+              vertical axis.
+              The bars are between about 13% and 24% up to 2015, then rise to
+              around 28% in 2016 and 2017, 33% in 2018, and between 37% and 43% from 2019
+              onwards.
             </p>
           </description>
         </image>
       </figure>
 
+      <p>
+        Between 2019 and 2023, 40% of the values are missing, compared with 23%
+        between 2010 and 2018.
+        Countries stop reporting the most recent figures, and they report some
+        years late.
+        So whether a value is missing depends on the year, and on the country's
+        income group.
+      </p>
+
+      <p>
+        Next question: are the countries with missing enrolment different in
+        other ways?
+        We can't compare them on enrolment (it's missing!), but we can compare
+        them on variables we do have:
+      </p>
+
+      <program language="r">
+        <code>
+        africa_indicators %&gt;%
+          group_by(enrolment_missing = is.na(primary_enrolment)) %&gt;%
+          summarise(
+            mean_under5 = mean(under5_mortality),
+            mean_life   = mean(life_expectancy),
+            n           = n()
+          )
+        #&gt; # A tibble: 2 x 4
+        #&gt;   enrolment_missing mean_under5 mean_life     n
+        #&gt;   &lt;lgl&gt;                   &lt;dbl&gt;     &lt;dbl&gt; &lt;int&gt;
+        #&gt; 1 FALSE                    63.7      62.9   537
+        #&gt; 2 TRUE                     75.6      61.6   219
+        </code>
+      </program>
+
+      <p>
+        Country-years with missing enrolment have higher under-5 mortality (75.6
+        deaths per 1,000 births, against 63.7) and slightly lower life
+        expectancy.
+        They are, on average, places where children are doing worse.
+        Hold on to that, because it matters for what we do about the gaps.
+      </p>
+
+      <p>
+        Now <c>hiv_prevalence</c>, which has a very different pattern.
+        Which rows are missing?
+      </p>
+
+      <program language="r">
+        <code>
+        africa_indicators %&gt;%
+          filter(is.na(hiv_prevalence)) %&gt;%
+          count(country, income_group)
+        #&gt; # A tibble: 4 x 3
+        #&gt;   country               income_group            n
+        #&gt;   &lt;chr&gt;                 &lt;fct&gt;               &lt;int&gt;
+        #&gt; 1 Equatorial Guinea     Upper middle income    14
+        #&gt; 2 Mauritius             Upper middle income    14
+        #&gt; 3 Sao Tome and Principe Lower middle income    14
+        #&gt; 4 Seychelles            High income            14
+        </code>
+      </program>
+
+      <p>
+        All 56 missing values come from just four countries, and every one of
+        their 14 years is missing.
+        The gaps aren't scattered.
+        Those countries simply have no HIV prevalence figure at all.
+        Are they like the other 50?
+      </p>
+
+      <program language="r">
+        <code>
+        africa_indicators %&gt;%
+          group_by(hiv_missing = is.na(hiv_prevalence)) %&gt;%
+          summarise(
+            mean_under5 = mean(under5_mortality),
+            mean_gdp    = mean(gdp_per_capita, na.rm = TRUE),
+            n           = n()
+          )
+        #&gt; # A tibble: 2 x 4
+        #&gt;   hiv_missing mean_under5 mean_gdp     n
+        #&gt;   &lt;lgl&gt;             &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;
+        #&gt; 1 FALSE              69.7    2145.   700
+        #&gt; 2 TRUE               35.1    9430.    56
+        </code>
+      </program>
+
+      <p>
+        They really aren't.
+        The four countries with no HIV figure have about half the under-5
+        mortality and over four times the GDP per capita of the countries that
+        report.
+        (Equatorial Guinea is the exception on child mortality, which is a good
+        reminder that four countries is a very small group to draw conclusions
+        from.)
+      </p>
+
+      <p>
+        Finally, <c>poverty_rate</c> and <c>births_skilled</c>, the two
+        mostly-missing columns.
+        Here's Kenya:
+      </p>
+
+      <program language="r">
+        <code>
+        africa_indicators %&gt;%
+          filter(country == "Kenya") %&gt;%
+          select(year, births_skilled, poverty_rate)
+        #&gt; # A tibble: 14 x 3
+        #&gt;     year births_skilled poverty_rate
+        #&gt;    &lt;int&gt;          &lt;dbl&gt;        &lt;dbl&gt;
+        #&gt;  1  2010           NA           NA
+        #&gt;  2  2011           NA           NA
+        #&gt;  3  2012           NA           NA
+        #&gt;  4  2013           NA           NA
+        #&gt;  5  2014           61.8         NA
+        #&gt;  6  2015           NA           37.7
+        #&gt;  7  2016           70.2         NA
+        #&gt;  8  2017           NA           NA
+        #&gt;  9  2018           NA           NA
+        #&gt; 10  2019           NA           NA
+        #&gt; 11  2020           NA           44.4
+        #&gt; 12  2021           NA           46.4
+        #&gt; 13  2022           NA           45.5
+        #&gt; 14  2023           NA           NA
+        </code>
+      </program>
+
+      <p>
+        Kenya has two values for births with skilled staff and four for poverty,
+        in 14 years.
+        That's because both come from household surveys, which happen every few
+        years, not every year.
+        A missing value here isn't a failure to record anything.
+        It means no survey was done that year, so there was nothing to
+        record.
+      </p>
+
       <insight xml:id="insight-missing-not-random">
         <title>Missing values are data too</title>
 
         <p>
-          The pattern of missingness in the flamingo dataset is not random.
-          Missing sex values are more common in Greater Flamingos, more common
-          at certain lakes, and associated with slightly smaller body size.
-          This means that the missing values themselves carry information: they
-          tell us something about which birds are harder to sex, and therefore
-          about the conditions under which the data was collected.
-          Dropping those birds without acknowledging this pattern would
-          introduce a subtle bias into any analysis comparing males and females.
-          The Challenger engineers made a similar mistake: they excluded
-          zero-damage launches because they seemed irrelevant, but those
-          launches were the most important context for interpreting the data
-          they did show.
-          In both cases, the absent data was not irrelevant — it was
-          informative.
+          Not one of these five variables has missing values that look
+          scattered at random.
+          Enrolment is missing more in recent years and in
+          upper-middle-income countries.
+          HIV prevalence is missing for four whole countries that look different
+          from the rest.
+          Poverty and skilled births are missing because surveys don't happen
+          every year.
+          Dropping the rows with missing values would quietly change which
+          countries, and which years, our analysis describes.
+          Just like the Kenyan clinics, the gaps themselves tell us something
+          about how the data was collected.
         </p>
       </insight>
     </subsection>
 
-    <subsection xml:id="ss-missing-handling">
-      <title>What to do about missing values</title>
+    <subsection xml:id="ss-missing-mechanism">
+      <title>Why values are missing: the mechanism matters</title>
 
       <p>
-        There is no single correct answer to how to handle missing values.
-        The right decision depends on how many values are missing, what pattern
-        they follow, and what the analysis requires.
-        There are three broad options.
+        We can now put names to what we've seen.
+        Statisticians describe missing data using three mechanisms, and the
+        viral load study had an example of each.
+        Here is each one in the context of this dataset.
+      </p>
+
+      <p>
+        <term>Missing completely at random (MCAR)</term> means that whether a
+        value is missing has nothing to do with the value, or with anything else
+        in the data.
+        The 219 missing enrolment figures would be MCAR if each country-year
+        had simply been lost at random, like the six viral load samples that
+        were never collected.
+        The values we do have would then still be a fair sample of all 756.
+        We'd love to show you a real example of that here, but we can't:
+        every gap we've looked at has a pattern.
+        Even the 20 missing GDP values are not random, since 12 come from
+        Eritrea and 8 from South Sudan.
+        Truly MCAR data is rarer than most people hope.
+      </p>
+
+      <p>
+        <term>Missing at random (MAR)</term> means that missingness can be
+        explained by other variables we <em>have</em> recorded.
+        The name is a bit misleading: it doesn't mean the missingness is random,
+        only that the pattern is explained by something we can see.
+        Primary enrolment is a good candidate.
+        It's missing more in recent years and in upper-middle-income countries,
+        and we know the year and the income group for every row.
+        That means we can compare like with like, for example upper-middle-income
+        countries in 2020 against other upper-middle-income countries in 2020.
+        (We say "candidate" because the higher child mortality we found
+        suggests something else might also be going on.
+        MAR is always an assumption, not something the data can confirm.)
+      </p>
+
+      <p>
+        <term>Missing not at random (MNAR)</term> means that whether a value is
+        missing depends on the value itself, and nothing else in the data can
+        fully account for it.
+        This is the dangerous one, the sickest patients who were never tested
+        in the Kenyan study.
+        HIV prevalence might be an example.
+        If countries tend not to publish a figure when the epidemic is small, or
+        when it's politically sensitive, then the missing values depend on the
+        very thing they would have told us.
+        The four countries that look wealthier and healthier than the rest are
+        consistent with that story, but we can't prove it.
+        The data can't tell us which mechanism applies.
+        Only knowing how it was collected can.
+      </p>
+
+      <p>
+        And then there are <c>poverty_rate</c> and <c>births_skilled</c>.
+        These aren't really any of the three.
+        The value wasn't hidden or lost, it never existed, because nobody
+        measured it that year.
+        Rather than asking "why is it missing?", the honest question is "was
+        this ever meant to be there?"
+      </p>
+
+      <p>
+        It's the same conclusion we reached in
+        <xref ref="ch-cleaning-recoding"/>, but now we have the words to say
+        exactly what's at stake in each case.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-missing-options">
+      <title>What to do: three options, each a decision</title>
+
+      <p>
+        First, doing nothing is also a choice, and usually not a good one.
+        Most R functions return <c>NA</c> if any input is missing:
+      </p>
+
+      <program language="r">
+        <code>
+        mean(africa_indicators$primary_enrolment)
+        #&gt; [1] NA
+        </code>
+      </program>
+
+      <p>
+        This is R refusing to guess.
+        The mean of numbers that include some unknowns is itself unknown, and R
+        is right to say so.
+        But in practice, most of us react by adding <c>na.rm = TRUE</c> and
+        moving on, without thinking about what we just decided.
+        There are three real options.
       </p>
 
       <paragraphs>
-        <title>Option 1: Remove the rows</title>
+        <title>
+          Option 1: Remove the rows (<c>na.rm = TRUE</c> or listwise deletion)
+        </title>
 
         <p>
-          The simplest approach is to drop any row with a missing value in the
-          relevant column.
-          In R, <c>filter(!is.na(sex))</c> or <c>na.omit()</c> does this.
-          This is called <term>listwise deletion</term> or
-          <term>complete case 
-        analysis</term>.
+          <c>na.rm = TRUE</c> removes the missing values and calculates on
+          whatever is left.
+          Put simply, you are no longer analysing the dataset you thought you
+          were.
         </p>
 
         <program language="r">
           <code>
-          flamingos_complete &lt;- kenya_flamingos %&gt;%
-            filter(!is.na(sex))
-
-          nrow(flamingos_complete)
-          #&gt; [1] 311
-
-          # What fraction of birds remain?
-          nrow(flamingos_complete) / nrow(kenya_flamingos)
-          #&gt; [1] 0.904
+          mean(africa_indicators$primary_enrolment, na.rm = TRUE)
+          #&gt; [1] 102.4205
           </code>
         </program>
 
         <p>
-          Dropping the 33 birds with missing sex leaves 311 birds — 90.4% of the
-          original dataset.
-          The cost is small in terms of data lost, but as we saw above, the
-          remaining birds are not perfectly representative: Greater Flamingos
-          and birds from Bogoria and Elementaita are slightly underrepresented.
-          For an analysis that compares males and females, listwise deletion is
-          reasonable here.
-          For an analysis of body mass by species, it introduces a small bias —
-          the 33 removed birds were slightly lighter on average.
+          This is the mean of 537 country-years, not 756.
+          It doesn't estimate the missing values, it just leaves them out
+          silently (unless you check with <c>sum(!is.na(...))</c> yourself).
+          And since the missing values were concentrated in recent years and in
+          upper-middle-income countries, that 102.4 describes the earlier years
+          and the other countries better than it describes everyone.
         </p>
 
         <p>
-          Listwise deletion is most defensible when the fraction of missing
-          values is small and the pattern of missingness appears roughly random.
-          It is least defensible when missingness is strongly related to the
-          outcome variable or to a key grouping variable.
+          A more aggressive version is listwise deletion, which drops every row
+          with a missing value anywhere.
         </p>
+
+        <program language="r">
+          <code>
+          sum(complete.cases(africa_indicators))
+          #&gt; [1] 22
+
+          nrow(africa_indicators)
+          #&gt; [1] 756
+          </code>
+        </program>
+
+        <p>
+          Only 22 of 756 rows are complete!
+          That's mostly down to <c>poverty_rate</c> and <c>births_skilled</c>,
+          which are missing in most rows.
+          Listwise deletion would throw away 97% of the data, including every
+          row where the only gap is a variable we don't even need.
+          If we only need the other columns, we can choose them first:
+        </p>
+
+        <program language="r">
+          <code>
+          africa_indicators %&gt;%
+            select(-poverty_rate, -births_skilled) %&gt;%
+            complete.cases() %&gt;%
+            sum()
+          #&gt; [1] 491
+          </code>
+        </program>
+
+        <p>
+          That keeps 491 rows, which is much better.
+          The lesson is that "drop the incomplete rows" depends entirely on
+          which columns you count, so decide what the analysis needs first.
+          (And remember that those 491 rows still leave out the countries
+          without an HIV figure.)
+        </p>
+
+        <remark xml:id="remark-report-n">
+          <title>Always report the n</title>
+
+          <p>
+            Never report a mean, a standard deviation, or any other summary
+            without also saying the <m>n</m> it was calculated from.
+            A summary of 756 country-years, 537 country-years, or 22
+            country-years is a different claim about a different sample, and a
+            table without <m>n</m> makes it impossible to tell them apart.
+          </p>
+        </remark>
       </paragraphs>
 
       <paragraphs>
         <title>Option 2: Keep the rows and work around the gap</title>
 
         <p>
-          For some analyses, the missing values in <c>sex</c> simply do not
-          matter.
-          If the question is about body mass by species and lake, sex is
-          irrelevant and the 33 birds with missing sex can be included without
-          issue.
-          R functions like <c>mean()</c> and <c>sum()</c> handle this with the
-          <c>na.rm = TRUE</c> argument, which tells R to skip missing values
-          rather than return <c>NA</c> for the whole result:
+          Sometimes the missing values just don't matter for the question.
+          If we want life expectancy by income group, the gaps in
+          <c>poverty_rate</c> are irrelevant and we can ignore them.
+          And when we do summarise a variable with gaps, we can report how many
+          are missing, instead of dropping them without saying so:
         </p>
 
         <program language="r">
           <code>
-          # Without na.rm: returns NA if any value is missing
-          mean(kenya_flamingos$body_mass_g)
-          #&gt; [1] 1929.
-
-          # This works fine because body_mass_g has no missing values.
-          # But for sex-based summaries:
-          kenya_flamingos %&gt;%
-            group_by(sex) %&gt;%
-            summarise(mean_mass = mean(body_mass_g))
-          #&gt; # A tibble: 3 x 2
-          #&gt;   sex    mean_mass
-          #&gt;   &lt;chr&gt;      &lt;dbl&gt;
-          #&gt; 1 female     1897.
-          #&gt; 2 male       1966.
-          #&gt; 3 NA         1898.
+          africa_indicators %&gt;%
+            group_by(income_group) %&gt;%
+            summarise(
+              mean_enrolment = mean(primary_enrolment, na.rm = TRUE),
+              n              = sum(!is.na(primary_enrolment)),
+              n_missing      = sum(is.na(primary_enrolment))
+            )
+          #&gt; # A tibble: 4 x 4
+          #&gt;   income_group        mean_enrolment     n n_missing
+          #&gt;   &lt;fct&gt;                        &lt;dbl&gt; &lt;int&gt;     &lt;int&gt;
+          #&gt; 1 Low income                    102.   202        92
+          #&gt; 2 Lower middle income           103.   255        81
+          #&gt; 3 Upper middle income           101.    66        46
+          #&gt; 4 High income                   115.    14         0
           </code>
         </program>
 
         <p>
-          The <c>NA</c> group appears as a third row in the summary.
-          This is not wrong — it is honest.
-          It shows that 33 birds could not be assigned to male or female, and
-          gives their mean mass separately.
-          Whether to include or exclude that row in a report depends on what the
-          report is for.
+          This table is honest about what it's built on.
+          Nobody reading it can miss that for upper-middle-income countries, 46
+          out of 112 values are absent, so that 101 is based on just 66.
+          Whether you'd trust it for a report depends on what the report is for.
+          Also, because we compare within each group, this is the "like with
+          like" approach we described for MAR.
         </p>
       </paragraphs>
 
       <paragraphs>
-        <title>Option 3: Fill in an estimate</title>
+        <title>Option 3: Fill in an estimate (imputation)</title>
 
         <p>
-          A third option is to replace missing values with an estimate — a
-          process called <term>imputation</term>.
-          The simplest form is to replace each missing value with the column
-          mean or median.
-          More sophisticated approaches use other variables in the dataset to
-          predict the missing value.
+          <term>Imputation</term> fills in each missing value with an estimate,
+          often the mean of the variable, so no rows need to be dropped.
         </p>
 
         <program language="r">
           <code>
-          # Simple example: replace missing sex with "Unknown"
-          # (not imputation in the statistical sense, 
-          # but a common practical approach)
-          kenya_flamingos &lt;- kenya_flamingos %&gt;%
-            mutate(sex_clean = ifelse(is.na(sex), "Unknown", sex))
+          enrolment_imputed &lt;- ifelse(
+            is.na(africa_indicators$primary_enrolment),
+            mean(africa_indicators$primary_enrolment, na.rm = TRUE),
+            africa_indicators$primary_enrolment
+          )
 
-          table(kenya_flamingos$sex_clean)
-          #&gt; female   male Unknown 
-          #&gt;    155    156      33
+          sd(africa_indicators$primary_enrolment, na.rm = TRUE)
+          #&gt; [1] 19.92553
+
+          sd(enrolment_imputed)
+          #&gt; [1] 16.78877
           </code>
         </program>
 
         <p>
-          For a categorical variable like <c>sex</c>, true imputation is
-          difficult — you cannot average "male" and "female".
-          Replacing with "Unknown" is honest but creates a third category that
-          complicates comparisons.
-          For continuous variables, mean or median imputation is straightforward
-          but reduces the apparent variability in the data, because all imputed
-          values are identical.
-          More advanced methods are beyond the scope of this chapter, but the
-          key point applies to all of them: imputation introduces assumptions,
-          and those assumptions should be stated explicitly.
+          This runs without complaint and gives a column with no gaps.
+          But we've replaced 219 honestly missing values with 219 identical
+          copies of 102.4.
+          The mean doesn't change, but the standard deviation drops from 19.9
+          to 16.8, because we've added lots of values sitting exactly in the
+          middle.
+          The data now looks more consistent than it really is.
+        </p>
+
+        <p>
+          For enrolment, where we think the missingness is roughly MAR,
+          that's an acceptable shortcut for a quick look.
+          For HIV prevalence, it's much worse.
+          The mean of the 700 reported values is 4.26 (the median is just
+          1.6), so we'd be giving Mauritius, Seychelles, Equatorial Guinea and
+          São Tomé and Príncipe a prevalence of 4.26 each.
+          If the reason those countries have no figure is that their epidemics
+          are small, we've replaced four honest unknowns with four confidently
+          wrong numbers, and hidden the problem rather than acknowledging it.
         </p>
       </paragraphs>
 
@@ -885,17 +1092,15 @@
         <p>
           Whichever approach you choose, the most important thing is to say what
           you did and why.
-          <q>We excluded 33 birds with 
-        unrecorded sex from the male-female comparison. These birds 
-        were slightly lighter on average than birds with recorded 
-        sex, and were more common among Greater Flamingos. This 
-        may introduce a small bias toward heavier birds in our 
-        comparison.</q>
-          That sentence takes thirty seconds to write and is the difference
-          between an analysis that can be evaluated and one that cannot.
-          Missing data does not disappear when you drop the rows.
-          It moves from the dataset into the assumptions of the analysis — and
-          the reader deserves to know it is there.
+          <q>We excluded 219 country-years with no primary enrolment figure.
+          These were more common after 2018 and in upper-middle-income
+          countries, so our estimate may describe earlier years and poorer
+          countries better than recent years and richer ones.</q>
+          That takes thirty seconds to write, and it's the difference between an
+          analysis that can be checked and one that can't.
+          Missing data doesn't disappear when you drop the rows.
+          It moves from the dataset into the assumptions of the analysis, and
+          the reader deserves to know it's there.
         </p>
       </insight>
 
@@ -950,274 +1155,22 @@
           </cell>
         </row>
       </tabular>
-    </subsection>
-
-    <subsection xml:id="subsec-ch8-in-practice">
-      <title>Handling Missing Values in Practice</title>
-
-      <p>
-        The previous section found missing values in the flamingo dataset.
-        Before deciding what to do about them, it is worth thinking about
-        <em>why</em> they might be missing — because the reason changes what the
-        right response is.
-      </p>
-
-      <program language="r">
-        <code>
-        colSums(is.na(kenya_flamingos))
-        #&gt;           lake        species bill_length_mm  bill_depth_mm  leg_length_mm
-        #&gt;              0              0              0              4              0
-        #&gt;    body_mass_g            sex           year
-        #&gt;              8              7              0
-        </code>
-      </program>
-
-      <p>
-        Three variables have missing values: <c>bill_depth_mm</c> (4 missing),
-        <c>body_mass_g</c> (8 missing), and <c>sex</c> (7 missing).
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-flamingo-mechanism">
-      <title>Why values are missing: the mechanism matters</title>
-
-      <p>
-        Consider three plausible stories about why <c>body_mass_g</c> might be
-        missing:
-      </p>
-
-      <p>
-        The battery in the scale ran out mid-morning, so every mass after that
-        point went unrecorded, however heavy the bird was.
-        Whether a mass is missing has nothing to do with the mass itself — it
-        depends only on when the bird was weighed.
-        This is <term>missing completely at random (MCAR)</term>.
-        The 336 recorded masses are still a fair sample of all 344 birds' true
-        weights.
-      </p>
-
-      <p>
-        Working out a bird's sex requires handling it closely, and the field
-        team only does that with calmer birds.
-        If calmer birds tend to be a particular species or size — both recorded
-        in the dataset — then missingness in <c>sex</c> is related to observed
-        variables but not to sex itself.
-        This is <term>missing at random (MAR)</term>.
-        The name is slightly misleading: it does not mean the missingness is
-        random, only that it can be explained by other variables you have
-        measured.
-      </p>
-
-      <p>
-        But what if the heaviest, strongest birds are the ones that struggle
-        free before anyone can weigh them?
-        Then whether a mass is missing depends on the mass itself — the largest
-        birds are systematically absent from the <c>body_mass_g</c> column.
-        This is <term>missing not at random (MNAR)</term>.
-        It is the same structure as the Challenger engineers excluding
-        zero-damage launches because they seemed irrelevant — the missing values
-        are not a random gap, they are a biased one, and the 336 recorded masses
-        are not a fair sample of all 344 birds' true weights.
-      </p>
-
-      <p>
-        The dataset on its own cannot tell you which of these is true.
-        That has to come from knowing how the data was collected.
-        It is the same conclusion we reached in
-        <xref ref="ch-cleaning-recoding"/>, but now we have the words to say
-        exactly what is at stake in each case.
-      </p>
-    </subsection>
-
-    <subsection xml:id="ss-missing-options">
-      <title>What to do: three options, each a decision</title>
-
-      <p>
-        Before discussing how to handle missing values, it is worth saying that
-        doing nothing — leaving the missing values as <c>NA</c> and not thinking
-        about them — is also a choice, and usually not a good one.
-        Most R functions return <c>NA</c> if any input value is missing:
-      </p>
-
-      <program language="r">
-        <code>
-        mean(kenya_flamingos$body_mass_g)
-        #&gt; [1] NA
-        </code>
-      </program>
-
-      <p>
-        This is R refusing to guess.
-        The mean of a set of numbers that includes some unknowns is itself
-        unknown — and R is correct to say so.
-        But in practice, this behaviour prompts most users to add
-        <c>na.rm = TRUE</c> and move on without thinking about what they just
-        decided.
-        There are three meaningful options.
-      </p>
-
-      <paragraphs>
-        <title>
-          Option 1: Remove the rows ( <c>na.rm = TRUE</c> or listwise deletion)
-        </title>
-
-        <p>
-          <c>na.rm = TRUE</c> removes missing observations and does the
-          calculation on whatever is left.
-          Put simply: you are no longer analysing the sample you thought you
-          were.
-        </p>
-
-        <program language="r">
-          <code>
-          mean(kenya_flamingos$body_mass_g, na.rm = TRUE)
-          #&gt; [1] 1957.405
-          </code>
-        </program>
-
-        <p>
-          This is the mean of 336 birds, not 344.
-          It is not imputation — it does not estimate the missing values.
-          It simply leaves those birds out silently, unless you check
-          <c>sum(!is.na(...))</c> yourself.
-        </p>
-
-        <p>
-          If missing values are MCAR, leaving them out costs precision and
-          nothing else.
-          If MNAR — if the heaviest birds escaped before being weighed — the
-          remaining 336 masses are biased toward lighter birds, and the mean is
-          wrong in a direction you cannot detect from the data you have.
-        </p>
-
-        <p>
-          A more aggressive version is listwise deletion: dropping every row
-          with any missing value anywhere.
-        </p>
-
-        <program language="r">
-          <code>
-          sum(complete.cases(kenya_flamingos))
-          #&gt; [1] 325
-
-          nrow(kenya_flamingos)
-          #&gt; [1] 344
-          </code>
-        </program>
-
-        <p>
-          Only 325 of 344 rows are complete — more than the 8 missing masses
-          alone, because gaps for different variables fall in different rows.
-          Listwise deletion discards a bird with missing <c>sex</c> even when
-          calculating mean body mass, where sex is irrelevant.
-          For descriptive work, <c>na.rm = TRUE</c> one variable at a time is
-          usually better, but means different summaries come from different
-          subsets of birds — which must be reported.
-        </p>
-
-        <remark xml:id="remark-report-n">
-          <title>Always report the n</title>
-
-          <p>
-            Never report a mean, a standard deviation, or any other summary
-            without also saying the <m>n</m> it was calculated from.
-            A summary of 344 birds, 336 birds, or 325 birds is a different claim
-            about a different sample, and a table without <m>n</m> makes it
-            impossible to tell them apart.
-          </p>
-        </remark>
-      </paragraphs>
-
-      <paragraphs>
-        <title>Option 2: Keep the rows and work around the gap</title>
-
-        <p>
-          For some analyses, the missing values simply do not matter.
-          If the question is about body mass by species and lake, <c>sex</c> is
-          irrelevant and birds with missing sex can be included without issue.
-          And when summarising by group, the missing group can be reported
-          separately rather than silently dropped:
-        </p>
-
-        <program language="r">
-          <code>
-          kenya_flamingos %&gt;%
-            group_by(sex) %&gt;%
-            summarise(mean_mass = mean(body_mass_g, na.rm = TRUE),
-                      n         = sum(!is.na(body_mass_g)))
-          #&gt; # A tibble: 3 x 3
-          #&gt;   sex    mean_mass     n
-          #&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;
-          #&gt; 1 female     1897.   152
-          #&gt; 2 male       1966.   153
-          #&gt; 3 NA         1898.    31
-          </code>
-        </program>
-
-        <p>
-          The <c>NA</c> group is not wrong — it is honest.
-          It shows that 31 birds could not be assigned to male or female, and
-          gives their mean mass separately.
-          Whether to include or exclude that row in a report depends on what the
-          report is for.
-        </p>
-      </paragraphs>
-
-      <paragraphs>
-        <title>Option 3: Fill in an estimate (imputation)</title>
-
-        <p>
-          <term>Imputation</term> fills in each missing value with an estimate —
-          often the variable's mean — so no rows need to be dropped.
-        </p>
-
-        <program language="r">
-          <code>
-          mass_imputed &lt;- ifelse(
-            is.na(kenya_flamingos$body_mass_g),
-            mean(kenya_flamingos$body_mass_g, na.rm = TRUE),
-            kenya_flamingos$body_mass_g
-          )
-          </code>
-        </program>
-
-        <p>
-          This runs without complaint and gives a column with no missing values.
-          But it has replaced 8 honestly missing values with 8 copies of the
-          mean from the 336 birds that were weighed.
-          If those 336 birds are a fair sample — MCAR or MAR — imputing the mean
-          is a reasonable approximation, though it reduces the apparent
-          variability.
-          If the missing values are MNAR — if the heaviest birds escaped —
-          imputing the mean from a sample of lighter birds makes things worse,
-          not better.
-          It replaces 8 honestly missing values with 8 confidently wrong ones,
-          and hides the bias rather than acknowledging it.
-        </p>
-      </paragraphs>
 
       <insight xml:id="insight-missing-decision">
         <title>
-          Every missing value requires a decision — and the decision should be
+          Every missing value needs a decision, and the decision should be
           stated
         </title>
 
         <p>
-          There is no option that avoids making a choice about missing values.
+          There's no option that avoids making a choice about missing values.
           Leaving them as <c>NA</c> is a choice.
           Using <c>na.rm = TRUE</c> is a choice.
           Listwise deletion is a choice.
           Imputation is a choice.
-          What distinguishes good practice from bad is not which choice is made,
-          but whether it is made deliberately, whether the reasoning is stated,
-          and whether the sensitivity of the conclusions to that choice is
-          acknowledged.
-          <q>We excluded 8 birds with 
-        missing body mass from the mass analysis. If heavier birds 
-        were systematically harder to weigh, our mean mass may be 
-        an underestimate.</q>
-          That sentence takes thirty seconds to write and is the difference
-          between an analysis that can be evaluated and one that cannot.
+          What separates good practice from bad isn't which choice you make, but
+          whether you make it deliberately, say why, and acknowledge how much
+          your conclusions depend on it.
         </p>
       </insight>
     </subsection>

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!-- ================================================================= -->
 <!--  Chapter 7: Handling Factors                                      -->
 <!--    Checked over and happy with it (for now at least!)             -->
@@ -10,13 +11,14 @@
     <p>
       In 1950, the South African government made a decision that would shape the
       lives of millions of people for decades.
-      It decided to write down, officially and legally, what race everyone was.
+      They decided to write down, officially and legally, what race everyone
+      was.
     </p>
 
     <p>
       In this chapter, we're going to look carefully at variables like this one:
       variables that take a fixed set of named values.
-      With these variables, the choice of what those values are, and how they're
+      With these variables, the choice of what those values are and how they're
       defined, affects every analysis that comes after.
     </p>
   </introduction>
@@ -28,9 +30,9 @@
 
     <introduction>
       <p>
-        The story of <q>population group</q> shows how a single variable can
-        shape an entire system of laws, and how that system can change over
-        time.
+        This section tells the story of <q>population group</q> to show how a
+        single variable can shape an entire system of laws, and how that system
+        can change over time.
       </p>
     </introduction>
 
@@ -42,12 +44,12 @@
         Act, which required every person living in South Africa to be officially
         classified into a racial category.
         At its simplest, the Act set up three categories: White, Coloured, and
-        Native (also called <q>Bantu</q>).
+        Native (also called <q>Bantu</q> ).
         Indians, the descendants of South Asians who had come to South Africa
-        under British rule, didn't get a category of their own at first.
-        As we'll see, they were placed within the Coloured category, and it was
-        only later that a fourth category, Asian, was added, on the stated
-        grounds that Indians had <q>no historical right to the country</q>.
+        under British rule, didn't get a category of their own at first, so they
+        were placed within the Coloured category initially.
+        Later, a fourth <q>Asian</q> category was added, on the stated grounds
+        that Indians had <q>no historical right to the country</q>.
       </p>
 
       <p>
@@ -73,12 +75,11 @@
         within designated homelands.
         The Prohibition of Mixed Marriages Act made it illegal for a White
         person to marry someone from another classification.
-        The Immorality Amendment Act went even further, and made sexual
-        relations between a White person and anyone from another classification
-        a crime.
+        The Immorality Amendment Act criminalised sexual relations between a
+        White person and anyone from another classification.
         A person's most basic rights and opportunities (where they lived, who
-        they could marry, which schools their children went to, and what work
-        they could do) all came from a single categorical variable, assigned at
+        they could marry, which schools their children went to, what work they
+        could do) all came from a single categorical variable, assigned at
         birth.
       </p>
 
@@ -121,8 +122,7 @@
       </p>
     </subsection>
   </section>
-
-    <!-- ================================================================= -->
+  <!-- ================================================================= -->
   <!--  SECTION 3: the STACK question that exemplifies this              -->
   <!-- ================================================================= -->
   <section xml:id="sec-ch7-stack">
@@ -142,7 +142,6 @@
       </p>
     </subsection>
   </section>
-
   <!-- ================================================================= -->
   <!--  SECTION 2: ordered vs. unordered, and when to factor at all       -->
   <!-- ================================================================= -->
@@ -151,12 +150,10 @@
 
     <introduction>
       <p>
-        Factors come in two kinds.
-        The first kind is <term>unordered factors</term>, where the levels are
-        just different categories, with no natural ranking between them.
-        The racial classifications of the Population Registration Act are one
-        example: <q>White</q> doesn't come before or after <q>Coloured</q> in
-        any meaningful order.
+        We saw in <xref ref="ss-factors-legal-classification"/> a factor group,
+        the racial classifications of the Population Registration Act.
+        In this factor, order doesn't matter <ndash/> <q>White</q> doesn't come
+        before or after <q>Coloured</q> in any meaningful order.
         Continent is another: <q>Africa</q>, <q>Asia</q>, <q>Europe</q>, and
         <q>the Americas</q> are different from each other, but none of them is
         greater or lesser than another.
@@ -532,8 +529,8 @@
       <p>
         By setting <c>levels = c("JUNIOR", "ADULT")</c> ourselves, we control
         the order these categories appear in tables, plots, and model output.
-        Without it, R would put them in alphabetical order (<c>ADULT</c> before
-        <c>JUNIOR</c>).
+        Without it, R would put them in alphabetical order ( <c>ADULT</c> before
+        <c>JUNIOR</c> ).
         With it, we get the more natural order, from younger to older.
       </p>
 
@@ -634,24 +631,24 @@
           factor, and the months appear in calendar order, instead of
           alphabetical order.
           That order came from how we defined the factor, and not from the data.
-          May doesn't appear at all because, as we saw in <xref
-          ref="ch-cleaning-recoding"/>, the dataset doesn't include any data for
-          May.
+          May doesn't appear at all because, as we saw in
+          <xref ref="ch-cleaning-recoding"/>, the dataset doesn't include any
+          data for May.
           If you want every level to show up, even with zero crashes, you can
           add <c>.drop = FALSE</c> inside <c>group_by()</c>.
         </p>
 
         <p>
-          If you look back, this is also exactly what happened in <xref
-          ref="ch-multilevel-data"/>.
+          If you look back, this is also exactly what happened in
+          <xref ref="ch-multilevel-data"/>.
           At Berkeley, <c>department</c> was a factor in exactly this sense.
           The university-wide admission rate that looked like discrimination was
           calculated by ignoring that factor, and pooling every department into
           one group.
           Splitting by department meant grouping by the factor, and that one
           step made the real pattern visible, and reversed the conclusion.
-          You can see this in the plot split by department in <xref
-          ref="fig-berkeley-admissions-by-dept"/>.
+          You can see this in the plot split by department in
+          <xref ref="fig-berkeley-admissions-by-dept"/>.
         </p>
 
         <insight xml:id="insight-factors-grouping-payoff">
@@ -664,8 +661,8 @@
             Get a factor's levels wrong, as the story at the start of this
             chapter shows, and every group you calculate is quietly the wrong
             group.
-            Skip grouping by a factor that really matters, as <xref
-            ref="ch-multilevel-data"/> showed, and you get one number that
+            Skip grouping by a factor that really matters, as
+            <xref ref="ch-multilevel-data"/> showed, and you get one number that
             doesn't honestly describe any part of your data.
             So when you decide to treat a variable as a factor, you're really
             deciding which comparisons you'll be able to make.
@@ -799,8 +796,8 @@
                 body mass in grams on the y-axis.
                 All points are the same dark teal colour.
                 The points form two loose clusters, one in the lower left and
-                one in the upper right, but without colour coding this
-                structure is not immediately obvious.
+                one in the upper right, but without colour coding this structure
+                is not immediately obvious.
                 A single orange trend line runs through all points, suggesting a
                 moderate positive relationship between bill length and body mass
                 across all birds.
@@ -875,9 +872,9 @@
           <em>within</em> either of them.
           Without splitting by the factor, you wouldn't know which of those two
           things you were looking at.
-          This is exactly the kind of structural question we met in <xref
-          ref="ch-multilevel-data"/>: if you ignore a grouping variable, it's
-          still there, just hidden inside your summary statistic.
+          This is exactly the kind of structural question we met in
+          <xref ref="ch-multilevel-data"/>: if you ignore a grouping variable,
+          it's still there, just hidden inside your summary statistic.
         </p>
 
         <p>
@@ -958,8 +955,8 @@
           This reversal, where the direction of a relationship changes depending
           on which group you look at, is exactly what we called Simpson's
           paradox in <xref ref="ch-multilevel-data"/>.
-          The overall trend across all Greater Flamingos (in <xref
-          ref="fig-flamingo-bill-mass-split"/>) suggested a positive
+          The overall trend across all Greater Flamingos (in
+          <xref ref="fig-flamingo-bill-mass-split"/> ) suggested a positive
           relationship.
           Split by sex, that trend reverses for males.
         </p>
@@ -976,7 +973,6 @@
       </subsubsection>
     </subsection>
   </section>
-
   <!-- ================================================================= -->
   <!--  SECTION 4: Exercises              -->
   <!-- ================================================================= -->
@@ -1029,8 +1025,9 @@
       <statement>
         <p>
           Using the Kenya road accidents data, pull the hour of day out of the
-          <c>TIME_PARSED</c> column (which we created in <xref
-          ref="ch-cleaning-recoding"/>), and store it as an ordered factor.
+          <c>TIME_PARSED</c> column (which we created in
+          <xref ref="ch-cleaning-recoding"/> ), and store it as an ordered
+          factor.
           Then use <c>group_by()</c> and <c>summarise()</c> to count the number
           of crashes in each hour.
           Does the order of the factor change the output?
@@ -1043,8 +1040,10 @@
       <statement>
         <p>
           The <c>VICTIM</c> column in the Kenya road accidents data has several
-          levels that mean the same thing, like <c>M/CYCLIST</c> and <c>MOTOR
-          CYCLIST</c>, or <c>P/PASENGER</c> and <c>P/PASSENGER</c>.
+          levels that mean the same thing, like <c>M/CYCLIST</c> and
+          <c>MOTOR
+          CYCLIST</c>, or <c>P/PASENGER</c> and
+          <c>P/PASSENGER</c>.
           Use <c>fct_recode()</c> or <c>case_when()</c> to collapse these into
           clean levels.
           Then make a bar chart of the counts for each victim category.
