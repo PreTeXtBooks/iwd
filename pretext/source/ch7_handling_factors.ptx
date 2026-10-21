@@ -162,8 +162,7 @@
       </p>
 
       <p>
-        The second kind is <term>ordered factors</term>, where the levels have a
-        natural order that carries real meaning.
+        Some factors have levels with a natural order that carries real meaning.
         Kenya's Competency Based Curriculum (CBC) has really clear ordered
         levels: <q>Pre-Primary</q>, <q>Lower Primary</q>, <q>Upper Primary</q>,
         <q>Junior Secondary</q>, and <q>Senior Secondary</q>.
@@ -176,21 +175,25 @@
         analyse the data.
       </p>
 
-      <p>
-        Humanitarian data gives us an even starker example.
-        The Integrated Phase Classification (IPC) system, used across Kenya and
-        the wider East Africa region, puts food security into five ordered
-        levels: <q>Minimal</q>, <q>Stressed</q>, <q>Crisis</q>,
-        <q>Emergency</q>, and <q>Famine</q>.
-        Governments and international agencies use this classification to track
-        food shortages, malnutrition, and death rates, so they can direct
-        emergency aid.
-        And the order really matters: Crisis is meaningfully worse than
-        Stressed, and Emergency is meaningfully worse than Crisis.
-        If an analyst treated these five levels as an unordered factor, any
-        summary or comparison they produced would be misleading at best.
-        At worst, it could inform decisions that cost lives.
-      </p>
+      <example>
+        <title>Ordered Factors</title>
+
+        <p>
+          Humanitarian data gives a clear example of an ordered factor.
+          The Integrated Phase Classification (IPC) system, used across Kenya
+          and the wider East Africa region, puts food security into five ordered
+          levels: <q>Minimal</q>, <q>Stressed</q>, <q>Crisis</q>,
+          <q>Emergency</q>, and <q>Famine</q>.
+          Governments and international agencies use this classification to
+          track food shortages, malnutrition, and death rates, so they can
+          direct emergency aid.
+          And the order really matters: Crisis is meaningfully worse than
+          Stressed, and Emergency is meaningfully worse than Crisis.
+          If an analyst treated these five levels as an unordered factor, any
+          summary or comparison they produced would be misleading at best.
+          At worst, it could inform decisions that cost lives.
+        </p>
+      </example>
 
       <p>
         In R, the tools for working with factors are built into the base
@@ -247,8 +250,9 @@
         <c>VICTIM</c> is an unordered factor, because there's no sensible way to
         rank pedestrians, drivers, and passengers.
         But now let's pull the month out of the date column.
-        Months have a clear order that everyone agrees on: January comes before
-        February, and February comes before March.
+        Months have a clear order that everyone agrees on: In the Kenyan
+        calendar year, January comes before February, and February comes before
+        March.
         So we can make month an ordered factor:
       </p>
 
@@ -534,18 +538,22 @@
         With it, we get the more natural order, from younger to older.
       </p>
 
-      <p>
-        The IPC food security classification shows a different kind of recoding
-        decision, where levels are collapsed or combined to match the question
-        being asked.
-        A researcher studying the difference between households in Crisis and
-        households in Emergency needs to keep those levels separate.
-        A researcher asking simply <q>how many households are food insecure?</q>
-        might reasonably collapse Crisis, Emergency, and Famine into a single
-        level.
-        Neither choice is wrong, but both need to be made on purpose, and
-        reported clearly.
-      </p>
+      <example>
+        <title>Recoding Factor Levels</title>
+
+        <p>
+          The IPC food security classification shows a different kind of
+          recoding decision, where levels are collapsed or combined to match the
+          question being asked.
+          A researcher studying the difference between households in Crisis and
+          households in Emergency needs to keep those levels separate.
+          A researcher asking simply
+          <q>how many households are food insecure?</q> might reasonably
+          collapse Crisis, Emergency, and Famine into a single level.
+          Neither choice is wrong, but both need to be made on purpose, and
+          reported clearly.
+        </p>
+      </example>
     </subsection>
 
     <subsection xml:id="sec-splitting-by-factors">
@@ -628,8 +636,8 @@
 
         <p>
           Notice that <c>month</c> is shown as <c>&lt;ord&gt;</c>, an ordered
-          factor, and the months appear in calendar order, instead of
-          alphabetical order.
+          factor (hence the months appear in calendar order instead of
+          alphabetical order).
           That order came from how we defined the factor, and not from the data.
           May doesn't appear at all because, as we saw in
           <xref ref="ch-cleaning-recoding"/>, the dataset doesn't include any
@@ -666,6 +674,121 @@
             doesn't honestly describe any part of your data.
             So when you decide to treat a variable as a factor, you're really
             deciding which comparisons you'll be able to make.
+          </p>
+        </insight>
+
+        <p>
+          There's one more way to get a factor that we haven't talked about yet:
+          making one from a number.
+          We did this with <c>AGE_GROUP</c> earlier, when we cut <c>AGE</c> into
+          <c>JUNIOR</c> and <c>ADULT</c>.
+          It's a really common thing to do, and it's easy to treat as a small
+          decision.
+          But how many groups you cut a number into, and where, can completely
+          change what the data seems to say.
+        </p>
+
+        <p>
+          To see this, we've simulated the ages of 600 visitors to a health
+          clinic.
+          We simulated them (rather than using real data) because that way we
+          know what's really going on underneath.
+          The clinic sees lots of young children, a big group of adults in their
+          20s and 30s, and a smaller group of older adults in their 60s.
+          In R, <c>cut()</c> turns a number into a factor, and
+          <c>seq()</c> lets us choose the number of groups.
+          Let's start with just two groups, under 45 and 45 or over:
+        </p>
+
+        <program language="r">
+          <code>
+      clinic_visits %&gt;%
+        mutate(
+          age_group = cut(age, breaks = seq(0, 90, length.out = 3),
+                          include.lowest = TRUE, right = FALSE)
+        ) %&gt;%
+        count(age_group)
+      #&gt; # A tibble: 2 × 2
+      #&gt;   age_group     n
+      #&gt;   &lt;fct&gt;     &lt;int&gt;
+      #&gt; 1 [0,45)      414
+      #&gt; 2 [45,90]     186
+          </code>
+        </program>
+
+        <p>
+          With two groups the story seems clear.
+          About 7 in 10 visitors are younger, and 3 in 10 are older.
+          We might conclude the clinic mostly serves younger people, and stop
+          there.
+          But what happens if we use more groups?
+          Try it for yourself in <xref ref="fig-age-groups-interactive"/>.
+          Slide the number of groups up and watch what happens to the shape of
+          the data.
+        </p>
+
+        <figure xml:id="fig-age-groups-interactive">
+          <caption>
+            The same 600 simulated clinic visitors, cut into different numbers of
+            groups.
+            Use the slider to change the number of groups.
+            The values are simulated, to illustrate the problem.
+          </caption>
+
+          <interactive iframe="interactive/ch7_age_groups.html" width="100%" aspect="4:3">
+            <static>
+              <image source="images/ch7_age_bins.png" width="100%">
+                <description>
+                  <p>
+                    Four histograms of the same simulated visitor ages, with 2,
+                    6, 9 and 90 groups.
+                    With 2 groups there are two bars, a tall one for ages
+                    under 45 and a shorter one for ages 45 and over.
+                    With 6 groups there is a hint of two peaks.
+                    With 9 groups three separate humps are clear, one for young
+                    children, one for adults in their 20s and 30s, and one for
+                    older adults in their 60s.
+                    With 90 groups the same three humps are visible, but the
+                    bars are jagged and hard to read.
+                  </p>
+                </description>
+              </image>
+            </static>
+          </interactive>
+        </figure>
+
+        <p>
+          Somewhere between three and nine groups, the story changes.
+          Three separate groups of visitors appear: young children, adults in
+          their 20s and 30s, and older adults in their 60s.
+          They were there all along, but two groups averaged them away.
+          And the two-group answer wasn't <em>wrong</em>, since 7 in 10 visitors
+          really are under 45.
+          It just wasn't very useful if you want to plan for the children, or
+          the older adults, who were hidden inside it.
+        </p>
+
+        <p>
+          Keep sliding to the right, though, and a different problem shows up.
+          By the time every age is its own group, the three humps are still
+          there, but the bars jump around so much that it's hard to see them.
+          More groups isn't automatically better.
+          Each group gets fewer people in it, so chance starts to matter more.
+          So there's no single right number of groups.
+          We want enough to show the real pattern, but not so many that we're
+          just looking at noise.
+        </p>
+
+        <insight xml:id="insight-factors-number-of-groups">
+          <title>The number of groups is part of the analysis</title>
+
+          <p>
+            When we turn a number into a factor, we decide how many groups to
+            use and where to put the cut points.
+            Both choices can change the story, so look at the same data cut
+            more than one way before settling on one.
+            And whichever you pick, say how you chose it, so that anyone reading
+            your work knows what the groups are hiding.
           </p>
         </insight>
       </introduction>

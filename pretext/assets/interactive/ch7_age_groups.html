@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Number of groups and the story</title>
+<style>
+  body { margin: 0; padding: 12px 16px; background: #fff; color: #1f2937;
+         font-family: "IBM Plex Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+  h1 { font-size: 1.05rem; margin: 0 0 4px; }
+  .sub { color: #6b7280; font-size: .85rem; margin: 0 0 10px; }
+  .row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+  label { font-weight: 600; }
+  input[type=range] { flex: 1 1 240px; accent-color: #F37021; }
+  .k { font-size: 1.4rem; font-weight: 700; color: #F37021; min-width: 7ch; }
+  svg { width: 100%; height: auto; display: block; }
+  .note { background: #FFF1E8; border-left: 4px solid #F37021; border-radius: 4px;
+          padding: 8px 12px; margin-top: 8px; min-height: 3.2em; font-size: .95rem; }
+  code { background: #f3f4f6; padding: 1px 5px; border-radius: 3px; font-size: .85rem; }
+  .axis text { font-size: 11px; fill: #44575E; }
+  .axis line, .axis path { stroke: #9ca3af; }
+</style>
+</head>
+<body>
+<h1>One variable, different numbers of groups</h1>
+<p class="sub">Ages of 600 simulated clinic visitors. Slide to change how many groups the ages are cut into.</p>
+
+<div class="row">
+  <label for="k">Number of groups</label>
+  <input id="k" type="range" min="0" max="10" step="1" value="0" aria-describedby="note"/>
+  <span class="k" id="kval">2</span>
+</div>
+<p class="sub" style="margin:0 0 6px">R: <code id="code"></code></p>
+
+<svg id="chart" viewBox="0 0 640 330" role="img" aria-label="Histogram of simulated visitor ages"></svg>
+<div class="note" id="note" role="status" aria-live="polite"></div>
+
+<script>
+const AGES = [14, 35, 56, 72, 1, 63, 4, 15, 39, 25, 30, 46, 62, 2, 3, 37, 33, 55, 28, 28, 32, 21, 60, 79, 64, 33, 67, 62, 27, 27, 1, 21, 17, 64, 66, 60, 21, 36, 29, 56, 32, 16, 71, 2, 79, 0, 1, 40, 66, 67, 33, 72, 0, 2, 60, 65, 24, 26, 1, 28, 31, 3, 28, 56, 17, 44, 17, 62, 27, 25, 65, 27, 80, 2, 25, 74, 27, 27, 61, 19, 27, 31, 0, 45, 79, 2, 65, 28, 24, 29, 4, 37, 69, 33, 68, 23, 69, 4, 77, 0, 22, 71, 26, 0, 24, 70, 27, 24, 31, 32, 24, 65, 23, 30, 3, 42, 67, 38, 0, 29, 42, 21, 48, 27, 58, 33, 1, 41, 24, 70, 1, 34, 19, 4, 60, 65, 67, 30, 38, 73, 41, 20, 33, 2, 69, 40, 2, 25, 2, 25, 26, 2, 77, 27, 65, 2, 27, 28, 0, 42, 22, 57, 58, 26, 36, 62, 25, 65, 4, 2, 60, 61, 0, 26, 3, 63, 2, 21, 65, 4, 28, 30, 26, 61, 29, 33, 60, 62, 64, 26, 31, 23, 37, 30, 22, 46, 0, 1, 57, 52, 64, 26, 62, 25, 41, 35, 1, 2, 29, 55, 81, 49, 2, 2, 49, 2, 31, 10, 23, 27, 22, 2, 18, 1, 24, 44, 3, 45, 21, 0, 29, 20, 15, 33, 78, 28, 0, 20, 71, 14, 0, 40, 41, 4, 33, 37, 1, 21, 42, 64, 1, 28, 37, 1, 18, 3, 37, 23, 63, 25, 21, 19, 4, 79, 30, 3, 0, 27, 20, 23, 34, 32, 26, 22, 65, 3, 70, 29, 2, 17, 62, 4, 25, 2, 31, 31, 47, 23, 6, 33, 68, 52, 50, 65, 1, 1, 9, 68, 70, 28, 30, 64, 4, 59, 53, 28, 28, 64, 28, 17, 27, 26, 65, 31, 27, 23, 31, 41, 69, 30, 37, 60, 3, 31, 3, 2, 14, 12, 33, 37, 24, 61, 2, 61, 41, 0, 21, 36, 46, 49, 22, 61, 31, 25, 30, 1, 2, 1, 68, 1, 32, 2, 71, 52, 1, 18, 55, 29, 28, 62, 60, 23, 73, 64, 66, 74, 25, 3, 17, 55, 70, 59, 19, 26, 31, 61, 29, 34, 53, 16, 19, 29, 25, 74, 60, 2, 54, 73, 52, 26, 63, 32, 47, 20, 64, 72, 54, 29, 19, 61, 3, 7, 59, 9, 26, 23, 2, 3, 31, 55, 30, 2, 21, 1, 4, 19, 12, 3, 69, 29, 27, 79, 61, 52, 27, 38, 21, 38, 52, 62, 69, 22, 71, 62, 67, 75, 37, 18, 42, 0, 16, 4, 76, 25, 1, 64, 0, 4, 1, 25, 4, 60, 0, 26, 66, 0, 3, 62, 63, 23, 45, 27, 58, 17, 2, 31, 25, 73, 2, 36, 4, 25, 2, 30, 36, 32, 0, 72, 32, 69, 0, 60, 63, 29, 15, 37, 19, 4, 34, 2, 15, 38, 24, 68, 64, 59, 24, 32, 2, 59, 79, 4, 3, 23, 20, 34, 2, 3, 71, 23, 28, 27, 0, 16, 4, 21, 61, 2, 25, 78, 4, 42, 27, 78, 66, 61, 33, 2, 36, 25, 69, 31, 29, 73, 66, 35, 66, 24, 23, 3, 16, 3, 0, 66, 18, 66, 36, 30, 70, 74, 4, 1, 25, 21, 26, 3, 28, 63, 0, 58, 67, 2, 3, 63, 38, 27, 0, 27, 73, 66, 36, 3, 24, 35, 0, 31, 47, 34, 49, 69, 31, 42, 63, 1, 6, 63, 21, 2, 59, 65, 76, 25, 25, 53, 35, 22, 27, 67, 1, 62];
+const KS = [2, 3, 5, 6, 9, 10, 15, 18, 30, 45, 90];
+const NOTES = {
+  2:  "With two groups (under 45, and 45 or over) the story looks simple: the clinic mostly sees younger people, about 7 in 10 of the visitors.",
+  3:  "Three groups tell roughly the same story. About half of the visitors are under 30, and the rest are split fairly evenly between the other two groups.",
+  5:  "Five groups start to show a dip, but the groups are 18 years wide, so a lot is still averaged together.",
+  6:  "With six groups there's a hint of two peaks, one in the younger groups and one around 60 to 75. The story is changing.",
+  9:  "Now it's clear. There are three separate groups of visitors: young children, adults in their 20s and 30s, and older adults in their 60s. The two-group picture was hiding all of this.",
+  10: "Ten groups tell the same three-group story, with nearly the same shapes. This looks like a sensible choice for these data.",
+  15: "Fifteen groups: the three humps are still easy to see, and the young children are now a clear spike at the left.",
+  18: "Eighteen groups (5 years each) show the same three humps, and the gap in the school-age years is easy to see.",
+  30: "Thirty groups (3 years each). The pattern is still there, and bars are starting to get a bit jumpy.",
+  45: "With 45 groups, small bars appear and disappear. We're starting to see noise as well as pattern.",
+  90: "Every age is its own group. The three humps are still visible if you know to look for them, but the bars jump around so much that it's hard to read. More groups don't mean more insight."
+};
+
+const svg = document.getElementById("chart");
+const NS = "http://www.w3.org/2000/svg";
+const W = 640, H = 330, m = {l: 46, r: 12, t: 12, b: 42};
+
+function el(name, attrs, parent) {
+  const e = document.createElementNS(NS, name);
+  for (const a in attrs) e.setAttribute(a, attrs[a]);
+  (parent || svg).appendChild(e);
+  return e;
+}
+function niceMax(v) {
+  const step = v <= 20 ? 5 : v <= 60 ? 10 : v <= 150 ? 25 : 50;
+  return Math.ceil(v / step) * step;
+}
+
+function draw(k) {
+  svg.innerHTML = "";
+  const counts = new Array(k).fill(0), width = 90 / k;
+  AGES.forEach(a => counts[Math.min(k - 1, Math.floor(a / width))]++);
+  const ymax = niceMax(Math.max(...counts));
+  const x = v => m.l + (v / 90) * (W - m.l - m.r);
+  const y = v => H - m.b - (v / ymax) * (H - m.t - m.b);
+
+  const ax = el("g", {"class": "axis"});
+  const yStep = ymax <= 20 ? 5 : ymax <= 60 ? 10 : ymax <= 150 ? 25 : 50;
+  for (let t = 0; t <= ymax; t += yStep) {
+    el("line", {x1: m.l, x2: W - m.r, y1: y(t), y2: y(t), stroke: "#e5e7eb"}, ax);
+    el("text", {x: m.l - 6, y: y(t) + 4, "text-anchor": "end"}, ax).textContent = t;
+  }
+  for (let t = 0; t <= 90; t += 15) {
+    el("line", {x1: x(t), x2: x(t), y1: H - m.b, y2: H - m.b + 4}, ax);
+    el("text", {x: x(t), y: H - m.b + 16, "text-anchor": "middle"}, ax).textContent = t;
+  }
+  el("text", {x: (m.l + W - m.r) / 2, y: H - 6, "text-anchor": "middle", "style": "font-size:12px;fill:#44575E"}, ax).textContent = "Age (years)";
+  el("text", {x: 12, y: (m.t + H - m.b) / 2, "text-anchor": "middle", transform: `rotate(-90 12 ${(m.t + H - m.b) / 2})`, "style": "font-size:12px;fill:#44575E"}, ax).textContent = "Number of visitors";
+
+  const gap = k > 30 ? 0.5 : 1;
+  counts.forEach((c, i) => {
+    const r = el("rect", {x: x(i * width) + gap / 2, y: y(c), width: Math.max(0.5, x(width) - x(0) - gap),
+                          height: y(0) - y(c), fill: "#F37021"});
+    el("title", {}, r).textContent = `Ages ${+(i * width).toFixed(1)} to ${+((i + 1) * width).toFixed(1)}: ${c} visitors`;
+  });
+  el("line", {x1: m.l, x2: W - m.r, y1: y(0), y2: y(0), stroke: "#6b7280"}, ax);
+}
+
+const slider = document.getElementById("k");
+function update() {
+  const k = KS[+slider.value];
+  document.getElementById("kval").textContent = k;
+  document.getElementById("code").textContent = `cut(age, breaks = seq(0, 90, length.out = ${k + 1}))`;
+  document.getElementById("note").textContent = NOTES[k];
+  draw(k);
+}
+slider.addEventListener("input", update);
+update();
+</script>
+</body>
+</html>
