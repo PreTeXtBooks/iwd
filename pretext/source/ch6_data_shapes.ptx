@@ -1591,6 +1591,7 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
               <cell>BASE/SUB BASE</cell>
               <cell>COUNTY</cell>
               <cell>ROAD</cell>
+              <cell>PLACE</cell>
               <cell>...</cell>
               <cell>Population</cell>
               <cell>Male</cell>
