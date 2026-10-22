@@ -280,6 +280,7 @@
         In this section, we work through these shape problems in R, using a few
         different datasets (flamingos, the Kenya road accidents data, and the
         Kenya census).
+        
         Along the way, we also look at some real examples of each problem out in
         the wild.
       </p>
