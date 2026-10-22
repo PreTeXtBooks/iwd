@@ -3,9 +3,9 @@
 <!-- ================================================================= -->
 <!--  Chapter 6: Data Shapes                                           -->
 <!--                                                                    -->
-<!--  Opens with Sierra Leone's Ebola data management (Owada et al.    -->
-<!--  2016): two unlinked systems, district files in different shapes, -->
-<!--  and a case fatality rate that was biased in both directions.     -->
+<!--  Opens with Kenya's Test, Treat and Track malaria policy (Mbuli    -->
+<!--  et al. 2016): confirmed cases rose 150% in three years while all  -->
+<!--  malaria cases fell, because testing changed, not the disease.     -->
 <!--  The R section then covers:                                       -->
 <!--    - reshaping (flamingos; the JHU COVID-19 wide files)           -->
 <!--    - appending (Kenya road accidents 2016 + 2017; fertiliser       -->
@@ -38,387 +38,222 @@
   <!--  SECTION 1: The opener, on its own, told in full                  -->
   <!-- ================================================================= -->
   <section xml:id="sec-intro-data-shapes">
-    <title>The Same Information, the Wrong Shape</title>
+    <title>Same Column, Different Meaning</title>
 
     <introduction>
       <p>
-        In <xref ref="ch-cleaning-recoding"/>, we followed one organisation
-        managing data across five Ebola treatment units.
-        That story was about data cleaning.
+        In <xref ref="ch-cleaning-recoding"/>, the problem was messy values
+        inside a single file.
+        This chapter is about what happens when you put files together: stacking
+        them, reshaping them, joining them.
+        And we want to start with a case where the files fit together perfectly,
+        with the same columns and the same types, and the numbers still pointed
+        the wrong way.
       </p>
 
       <p>
-        Owada et al.
-        (2016) describe a different problem during the ebola crisis that
-        occurred in Sierra Leone.
-        Here, the information needed to run the response did exist.
-        But it had been recorded in shapes that didn't fit together, so it
-        couldn't be combined.
+        Mbuli et al.
+        (2016) looked at outpatient malaria cases reported across Kenya between
+        2012 and 2015.
+        One of the columns they counted went up by 150% in three years - but how
+        can this happen if malaria hadn't got any worse?
       </p>
     </introduction>
 
-    <subsection xml:id="ss-ebola-two-systems">
-      <title>One patient, two records</title>
+    <subsection xml:id="ss-malaria-policy">
+      <title>A new way of deciding who has malaria</title>
 
       <p>
-        Each Ebola case in Sierra Leone was supposed to be recorded on a paper
-        case investigation form (CIF), filled in by a surveillance officer in
-        the field.
-        That form was then entered into the Epi Info VHF database, a tool built
-        by the US Centers for Disease Control specifically for tracking outbreak
-        cases and their contacts.
-        In theory, several people could enter data at the same time, and
-        district databases could be merged into one national database.
-      </p>
-
-      <figure xml:id="fig-ebola-data-flow">
-        <caption>
-          How a case was supposed to travel.
-          Surveillance officers fill in paper forms, a data manager enters them
-          into the district's Epi Info VHF database, and the district databases
-          are merged into one national database.
-        </caption>
-
-        <image source="images/ch6_ebola_data_flow.png" width="90%">
-          <description>
-            <p>
-              A flow diagram with three rows.
-              In each row, three paper case investigation forms all point to the
-              Epi Info VHF database for one of three districts, A, B and C.
-              Arrows from all three district databases point to a single
-              national Ebola database, labelled as the districts merged.
-            </p>
-          </description>
-        </image>
-      </figure>
-
-      <p>
-        In practice, it wasn't that simple, in part because most district data
-        managers had never used the software before, but also because the paper
-        forms often reached the district response centres days after the case
-        had been investigated, so the national database was never fully up to
-        date, even late in the outbreak.
+        Kenya reports over six million malaria cases every year.
+        For a long time, malaria was mostly treated <em>presumptively</em>.
+        A patient arrived at a clinic with a fever, and if malaria was a
+        reasonable guess, they were treated for it, without a blood test.
+        That's quick, and it's often the only option where there's no
+        laboratory.
+        But it meant plenty of fevers caused by something else (a chest
+        infection, say) were treated as malaria, and the real cause went
+        unaddressed.
       </p>
 
       <p>
-        The failure with the biggest consequences was much quieter than any of
-        these.
-        When a blood sample came back from the lab, the result was often entered
-        as a brand new record, instead of being added to that patient's existing
-        record.
-        So one person, with one infection, now had two rows in the same
-        database, and nothing to link them or show they were the same person.
-      </p>
-
-      <figure xml:id="fig-ebola-duplicate-record">
-        <caption>
-          Left: the lab result is added to the patient's existing record, so
-          there is one person and one row.
-          Right: the lab result is entered as a new record, so the same person
-          now has two rows with different IDs, and nothing links them.
-          The values shown are made up, to illustrate the problem.
-        </caption>
-
-        <image source="images/ch6_ebola_duplicate_record.png" width="95%">
-          <description>
-            <p>
-              Two small tables side by side.
-              On the left, a table with one row for patient 1042 changes its lab
-              result from pending to positive, still as one row.
-              On the right, the same starting table gains a second row with a
-              new ID, 1187, the same age and sex, and a positive result.
-              A bracket marks the two rows as the same person with nothing
-              linking them.
-            </p>
-          </description>
-        </image>
-      </figure>
-
-      <p>
-        On top of the Epi Info database, district teams also kept a second,
-        completely separate dataset in Excel built mainly from lab sample
-        results.
-        This held some of the same information: age, sex, location, and the
-        dates each sample was collected, received, and tested.
-        Teams used it because it was quicker for producing daily reports and
-        charts.
-        So a single patient might now be in the national database (possibly
-        twice!) and in a district spreadsheet, with no reliable way to tell
-        which entries in the two systems were the same person.
+        In 2012, Kenya adopted the Test, Treat and Track (T3) policy, in line
+        with the World Health Organisation.
+        The idea is that every suspected case should be tested first, and only
+        treated for malaria if the test is positive.
+        Rapid diagnostic tests (RDTs), which don't need a laboratory, made this
+        possible even in small dispensaries.
+        Cases are reported through the national health information system,
+        DHIS2.
       </p>
     </subsection>
 
-    <subsection xml:id="ss-ebola-districts">
-      <title>Every district its own shape</title>
+    <subsection xml:id="ss-malaria-table">
+      <title>Four years of reporting</title>
 
       <p>
-        As the outbreak grew, District Ebola Response Centres (DERCs) were set
-        up across the country.
-        Each one was responsible for its own area: who had tested positive, who
-        they'd been in contact with, who had died, and what the lab results
-        said.
-        Collecting data close to where the cases were meant that local teams
-        could act on what they saw, without waiting for instructions from the
-        capital.
+        Mbuli et al.
+        took the routine reports from every government health facility in the 47
+        counties, from DHIS2, and totalled them by year.
+        The table below is their Table 1, for outpatient cases only.
+        <q>All malaria cases</q> is every case reported, whether it was
+        diagnosed from symptoms alone or confirmed by a test.
+        <q>Confirmed</q> is only the cases that had a positive test, so it's
+        part of the first column.
       </p>
 
-      <p>
-        Each centre had to manage a constant daily stream of information on top
-        of the case forms:
-        <ul>
-          <li>
-            <p>
-              Live alerts, recording who had been seen and whether a sample had
-              been taken.
-            </p>
-          </li>
+      <table xml:id="table-malaria-t3">
+        <title>
+          Outpatient malaria cases reported in Kenya's government health
+          facilities, 2012 to 2015 (Mbuli et al., 2016).
+        </title>
 
-          <li>
-            <p>
-              Death alerts, noting whether a swab had been collected and a
-              burial team sent out.
-            </p>
-          </li>
+        <tabular halign="right">
+          <col halign="left"/>
+          <col halign="right"/>
+          <col halign="right"/>
+          <col halign="right"/>
+          <row header="yes" bottom="minor">
+            <cell>Year</cell>
+            <cell>All malaria cases</cell>
+            <cell>Confirmed cases</cell>
+            <cell>Confirmed (%)</cell>
+          </row>
 
-          <li>
-            <p>
-              Quarantined households, and whether they had food.
-            </p>
-          </li>
+          <row>
+            <cell>2012</cell>
+            <cell>8,474,945</cell>
+            <cell>1,969,868</cell>
+            <cell>23.2</cell>
+          </row>
 
-          <li>
-            <p>
-              Confirmed positive counts from health facilities.
-            </p>
-          </li>
-        </ul>
-        Most centres tracked all of this on manual dashboards (physical displays
-        showing what was happening in their district right now), and then copied
-        the numbers into Excel sheets or Word documents.
-      </p>
+          <row>
+            <cell>2013</cell>
+            <cell>7,871,171</cell>
+            <cell>3,185,007</cell>
+            <cell>40.5</cell>
+          </row>
 
-      <p>
-        So every district had data, but each one had structured it in its own
-        way, with its own column names, definitions, and meanings.
-        In one district's dataset, a row might be a patient.
-        In another, a row might be a day, with columns counting how many new
-        cases and deaths there were that day.
-        And in a third, confirmed and suspected cases might be on completely
-        separate sheets.
-      </p>
+          <row>
+            <cell>2014</cell>
+            <cell>8,774,354</cell>
+            <cell>4,091,494</cell>
+            <cell>46.6</cell>
+          </row>
 
-      <figure xml:id="fig-ebola-district-shapes">
-        <caption>
-          Three districts, three shapes.
-          In district A each row is a patient.
-          In district B each row is a day, with counts of new cases and deaths.
-          In district C confirmed and suspected cases are on separate sheets.
-          The values shown are made up.
-        </caption>
-
-        <image source="images/ch6_ebola_district_shapes.png" width="95%">
-          <description>
-            <p>
-              Three example tables.
-              District A has one row per patient, with columns for ID, age, sex
-              and status.
-              District B has one row per day, with columns for date, new cases
-              and new deaths.
-              District C has two small tables on separate sheets, one listing
-              confirmed cases and one listing suspected cases, each with ID and
-              age.
-            </p>
-          </description>
-        </image>
-      </figure>
-
-      <p>
-        We want to be really clear that no district was doing anything wrong
-        here.
-        A team designing a spreadsheet for their own district's daily use has no
-        reason to think about how a national team might later want to combine it
-        with everyone else's.
-        The incompatibility only showed up when someone tried to put the files
-        together.
-      </p>
-
-      <p>
-        You can't stack a file where each row is a patient on top of a file
-        where each row is a day.
-        If you put one underneath the other, you get a table where the rows mean
-        two different things, and any count you take from it is meaningless.
-        A column called <c>EVD_positive</c> in one district's file and a column
-        called <c>confirmed_cases</c> in another's might hold the same thing, or
-        might not, and there was no documentation to settle it.
-        So before the national team could count anything at all, someone had to
-        answer one question: what shape should this data be in?
-      </p>
-
-      <figure xml:id="fig-ebola-stacking">
-        <caption>
-          What happens when a patient-level table and a day-level table are
-          stacked.
-          The result has gaps wherever a column does not apply, and its rows
-          mean two different things, so counts and averages from it are
-          meaningless.
-        </caption>
-
-        <image source="images/ch6_ebola_stacking.png" width="95%">
-          <description>
-            <p>
-              Two small tables, district A with one row per patient and district
-              B with one row per day, are stacked into one table.
-              The combined table has the columns of both.
-              The first two rows have patient values and NA in the date and
-              count columns, and the last two rows have day values and NA in the
-              patient columns.
-              Text beneath asks whether a row is a patient or a day, what the
-              average age of the table is, and how many cases there are.
-            </p>
-          </description>
-        </image>
-      </figure>
-
-      <insight xml:id="ss-ebola-cfr">
-        <title>The number that was wrong in both directions</title>
-
-        <p>
-          To see what this cost, let's follow a single number.
-          Out of everyone who caught Ebola, what fraction died?
-          Epidemiologists call this the <term>case fatality rate</term>, and in
-          an outbreak, it's about as fundamental as numbers get.
-          It tells you how deadly the disease is in this population, whether
-          treatment is helping, and whether things are getting better or worse.
-          It's confirmed deaths divided by confirmed cases.
-        </p>
-
-        <p>
-          <md>
-            \text{CFR} =
-    \frac{\text{Number of confirmed deaths}}
-         {\text{Number of confirmed cases}}
-    \times 100\%
-          </md>
-        </p>
-
-        <p>
-          Both halves of that fraction were unreliable, and they went wrong in
-          ways that pushed the answer in opposite directions.
-        </p>
-
-        <p>
-          Let's start with deaths.
-          To confirm that a death was caused by Ebola, you needed a post-mortem
-          mouth swab.
-          In areas where traditional burial practices carried on, that swab
-          often wasn't taken.
-          Those deaths were real, and they were caused by Ebola, but they never
-          made it into the count of confirmed deaths.
-          If the count of deaths (the numerator) is too low, and you divide it
-          by the count of cases, the fraction comes out too small, and the
-          outbreak looks less deadly than it really is.
-        </p>
-
-        <p>
-          So let's try to correct for that.
-          One sensible fix is to only use cases where we know the outcome
-          (recovered or died), and ignore everyone who's still being treated.
-          That takes out the patients whose outcome hasn't been decided yet.
-          But deaths and recoveries weren't recorded on the same timescale.
-          A death could be entered on the day it happened.
-          A recovery could only be entered once the patient's hospital stay had
-          completely finished, which took a lot longer.
-          So at any moment, the cases with a known outcome included a bigger
-          share of deaths than they would once everyone's outcome was known.
-          Only using known outcomes pushes the fraction too high.
-          Now the outbreak looks <em>more</em> deadly than it really is.
-        </p>
-
-        <p>
-          And underneath both of these calculations, there was a third
-          complication.
-          Before Ebola, malaria accounted for roughly 38% of hospital admissions
-          in Sierra Leone, and about 30% of deaths in children under five.
-          In their early stages, malaria and Ebola have similar symptoms.
-          That overlap probably delayed the recognition of some real Ebola
-          cases, and it also meant that some malaria deaths risked being counted
-          as Ebola deaths.
-          So the same confusion was moving the numbers in both directions, in
-          different places, at the same time.
-        </p>
-
-        <p>
-          The national team came to the obvious conclusion.
-          The system that was supposed to hold the complete picture couldn't be
-          trusted to give them one.
-          So for the rest of the outbreak, they stopped relying on the case
-          database for routine reporting, and used lab data for their day-to-day
-          situation reports instead.
-          The case data was never fully reconciled.
-          When the outbreak ended, lots of suspected cases were left permanently
-          unclassified, never confirmed as Ebola, and never ruled out.
-        </p>
-      </insight>
+          <row>
+            <cell>2015</cell>
+            <cell>6,852,506</cell>
+            <cell>4,922,574</cell>
+            <cell>71.8</cell>
+          </row>
+        </tabular>
+      </table>
     </subsection>
 
-    <subsection xml:id="ss-ebola-shape-lesson">
-      <title>Shape is a decision made before the data arrives</title>
+    <subsection xml:id="ss-malaria-two-stories">
+      <title>Two stories from one table</title>
 
       <p>
-        Owada et al.
-        (2016) are really direct about the cause.
-        The <q>Lack of consistency</q> in how data was structured across
-        districts
-        <q>caused problems with merging and aggregating cases to report critical
-        information.</q>
-        That <q>critical information</q> sounds almost mundane (How many new
-        alerts today?
-        How many new confirmed cases?
-        How many blood tests were processed, and what did they show?
-        How many deaths were there in each district?).
-        But these are the numbers that decide where treatment units get built,
-        where contact tracers get sent, and where the response is losing ground.
-        When the files underneath can't be combined automatically, just
-        producing those numbers becomes a manual job.
+        Suppose you only had the <q>Confirmed cases</q> column.
+        Perhaps it came from the 2012 report, and the 2015 report, stacked
+        together, because the columns match exactly.
+        It says that confirmed malaria rose from about 2.0 million cases to
+        about 4.9 million.
+        On that evidence, malaria in Kenya more than doubled in three years.
+        (Kenya had set itself a target of cutting the malaria burden by
+        two-thirds by 2018, so that would have been alarming!)
       </p>
 
       <p>
-        And the loss went beyond the response at the time.
-        The authors conclude that
-        <q>much of the data has never found its way
-        into any structured database and may never be recoverable.</q>
-        That's data that was collected at real cost, and real risk, in formats
-        that each worked fine on their own, but couldn't be used together.
+        Now suppose you had the other column instead.
+        All malaria cases went from 8.5 million to 6.9 million, a fall of 19%.
+        That's the opposite story.
+      </p>
+
+      <figure xml:id="fig-malaria-t3">
+        <caption>
+          Outpatient malaria cases reported in Kenya, 2012 to 2015.
+          Confirmed cases rise steeply while all malaria cases fall.
+          Data from Table 1 of Mbuli et al.
+          (2016).
+        </caption>
+
+        <image source="images/ch6_malaria_t3.png" width="80%">
+          <description>
+            <p>
+              A line chart with year from 2012 to 2015 on the horizontal axis
+              and outpatient malaria cases in millions on the vertical axis.
+              The line for confirmed cases rises from about 2.0 million in 2012
+              to about 4.9 million in 2015.
+              The line for all malaria cases stays between about 7 and 9 million
+              until 2014, then drops to about 6.9 million in 2015.
+            </p>
+          </description>
+        </image>
+      </figure>
+
+      <p>
+        So which is right?
+        They both are, and that's the point.
+        What changed between 2012 and 2015 wasn't the amount of malaria, but,
+        how many suspected cases got tested.
+        In 2012, 23% of reported malaria cases were confirmed by a test.
+        By 2015, it was 72%!
+        More tests means more confirmed cases, even if the number of people with
+        malaria stays the same, or falls.
+        And the cases diagnosed without a test, which had been the majority,
+        dropped by 70%, which is what the T3 policy was designed to do.
       </p>
 
       <p>
-        Two of the paper's recommendations tackle this directly.
-        The first is regular data harmonisation meetings between district
-        monitoring and evaluation officers and national and external data
-        managers, to improve data quality and consistency at both levels.
-        The second is training for surveillance officers and data clerks in how
-        to collect and enter data.
-        Both of these are really recommendations about shape: agreeing what a
-        row means, what a column is called, and how files from different places
-        will eventually be brought together.
+        The column was called <c>confirmed</c> in every year, so on paper it
+        meant the same thing every time.
+        But the amount of testing behind it was completely different, and the
+        computer has no way to know that.
+      </p>
+    </subsection>
+
+    <subsection xml:id="ss-malaria-lesson">
+      <title>Matching columns aren't enough</title>
+
+      <p>
+        Mbuli et al.
+        are careful about what they conclude.
+        They say malaria cases
+        <q>have been decreasing gradually over the
+        period</q>, and that
+        confirmation of suspected cases has increased, but that one-third of
+        outpatients were still being treated without a test in 2015.
+        They also note that the share of facilities reporting went from 89% to
+        95% over the same years, which is another thing changing underneath the
+        trend.
+      </p>
+
+      <p>
+        What we take from this is about combining datasets.
+        And, when you bring datasets together, there are two questions to
+        answer.
+        The first is the one a computer can check: do the column names match,
+        and do the types match?
+        The second is the one it can't check: does a row, or a number in a
+        column, mean the same thing in every file?
+        Has the way people were counted, tested, or recorded changed along the
+        way?
+        Are the definitions the same in all datasets being combined?
       </p>
 
       <p>
         That's what this chapter is about: the operations that bring data
-        together, and the decisions you need to make before those operations can
-        work.
-        If everyone had shared an understanding of what shape the national
-        reporting needed, much of what was lost could have been recovered.
+        together, and the questions you need to ask before they work.
       </p>
 
       <p>
-        <term>Source:</term> Owada, K., Eckmanns, T., Kamara, K.O.B.
-        and Olu, O.O.
-        (2016).
-        <q>Epidemiological Data Management during an
-      Outbreak of Ebola Virus Disease: Key Issues and Observations
-      from Sierra Leone.</q>
-        <em>Frontiers in Public Health</em>, 4, 163.
+        <term>Source:</term> Mbuli, C.W., Waqo, E., Owiti, P.O., Tweya, H.,
+        Kizito, W., Edwards, J.K., Takarinda, K.C.
+        and Omondi-Ogutu (2016).
+        <q>Trends of reported outpatient malaria cases to assess the Test,
+        Treat and Track (T3) policy in Kenya.</q>
+        <em>East African Medical Journal</em>, 93(10) (Supplement).
       </p>
     </subsection>
   </section>
@@ -1109,9 +944,9 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           <p>
             A clean append depends on both datasets using the same column names
             for the same variables.
-            In the Ebola response, one problem could easily have been different
-            districts using different names for the same field, and then the
-            files couldn't be combined correctly.
+            In practice, one problem could easily be different offices using
+            different names for the same field, and then the files couldn't be
+            combined correctly.
             We can recreate that problem on purpose.
           </p>
 
@@ -1379,6 +1214,66 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
           Countries: A Case Study in Uganda.</q>
             <em>Future Transportation</em>, 5(1), 29.
             <url href="https://doi.org/10.3390/futuretransp5010029" visual="doi.org/10.3390/futuretransp5010029"/>.
+          </p>
+        </example>
+
+        <example xml:id="ex-append-malaria-t3">
+          <title>Back to the Malaria Data</title>
+
+          <p>
+            At the start of this chapter, we looked at Kenya's outpatient
+            malaria reports (Mbuli et al., 2016).
+            Suppose the 2012 and 2015 reports arrive as separate files, and we
+            want to put them together:
+          </p>
+
+          <program language="r">
+            <code>
+          library(dplyr)
+
+          malaria_2012 &lt;- tibble(year = 2012,
+                                 all_malaria = 8474945,
+                                 confirmed = 1969868)
+
+          malaria_2015 &lt;- tibble(year = 2015,
+                                 all_malaria = 6852506,
+                                 confirmed = 4922574)
+
+          bind_rows(malaria_2012, malaria_2015)
+          #&gt; # A tibble: 2 x 3
+          #&gt;    year all_malaria confirmed
+          #&gt;   &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;
+          #&gt; 1  2012     8474945   1969868
+          #&gt; 2  2015     6852506   4922574
+            </code>
+          </program>
+
+          <p>
+            It runs without any complaint, because the names and types match.
+            Nothing in the result warns us that <c>confirmed</c> more than
+            doubled while <c>all_malaria</c> fell.
+            The only way to see it is to ask what is behind the column, which in
+            this case means checking what share of cases were tested:
+          </p>
+
+          <program language="r">
+            <code>
+          bind_rows(malaria_2012, malaria_2015) %&gt;%
+            mutate(pct_confirmed = round(confirmed / all_malaria * 100, 1))
+          #&gt; # A tibble: 2 x 4
+          #&gt;    year all_malaria confirmed pct_confirmed
+          #&gt;   &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;
+          #&gt; 1  2012     8474945   1969868          23.2
+          #&gt; 2  2015     6852506   4922574          71.8
+            </code>
+          </program>
+
+          <p>
+            The share of cases that were tested went from 23% to 72%.
+            That's the thing that really changed, and it's a variable you have
+            to go looking for, because the append itself will never flag it.
+            Before you combine files, ask whether whatever sits behind a column,
+            such as how many people were tested, stayed the same.
           </p>
         </example>
 
@@ -2421,16 +2316,17 @@ ggplot(counts_long, aes(x = lake, y = n, fill = species)) +
       </statement>
     </exercise>
 
-    <exercise xml:id="ex-shapes-ebola-standard">
+    <exercise xml:id="ex-shapes-malaria-definition">
       <statement>
         <p>
-          <xref ref="sec-intro-data-shapes"/> argues that agreeing on a shape in
-          advance is cheaper than trying to reconcile incompatible shapes
-          afterwards.
-          Suggest one practical rule that Sierra Leone's district response
-          centres could have agreed on in advance (about column names, row
-          structure, or file format) that would have prevented the merging
-          problem described in <xref ref="ss-ebola-districts"/>.
+          <xref ref="sec-intro-data-shapes"/> showed that matching column names
+          and types isn't enough to make two datasets comparable.
+          Suppose you're setting up a national reporting form, and you know that
+          years from now someone will append the reports from different years.
+          Suggest one extra column you would ask every facility to include, or
+          one thing you would write down about how the data was collected, that
+          would let a future analyst spot a change like the rise in testing
+          described in <xref ref="ss-malaria-two-stories"/>.
         </p>
       </statement>
     </exercise>
