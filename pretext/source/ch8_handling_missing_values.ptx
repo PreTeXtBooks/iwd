@@ -428,8 +428,8 @@
 
     <introduction>
       <p>
-        The viral load study had something most of us never get: a team who
-        went and found out why each result was missing.
+        The viral load study had something most of us never get: a team who went
+        and found out why each result was missing.
         In practice, we usually have the dataset and nothing else, so we have to
         work out what we can from the data itself.
         This section does that, using the <c>africa_indicators</c> dataset.
@@ -461,8 +461,8 @@
       <title>Finding missing values</title>
 
       <p>
-        The first step is to find out where the missing values are, and how
-        many there are.
+        The first step is to find out where the missing values are, and how many
+        there are.
         In R, <c>is.na()</c> returns <c>TRUE</c> for each missing value and
         <c>FALSE</c> for each value that is there.
         Wrapping it in <c>sum()</c> counts the missing values in a column:
@@ -502,11 +502,8 @@
       <p>
         Five of the thirteen columns have missing values, and they are nothing
         like each other.
-        <c>gdp_per_capita</c> has 20 missing values out of 756 (under 3%),
-        while <c>poverty_rate</c> has 634 (84%).
-        That difference already tells us that "the dataset has missing values"
-        isn't one problem.
-        It's at least five.
+        <c>gdp_per_capita</c> has 20 missing values out of 756 (under 3%), while
+        <c>poverty_rate</c> has 634 (84%).
       </p>
 
       <p>
@@ -566,8 +563,8 @@
 
       <figure xml:id="fig-africa-gg-miss-var">
         <caption>
-          Number of missing values per variable in the
-          <c>africa_indicators</c> dataset.
+          Number of missing values per variable in the <c>africa_indicators</c>
+          dataset.
         </caption>
 
         <image source="images/ch-missing-gg-miss-var.png" width="80%">
@@ -576,8 +573,8 @@
               A horizontal bar chart with variable names on the vertical axis
               and the number of missing values on the horizontal axis.
               poverty_rate is longest at 634, then births_skilled at 583,
-              primary_enrolment at 219, hiv_prevalence at 56 and
-              gdp_per_capita at 20.
+              primary_enrolment at 219, hiv_prevalence at 56 and gdp_per_capita
+              at 20.
               All other variables have none.
             </p>
           </description>
@@ -588,236 +585,434 @@
     <subsection xml:id="ss-missing-patterns">
       <title>Patterns of missingness</title>
 
-      <p>
-        Knowing how many values are missing is the start, not the end.
-        The next question is whether they're scattered randomly through the
-        data, or whether they cluster.
-        If they cluster, the rows with missing values are different from the
-        rows without, and any analysis that drops them is quietly answering a
-        different question.
-      </p>
-
-      <p>
-        We'll take <c>primary_enrolment</c> first.
-        Is it missing equally across income groups?
-      </p>
-
-      <program language="r">
-        <code>
-        africa_indicators %&gt;%
-          group_by(income_group) %&gt;%
-          summarise(
-            n_total     = n(),
-            n_missing   = sum(is.na(primary_enrolment)),
-            pct_missing = round(n_missing / n_total * 100, 1)
-          )
-        #&gt; # A tibble: 4 x 4
-        #&gt;   income_group        n_total n_missing pct_missing
-        #&gt;   &lt;fct&gt;                 &lt;int&gt;     &lt;int&gt;       &lt;dbl&gt;
-        #&gt; 1 Low income              294        92        31.3
-        #&gt; 2 Lower middle income     336        81        24.1
-        #&gt; 3 Upper middle income     112        46        41.1
-        #&gt; 4 High income              14         0         0
-        </code>
-      </program>
-
-      <p>
-        Not equally at all.
-        Upper-middle-income countries are missing 41% of their values, against
-        24% for lower-middle-income countries.
-        (Only one country, Seychelles, is high income, and it reports every
-        year, so we wouldn't read too much into that 0%.)
-        What about over time?
-      </p>
-
-      <program language="r">
-        <code>
-        africa_indicators %&gt;%
-          group_by(year) %&gt;%
-          summarise(pct_missing = mean(is.na(primary_enrolment)) * 100) %&gt;%
-          ggplot(aes(x = year, y = pct_missing)) +
-          geom_col(fill = "#F37021") +
-          scale_x_continuous(breaks = 2010:2023) +
-          labs(x = "Year", y = "Countries with no value (%)") +
-          theme_bw()
-        </code>
-      </program>
-
-      <figure xml:id="fig-africa-enrolment-year">
-        <caption>
-          The percentage of countries with no primary enrolment figure, by year.
-          Missingness rises from 2016 onwards, to around 40% in 2019 and 2020.
-        </caption>
-
-        <image source="images/ch-missing-enrolment-year.png" width="90%">
-          <description>
-            <p>
-              A bar chart with year from 2010 to 2023 on the horizontal axis and
-              the percentage of countries with no primary enrolment value on the
-              vertical axis.
-              The bars are between about 13% and 24% up to 2015, then rise to
-              around 28% in 2016 and 2017, 33% in 2018, and between 37% and 43% from 2019
-              onwards.
-            </p>
-          </description>
-        </image>
-      </figure>
-
-      <p>
-        Between 2019 and 2023, 40% of the values are missing, compared with 23%
-        between 2010 and 2018.
-        Countries stop reporting the most recent figures, and they report some
-        years late.
-        So whether a value is missing depends on the year, and on the country's
-        income group.
-      </p>
-
-      <p>
-        Next question: are the countries with missing enrolment different in
-        other ways?
-        We can't compare them on enrolment (it's missing!), but we can compare
-        them on variables we do have:
-      </p>
-
-      <program language="r">
-        <code>
-        africa_indicators %&gt;%
-          group_by(enrolment_missing = is.na(primary_enrolment)) %&gt;%
-          summarise(
-            mean_under5 = mean(under5_mortality),
-            mean_life   = mean(life_expectancy),
-            n           = n()
-          )
-        #&gt; # A tibble: 2 x 4
-        #&gt;   enrolment_missing mean_under5 mean_life     n
-        #&gt;   &lt;lgl&gt;                   &lt;dbl&gt;     &lt;dbl&gt; &lt;int&gt;
-        #&gt; 1 FALSE                    63.7      62.9   537
-        #&gt; 2 TRUE                     75.6      61.6   219
-        </code>
-      </program>
-
-      <p>
-        Country-years with missing enrolment have higher under-5 mortality (75.6
-        deaths per 1,000 births, against 63.7) and slightly lower life
-        expectancy.
-        They are, on average, places where children are doing worse.
-        Hold on to that, because it matters for what we do about the gaps.
-      </p>
-
-      <p>
-        Now <c>hiv_prevalence</c>, which has a very different pattern.
-        Which rows are missing?
-      </p>
-
-      <program language="r">
-        <code>
-        africa_indicators %&gt;%
-          filter(is.na(hiv_prevalence)) %&gt;%
-          count(country, income_group)
-        #&gt; # A tibble: 4 x 3
-        #&gt;   country               income_group            n
-        #&gt;   &lt;chr&gt;                 &lt;fct&gt;               &lt;int&gt;
-        #&gt; 1 Equatorial Guinea     Upper middle income    14
-        #&gt; 2 Mauritius             Upper middle income    14
-        #&gt; 3 Sao Tome and Principe Lower middle income    14
-        #&gt; 4 Seychelles            High income            14
-        </code>
-      </program>
-
-      <p>
-        All 56 missing values come from just four countries, and every one of
-        their 14 years is missing.
-        The gaps aren't scattered.
-        Those countries simply have no HIV prevalence figure at all.
-        Are they like the other 50?
-      </p>
-
-      <program language="r">
-        <code>
-        africa_indicators %&gt;%
-          group_by(hiv_missing = is.na(hiv_prevalence)) %&gt;%
-          summarise(
-            mean_under5 = mean(under5_mortality),
-            mean_gdp    = mean(gdp_per_capita, na.rm = TRUE),
-            n           = n()
-          )
-        #&gt; # A tibble: 2 x 4
-        #&gt;   hiv_missing mean_under5 mean_gdp     n
-        #&gt;   &lt;lgl&gt;             &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;
-        #&gt; 1 FALSE              69.7    2145.   700
-        #&gt; 2 TRUE               35.1    9430.    56
-        </code>
-      </program>
-
-      <p>
-        They really aren't.
-        The four countries with no HIV figure have about half the under-5
-        mortality and over four times the GDP per capita of the countries that
-        report.
-        (Equatorial Guinea is the exception on child mortality, which is a good
-        reminder that four countries is a very small group to draw conclusions
-        from.)
-      </p>
-
-      <p>
-        Finally, <c>poverty_rate</c> and <c>births_skilled</c>, the two
-        mostly-missing columns.
-        Here's Kenya:
-      </p>
-
-      <program language="r">
-        <code>
-        africa_indicators %&gt;%
-          filter(country == "Kenya") %&gt;%
-          select(year, births_skilled, poverty_rate)
-        #&gt; # A tibble: 14 x 3
-        #&gt;     year births_skilled poverty_rate
-        #&gt;    &lt;int&gt;          &lt;dbl&gt;        &lt;dbl&gt;
-        #&gt;  1  2010           NA           NA
-        #&gt;  2  2011           NA           NA
-        #&gt;  3  2012           NA           NA
-        #&gt;  4  2013           NA           NA
-        #&gt;  5  2014           61.8         NA
-        #&gt;  6  2015           NA           37.7
-        #&gt;  7  2016           70.2         NA
-        #&gt;  8  2017           NA           NA
-        #&gt;  9  2018           NA           NA
-        #&gt; 10  2019           NA           NA
-        #&gt; 11  2020           NA           44.4
-        #&gt; 12  2021           NA           46.4
-        #&gt; 13  2022           NA           45.5
-        #&gt; 14  2023           NA           NA
-        </code>
-      </program>
-
-      <p>
-        Kenya has two values for births with skilled staff and four for poverty,
-        in 14 years.
-        That's because both come from household surveys, which happen every few
-        years, not every year.
-        A missing value here isn't a failure to record anything.
-        It means no survey was done that year, so there was nothing to
-        record.
-      </p>
-
-      <insight xml:id="insight-missing-not-random">
-        <title>Missing values are data too</title>
+      <introduction>
+        <p>
+          We now know how many values are missing from each variable.
+          But are those missing values scattered throughout the data, or do they
+          follow a pattern?
+        </p>
 
         <p>
-          Not one of these five variables has missing values that look
-          scattered at random.
-          Enrolment is missing more in recent years and in
-          upper-middle-income countries.
-          HIV prevalence is missing for four whole countries that look different
-          from the rest.
-          Poverty and skilled births are missing because surveys don't happen
-          every year.
-          Dropping the rows with missing values would quietly change which
-          countries, and which years, our analysis describes.
-          Just like the Kenyan clinics, the gaps themselves tell us something
-          about how the data was collected.
+          Think back to the <c>vis_miss</c> graph above.
+          Some variables had long blocks of missing values, while others had
+          gaps scattered across different rows.
+          These patterns might tell us something about why the values are
+          missing.
         </p>
-      </insight>
+
+        <p>
+          Let's investigate a few of the variables to see what we can find out.
+        </p>
+      </introduction>
+
+      <subsubsection>
+        <title>Are entire countries missing?</title>
+
+        <p>
+          Start with <c>hiv_prevalence</c>.
+          The graph showed a large block of missing values.
+          Are these spread across many countries, or concentrated in just a few?
+        </p>
+
+        <program language="r">
+          <code>
+africa_indicators %&gt;%
+  filter(is.na(hiv_prevalence)) %&gt;%
+  count(country, income_group)
+
+# A tibble: 4 x 3
+  country               income_group            n
+  &lt;chr&gt;                 &lt;fct&gt;               &lt;int&gt;
+1 Equatorial Guinea     Upper middle income     14
+2 Mauritius             Upper middle income     14
+3 Sao Tome and Principe Lower middle income     14
+4 Seychelles            High income             14
+          </code>
+        </program>
+
+        <p>
+          All 56 missing values come from just four countries.
+          For each of these countries, HIV prevalence is missing for all 14
+          years.
+          This is quite different from having a few missing observations
+          scattered across the dataset.
+        </p>
+
+        <p>
+          Does it matter which countries are missing?
+          Let's compare these four countries with the countries that do have HIV
+          prevalence data.
+          We cannot compare their HIV prevalence, since that is precisely what
+          is missing, but we can compare other variables.
+        </p>
+
+        <program language="r">
+          <code>
+africa_indicators %&gt;%
+  group_by(hiv_missing = is.na(hiv_prevalence)) %&gt;%
+  summarise(
+    mean_under5 = mean(under5_mortality),
+    mean_gdp = mean(gdp_per_capita, na.rm = TRUE),
+    n = n()
+  )
+
+# A tibble: 2 x 4
+  hiv_missing mean_under5 mean_gdp     n
+  &lt;lgl&gt;             &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;
+1 FALSE              69.7    2145.   700
+2 TRUE               35.1    9430.    56
+          </code>
+        </program>
+
+        <p>
+          There is quite a difference!
+          The four countries without HIV prevalence data have, on average, about
+          half the under-5 mortality and more than four times the GDP per capita
+          of the countries with data.
+          These are averages across country-years, and there are differences
+          between the four countries themselves.
+        </p>
+
+        <p>
+          Why does this matter?
+          Suppose we wanted to investigate the relationship between HIV
+          prevalence and economic development across Africa.
+          We would have no HIV prevalence data for these four countries, so they
+          could not be included in that analysis.
+          Our results would describe the countries with data, which are not
+          necessarily representative of all African countries.
+        </p>
+      </subsubsection>
+
+      <subsubsection>
+        <title>Are particular years missing?</title>
+
+        <p>
+          Next, consider <c>gdp_per_capita</c>.
+          Which countries have missing values?
+        </p>
+
+        <program language="r">
+          <code>
+africa_indicators %&gt;%
+  filter(is.na(gdp_per_capita)) %&gt;%
+  count(country)
+
+# A tibble: 2 x 2
+  country         n
+  &lt;chr&gt;       &lt;int&gt;
+1 Eritrea        12
+2 South Sudan     8
+          </code>
+        </program>
+
+        <p>
+          Only two countries have missing GDP per capita values.
+          But unlike HIV prevalence, where every year was missing for four
+          countries, these countries do have some GDP data.
+          Which years are missing?
+        </p>
+
+        <program language="r">
+          <code>
+africa_indicators %&gt;%
+  filter(is.na(gdp_per_capita)) %&gt;%
+  group_by(country) %&gt;%
+  summarise(
+    first_missing = min(year),
+    last_missing = max(year),
+    n_missing = n()
+  )
+
+# A tibble: 2 x 4
+  country     first_missing last_missing n_missing
+  &lt;chr&gt;               &lt;int&gt;        &lt;int&gt;     &lt;int&gt;
+1 Eritrea              2012         2023        12
+2 South Sudan          2016         2023         8
+          </code>
+        </program>
+
+        <p>
+          Eritrea has no GDP per capita figures from 2012 onwards, while South
+          Sudan has none from 2016 onwards.
+          In both cases, the missing values form one long, uninterrupted period.
+        </p>
+
+        <p>
+          Why might this happen?
+          GDP figures depend on national statistical systems collecting and
+          compiling economic information.
+          Political instability, conflict, difficulties collecting data, or
+          delays in producing national accounts can all affect the availability
+          of these figures.
+        </p>
+
+        <p>
+          Both Eritrea and South Sudan have faced substantial political and
+          economic challenges during these periods.
+          However, we cannot tell from this dataset alone exactly why their GDP
+          figures are missing.
+          We would need to investigate the original data source and its
+          documentation.
+        </p>
+
+        <p>
+          What we can say is that the gaps are not spread evenly across
+          countries or years.
+          If we removed every row without GDP per capita, we would lose most of
+          Eritrea's observations and all of South Sudan's observations from 2016
+          onwards.
+        </p>
+      </subsubsection>
+
+      <subsubsection>
+        <title>Does missingness relate to other variables?</title>
+
+        <p>
+          Let's turn to <c>primary_enrolment</c>.
+          We have seen that missing values can be concentrated in particular
+          countries and years.
+          Could they also be associated with other characteristics?
+        </p>
+
+        <p>
+          First, let's look at the proportion of missing values within each
+          income group.
+        </p>
+
+        <program language="r">
+          <code>
+africa_indicators %&gt;%
+  group_by(income_group) %&gt;%
+  summarise(
+    n_total = n(),
+    n_missing = sum(is.na(primary_enrolment)),
+    pct_missing = round(n_missing / n_total * 100, 1)
+  )
+
+# A tibble: 4 x 4
+  income_group        n_total n_missing pct_missing
+  &lt;fct&gt;                 &lt;int&gt;     &lt;int&gt;       &lt;dbl&gt;
+1 Low income              294        92        31.3
+2 Lower middle income     336        81        24.1
+3 Upper middle income     112        46        41.1
+4 High income              14         0         0
+          </code>
+        </program>
+
+        <p>
+          The proportion missing varies considerably.
+          Around 41% of upper-middle-income observations are missing, compared
+          with 24% of lower-middle-income observations.
+          The high-income group has no missing values, although this group
+          contains only Seychelles, so we should be careful about drawing
+          conclusions from it.
+        </p>
+
+        <p>
+          What about time?
+          Are some years more likely to have missing enrolment data than others?
+        </p>
+
+        <program language="r">
+          <code>
+africa_indicators %&gt;%
+  group_by(year) %&gt;%
+  summarise(
+    pct_missing = mean(is.na(primary_enrolment)) * 100
+  ) %&gt;%
+  ggplot(aes(x = year, y = pct_missing)) +
+  geom_col(fill = "#F37021") +
+  scale_x_continuous(breaks = 2010:2023) +
+  labs(
+    x = "Year",
+    y = "Countries with no value (%)"
+  ) +
+  theme_bw()
+          </code>
+        </program>
+
+        <figure xml:id="fig-africa-enrolment-year">
+          <caption>
+            The percentage of countries with missing primary enrolment figures,
+            by year.
+            Missingness increases in the later years of the dataset.
+          </caption>
+
+          <image source="images/ch-missing-enrolment-year.png" width="90%">
+            <description>
+              <p>
+                A bar chart showing the percentage of countries missing primary
+                enrolment data each year from 2010 to 2023.
+                The percentage increases after 2015, reaching approximately 40%
+                in several years from 2019 onwards.
+              </p>
+            </description>
+          </image>
+        </figure>
+
+        <p>
+          Missing values become much more common in recent years.
+          This could partly reflect delays in collecting, processing, or
+          publishing education statistics.
+          Again, the graph shows us the pattern, but not necessarily its cause.
+        </p>
+
+        <p>
+          There is one more question worth asking.
+          Are the country-years with missing enrolment data different from those
+          with available data?
+        </p>
+
+        <p>
+          We cannot compare their enrolment rates, because those are missing.
+          But we can compare under-5 mortality and life expectancy.
+        </p>
+
+        <program language="r">
+          <code>
+africa_indicators %&gt;%
+  group_by(
+    enrolment_missing = is.na(primary_enrolment)
+  ) %&gt;%
+  summarise(
+    mean_under5 = mean(under5_mortality),
+    mean_life = mean(life_expectancy),
+    n = n()
+  )
+
+# A tibble: 2 x 4
+  enrolment_missing mean_under5 mean_life     n
+  &lt;lgl&gt;                   &lt;dbl&gt;     &lt;dbl&gt; &lt;int&gt;
+1 FALSE                    63.7      62.9   537
+2 TRUE                     75.6      61.6   219
+          </code>
+        </program>
+
+        <p>
+          Country-years without enrolment data have higher under-5 mortality:
+          75.6 deaths per 1,000 live births, compared with 63.7 where enrolment
+          data is available.
+          They also have slightly lower life expectancy.
+        </p>
+
+        <p>
+          This does not mean that missing enrolment data causes higher child
+          mortality, or that we know the missing enrolment rates are lower.
+          But it does show that the observations with missing data differ in
+          other important ways.
+        </p>
+
+        <p>
+          Imagine that we wanted to study the relationship between primary
+          school enrolment and child health.
+          If we simply removed all the rows with missing enrolment, we would
+          disproportionately exclude observations with higher child mortality.
+          That could affect the conclusions we draw.
+        </p>
+      </subsubsection>
+
+      <subsubsection>
+        <title>What if the data was never collected?</title>
+
+        <p>
+          Finally, let's look at <c>poverty_rate</c> and <c>births_skilled</c>.
+          Both have many missing values, but there may be a different
+          explanation for these gaps.
+        </p>
+
+        <p>
+          Consider Kenya's data.
+        </p>
+
+        <program language="r">
+          <code>
+africa_indicators %&gt;%
+  filter(country == "Kenya") %&gt;%
+  select(year, births_skilled, poverty_rate)
+
+# A tibble: 14 x 3
+    year births_skilled poverty_rate
+   &lt;int&gt;          &lt;dbl&gt;        &lt;dbl&gt;
+ 1  2010           NA           NA
+ 2  2011           NA           NA
+ 3  2012           NA           NA
+ 4  2013           NA           NA
+ 5  2014           61.8         NA
+ 6  2015           NA           37.7
+ 7  2016           70.2         NA
+ 8  2017           NA           NA
+ 9  2018           NA           NA
+10  2019           NA           NA
+11  2020           NA           44.4
+12  2021           NA           46.4
+13  2022           NA           45.5
+14  2023           NA           NA
+          </code>
+        </program>
+
+        <p>
+          Kenya has just two values for births attended by skilled health
+          personnel, and four for poverty, across 14 years.
+        </p>
+
+        <p>
+          Why might this be?
+          Unlike some indicators that are estimated annually, these measures
+          often rely on household surveys.
+          Large surveys are expensive and time-consuming, so they are generally
+          conducted periodically rather than every year.
+        </p>
+
+        <p>
+          For example, Kenya's Demographic and Health Surveys collect
+          information about maternal and child health, including assistance
+          during childbirth.
+          Poverty estimates also depend heavily on household survey information.
+        </p>
+
+        <p>
+          A missing value in an annual dataset may therefore mean that no new
+          estimate was available for that year.
+          It does not necessarily mean someone forgot to enter a value.
+        </p>
+
+        <p>
+          We would need to check the source documentation to establish which
+          surveys or estimates produced the values shown here.
+          We should not assume that a missing year has the same value as the
+          previous year.
+        </p>
+
+        <insight xml:id="insight-missing-not-random">
+          <title>Missing values can tell us something</title>
+
+          <p>
+            Missing values can occur for so many different reasons, and knowing
+            that reason impacts how to handle it.
+            Sometimes entire countries are missing, or gaps are in particular
+            years.
+            Sometimes they are associated with other characteristics, such as
+            income group or child mortality.
+            And sometimes an annual value is missing because the underlying data
+            is collected only periodically.
+          </p>
+
+          <p>
+            These patterns matter.
+            If we remove every row containing a missing value, we may also
+            remove particular countries, years, or groups from our analysis.
+            The remaining data may give us a different picture from the one we
+            intended to study.
+          </p>
+
+          <p>
+            Before deciding what to do with missing values, we should first
+            investigate where they occur, what might explain them, and how their
+            absence could affect our results.
+          </p>
+        </insight>
+      </subsubsection>
     </subsection>
 
     <subsection xml:id="ss-missing-mechanism">
@@ -834,12 +1029,12 @@
         <term>Missing completely at random (MCAR)</term> means that whether a
         value is missing has nothing to do with the value, or with anything else
         in the data.
-        The 219 missing enrolment figures would be MCAR if each country-year
-        had simply been lost at random, like the six viral load samples that
-        were never collected.
+        The 219 missing enrolment figures would be MCAR if each country-year had
+        simply been lost at random, like the six viral load samples that were
+        never collected.
         The values we do have would then still be a fair sample of all 756.
-        We'd love to show you a real example of that here, but we can't:
-        every gap we've looked at has a pattern.
+        We'd love to show you a real example of that here, but we can't: every
+        gap we've looked at has a pattern.
         Even the 20 missing GDP values are not random, since 12 come from
         Eritrea and 8 from South Sudan.
         Truly MCAR data is rarer than most people hope.
@@ -853,10 +1048,11 @@
         Primary enrolment is a good candidate.
         It's missing more in recent years and in upper-middle-income countries,
         and we know the year and the income group for every row.
-        That means we can compare like with like, for example upper-middle-income
-        countries in 2020 against other upper-middle-income countries in 2020.
-        (We say "candidate" because the higher child mortality we found
-        suggests something else might also be going on.
+        That means we can compare like with like, for example
+        upper-middle-income countries in 2020 against other upper-middle-income
+        countries in 2020.
+        (We say "candidate" because the higher child mortality we found suggests
+        something else might also be going on.
         MAR is always an assumption, not something the data can confirm.)
       </p>
 
@@ -864,25 +1060,21 @@
         <term>Missing not at random (MNAR)</term> means that whether a value is
         missing depends on the value itself, and nothing else in the data can
         fully account for it.
-        This is the dangerous one, the sickest patients who were never tested
-        in the Kenyan study.
+        This is the dangerous one, the sickest patients who were never tested in
+        the Kenyan study.
         HIV prevalence might be an example.
         If countries tend not to publish a figure when the epidemic is small, or
         when it's politically sensitive, then the missing values depend on the
         very thing they would have told us.
         The four countries that look wealthier and healthier than the rest are
         consistent with that story, but we can't prove it.
-        The data can't tell us which mechanism applies.
-        Only knowing how it was collected can.
       </p>
 
       <p>
         And then there are <c>poverty_rate</c> and <c>births_skilled</c>.
         These aren't really any of the three.
-        The value wasn't hidden or lost, it never existed, because nobody
-        measured it that year.
-        Rather than asking "why is it missing?", the honest question is "was
-        this ever meant to be there?"
+        The value never existed because nobody measured it that year.
+        The question here is <q>was this ever meant to be there?</q>
       </p>
 
       <p>
@@ -918,7 +1110,7 @@
 
       <paragraphs>
         <title>
-          Option 1: Remove the rows (<c>na.rm = TRUE</c> or listwise deletion)
+          Option 1: Remove the rows ( <c>na.rm = TRUE</c> or listwise deletion)
         </title>
 
         <p>
@@ -938,7 +1130,7 @@
         <p>
           This is the mean of 537 country-years, not 756.
           It doesn't estimate the missing values, it just leaves them out
-          silently (unless you check with <c>sum(!is.na(...))</c> yourself).
+          (unless you check with <c>sum(!is.na(...))</c> yourself).
           And since the missing values were concentrated in recent years and in
           upper-middle-income countries, that 102.4 describes the earlier years
           and the other countries better than it describes everyone.
@@ -979,11 +1171,11 @@
         </program>
 
         <p>
-          That keeps 491 rows, which is much better.
-          The lesson is that "drop the incomplete rows" depends entirely on
-          which columns you count, so decide what the analysis needs first.
-          (And remember that those 491 rows still leave out the countries
-          without an HIV figure.)
+          That keeps 491 rows, which is much better, but still a lot!
+          <q>Drop the incomplete rows</q> depends entirely on which columns you
+          count, so decide what the analysis needs first.
+          (And remember that those 491 rows still leave out those four countries
+          as they have no HIV figure.)
         </p>
 
         <remark xml:id="remark-report-n">
@@ -1067,19 +1259,19 @@
           This runs without complaint and gives a column with no gaps.
           But we've replaced 219 honestly missing values with 219 identical
           copies of 102.4.
-          The mean doesn't change, but the standard deviation drops from 19.9
-          to 16.8, because we've added lots of values sitting exactly in the
+          The mean doesn't change, but the standard deviation drops from 19.9 to
+          16.8, because we've added lots of values sitting exactly in the
           middle.
           The data now looks more consistent than it really is.
         </p>
 
         <p>
-          For enrolment, where we think the missingness is roughly MAR,
-          that's an acceptable shortcut for a quick look.
+          For enrolment, where we think the missingness is roughly MAR, that's
+          an acceptable shortcut for a quick look.
           For HIV prevalence, it's much worse.
-          The mean of the 700 reported values is 4.26 (the median is just
-          1.6), so we'd be giving Mauritius, Seychelles, Equatorial Guinea and
-          São Tomé and Príncipe a prevalence of 4.26 each.
+          The mean of the 700 reported values is 4.26 (the median is just 1.6),
+          so we'd be giving Mauritius, Seychelles, Equatorial Guinea and São
+          Tomé and Príncipe a prevalence of 4.26 each.
           If the reason those countries have no figure is that their epidemics
           are small, we've replaced four honest unknowns with four confidently
           wrong numbers, and hidden the problem rather than acknowledging it.
@@ -1098,9 +1290,6 @@
           countries better than recent years and richer ones.</q>
           That takes thirty seconds to write, and it's the difference between an
           analysis that can be checked and one that can't.
-          Missing data doesn't disappear when you drop the rows.
-          It moves from the dataset into the assumptions of the analysis, and
-          the reader deserves to know it's there.
         </p>
       </insight>
 
@@ -1168,9 +1357,9 @@
           Using <c>na.rm = TRUE</c> is a choice.
           Listwise deletion is a choice.
           Imputation is a choice.
-          What separates good practice from bad isn't which choice you make, but
-          whether you make it deliberately, say why, and acknowledge how much
-          your conclusions depend on it.
+          What separates good practice from bad is in how you make the choice -
+          make it deliberately, say why, and acknowledge how much your
+          conclusions depend on it.
         </p>
       </insight>
     </subsection>
