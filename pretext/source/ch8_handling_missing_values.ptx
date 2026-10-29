@@ -45,7 +45,7 @@
       In <xref ref="ch-exploring-data"/>, we ran into <c>NA</c> as soon as we
       tried to calculate a mean, and set the problem aside.
       In <xref ref="ch-cleaning-recoding"/>, we looked at the gaps, and started
-      to think informally about why VARIBABLES specifically had NAs.
+      to think informally about why there were <c>NA</c> values in the data.
     </p>
 
     <p>
@@ -54,7 +54,8 @@
       Sometimes missing values are just background noise, and you can safely
       ignore them.
       Sometimes they're the most important information in the whole dataset.
-      The study below is one where working out that difference really mattered.
+      The study given in <xref ref="sec-intro-missing-values"/> is one where
+      working out that difference really mattered.
     </p>
   </introduction>
   <!-- ================================================================= -->
@@ -65,19 +66,12 @@
 
     <introduction>
       <p>
-        In <xref ref="ch-cleaning-recoding"/>, the problem was ...
-        .
-        This case study is about [..]: data that should have existed, but simply
-        isn't there at all.
-      </p>
-
-      <p>
         Adhiambo et al.
         (2025) followed adults getting HIV treatment at five health facilities
         in western Kenya, and asked a question that sounds simple: how many of
         them had missed a routine blood test they were supposed to have?
-        The answer turned out to depend completely on working out why each
-        person was missing, and not just how many were.
+        The answer turned out to depend completely on working out <em>why</em>
+        each person was missing, and not just how many were.
       </p>
     </introduction>
 
@@ -101,17 +95,19 @@
     load testing was treated as such a major improvement when it was
     introduced.
   </fn>
-        Kenyan national guidelines, in line with World Health Organization
+        Kenyan national guidelines, in line with World Health Organisation
         recommendations, say this test should happen 6 and 12 months after
         starting treatment, and every 12 months after that.
       </p>
 
       <p>
-        The first year is when treatment failure is most likely, and a timely
-        viral load result is what lets a clinician catch it early, before drug
-        resistance develops or the patient's health declines further.
-        A missed viral load test could mean a patient has failing treatment,
-        with nobody currently able to tell.
+        The first year is when treatment failure is most likely, making timely
+        viral load testing particularly important.
+        Without these results, clinicians may miss early signs of treatment
+        failure, allowing drug resistance to develop or the patient's health to
+        deteriorate.
+        A missed test could therefore mean that a patient is failing treatment
+        without anyone knowing.
       </p>
     </subsection>
 
@@ -120,23 +116,22 @@
 
       <p>
         The study sat inside a larger clinical trial running from 2014 to 2019,
-        across three urban clinics in Kisumu County and two more rural clinics
-        in Migori County.
-        Viral load monitoring wasn't managed specially for the trial.
-        It happened through ordinary, routine clinic care, which is exactly what
-        makes the results useful: they show what actually happens in the health
-        system, not what happens under ideal research conditions.
+        across three urban clinics in Kisumu County and two rural clinics in
+        Migori County.
+        Viral load monitoring wasn't managed specially for the trial, but
+        happened through ordinary, routine clinic care.
+        This means that the results show what <em>actually</em> happens in the
+        health system, not what happens under ideal research conditions.
       </p>
 
       <p>
         For every one of 1,754 participants, the researchers checked whether a
         viral load result existed in the 9 to 15 month window after starting
         treatment, and again in the 21 to 27 month window.
-        If a result couldn't be found in the routine records, that wasn't the
-        end of the process.
-        The researchers went further: checking laboratory logs, a national
-        database, paper files, and eventually contacting clinicians directly, to
-        work out, case by case, what had actually happened to that missing test.
+        If a result couldn't be found in the routine records, the researchers
+        would check laboratory logs, a national database, paper files, and
+        eventually contact clinicians directly, to work out, case by case, what
+        had actually happened to that missing test.
         Later in this chapter, we'll come back to why that second step mattered
         so much.
       </p>
@@ -146,257 +141,493 @@
       <title>The number you'd report first</title>
 
       <p>
-        In year one, 428 of 1,754 participants, 24.4%, had no viral load result
+        In year one, 24.4% (428/1,754) of participants had no viral load result
         in their window.
-        In year two, it was 502 of 1,709, 29.4%.
+        In year two, it was 29.4% (502/1,709)!
         Almost a third of patients, on the most basic reading of the data,
-        simply didn't have the information their doctors needed.
+        didn't have the information their doctors needed.
       </p>
 
       <p>
-        Faced with a gap like this, the easiest thing to do is to just work with
-        the data you have.
-        Take the roughly 1,300 people who do have a year-one viral load result,
-        calculate whatever you need from them, (look at `urban vs rural`, `older
-        vs younger`), and assume it applies to everyone.
+        The temptation is to work with the data you have: Take the roughly 1,300
+        people who do have a year-one viral load result, calculate whatever you
+        need from them, and assume it applies to everyone.
       </p>
 
       <p>
-        Faced with a gap like this, the easiest thing to do is to just work with
-        what you have.
-        Take the roughly 1,300 people who do have a year-one viral load result,
-        calculate whatever you need from them, urban vs rural, older vs younger,
-        and assume it applies to everyone.
-      </p>
-
-      <p>
-        Think about a class of 100 students sitting an exam, where 24 are absent
-        on the day.
-        If you calculate the class average from the 76 who showed up, is that a
-        fair estimate of how the whole class of 100 would have done?
-        It depends entirely on <em>why</em> those 24 weren't there.
-        If they were kept home by 24 unrelated colds and stomach bugs, there's
-        no reason to think they'd have scored any differently, so the average
-        from the 76 is a perfectly good stand-in for all 100.
-        But if most of the 24 stayed home because they hadn't done the reading
-        and didn't want to sit the exam, the 76 who showed up are, on average,
-        the more prepared half of the class.
-        Their average isn't a fair estimate of everyone anymore.
-        It's an estimate of the students who choose to turn up when they're
-        ready.
-      </p>
-
-      <p>
-        The same question applies to the 428 people missing a year-one viral
-        load.
-        Working with just the 1,300 who were tested is only safe if <em>why</em>
-        someone went untested has nothing to do with whether their treatment was
-        working.
+        But, working with just the 1,300 who were tested is only safe if the
+        reason <em>why</em> someone went untested has nothing to do with whether
+        their treatment was working.
         In this dataset, it turns out that isn't the case.
       </p>
+
+      <example>
+        <p>
+          Think about a class of 100 students sitting an exam, where 24 are
+          absent on the day.
+          If you calculate the class average from the 76 who showed up, is that
+          a fair estimate of how the whole class of 100 would have done?
+          It depends entirely on <em>why</em> those 24 weren't there.
+          If they were kept home by 24 unrelated colds and stomach bugs, there's
+          no reason to think they'd have scored any differently, so the average
+          from the 76 is a perfectly good stand-in for all 100.
+          But if most of the 24 stayed home because they hadn't done the reading
+          and didn't want to sit the exam, the 76 who showed up are, on average,
+          the more prepared half of the class.
+          Their average isn't a fair estimate of everyone anymore.
+          It's an estimate of the students who choose to turn up when they're
+          ready.
+        </p>
+      </example>
     </subsection>
 
     <subsection xml:id="ss-vl-why">
-      <title>Ah, but why is it missing?</title>
+      <title>So, why is it missing?</title>
 
-      <p>
-        The extended investigation gave the missing results a reason, and the
-        reasons were not evenly spread.
-        In year one, of the 406 participants who were still alive and missing a
-        test, 149 (36.7%) were missing because a clinician misread the
-        monitoring schedule, ordering the next test 12 months after the
-        <em>last</em> viral load rather than 12 months after treatment started.
-        209 (51.5%) had missed every clinic appointment during the testing
-        window and couldn't be found at all.
-        42 (10.3%) had no documented reason.
-        And 6 (1.5%) had a test ordered by a clinician, with no record that a
-        sample was ever collected.
-      </p>
+      <introduction>
+        <p>
+          The extended investigation gave the missing results a reason, and the
+          reasons were not evenly spread.
+          <xref ref="table-missing-viral-load-reasons"/> summarises the reasons
+          for missing viral load tests in the first year.
+        </p>
 
-      <p>
-        Four reasons, and as we'll see, each one changes what the missing data
-        is quietly telling you.
-      </p>
-    </subsection>
+        <table xml:id="table-missing-viral-load-reasons">
+          <title>
+            Reasons for missing viral load tests in year one, among 406
+            participants who were still alive but had no recorded test result.
+          </title>
 
-    <subsection xml:id="ss-vl-mcar">
-      <title>Some people are missing for no reason at all</title>
+          <tabular>
+            <col halign="left"/>
+            <col halign="right"/>
+            <col halign="right"/>
+            <row>
+              <cell><em>Reason</em></cell>
+              <cell><em>Number</em></cell>
+              <cell><em>Percentage</em></cell>
+            </row>
 
-      <p>
-        There are 6 participants in year one, and 6 again in year two, whose
-        clinician ordered a viral load test, and where a sample was, apparently,
-        simply never collected.
-        No record of a patient refusal.
-        No record of a clinical decision.
-        Just a test that should have happened, and didn't, for reasons that look
-        like nothing more than an administrative slip.
-      </p>
+            <row>
+              <cell>Clinician misinterpreted the monitoring schedule</cell>
+              <cell>149</cell>
+              <cell>36.7%</cell>
+            </row>
 
-      <p>
-        This is the closest thing in the dataset to missingness that has nothing
-        to do with the patient at all.
-        It's the "kept home by an unrelated cold" case from our exam: whatever
-        happened to these six people, it wasn't connected to whether their
-        treatment was working.
-        Losing these six records doesn't quietly shift your results in any
-        particular direction.
-        There's no reason to think they'd have looked any different from the
-        patients who were tested, so leaving them out costs you six data points,
-        and nothing else.
-      </p>
-    </subsection>
+            <row>
+              <cell>
+                Missed all clinic appointments during the testing window
+              </cell>
+              <cell>209</cell>
+              <cell>51.5%</cell>
+            </row>
 
-    <subsection xml:id="ss-vl-mar">
-      <title>Some people are missing because of who they are</title>
+            <row>
+              <cell>No documented reason</cell>
+              <cell>42</cell>
+              <cell>10.3%</cell>
+            </row>
 
-      <p>
-        Two other characteristics also predicted missingness, but in a different
-        way.
-        Participants under 24 had more than double the risk of a missed viral
-        load compared to those over 44, and participants at rural clinics had a
-        higher risk than those at urban clinics.
-        Neither of these is a measurement of how sick someone is.
-        They're just facts about the patient that happen to be recorded already,
-        in every participant's file, tested or not.
-      </p>
+            <row>
+              <cell>Test ordered, but no sample collection recorded</cell>
+              <cell>6</cell>
+              <cell>1.5%</cell>
+            </row>
 
-      <p>
-        That difference matters.
-        Can we assume that younger and older patients would show the same viral
-        suppression results, if we could see everyone's?
-        Not necessarily; the paper suggests younger patients are more mobile,
-        and more likely to fall out of care for reasons that have nothing to do
-        with how their treatment is going.
-        Can we assume rural and urban patients would look the same?
-        Again, probably not exactly, since rural clinics face harder equipment
-        access and longer sample transport.
-        But because age and clinic location are known for every single
-        participant, missing or not, they at least give you something to work
-        with.
-        You can compare rural patients to rural patients, and under-24s to
-        under-24s, instead of guessing at the group as a whole.
-        A gap you can explain using information you already have!
-        But, assuming these were
-      </p>
+            <row>
+              <cell><em>Total</em></cell>
+              <cell>406</cell>
+              <cell>100.0%</cell>
+            </row>
+          </tabular>
+        </table>
 
-      <p>
-        That difference matters.
-        Unlike the six lost samples, we can't just assume these absences were
-        unrelated to anything, the way we could with an unlucky cold.
-        Think back to the exam: imagine the 24 absent students weren't a random
-        slice of the class, but were disproportionately the students who come to
-        school from a further, poorer part of town, and they didn't make it in
-        that day.
-        Averaging just the students who made it in would quietly overrepresent
-        those who live closer, and you'd have no way to know it, unless you'd
-        also recorded where each student lived.
-      </p>
+        <p>
+          Four reasons, and as we'll see, each one changes what the missing data
+          is quietly telling you.
+        </p>
+      </introduction>
 
-      <p>
-        That's the difference here.
-        Age and clinic location aren't a guess.
-        They're recorded for every single participant, tested or not.
-        So instead of assuming the untested under-24s would have looked like the
-        tested over-44s, or that untested rural patients would have looked like
-        tested urban ones, we can do something more careful: compare like with
-        like.
-        Look at suppression rates among tested under-24s, and treat that as your
-        best estimate for untested under-24s, rather than borrowing an estimate
-        from a different age group entirely.
-        A gap you can explain using information you already have is a very
-        different problem from a gap you can only explain using the very thing
-        you're trying to measure, which is exactly the case we turn to next.
-      </p>
-    </subsection>
+      <subsubsection xml:id="ss-vl-mcar">
+        <title>Some results may be missing by chance</title>
 
-    <subsection xml:id="ss-vl-mnar">
-      <title>And some people are missing because they're sicker</title>
+        <p>
+          There were six participants in year one whose clinician ordered a
+          viral load test, but for whom no sample collection was recorded.
+          One possible explanation is a simple administrative mistake.
+          Perhaps the test was forgotten, or the paperwork was lost.
+        </p>
 
-      <p>
-        The study's analysis found that participants at the most advanced stage
-        of HIV disease (WHO clinical stage 4), had more than twice the risk of
-        missing their year-two viral load compared to those at stage 1.
-        The research team also learned something that never made it into any
-        official record at all: some clinicians told them, when asked directly,
-        that they had deliberately avoided sending viral load tests for patients
-        they suspected were already failing treatment, because they already
-        knew, or believed, the result would come back high.
-      </p>
+        <p>
+          Suppose that these mistakes happened entirely by chance, with no
+          connection to the patients or how well their treatment was working.
+        </p>
 
-      <p>
-        This is the most dangerous kind of missing data there is, because the
-        reason for the gap is tangled up with the very thing you're trying to
-        measure.
-        Go back to the exam one last time.
-        This is the student who stayed home because they hadn't done the reading
-        and didn't want to sit a test they knew they'd fail.
-        Their absence isn't unrelated to their score, like the cold, and it
-        isn't something you could correct for with a note about which bus they
-        take, like the traffic.
-        Their absence <em>is</em> their score, in the sense that not showing up
-        is itself evidence of how unprepared they were.
-      </p>
+        <example>
+          <p>
+            Think back to our exam example.
+            Imagine a student misses the exam because they catch a cold.
+            Their illness has nothing to do with how well they prepared or what
+            mark they would have received.
+            If students missed the exam for reasons like this, completely
+            independently of their marks and other characteristics, those who
+            attended would still give us a reasonable picture of the class.
+          </p>
+        </example>
 
-      <p>
-        The same is true here.
-        The patients missing from the "viral load" column aren't a random slice
-        of everyone, and they aren't a slice you can identify from something
-        else in their file, the way you could identify an under-24 or a rural
-        patient.
-        They're disproportionately the patients doing worst, and the very fact
-        of their disease progressing is bound up with why they weren't tested.
-        If you calculate what fraction of tested patients are virally suppressed
-        and treat that as the answer for everyone, you'll come out too
-        optimistic, because the sickest people were the ones most likely never
-        to be tested in the first place.
-        There's no group to compare like with like here, the way there was for
-        age or clinic location.
-        The information you'd need to correct for the gap is the same
-        information that's missing.
-      </p>
+        <p>
+          We would have fewer results to work with, so our estimate would be
+          less precise.
+          But we would not expect the missing students to be systematically
+          better or worse than those who attended.
+        </p>
+      </subsubsection>
+
+      <subsubsection xml:id="ss-vl-mar">
+        <title>
+          Some people are more likely to have missing data than others
+        </title>
+
+        <p>
+          We have missing viral load results for some participants, but we still
+          know other things about them, such as their age, sex and the clinic
+          they attend.
+          This information is recorded for everyone, whether or not they had a
+          viral load test.
+        </p>
+
+        <p>
+          When researchers looked at who was missing a viral load result, they
+          found some important differences.
+          Participants under 24 were more than twice as likely to have a missing
+          result as participants over 44.
+          In other words, if 10 out of every 100 older participants were missing
+          a result, we would expect more than 20 out of every 100 younger
+          participants to be missing one.
+          Participants attending rural clinics were also more likely to have a
+          missing result than those attending urban clinics.
+        </p>
+
+        <p>
+          Why does this matter?
+          Imagine we calculate the percentage of participants whose treatment is
+          working, using only those with a viral load result.
+          We now know that younger participants and those attending rural
+          clinics are <em>less</em> likely to be included in our calculation.
+          Our results will therefore tell us more about older participants and
+          those attending urban clinics than about the whole group.
+        </p>
+
+        <p>
+          This would not necessarily be a problem if everyone had similar
+          treatment outcomes.
+          But what if younger and older participants have different rates of
+          viral suppression?
+          Or rural and urban participants?
+          We cannot simply assume that they are the same.
+          The people missing from our calculation might have different results
+          from those who are included.
+        </p>
+
+        <example>
+          <p>
+            Think back to our example of the exam.
+            Imagine that the 24 absent students were mostly from a poorer part
+            of town, further away from the school.
+            The students who took the exam would then include fewer students
+            from that part of town than the class as a whole.
+            If students from different parts of town also tend to perform
+            differently in exams, the average mark of those who attended might
+            not give us a good picture of how the whole class would have
+            performed.
+          </p>
+
+          <p>
+            But suppose we already knew which part of town every student lived
+            in, including those who missed the exam.
+            We could compare students who live in the same area, rather than
+            assuming that absent students would have performed like everyone who
+            attended.
+            This would give us a better starting point for estimating the
+            missing marks.
+          </p>
+        </example>
+
+        <p>
+          We can do something similar with the viral load data to the example
+          exam scenario.
+          Because we know everyone's age and clinic location, we can compare
+          like with like.
+          Instead of assuming that an untested participant under 24 would have
+          the same result as a tested participant over 44, we can look at the
+          results of other tested participants under 24.
+          Similarly, we can compare rural participants with other rural
+          participants.
+        </p>
+
+        <p>
+          This does not tell us exactly what the missing results would have
+          been.
+          Younger participants who missed their tests might still be different
+          from younger participants who attended.
+          But it gives us a more informed starting point than treating everyone
+          as though they were the same.
+        </p>
+      </subsubsection>
+
+      <subsubsection xml:id="ss-vl-mnar">
+        <title>And some people are missing because they're sicker</title>
+
+        <p>
+          The study's analysis found that participants at the most advanced
+          stage of HIV disease (WHO clinical stage 4), had more than twice the
+          risk of missing their year-two viral load compared to those at stage
+          1.
+          The research team also learned something that never made it into any
+          official record at all: some clinicians told them, when asked
+          directly, that they had deliberately avoided sending viral load tests
+          for patients they suspected were already failing treatment, because
+          they already knew, or believed, the result would come back high.
+        </p>
+
+        <p>
+          This is the most dangerous kind of missing data there is, because the
+          reason for the gap is tangled up with the very thing you're trying to
+          measure.
+          Go back to the exam example.
+          This is the student who stayed home because they hadn't done the
+          reading and didn't want to sit a test they knew they'd fail.
+          Their absence isn't unrelated to their score, like the cold, and it
+          isn't something you could correct for with a note about which bus they
+          take, like the traffic.
+          Their absence <em>is</em> their score, in the sense that not showing
+          up is itself evidence of how unprepared they were.
+        </p>
+
+        <p>
+          The patients missing from the <q>viral load</q> column aren't a random
+          slice of everyone, and they aren't a slice you can identify from
+          something else in their file, the way you could identify an under-24
+          or a rural patient.
+          They're disproportionately the patients doing worst, and the very fact
+          of their disease progressing is bound up with why they weren't tested.
+          If you calculate what fraction of tested patients are virally
+          suppressed and treat that as the answer for everyone, you'll come out
+          too optimistic, because the sickest people were the ones most likely
+          never to be tested in the first place.
+          There's no group to compare like with like here, the way there was for
+          age or clinic location.
+          The information you'd need to correct for the gap is the same
+          information that's missing.
+        </p>
+      </subsubsection>
+
+      <conclusion xml:id="ss-missingness-comparison">
+        <p>
+          We have now seen three different reasons why data might be missing.
+          But how much difference can the reason for missingness actually make?
+        </p>
+
+        <p>
+          Let's return to our exam example and imagine a class of 100 students.
+          There are 70 students who live close to school and 30 who live further
+          away.
+          In our simulated class, students living closer to school tend to get
+          higher marks than those living further away.
+        </p>
+
+        <p>
+          Now suppose that 24 students miss the exam.
+          We will look at three different situations, each with exactly 24
+          students absent.
+          The class and their potential exam marks stay exactly the same.
+          The only thing we change is <em>who misses the exam</em>.
+        </p>
+
+        <figure xml:id="fig-exam-missingness-comparison">
+          <caption>
+            How different reasons for missing data can change the exam results
+            we observe.
+          </caption>
+
+          <image source="images/exam-missingness-comparison.png" width="100%">
+            <description>
+              <p>
+                Four histograms show the exam marks from the same simulated
+                class of 100 students.
+                The first shows all 100 marks.
+                The next three show the marks of 76 students, with 24 results
+                missing in each case.
+                In one, students are absent at random.
+                In another, students living further away, who tend to have lower
+                marks, are more likely to be absent.
+                In the fourth panel, the students with the lowest marks are
+                absent.
+                A dashed vertical line shows the average of the available marks
+                in each panel.
+                The average is generally higher in the third and fourth examples
+                because fewer low marks are included.
+              </p>
+            </description>
+          </image>
+        </figure>
+
+        <p>
+          Look at <xref ref="fig-exam-missingness-comparison"/>.
+          In every situation, we are working with the same class of students.
+          And in each of the three missing-data examples, we have exactly 76
+          exam results.
+        </p>
+
+        <p>
+          In the first missing-data example, students are absent completely at
+          random.
+          Some students with high marks are missing, and some with low marks are
+          missing.
+          We lose information, but there is no systematic reason for the average
+          to move upwards or downwards.
+        </p>
+
+        <p>
+          In the second example, most of the absent students live further away
+          from school.
+          Because students from that area tend to get lower marks in our
+          simulated class, the average of the students who took the exam is
+          higher than the average for the whole class.
+        </p>
+
+        <p>
+          However, we know where every student lives, including those who were
+          absent.
+          This gives us useful information.
+          We can compare students from the same area, rather than treating
+          everyone as though they were the same.
+        </p>
+
+        <p>
+          In the third example, the students with the lowest marks are the ones
+          who miss the exam.
+          The average mark of those who attended is now much higher than the
+          average for the whole class.
+        </p>
+
+        <p>
+          This is particularly difficult because the missing marks themselves
+          are connected to why the students were absent.
+          Even if we know where each student lives, the students who missed the
+          exam may have performed worse than the students who attended from the
+          same area.
+        </p>
+
+        <p>
+          Notice that the number of missing values was the same in all three
+          examples.
+          What changed was which values were missing.
+          This is why, when investigating missing data, we need to ask more than
+          just <q>How many values are missing?</q> We also need to ask
+          <q>Why are they missing?</q>
+        </p>
+      </conclusion>
     </subsection>
 
     <subsection xml:id="ss-vl-lesson">
-      <title>Missingness is not one problem</title>
+      <title>Why the reason for missing data matters</title>
 
       <p>
-        Put these different reasons side by side, and you can see why treating
-        "24.4% missing" as a single fact would have been a mistake.
-        Lost to follow-up, which accounts for over half of all missing cases,
-        could mean a death that was never recorded, a self-transfer to another
-        clinic, or a patient who is very much alive and simply out of care.
-        Clinician misinterpretation of the guidelines, more than a third,
-        reflects a scheduling error, unrelated to the patient's health at all.
-        Advanced disease stage reflects the sickest patients disappearing from
-        the very data used to judge how well treatment is working.
-        And the handful of lost samples reflect nothing more than bad luck.
+        We started with viral load results with 24.4% missing.
+        But as we investigated further, we found that those missing results had
+        very different explanations.
+      </p>
+
+      <p>
+        More than half of the missing results were from patients who had stopped
+        attending clinic appointments.
+        Some might have transferred to another clinic, others might have stopped
+        receiving care altogether, and some might have died without this being
+        recorded <ndash/> we cannot tell from the missing result alone.
+      </p>
+
+      <p>
+        More than a third were linked to clinicians misunderstanding the
+        monitoring schedule.
+        A small number had a test ordered but no record of a sample being
+        collected.
+        These could reflect administrative problems rather than anything about
+        the patients' health.
+      </p>
+
+      <p>
+        But we also saw patterns <ndash/> younger patients, patients attending
+        rural clinics, and patients with more advanced HIV disease were more
+        likely to have missing results.
+        Some clinicians even reported avoiding tests when they already suspected
+        that a patient's treatment was failing.
+      </p>
+
+      <p>
+        Think back to our exam example.
+        We had the same class of students, with the same 24 missing exam marks,
+        but the average we calculated could change depending on which students
+        were absent.
+        Missing 24 marks by chance was very different from missing 24 marks
+        mostly from students who expected to fail.
+      </p>
+
+      <p>
+        The same applies here.
+        If patients whose treatment is failing are more likely to have missing
+        viral load results, calculating the percentage with viral suppression
+        using only the patients who were tested could give us a misleadingly
+        optimistic picture.
       </p>
 
       <p>
         Adhiambo et al.
-        (2025) are explicit that this changes what the topline numbers can be
-        trusted to say.
-        Missed viral load monitoring, they write,
-        <q>remains high, primarily due to loss to follow-up, and may
-        substantially alter suppression estimates.</q>
-        Once the team understood that the missing data wasn't random, they
-        stopped relying on the case database for routine reporting and used
-        laboratory data for day-to-day reports instead.
+        (2025) recognised this problem.
+        They concluded that missing viral load results could substantially
+        change estimates of viral suppression.
+        The research team also reported using laboratory data for routine
+        reporting rather than relying on the case database alone.
       </p>
 
       <p>
-        That's the habit this chapter is trying to build.
-        A missing value is never just an empty cell.
-        Before you decide whether to drop it, fill it in, or flag it and move
-        on, you have to ask why it's empty.
-        Sometimes that question has a simple answer, and you can safely ignore
-        the gap.
-        Sometimes it has an answer tied to information you already have
-        elsewhere, and you can work around it.
-        And sometimes, as with the sickest patients in this study, the answer is
-        tied to the exact thing you were trying to measure, and ignoring it
-        could seriously bias your study.
+        We need to understand <em>why</em> a value is missing to be able to
+        handle it responsibly.
+        It may be unrelated to the results we are interested in, or it may be
+        explained (at least partly) by information we already have.
+        But, sometimes the missing result itself may be connected to why it is
+        missing.
       </p>
+
+      <p>
+        Each situation has different consequences for our analysis, and removing
+        rows with missing values might be reasonable in some circumstances, but
+        misleading in others.
+        Filling in missing values also requires assumptions about what those
+        values might have been.
+      </p>
+
+      <p>
+        We do not always have enough information to know exactly why data is
+        missing, or to recover the missing values, but that does not mean we
+        should ignore the problem.
+      </p>
+
+      <warning>
+        <title>Ignoring missing data is still a decision</title>
+
+        <p>
+          When you analyse only the values you have, you are making a decision
+          about how to handle the missing ones, even if you do not realise it.
+        </p>
+
+        <p>
+          That decision may have little effect, or it may completely change your
+          conclusions.
+          Before ignoring missing values, ask yourself:
+          <em>Why might these values be missing, and could that affect my results?</em>
+        </p>
+      </warning>
 
       <p>
         <term>Source:</term> Adhiambo, H.F., Lewis-Kulzer, J., Nyagesoa, E.,
@@ -405,9 +636,10 @@
         M.L.
         and Geng, E.H.
         (2025).
-        <q>Examining and classifying reasons for missing viral loads among
-        adults living with HIV: An extended outcome investigation and
-        ascertainment approach in Western Kenya.</q>
+        <q>Examining and classifying reasons for missing viral
+    loads among adults living with HIV: An extended
+    outcome investigation and ascertainment approach
+    in Western Kenya.</q>
         <em>PLOS Global Public Health</em>, 5(5), e0004038.
       </p>
     </subsection>
@@ -428,21 +660,21 @@
 
     <introduction>
       <p>
-        The viral load study had something most of us never get: a team who went
-        and found out why each result was missing.
+        The viral load study had a team who went and found out why each result
+        was missing.
         In practice, we usually have the dataset and nothing else, so we have to
         work out what we can from the data itself.
-        This section does that, using the <c>africa_indicators</c> dataset.
+        This section does that, using the <c>africa_indicators</c> dataset in
+        the <c>statsdata</c> package.
       </p>
 
       <p>
-        It holds World Bank development indicators for the 54 African countries,
-        one row per country per year from 2010 to 2023.
+        The <c>africa_indicators</c> data holds World Bank development
+        indicators for the 54 African countries, one row per country per year
+        from 2010 to 2023.
         There are 756 rows, with population, GDP per capita, life expectancy,
         under-5 mortality, HIV prevalence, births attended by skilled health
-        staff, primary school enrolment and the poverty rate.
-        We chose it because the missing values are real, they are everywhere,
-        and (as we'll see) they are missing for very different reasons.
+        staff, primary school enrolment, and the poverty rate.
       </p>
 
       <program language="r">
@@ -461,71 +693,101 @@
       <title>Finding missing values</title>
 
       <p>
-        The first step is to find out where the missing values are, and how many
-        there are.
-        In R, <c>is.na()</c> returns <c>TRUE</c> for each missing value and
-        <c>FALSE</c> for each value that is there.
-        Wrapping it in <c>sum()</c> counts the missing values in a column:
+        Before we can decide what to do about missing values, we need to know
+        where they are.
+        Are there just a few gaps, or are large parts of the dataset missing?
+      </p>
+
+      <p>
+        In R, <c>is.na()</c> tells us whether a value is missing.
+        It returns <c>TRUE</c> if the value is missing, and <c>FALSE</c> if it
+        is present.
+      </p>
+
+      <p>
+        Let's start by looking at the first six values of <c>births_skilled</c>,
+        which records the percentage of births attended by skilled health
+        personnel.
       </p>
 
       <program language="r">
         <code>
-        # Is births_skilled missing for the first six rows (Algeria, 2010-2015)?
-        head(is.na(africa_indicators$births_skilled))
-        #&gt; [1]  TRUE  TRUE  TRUE FALSE  TRUE  TRUE
-
-        # How many missing values in primary_enrolment?
-        sum(is.na(africa_indicators$primary_enrolment))
-        #&gt; [1] 219
+head(is.na(africa_indicators$births_skilled))
+#&gt; [1] TRUE TRUE TRUE FALSE TRUE TRUE
         </code>
       </program>
 
       <p>
-        To check every column at once, <c>colSums(is.na())</c> does the same
-        thing across the whole dataset:
+        Five of these six values are missing.
+        But what about the whole column?
+        We can use <c>sum()</c> to count the number of <c>TRUE</c> values.
+        In R, <c>TRUE</c> is counted as 1 and <c>FALSE</c> as 0.
       </p>
 
       <program language="r">
         <code>
-        colSums(is.na(africa_indicators))
-        #&gt;              iso3           country            region      income_group
-        #&gt;                 0                 0                 0                 0
-        #&gt;              year        population    gdp_per_capita   life_expectancy
-        #&gt;                 0                 0                20                 0
-        #&gt;  under5_mortality    hiv_prevalence    births_skilled primary_enrolment
-        #&gt;                 0                56               583               219
-        #&gt;      poverty_rate
-        #&gt;               634
+sum(is.na(africa_indicators$primary_enrolment))
+#&gt; [1] 219
         </code>
       </program>
 
       <p>
-        Five of the thirteen columns have missing values, and they are nothing
-        like each other.
-        <c>gdp_per_capita</c> has 20 missing values out of 756 (under 3%), while
-        <c>poverty_rate</c> has 634 (84%).
+        There are 219 missing values in <c>primary_enrolment</c>.
+        Since the dataset contains 756 rows, 29% of the country-year
+        observations have no primary enrolment figure.
       </p>
 
       <p>
-        The <c>naniar</c> package gives us some visual tools.
-        <c>vis_miss()</c> draws a heatmap of the whole dataset, with missing
-        values in a dark colour:
+        We could repeat this calculation for every variable, but R can do that
+        for us.
+        <c>colSums()</c> adds up the missing values in each column.
       </p>
 
       <program language="r">
         <code>
-        vis_miss(africa_indicators)
+colSums(is.na(africa_indicators))
+#&gt;              iso3           country            region      income_group
+#&gt;                 0                 0                 0                 0
+#&gt;              year        population    gdp_per_capita   life_expectancy
+#&gt;                 0                 0                20                 0
+#&gt;  under5_mortality    hiv_prevalence    births_skilled primary_enrolment
+#&gt;                 0                56               583               219
+#&gt;      poverty_rate
+#&gt;               634
+        </code>
+      </program>
+
+      <p>
+        Five of the thirteen columns have missing values.
+        But the amount missing varies enormously.
+        <c>gdp_per_capita</c> has just 20 missing values, fewer than 3% of its
+        observations, while <c>poverty_rate</c> has 634, around 84%.
+      </p>
+
+      <p>
+        Counting missing values is useful, but it doesn't tell us whether they
+        occur together, or whether they follow any particular pattern.
+        For that, a graph can help.
+      </p>
+
+      <p>
+        The <c>naniar</c> package includes a function called <c>vis_miss()</c>,
+        which shows where values are missing across the dataset.
+      </p>
+
+      <program language="r">
+        <code>
+library(naniar)
+
+vis_miss(africa_indicators)
         </code>
       </program>
 
       <figure xml:id="fig-africa-vis-miss">
         <caption>
-          Missingness heatmap for the <c>africa_indicators</c> dataset.
-          Each row is one country in one year, and each column is one variable.
-          Missing values are dark.
-          <c>births_skilled</c> and <c>poverty_rate</c> are mostly missing,
-          <c>primary_enrolment</c> is patchy, and <c>gdp_per_capita</c> and
-          <c>hiv_prevalence</c> have a few solid blocks.
+          Missing values in the <c>africa_indicators</c> dataset.
+          Each row represents a country in a particular year, and each column
+          represents a variable.
         </caption>
 
         <image source="images/ch-missing-vis-miss.png" width="90%">
@@ -533,53 +795,61 @@
             <p>
               A heatmap with one row per country-year and one column per
               variable.
-              Most columns are entirely light grey.
-              The births_skilled and poverty_rate columns are mostly dark,
-              primary_enrolment has scattered dark stripes, and gdp_per_capita
-              and hiv_prevalence each have a few short dark blocks.
-              The percentage missing is printed in each column label.
+              Most columns contain no missing values.
+              The births_skilled and poverty_rate columns are mostly missing,
+              primary_enrolment has scattered gaps, and gdp_per_capita and
+              hiv_prevalence have blocks of missing values.
+              The percentage missing is displayed for each variable.
             </p>
           </description>
         </image>
       </figure>
 
       <p>
-        Look at the blocks in <c>gdp_per_capita</c> and <c>hiv_prevalence</c>.
-        A block is a run of consecutive rows, and since the rows are sorted by
-        country, a block means one country that has no value in any year.
-        That isn't what scattered, unlucky gaps look like!
+        Look at <xref ref="fig-africa-vis-miss"/>.
+        Some columns are almost entirely missing, while others have just a few
+        gaps.
+        Notice the blocks of missing values in <c>gdp_per_capita</c> and
+        <c>hiv_prevalence</c>.
+        These are worth investigating.
+        Could they correspond to particular countries or years?
       </p>
 
       <p>
-        <c>gg_miss_var()</c> gives a bar chart of the number of missing values
-        per variable, which is easier to read when there are lots of columns:
+        Another useful function is <c>gg_miss_var()</c>, which produces a bar
+        chart showing the number of missing values in each variable.
       </p>
 
       <program language="r">
         <code>
-        gg_miss_var(africa_indicators)
+gg_miss_var(africa_indicators)
         </code>
       </program>
 
       <figure xml:id="fig-africa-gg-miss-var">
         <caption>
-          Number of missing values per variable in the <c>africa_indicators</c>
-          dataset.
+          Number of missing values in each variable of the
+          <c>africa_indicators</c> dataset.
         </caption>
 
         <image source="images/ch-missing-gg-miss-var.png" width="80%">
           <description>
             <p>
-              A horizontal bar chart with variable names on the vertical axis
-              and the number of missing values on the horizontal axis.
-              poverty_rate is longest at 634, then births_skilled at 583,
-              primary_enrolment at 219, hiv_prevalence at 56 and gdp_per_capita
-              at 20.
+              A horizontal bar chart showing the number of missing values per
+              variable.
+              Poverty rate has the most, with 634, followed by births attended
+              by skilled health personnel with 583, primary enrolment with 219,
+              HIV prevalence with 56 and GDP per capita with 20.
               All other variables have none.
             </p>
           </description>
         </image>
       </figure>
+
+      <p>
+        We now know how much data is missing from each variable.
+        But we also need to investigate <em>which</em> observations are missing.
+      </p>
     </subsection>
 
     <subsection xml:id="ss-missing-patterns">
@@ -587,21 +857,24 @@
 
       <introduction>
         <p>
-          We now know how many values are missing from each variable.
-          But are those missing values scattered throughout the data, or do they
-          follow a pattern?
+          We have found the missing values and counted them.
+          Now let's look more closely at where they occur.
         </p>
 
         <p>
-          Think back to the <c>vis_miss</c> graph above.
-          Some variables had long blocks of missing values, while others had
-          gaps scattered across different rows.
-          These patterns might tell us something about why the values are
-          missing.
+          Think back to our exam example.
+          Knowing that 24 students were absent told us very little until we
+          discovered which students they were.
+          Were they absent by chance, or were particular groups more likely to
+          be missing?
         </p>
 
         <p>
-          Let's investigate a few of the variables to see what we can find out.
+          We can ask similar questions about our African development indicators.
+          Are entire countries missing?
+          Are particular years missing?
+          Do the observations with missing values differ from those with
+          recorded values?
         </p>
       </introduction>
 
@@ -609,9 +882,15 @@
         <title>Are entire countries missing?</title>
 
         <p>
-          Start with <c>hiv_prevalence</c>.
-          The graph showed a large block of missing values.
-          Are these spread across many countries, or concentrated in just a few?
+          Let's start with <c>hiv_prevalence</c>.
+          We know that 56 values are missing.
+          But are these scattered across many countries, or concentrated in just
+          a few?
+        </p>
+
+        <p>
+          We can use <c>filter()</c> to select the rows where HIV prevalence is
+          missing, and <c>count()</c> to see which countries they belong to.
         </p>
 
         <program language="r">
@@ -621,12 +900,12 @@ africa_indicators %&gt;%
   count(country, income_group)
 
 # A tibble: 4 x 3
-  country               income_group            n
-  &lt;chr&gt;                 &lt;fct&gt;               &lt;int&gt;
-1 Equatorial Guinea     Upper middle income     14
-2 Mauritius             Upper middle income     14
-3 Sao Tome and Principe Lower middle income     14
-4 Seychelles            High income             14
+  country                income_group           n
+  &lt;chr&gt;                  &lt;fct&gt;              &lt;int&gt;
+1 Equatorial Guinea      Upper middle income    14
+2 Mauritius              Upper middle income    14
+3 Sao Tome and Principe  Lower middle income    14
+4 Seychelles             High income            14
           </code>
         </program>
 
@@ -640,10 +919,22 @@ africa_indicators %&gt;%
 
         <p>
           Does it matter which countries are missing?
-          Let's compare these four countries with the countries that do have HIV
-          prevalence data.
+          Think back to our exam example <ndash/> of the absent students came
+          mostly from one part of town, the students who attended might not
+          represent the whole class.
+        </p>
+
+        <p>
+          Could something similar be happening here?
+          Let's compare the four countries without HIV prevalence data with the
+          countries that do have it.
+        </p>
+
+        <p>
           We cannot compare their HIV prevalence, since that is precisely what
-          is missing, but we can compare other variables.
+          is missing.
+          But we can compare other information that we do have, such as GDP per
+          capita and under-5 mortality.
         </p>
 
         <program language="r">
@@ -659,28 +950,40 @@ africa_indicators %&gt;%
 # A tibble: 2 x 4
   hiv_missing mean_under5 mean_gdp     n
   &lt;lgl&gt;             &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;
-1 FALSE              69.7    2145.   700
-2 TRUE               35.1    9430.    56
+1 FALSE              69.7    2145.    700
+2 TRUE               35.1    9430.     56
           </code>
         </program>
 
         <p>
           There is quite a difference!
-          The four countries without HIV prevalence data have, on average, about
-          half the under-5 mortality and more than four times the GDP per capita
-          of the countries with data.
-          These are averages across country-years, and there are differences
-          between the four countries themselves.
+          The countries without HIV prevalence data have, on average, about half
+          the under-5 mortality and more than four times the GDP per capita of
+          the countries with data.
+        </p>
+
+        <p>
+          These are averages across country-years, rather than individual
+          countries, but they show that the missing observations are different
+          in other important ways.
         </p>
 
         <p>
           Why does this matter?
           Suppose we wanted to investigate the relationship between HIV
           prevalence and economic development across Africa.
-          We would have no HIV prevalence data for these four countries, so they
-          could not be included in that analysis.
-          Our results would describe the countries with data, which are not
-          necessarily representative of all African countries.
+          We would have no HIV prevalence figures for these four countries, so
+          they could not contribute to that analysis.
+          Our results would describe the countries with available data, which
+          might not give us a complete picture of Africa.
+        </p>
+
+        <p>
+          We have found a pattern in the missing data.
+          But we still don't know <em>why</em> these four countries have no HIV
+          prevalence figures.
+          The pattern gives us a reason to investigate further, not a definite
+          explanation.
         </p>
       </subsubsection>
 
@@ -688,8 +991,14 @@ africa_indicators %&gt;%
         <title>Are particular years missing?</title>
 
         <p>
-          Next, consider <c>gdp_per_capita</c>.
-          Which countries have missing values?
+          Next, let's look at <c>gdp_per_capita</c>.
+          There are only 20 missing values, fewer than 3% of the dataset.
+        </p>
+
+        <p>
+          That might not sound like much.
+          But before deciding that these missing values are unimportant, let's
+          find out where they occur.
         </p>
 
         <program language="r">
@@ -707,10 +1016,13 @@ africa_indicators %&gt;%
         </program>
 
         <p>
-          Only two countries have missing GDP per capita values.
-          But unlike HIV prevalence, where every year was missing for four
-          countries, these countries do have some GDP data.
-          Which years are missing?
+          All 20 missing values come from just two countries.
+          Unlike the HIV prevalence example, however, these countries do have
+          GDP data for some years.
+        </p>
+
+        <p>
+          Let's investigate which years are missing.
         </p>
 
         <program language="r">
@@ -739,17 +1051,17 @@ africa_indicators %&gt;%
         </p>
 
         <p>
-          Why might this happen?
+          What might explain this?
           GDP figures depend on national statistical systems collecting and
           compiling economic information.
-          Political instability, conflict, difficulties collecting data, or
-          delays in producing national accounts can all affect the availability
-          of these figures.
+          Conflict, political instability, difficulties collecting data, and
+          delays in producing national accounts can all affect whether figures
+          are available.
         </p>
 
         <p>
           Both Eritrea and South Sudan have faced substantial political and
-          economic challenges during these periods.
+          economic challenges.
           However, we cannot tell from this dataset alone exactly why their GDP
           figures are missing.
           We would need to investigate the original data source and its
@@ -757,11 +1069,20 @@ africa_indicators %&gt;%
         </p>
 
         <p>
-          What we can say is that the gaps are not spread evenly across
-          countries or years.
+          What we can say is that the gaps are concentrated in particular
+          countries and years.
+        </p>
+
+        <p>
           If we removed every row without GDP per capita, we would lose most of
           Eritrea's observations and all of South Sudan's observations from 2016
           onwards.
+        </p>
+
+        <p>
+          So even though fewer than 3% of the GDP values are missing, removing
+          them could have a much bigger effect on an analysis of these
+          particular countries.
         </p>
       </subsubsection>
 
@@ -769,15 +1090,16 @@ africa_indicators %&gt;%
         <title>Does missingness relate to other variables?</title>
 
         <p>
-          Let's turn to <c>primary_enrolment</c>.
-          We have seen that missing values can be concentrated in particular
+          So far, we have found missing values concentrated in particular
           countries and years.
-          Could they also be associated with other characteristics?
+          But could missingness also be related to other characteristics (that
+          we have measured in our data!)?
         </p>
 
         <p>
-          First, let's look at the proportion of missing values within each
-          income group.
+          Let's investigate <c>primary_enrolment</c>.
+          We know that 219 values are missing.
+          First, we can compare the proportion missing in each income group.
         </p>
 
         <program language="r">
@@ -791,12 +1113,12 @@ africa_indicators %&gt;%
   )
 
 # A tibble: 4 x 4
-  income_group        n_total n_missing pct_missing
-  &lt;fct&gt;                 &lt;int&gt;     &lt;int&gt;       &lt;dbl&gt;
-1 Low income              294        92        31.3
-2 Lower middle income     336        81        24.1
-3 Upper middle income     112        46        41.1
-4 High income              14         0         0
+  income_group         n_total n_missing pct_missing
+  &lt;fct&gt;                  &lt;int&gt;     &lt;int&gt;       &lt;dbl&gt;
+1 Low income               294        92        31.3
+2 Lower middle income      336        81        24.1
+3 Upper middle income      112        46        41.1
+4 High income               14         0         0
           </code>
         </program>
 
@@ -804,6 +1126,9 @@ africa_indicators %&gt;%
           The proportion missing varies considerably.
           Around 41% of upper-middle-income observations are missing, compared
           with 24% of lower-middle-income observations.
+        </p>
+
+        <p>
           The high-income group has no missing values, although this group
           contains only Seychelles, so we should be careful about drawing
           conclusions from it.
@@ -812,6 +1137,8 @@ africa_indicators %&gt;%
         <p>
           What about time?
           Are some years more likely to have missing enrolment data than others?
+          Let's calculate the percentage missing for each year and plot the
+          results.
         </p>
 
         <program language="r">
@@ -834,9 +1161,8 @@ africa_indicators %&gt;%
 
         <figure xml:id="fig-africa-enrolment-year">
           <caption>
-            The percentage of countries with missing primary enrolment figures,
-            by year.
-            Missingness increases in the later years of the dataset.
+            Percentage of countries with missing primary enrolment figures, by
+            year.
           </caption>
 
           <image source="images/ch-missing-enrolment-year.png" width="90%">
@@ -852,10 +1178,9 @@ africa_indicators %&gt;%
         </figure>
 
         <p>
-          Missing values become much more common in recent years.
+          Missing values become more common in the later years of the dataset.
           This could partly reflect delays in collecting, processing, or
           publishing education statistics.
-          Again, the graph shows us the pattern, but not necessarily its cause.
         </p>
 
         <p>
@@ -866,7 +1191,8 @@ africa_indicators %&gt;%
 
         <p>
           We cannot compare their enrolment rates, because those are missing.
-          But we can compare under-5 mortality and life expectancy.
+          But we can compare other information, such as under-5 mortality and
+          life expectancy.
         </p>
 
         <program language="r">
@@ -906,9 +1232,20 @@ africa_indicators %&gt;%
         <p>
           Imagine that we wanted to study the relationship between primary
           school enrolment and child health.
+        </p>
+
+        <p>
           If we simply removed all the rows with missing enrolment, we would
           disproportionately exclude observations with higher child mortality.
           That could affect the conclusions we draw.
+        </p>
+
+        <p>
+          This is another example of why comparing like with like matters.
+          We already know that missingness differs by income group and year.
+          We can use that information to investigate the gaps more carefully,
+          rather than assuming that the observations with available enrolment
+          data represent every country-year.
         </p>
       </subsubsection>
 
@@ -932,22 +1269,22 @@ africa_indicators %&gt;%
   select(year, births_skilled, poverty_rate)
 
 # A tibble: 14 x 3
-    year births_skilled poverty_rate
-   &lt;int&gt;          &lt;dbl&gt;        &lt;dbl&gt;
- 1  2010           NA           NA
- 2  2011           NA           NA
- 3  2012           NA           NA
- 4  2013           NA           NA
- 5  2014           61.8         NA
- 6  2015           NA           37.7
- 7  2016           70.2         NA
- 8  2017           NA           NA
- 9  2018           NA           NA
-10  2019           NA           NA
-11  2020           NA           44.4
-12  2021           NA           46.4
-13  2022           NA           45.5
-14  2023           NA           NA
+   year births_skilled poverty_rate
+  &lt;int&gt;          &lt;dbl&gt;        &lt;dbl&gt;
+ 1 2010              NA           NA
+ 2 2011              NA           NA
+ 3 2012              NA           NA
+ 4 2013              NA           NA
+ 5 2014            61.8           NA
+ 6 2015              NA         37.7
+ 7 2016            70.2           NA
+ 8 2017              NA           NA
+ 9 2018              NA           NA
+10 2019              NA           NA
+11 2020              NA         44.4
+12 2021              NA         46.4
+13 2022              NA         45.5
+14 2023              NA           NA
           </code>
         </program>
 
@@ -965,403 +1302,529 @@ africa_indicators %&gt;%
         </p>
 
         <p>
-          For example, Kenya's Demographic and Health Surveys collect
+          For example, Kenya's Demographic and Health Surveys (DHS) collect
           information about maternal and child health, including assistance
           during childbirth.
           Poverty estimates also depend heavily on household survey information.
         </p>
 
         <p>
-          A missing value in an annual dataset may therefore mean that no new
-          estimate was available for that year.
-          It does not necessarily mean someone forgot to enter a value.
+          A missing value in an annual dataset may mean that no new estimate was
+          available for that year.
+          We would need to check the original source documentation to establish
+          which surveys or estimates produced the figures shown here.
         </p>
 
         <p>
-          We would need to check the source documentation to establish which
-          surveys or estimates produced the values shown here.
-          We should not assume that a missing year has the same value as the
-          previous year.
+          Importantly, we should not assume that a missing year has the same
+          value as the previous year.
+          Poverty and health indicators can change between surveys, even when we
+          do not have measurements to show it.
         </p>
 
         <insight xml:id="insight-missing-not-random">
           <title>Missing values can tell us something</title>
 
           <p>
-            Missing values can occur for so many different reasons, and knowing
-            that reason impacts how to handle it.
-            Sometimes entire countries are missing, or gaps are in particular
-            years.
-            Sometimes they are associated with other characteristics, such as
-            income group or child mortality.
-            And sometimes an annual value is missing because the underlying data
-            is collected only periodically.
+            In this investigation, we have seen several different patterns
+            <ndash/> sometimes entire countries are missing, other times gaps
+            are concentrated in particular years, and sometimes missingness is
+            associated with other characteristics, such as income group or child
+            mortality.
+            And sometimes an annual value may be missing because the underlying
+            data is only collected periodically.
           </p>
 
           <p>
-            These patterns matter.
             If we remove every row containing a missing value, we may also
-            remove particular countries, years, or groups from our analysis.
-            The remaining data may give us a different picture from the one we
+            remove particular countries, years or groups from our analysis.
+            The remaining data might give us a different picture from the one we
             intended to study.
           </p>
 
           <p>
-            Before deciding what to do with missing values, we should first
-            investigate where they occur, what might explain them, and how their
-            absence could affect our results.
+            But remember that finding a pattern is not the same as knowing its
+            cause.
+            The data can show us <em>where</em> values are missing and how
+            missingness relates to other information.
+            To understand <em>why</em>, we may need to investigate further.
           </p>
         </insight>
       </subsubsection>
     </subsection>
 
-    <subsection xml:id="ss-missing-mechanism">
-      <title>Why values are missing: the mechanism matters</title>
-
-      <p>
-        We can now put names to what we've seen.
-        Statisticians describe missing data using three mechanisms, and the
-        viral load study had an example of each.
-        Here is each one in the context of this dataset.
-      </p>
-
-      <p>
-        <term>Missing completely at random (MCAR)</term> means that whether a
-        value is missing has nothing to do with the value, or with anything else
-        in the data.
-        The 219 missing enrolment figures would be MCAR if each country-year had
-        simply been lost at random, like the six viral load samples that were
-        never collected.
-        The values we do have would then still be a fair sample of all 756.
-        We'd love to show you a real example of that here, but we can't: every
-        gap we've looked at has a pattern.
-        Even the 20 missing GDP values are not random, since 12 come from
-        Eritrea and 8 from South Sudan.
-        Truly MCAR data is rarer than most people hope.
-      </p>
-
-      <p>
-        <term>Missing at random (MAR)</term> means that missingness can be
-        explained by other variables we <em>have</em> recorded.
-        The name is a bit misleading: it doesn't mean the missingness is random,
-        only that the pattern is explained by something we can see.
-        Primary enrolment is a good candidate.
-        It's missing more in recent years and in upper-middle-income countries,
-        and we know the year and the income group for every row.
-        That means we can compare like with like, for example
-        upper-middle-income countries in 2020 against other upper-middle-income
-        countries in 2020.
-        (We say "candidate" because the higher child mortality we found suggests
-        something else might also be going on.
-        MAR is always an assumption, not something the data can confirm.)
-      </p>
-
-      <p>
-        <term>Missing not at random (MNAR)</term> means that whether a value is
-        missing depends on the value itself, and nothing else in the data can
-        fully account for it.
-        This is the dangerous one, the sickest patients who were never tested in
-        the Kenyan study.
-        HIV prevalence might be an example.
-        If countries tend not to publish a figure when the epidemic is small, or
-        when it's politically sensitive, then the missing values depend on the
-        very thing they would have told us.
-        The four countries that look wealthier and healthier than the rest are
-        consistent with that story, but we can't prove it.
-      </p>
-
-      <p>
-        And then there are <c>poverty_rate</c> and <c>births_skilled</c>.
-        These aren't really any of the three.
-        The value never existed because nobody measured it that year.
-        The question here is <q>was this ever meant to be there?</q>
-      </p>
-
-      <p>
-        It's the same conclusion we reached in
-        <xref ref="ch-cleaning-recoding"/>, but now we have the words to say
-        exactly what's at stake in each case.
-      </p>
-    </subsection>
-
     <subsection xml:id="ss-missing-options">
-      <title>What to do: three options, each a decision</title>
+      <title>What should we do about missing values?</title>
 
-      <p>
-        First, doing nothing is also a choice, and usually not a good one.
-        Most R functions return <c>NA</c> if any input is missing:
-      </p>
-
-      <program language="r">
-        <code>
-        mean(africa_indicators$primary_enrolment)
-        #&gt; [1] NA
-        </code>
-      </program>
-
-      <p>
-        This is R refusing to guess.
-        The mean of numbers that include some unknowns is itself unknown, and R
-        is right to say so.
-        But in practice, most of us react by adding <c>na.rm = TRUE</c> and
-        moving on, without thinking about what we just decided.
-        There are three real options.
-      </p>
-
-      <paragraphs>
-        <title>
-          Option 1: Remove the rows ( <c>na.rm = TRUE</c> or listwise deletion)
-        </title>
+      <introduction>
+        <p>
+          We have now investigated where values are missing in the
+          <c>africa_indicators</c> dataset.
+          We found that some gaps are concentrated in particular countries, some
+          occur more often in certain years, and others are associated with
+          characteristics such as income group.
+        </p>
 
         <p>
-          <c>na.rm = TRUE</c> removes the missing values and calculates on
-          whatever is left.
-          Put simply, you are no longer analysing the dataset you thought you
-          were.
+          But what happens when we want to use the data?
+          Should we remove the missing values?
+          Leave them alone?
+          Or try to fill them in?
+        </p>
+
+        <p>
+          There is no single answer that works for every dataset.
+          What we decide depends on which values are missing, why they might be
+          missing, and what we are trying to find out.
+        </p>
+      </introduction>
+
+      <subsubsection>
+        <title>What happens if we ignore the missing values?</title>
+
+        <p>
+          Let's start with something simple.
+          Suppose we want to calculate the average primary school enrolment rate
+          across the observations in our dataset.
+        </p>
+
+        <p>
+          We might try:
         </p>
 
         <program language="r">
           <code>
-          mean(africa_indicators$primary_enrolment, na.rm = TRUE)
-          #&gt; [1] 102.4205
+mean(africa_indicators$primary_enrolment)
+
+#&gt; [1] NA
           </code>
         </program>
 
         <p>
-          This is the mean of 537 country-years, not 756.
-          It doesn't estimate the missing values, it just leaves them out
-          (unless you check with <c>sum(!is.na(...))</c> yourself).
-          And since the missing values were concentrated in recent years and in
-          upper-middle-income countries, that 102.4 describes the earlier years
-          and the other countries better than it describes everyone.
+          R returns <c>NA</c>.
+          Why?
         </p>
 
         <p>
-          A more aggressive version is listwise deletion, which drops every row
-          with a missing value anywhere.
+          We have 756 observations, but 219 of them have no primary enrolment
+          figure.
+          R cannot calculate the average of all 756 values because some of those
+          values are unknown.
         </p>
 
-        <program language="r">
-          <code>
-          sum(complete.cases(africa_indicators))
-          #&gt; [1] 22
-
-          nrow(africa_indicators)
-          #&gt; [1] 756
-          </code>
-        </program>
-
         <p>
-          Only 22 of 756 rows are complete!
-          That's mostly down to <c>poverty_rate</c> and <c>births_skilled</c>,
-          which are missing in most rows.
-          Listwise deletion would throw away 97% of the data, including every
-          row where the only gap is a variable we don't even need.
-          If we only need the other columns, we can choose them first:
+          We can tell R to calculate the average using only the values that are
+          available.
+          We do this by adding <c>na.rm = TRUE</c>.
         </p>
 
         <program language="r">
           <code>
-          africa_indicators %&gt;%
-            select(-poverty_rate, -births_skilled) %&gt;%
-            complete.cases() %&gt;%
-            sum()
-          #&gt; [1] 491
+mean(africa_indicators$primary_enrolment,
+     na.rm = TRUE)
+
+#&gt; [1] 102.4205
           </code>
         </program>
 
         <p>
-          That keeps 491 rows, which is much better, but still a lot!
-          <q>Drop the incomplete rows</q> depends entirely on which columns you
-          count, so decide what the analysis needs first.
-          (And remember that those 491 rows still leave out those four countries
-          as they have no HIV figure.)
+          Now we have an answer: approximately 102.4.
+          But what exactly have we calculated?
+        </p>
+
+        <p>
+          This is the average of the 537 country-years with recorded enrolment
+          figures, not the average of all 756 country-years.
+          We have left out 219 observations.
+        </p>
+
+        <p>
+          Remember what we found earlier: Missing enrolment figures were more
+          common in recent years and differed between income groups.
+          This means that the observations included in our average may not
+          represent all the country-years equally well.
+        </p>
+
+        <p>
+          Adding <c>na.rm = TRUE</c> has not solved the missing-data problem.
+          We are just ignoring the missing values (and possibly therefore
+          ignoring the problem!).
+          This might be reasonable, depending on our question.
+          But we should understand what the resulting number represents.
         </p>
 
         <remark xml:id="remark-report-n">
-          <title>Always report the n</title>
+          <title>How many observations were used?</title>
 
           <p>
-            Never report a mean, a standard deviation, or any other summary
-            without also saying the <m>n</m> it was calculated from.
-            A summary of 756 country-years, 537 country-years, or 22
-            country-years is a different claim about a different sample, and a
-            table without <m>n</m> makes it impossible to tell them apart.
+            When reporting a summary, it is good practice to say how many
+            observations were used to calculate it.
+            We often call this number <m>n</m>.
+          </p>
+
+          <p>
+            For example, reporting an average enrolment rate of 102.4 tells us
+            less than reporting an average of 102.4 based on 537 country-years,
+            with 219 missing observations.
           </p>
         </remark>
-      </paragraphs>
+      </subsubsection>
 
-      <paragraphs>
-        <title>Option 2: Keep the rows and work around the gap</title>
+      <subsubsection>
+        <title>What if we remove every incomplete row?</title>
 
         <p>
-          Sometimes the missing values just don't matter for the question.
-          If we want life expectancy by income group, the gaps in
-          <c>poverty_rate</c> are irrelevant and we can ignore them.
-          And when we do summarise a variable with gaps, we can report how many
-          are missing, instead of dropping them without saying so:
+          So far, we have only left out missing values from one variable.
+          But suppose we want to analyse several variables together.
+        </p>
+
+        <p>
+          One approach is to remove any row containing a missing value.
+          In R, <c>complete.cases()</c> identifies rows with no missing values.
         </p>
 
         <program language="r">
           <code>
-          africa_indicators %&gt;%
-            group_by(income_group) %&gt;%
-            summarise(
-              mean_enrolment = mean(primary_enrolment, na.rm = TRUE),
-              n              = sum(!is.na(primary_enrolment)),
-              n_missing      = sum(is.na(primary_enrolment))
-            )
-          #&gt; # A tibble: 4 x 4
-          #&gt;   income_group        mean_enrolment     n n_missing
-          #&gt;   &lt;fct&gt;                        &lt;dbl&gt; &lt;int&gt;     &lt;int&gt;
-          #&gt; 1 Low income                    102.   202        92
-          #&gt; 2 Lower middle income           103.   255        81
-          #&gt; 3 Upper middle income           101.    66        46
-          #&gt; 4 High income                   115.    14         0
+sum(complete.cases(africa_indicators))
+
+#&gt; [1] 22
+
+nrow(africa_indicators)
+
+#&gt; [1] 756
           </code>
         </program>
 
         <p>
-          This table is honest about what it's built on.
-          Nobody reading it can miss that for upper-middle-income countries, 46
-          out of 112 values are absent, so that 101 is based on just 66.
-          Whether you'd trust it for a report depends on what the report is for.
-          Also, because we compare within each group, this is the "like with
-          like" approach we described for MAR.
+          Only 22 of our 756 rows are complete!
+          If we removed every row containing a missing value, we would lose more
+          than 97% of the dataset.
         </p>
-      </paragraphs>
-
-      <paragraphs>
-        <title>Option 3: Fill in an estimate (imputation)</title>
 
         <p>
-          <term>Imputation</term> fills in each missing value with an estimate,
-          often the mean of the variable, so no rows need to be dropped.
+          This is largely because <c>poverty_rate</c> and <c>births_skilled</c>
+          are missing for most country-years.
+        </p>
+
+        <p>
+          But do we always need those variables?
+          Suppose our analysis is about GDP, life expectancy and HIV prevalence.
+          Missing poverty figures would not prevent us from using the other
+          information in that row.
+        </p>
+
+        <p>
+          Let's see what happens if we exclude <c>poverty_rate</c> and
+          <c>births_skilled</c> before checking for complete rows.
         </p>
 
         <program language="r">
           <code>
-          enrolment_imputed &lt;- ifelse(
-            is.na(africa_indicators$primary_enrolment),
-            mean(africa_indicators$primary_enrolment, na.rm = TRUE),
-            africa_indicators$primary_enrolment
-          )
+africa_indicators %&gt;%
+  select(-poverty_rate, -births_skilled) %&gt;%
+  complete.cases() %&gt;%
+  sum()
 
-          sd(africa_indicators$primary_enrolment, na.rm = TRUE)
-          #&gt; [1] 19.92553
-
-          sd(enrolment_imputed)
-          #&gt; [1] 16.78877
+#&gt; [1] 491
           </code>
         </program>
 
         <p>
-          This runs without complaint and gives a column with no gaps.
-          But we've replaced 219 honestly missing values with 219 identical
-          copies of 102.4.
-          The mean doesn't change, but the standard deviation drops from 19.9 to
-          16.8, because we've added lots of values sitting exactly in the
-          middle.
-          The data now looks more consistent than it really is.
+          Now we have 491 complete rows instead of 22.
+          This is much better <ndash/> deciding which variables we need before
+          removing incomplete observations has meant we have far more data
+          points!
         </p>
 
         <p>
-          For enrolment, where we think the missingness is roughly MAR, that's
-          an acceptable shortcut for a quick look.
-          For HIV prevalence, it's much worse.
-          The mean of the 700 reported values is 4.26 (the median is just 1.6),
-          so we'd be giving Mauritius, Seychelles, Equatorial Guinea and São
-          Tomé and Príncipe a prevalence of 4.26 each.
-          If the reason those countries have no figure is that their epidemics
-          are small, we've replaced four honest unknowns with four confidently
-          wrong numbers, and hidden the problem rather than acknowledging it.
+          However, these 491 rows are not necessarily representative of the
+          original dataset.
+          For example, the four countries with no HIV prevalence figures are
+          still excluded.
         </p>
-      </paragraphs>
-
-      <insight xml:id="insight-missing-golden-rule">
-        <title>The golden rule: be explicit</title>
 
         <p>
-          Whichever approach you choose, the most important thing is to say what
-          you did and why.
-          <q>We excluded 219 country-years with no primary enrolment figure.
-          These were more common after 2018 and in upper-middle-income
-          countries, so our estimate may describe earlier years and poorer
-          countries better than recent years and richer ones.</q>
-          That takes thirty seconds to write, and it's the difference between an
-          analysis that can be checked and one that can't.
+          We should therefore ask not only how many rows remain, but also
+          <em>which</em> rows remain.
         </p>
-      </insight>
+      </subsubsection>
 
-      <p>
-        The table below summarises the three options and when each is most
-        appropriate:
-      </p>
-
-      <tabular halign="left">
-        <col halign="left" width="20%"/>
-        <col halign="left" width="40%"/>
-        <col halign="left" width="40%"/>
-        <row header="yes" bottom="minor">
-          <cell>Approach</cell>
-          <cell>When it is reasonable</cell>
-          <cell>When to be cautious</cell>
-        </row>
-
-        <row>
-          <cell>Remove the rows</cell>
-          <cell>
-            Few missing values; missingness appears roughly random; the removed
-            rows are not needed for the specific analysis
-          </cell>
-          <cell>
-            Missingness is related to the outcome or a key grouping variable;
-            many values missing
-          </cell>
-        </row>
-
-        <row>
-          <cell>Keep and work around</cell>
-          <cell>
-            The variable with missing values is not needed for the specific
-            analysis; you want to report the missing group separately
-          </cell>
-          <cell>
-            The missing values are in the outcome variable or a required
-            predictor
-          </cell>
-        </row>
-
-        <row>
-          <cell>Impute</cell>
-          <cell>
-            Many missing values that cannot be dropped; other variables are good
-            predictors of the missing value
-          </cell>
-          <cell>
-            Always: imputation introduces assumptions that must be stated and
-            justified
-          </cell>
-        </row>
-      </tabular>
-
-      <insight xml:id="insight-missing-decision">
-        <title>
-          Every missing value needs a decision, and the decision should be
-          stated
-        </title>
+      <subsubsection>
+        <title>Can we keep the incomplete rows?</title>
 
         <p>
-          There's no option that avoids making a choice about missing values.
-          Leaving them as <c>NA</c> is a choice.
-          Using <c>na.rm = TRUE</c> is a choice.
-          Listwise deletion is a choice.
-          Imputation is a choice.
-          What separates good practice from bad is in how you make the choice -
-          make it deliberately, say why, and acknowledge how much your
-          conclusions depend on it.
+          Removing rows is not always necessary.
+          We can often keep them in our dataset and use the information that is
+          available for each analysis.
         </p>
-      </insight>
+
+        <p>
+          For example, suppose we want to compare primary school enrolment
+          across income groups.
+          We can calculate the average for each group, while also reporting how
+          many observations were available and how many were missing.
+        </p>
+
+        <program language="r">
+          <code>
+africa_indicators %&gt;%
+  group_by(income_group) %&gt;%
+  summarise(
+    mean_enrolment = mean(primary_enrolment,
+                          na.rm = TRUE),
+    n = sum(!is.na(primary_enrolment)),
+    n_missing = sum(is.na(primary_enrolment))
+  )
+
+# A tibble: 4 x 4
+  income_group        mean_enrolment     n n_missing
+  &lt;fct&gt;                        &lt;dbl&gt; &lt;int&gt;     &lt;int&gt;
+1 Low income                    102.   202        92
+2 Lower middle income           103.   255        81
+3 Upper middle income           101.    66        46
+4 High income                   115.    14         0
+          </code>
+        </program>
+
+        <p>
+          This table tells us more than the averages alone <ndash/> for
+          upper-middle-income countries, the average enrolment rate is around
+          101, but it is based on just 66 observations.
+          Another 46 observations have missing values.
+        </p>
+
+        <p>
+          We can compare the groups, but we should be careful about our
+          conclusions.
+          The averages describe the observations with available data in each
+          group.
+          They do not necessarily describe every country-year in that group.
+        </p>
+
+        <p>
+          This connects to our earlier idea of comparing like with like.
+          By looking at income groups separately, we can see how the amount of
+          missing data differs between groups.
+        </p>
+
+        <p>
+          But grouping the data does not automatically correct for missingness.
+          For example, if more recent years are missing within an income group,
+          the available observations may still give us a misleading picture.
+        </p>
+
+        <p>
+          Keeping the incomplete rows and reporting the missing values allows us
+          to be more transparent about what we know and what we do not know.
+        </p>
+      </subsubsection>
+
+      <subsubsection>
+        <title>What if we fill in the missing values?</title>
+
+        <p>
+          Another possibility is to replace missing values with estimates.
+          This is called <term>imputation</term>.
+        </p>
+
+        <p>
+          For example, we might replace every missing primary enrolment figure
+          with the average of the values we do have.
+        </p>
+
+        <p>
+          Let's try it.
+        </p>
+
+        <program language="r">
+          <code>
+enrolment_imputed &lt;- ifelse(
+  is.na(africa_indicators$primary_enrolment),
+  mean(africa_indicators$primary_enrolment,
+       na.rm = TRUE),
+  africa_indicators$primary_enrolment
+)
+          </code>
+        </program>
+
+        <p>
+          We now have a value for every row.
+          But have we really recovered the missing information?
+        </p>
+
+        <p>
+          Not exactly.
+          We have replaced 219 unknown values with 219 copies of the same
+          number: approximately 102.4.
+        </p>
+
+        <p>
+          We can see what happens to the distribution of primary school
+          enrolment when we replace the missing values with the mean.
+        </p>
+
+        <figure xml:id="fig-enrolment-mean-imputation">
+          <caption>
+            Distribution of primary school enrolment before and after mean
+            imputation.
+            Orange represents values filled in using the observed mean, rather
+            than values actually recorded in the dataset.
+          </caption>
+
+          <image source="images/enrolment-mean-imputation.png" width="95%">
+            <description>
+              <p>
+                Two histograms show the distribution of primary school enrolment
+                rates before and after mean imputation.
+                The original distribution contains 537 observed values.
+                After imputation, 219 additional values appear in a large orange
+                bar near the mean of 102.4.
+                The original observed values remain unchanged.
+              </p>
+            </description>
+          </image>
+        </figure>
+
+        <p>
+          Look at the second graph.
+          There is now a large concentration of values around 102.4.
+          But these are not new observations.
+          We have created them by replacing all 219 missing values with the same
+          number.
+        </p>
+
+        <p>
+          The dataset now looks more complete, but it also looks less variable.
+          We have introduced an artificial concentration of values around the
+          mean.
+          This helps explain why the standard deviation decreased after
+          imputation.
+        </p>
+
+        <p>
+          This is one of the dangers of filling in missing values.
+          The dataset may look more complete, but the new values are estimates,
+          not measurements.
+        </p>
+
+        <p>
+          We also have to think about whether the estimates are reasonable.
+          Remember that enrolment figures were missing more often in certain
+          years and income groups.
+          Replacing all missing values with the same overall average ignores
+          those differences.
+        </p>
+
+        <p>
+          More sophisticated methods can use other information, such as year,
+          country or income group, to help estimate missing values.
+          But those methods also make assumptions, and they cannot guarantee
+          that the estimates are correct.
+        </p>
+
+        <p>
+          For now, the important lesson is that filling in a missing value does
+          not make it an observed value.
+        </p>
+      </subsubsection>
+
+      <subsubsection>
+        <title>Which approach should we choose?</title>
+
+        <p>
+          We have seen several ways of dealing with missing values.
+          We can calculate summaries using only the available observations,
+          remove incomplete rows, keep incomplete records and report the gaps,
+          or estimate missing values.
+        </p>
+
+        <p>
+          None of these approaches is always the right one.
+        </p>
+
+        <p>
+          Before choosing, we need to think about what we are trying to find
+          out, how much data is missing, and whether the missing observations
+          might differ from those we have.
+        </p>
+
+        <table xml:id="table-missing-options">
+          <title>
+            Some approaches to handling missing values, and questions to
+            consider before using them.
+          </title>
+
+          <tabular>
+            <col halign="left" width="25%"/>
+            <col halign="left" width="35%"/>
+            <col halign="left" width="40%"/>
+            <row header="yes" bottom="minor">
+              <cell>Approach</cell>
+              <cell>What it does</cell>
+              <cell>What to consider</cell>
+            </row>
+
+            <row>
+              <cell>Use available values</cell>
+              <cell>Calculates a summary using only the recorded values.</cell>
+              <cell>
+                Are the observations with available values representative of the
+                group we want to describe?
+              </cell>
+            </row>
+
+            <row>
+              <cell>Remove incomplete rows</cell>
+              <cell>
+                Keeps only rows with values for the variables being used.
+              </cell>
+              <cell>
+                How many rows are lost, and are particular countries, years or
+                groups excluded?
+              </cell>
+            </row>
+
+            <row>
+              <cell>Keep incomplete records</cell>
+              <cell>
+                Retains the rows and uses available information where possible.
+              </cell>
+              <cell>
+                Which analyses can still be carried out, and how will missing
+                values be reported?
+              </cell>
+            </row>
+
+            <row>
+              <cell>Estimate missing values</cell>
+              <cell>
+                Replaces missing values with estimates based on assumptions or
+                other information.
+              </cell>
+              <cell>
+                How were the estimates made, and how might they affect the
+                results?
+              </cell>
+            </row>
+          </tabular>
+        </table>
+
+        <p>
+          Notice that the first three approaches do not recover the missing
+          information.
+          They change how we use the information that is available.
+        </p>
+
+        <p>
+          Estimating missing values goes a step further, but it introduces
+          assumptions about what those values might have been.
+        </p>
+
+        <p>
+          Whichever approach we choose, we should be clear about what we have
+          done and why we chose to do it.
+        </p>
+      </subsubsection>
     </subsection>
   </section>
   <!-- ================================================================= -->
@@ -1369,6 +1832,300 @@ africa_indicators %&gt;%
   <!-- ================================================================= -->
   <exercises xml:id="exercises-handling-missing-values">
     <title>Exercises</title>
+
+    <exercise xml:id="ex-africa-missing-investigation">
+      <title>Investigating missing life and health data</title>
+
+      <statement>
+        <p>
+          We have investigated missing values in primary school enrolment, GDP
+          per capita and HIV prevalence.
+        </p>
+
+        <p>
+          Now investigate the missing values in <c>births_skilled</c>, the
+          percentage of births attended by skilled health personnel.
+          <ol>
+            <li>
+              <p>
+                How many values are missing from <c>births_skilled</c>?
+                What percentage of the dataset does this represent?
+              </p>
+            </li>
+
+            <li>
+              <p>
+                Calculate the percentage of missing values for each income
+                group.
+                Are some groups more affected than others?
+              </p>
+            </li>
+
+            <li>
+              <p>
+                Investigate whether missingness changes over time.
+                Create a graph showing the percentage of countries with missing
+                values in each year.
+              </p>
+            </li>
+
+            <li>
+              <p>
+                Compare the average under-5 mortality for observations with and
+                without <c>births_skilled</c> data.
+                What do you notice?
+              </p>
+            </li>
+
+            <li>
+              <p>
+                Suppose you wanted to investigate the relationship between
+                skilled birth attendance and child mortality.
+                What might happen if you simply removed every observation with
+                missing <c>births_skilled</c>?
+              </p>
+            </li>
+          </ol>
+        </p>
+      </statement>
+
+      <solution>
+        <p>
+          First, we can count how many values are missing from
+          <c>births_skilled</c> and calculate the percentage missing.
+        </p>
+
+        <program language="r">
+          <code>
+sum(is.na(africa_indicators$births_skilled))
+#&gt; [1] 583
+
+mean(is.na(africa_indicators$births_skilled)) * 100
+#&gt; [1] 77.1164
+          </code>
+        </program>
+
+        <p>
+          There are 583 missing values, approximately 77.1% of the dataset.
+          This means that fewer than one in four country-year observations have
+          a recorded value.
+        </p>
+
+        <p>
+          We can investigate whether the proportion missing differs between
+          income groups.
+        </p>
+
+        <program language="r">
+          <code>
+africa_indicators %&gt;%
+  group_by(income_group) %&gt;%
+  summarise(
+    n_total = n(),
+    n_missing = sum(is.na(births_skilled)),
+    pct_missing = round(
+      mean(is.na(births_skilled)) * 100, 1
+    )
+  )
+          </code>
+        </program>
+
+        <p>
+          The resulting table shows how many values are missing in each income
+          group.
+          Compare the percentages rather than just the counts, since the groups
+          contain different numbers of observations.
+        </p>
+
+        <p>
+          Next, we can investigate whether missingness changes over time.
+        </p>
+
+        <program language="r">
+          <code>
+africa_indicators %&gt;%
+  group_by(year) %&gt;%
+  summarise(
+    pct_missing = mean(is.na(births_skilled)) * 100
+  ) %&gt;%
+  ggplot(aes(x = year, y = pct_missing)) +
+  geom_col(fill = "#F47721") +
+  labs(
+    x = "Year",
+    y = "Countries with missing values (%)"
+  ) +
+  theme_bw()
+          </code>
+        </program>
+
+        <p>
+          The graph allows us to see whether missing values are concentrated in
+          particular years.
+          Because skilled birth attendance figures often come from periodic
+          surveys, we might expect gaps between years with available estimates.
+          However, we would need to check the data source to establish why
+          particular years are missing.
+        </p>
+
+        <p>
+          We can also compare under-5 mortality for observations with and
+          without skilled birth attendance data.
+        </p>
+
+        <program language="r">
+          <code>
+africa_indicators %&gt;%
+  group_by(
+    births_missing = is.na(births_skilled)
+  ) %&gt;%
+  summarise(
+    mean_under5 = mean(under5_mortality),
+    n = n()
+  )
+          </code>
+        </program>
+
+        <p>
+          This comparison helps us investigate whether the observations with
+          missing skilled birth attendance figures differ from those with
+          available figures.
+          Any difference does not establish why the data is missing, or tell us
+          what the missing values would have been.
+        </p>
+
+        <p>
+          Finally, if we removed every observation with missing
+          <c>births_skilled</c>, we would be left with just 173 of the original
+          756 country-years.
+        </p>
+
+        <p>
+          If those remaining observations are concentrated in particular
+          countries, income groups or years, our analysis of skilled birth
+          attendance and child mortality might not represent the wider dataset.
+          We should therefore investigate which observations remain before
+          drawing conclusions.
+        </p>
+      </solution>
+    </exercise>
+
+    <exercise xml:id="ex-missing-imputation-risk">
+      <title>Did filling in the gaps improve our data?</title>
+
+      <statement>
+        <p>
+          In this chapter, we replaced missing primary school enrolment values
+          with the mean of the observed values.
+          <ol>
+            <li>
+              <p>
+                Calculate the mean and standard deviation of
+                <c>primary_enrolment</c> using <c>na.rm = TRUE</c>.
+              </p>
+            </li>
+
+            <li>
+              <p>
+                Calculate the mean and standard deviation of
+                <c>enrolment_imputed</c>.
+                Which statistic changes?
+              </p>
+            </li>
+
+            <li>
+              <p>
+                Look again at <xref ref="fig-enrolment-mean-imputation"/>.
+                Explain why the standard deviation changes, using what you see
+                in the histograms.
+              </p>
+            </li>
+
+            <li>
+              <p>
+                Suppose someone reports the standard deviation from the imputed
+                dataset, without mentioning that 219 values were estimated.
+                What might a reader misunderstand?
+              </p>
+            </li>
+          </ol>
+        </p>
+      </statement>
+
+      <solution>
+        <p>
+          First, we calculate the mean and standard deviation using only the
+          observed primary enrolment values.
+        </p>
+
+        <program language="r">
+          <code>
+mean(africa_indicators$primary_enrolment,
+     na.rm = TRUE)
+#&gt; [1] 102.4205
+
+sd(africa_indicators$primary_enrolment,
+   na.rm = TRUE)
+#&gt; [1] 19.92553
+          </code>
+        </program>
+
+        <p>
+          The observed values have a mean of approximately 102.4 and a standard
+          deviation of 19.9.
+        </p>
+
+        <p>
+          Now we calculate the same statistics after replacing all missing
+          values with the observed mean.
+        </p>
+
+        <program language="r">
+          <code>
+mean(enrolment_imputed)
+#&gt; [1] 102.4205
+
+sd(enrolment_imputed)
+#&gt; [1] 16.78877
+          </code>
+        </program>
+
+        <p>
+          The mean remains unchanged, but the standard deviation decreases from
+          approximately 19.9 to 16.8.
+        </p>
+
+        <p>
+          The mean stays the same because every missing value was replaced with
+          the observed mean.
+          Adding more values equal to the mean does not change the mean.
+        </p>
+
+        <p>
+          However, the standard deviation decreases because we have added 219
+          values that are all exactly equal to the mean.
+          These values introduce no additional spread around the mean.
+        </p>
+
+        <p>
+          This is visible in <xref ref="fig-enrolment-mean-imputation"/>.
+          The second histogram contains a large concentration of values around
+          102.4 that was not present in the original observed data.
+        </p>
+
+        <p>
+          If someone reported the new standard deviation without explaining the
+          imputation, a reader might conclude that primary enrolment rates vary
+          less between country-years than the observed data suggests.
+        </p>
+
+        <p>
+          This illustrates an important limitation of mean imputation.
+          Although it produces a complete column, it can make the data appear
+          less variable without providing any new information about the missing
+          observations.
+        </p>
+      </solution>
+    </exercise>
 
     <exercise xml:id="ex-wald-survivorship">
       <title>The Bombers That Didn't Come Back</title>
@@ -1545,47 +2302,138 @@ africa_indicators %&gt;%
           </p>
         </solution>
       </task>
+    </exercise>
+    <!-- R: missing values -->
+    <exercise xml:id="ex-clean-missing-values">
+      <statement>
+        <p>
+          The Kenya Road Accidents database contains missing values in several
+          columns.
+          <ol>
+            <li>
+              <p>
+                Write R code to count the number of missing values in each
+                column.
+                Which column has the most missing values?
+              </p>
+            </li>
 
-      <task xml:id="ex-wald-e">
-        <statement>
-          <p>
-            Could you fix this problem by simply gathering more data, for
-            example, inspecting even more returning bombers?
-            Why or why not?
-            What kind of missing data can be fixed by collecting more of the
-            same kind of records, and what kind can't?
-          </p>
-        </statement>
+            <li>
+              <p>
+                The <c>AGE</c> column has both true missing values and coded
+                values like <c>A</c> and <c>J</c>.
+                After converting <c>AGE</c> to numeric, how many <c>NA</c> s
+                result?
+                Are all of these genuinely unknown ages, or are some of them
+                something else?
+              </p>
+            </li>
 
-        <solution>
-          <p>
-            No.
-            Inspecting more returning bombers only gives you more survivors, and
-            survivors are exactly the group that's already overrepresented.
-            No matter how many more of them you inspect, you'll never see the
-            damage pattern on a plane that didn't make it back, because those
-            planes are permanently absent from the pool you're sampling from.
-            More data of the same kind just makes you more confident in the
-            wrong picture.
-          </p>
+            <li>
+              <p>
+                Explain in your own words the difference between a value that is
+                missing and a value that is unknown.
+                Does that distinction matter for this dataset?
+              </p>
+            </li>
+          </ol>
+        </p>
+      </statement>
 
-          <p>
-            This is the key difference from the filing-error case in
-            <xref ref="ex-wald-c"/>.
-            If your gap is caused by something unrelated to the thing you're
-            measuring, like a lost log, collecting more records genuinely helps,
-            because the new records aren't systematically excluding a whole
-            category of outcome.
-            But if the gap exists <em>because</em> of the thing you're
-            measuring, like a plane not surviving because of where it was hit,
-            no amount of additional data collected the same way will ever
-            recover it.
-            You need a different source of information entirely (in Wald's case,
-            the logic of the missingness itself) rather than more of what you
-            already have.
-          </p>
-        </solution>
-      </task>
+      <solution>
+        <p>
+          We can count the missing values in each column using <c>is.na()</c>
+          and <c>colSums()</c>.
+        </p>
+
+        <program language="r">
+          <code>
+colSums(is.na(kenya_accidents_2016))
+          </code>
+        </program>
+
+        <p>
+          The column with the largest count has the most values recorded as
+          <c>NA</c>.
+          However, this only identifies values that R already recognises as
+          missing.
+        </p>
+
+        <p>
+          The <c>AGE</c> column illustrates why we need to be careful.
+          It contains numerical ages as well as codes such as <c>A</c> and
+          <c>J</c>.
+        </p>
+
+        <p>
+          We can investigate what happens when we convert this column to
+          numeric.
+        </p>
+
+        <program language="r">
+          <code>
+age_numeric &lt;- suppressWarnings(
+  as.numeric(kenya_accidents_2016$AGE)
+)
+
+sum(is.na(age_numeric))
+          </code>
+        </program>
+
+        <p>
+          Some values become <c>NA</c> because they were already missing.
+          Others become <c>NA</c> because R cannot convert a code such as
+          <c>A</c> or <c>J</c> into a number.
+        </p>
+
+        <p>
+          We can investigate which original values could not be converted.
+        </p>
+
+        <program language="r">
+          <code>
+kenya_accidents_2016 %&gt;%
+  mutate(age_numeric = suppressWarnings(
+    as.numeric(AGE)
+  )) %&gt;%
+  filter(is.na(age_numeric)) %&gt;%
+  count(AGE, sort = TRUE)
+          </code>
+        </program>
+
+        <p>
+          This is important because not all of these values mean the same thing.
+          A genuinely unknown age is different from a code that describes an age
+          category.
+        </p>
+
+        <p>
+          For example, if <c>A</c> represents an adult and <c>J</c> represents a
+          juvenile, those records still contain information about age, even
+          though they do not give an exact numerical age.
+          We should confirm the meanings of these codes from the data
+          documentation before using them.
+        </p>
+
+        <p>
+          Simply converting the column to numeric would discard that
+          information.
+        </p>
+
+        <p>
+          A missing value means that no usable value is recorded for the
+          variable in its current form.
+          An unknown value means that the information itself is not known.
+          These are not always the same thing.
+        </p>
+
+        <p>
+          In this dataset, a value may appear missing after conversion even
+          though the original record contains useful information.
+          This is why we should inspect unusual values before deciding how to
+          handle them.
+        </p>
+      </solution>
     </exercise>
 
     <exercise xml:id="ex-challenger-missing">
@@ -1792,55 +2640,6 @@ africa_indicators %&gt;%
           CC BY 4.0.
         </p>
       </conclusion>
-    </exercise>
-
-    <exercise xml:id="ex-missing-imputation-risk">
-      <statement>
-        <p>
-          What would happen to the mean and the standard deviation of
-          <c>body_mass_g</c> if you used <c>mass_imputed</c>, instead of the
-          original column with <c>na.rm = TRUE</c>.
-          Which one changes, which one doesn't, and why does that matter for
-          anyone reading a report built on this column?
-        </p>
-      </statement>
-    </exercise>
-    <!-- R: missing values -->
-    <exercise xml:id="ex-clean-missing-values">
-      <statement>
-        <p>
-          The Kenya Road Accidents database contains missing values in several
-          columns.
-        </p>
-
-        <ol>
-          <li>
-            <p>
-              Write R code to count the number of missing values in each column.
-              Which column has the most missing values?
-            </p>
-          </li>
-
-          <li>
-            <p>
-              The <c>AGE</c> column has both true missing values and coded
-              values like <c>A</c> and <c>J</c>.
-              After converting <c>AGE</c> to numeric, how many <c>NA</c> s
-              result?
-              Are all of these genuinely unknown ages, or are some of them
-              something else?
-            </p>
-          </li>
-
-          <li>
-            <p>
-              Explain in your own words the difference between a value that is
-              missing and a value that is unknown.
-              Does that distinction matter for this dataset?
-            </p>
-          </li>
-        </ol>
-      </statement>
     </exercise>
   </exercises>
 </chapter>
