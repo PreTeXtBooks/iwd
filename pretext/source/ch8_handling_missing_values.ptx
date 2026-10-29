@@ -2598,7 +2598,7 @@ kenya_accidents_2016 %&gt;%
       <task xml:id="ex-challenger-missing-d">
         <statement>
           <p>
-            In <xref ref="ex-wald-e"/> we saw that no amount of extra data
+            No amount of extra data
             collected the same way could fix Wald's problem.
             Is the Challenger case the same?
             What would it have taken to fix it?
