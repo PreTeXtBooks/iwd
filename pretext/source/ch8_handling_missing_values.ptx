@@ -646,11 +646,13 @@
   </section>
 
   <section xml:id="sec-ch8-stack">
-    <title>STACK question</title>
+    <title>Practise: Handling Missing Values</title>
 
-    <p>
-      TODO: add STACK question
-    </p>
+    <exercise>
+      <title>Handling Missing Values</title>
+
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/missing-values-1.xml" label="stk-ch8-handling-nas"/>
+    </exercise>
   </section>
   <!-- ================================================================= -->
   <!--  SECTION 3: applied to the africa_indicators data                 -->
