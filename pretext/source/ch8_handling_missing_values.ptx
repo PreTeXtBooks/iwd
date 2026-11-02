@@ -653,6 +653,11 @@
 
       <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/missing-values-1.xml" label="stk-ch8-handling-nas"/>
     </exercise>
+
+    <exercise>
+      <title>Finding Correlation</title>
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Correlation-with-Data-III-(Missing-Values).xml" label="stk-ch8-correlation-nas"/>
+    </exercise>
   </section>
   <!-- ================================================================= -->
   <!--  SECTION 3: applied to the africa_indicators data                 -->
