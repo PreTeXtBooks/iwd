@@ -263,7 +263,7 @@
     <exercise>
       <title>River Pollution and Distance Downstream</title>
 
-      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/Correlation-with-Data-II-(Data-Shapes).xml" label="stk-river-pollution-correlation"/>
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Correlation-with-Data-II-(Data-Shapes).xml" label="stk-river-pollution-correlation"/>
     </exercise>
   </section>
   <!-- ================================================================= -->
