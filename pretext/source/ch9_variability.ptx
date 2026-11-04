@@ -8,20 +8,18 @@
 
     <introduction xml:id="intro-ch9-variability">
         <p>
-            Data is never perfectly consistent: measure the same thing twice and
-            you will rarely get exactly the same answer.
+            Data is variable.
+            If you measure the same thing twice, you will rarely get exactly the
+            same answer.
             Track the population in a single country over fifty years and the
             numbers will shift, sometimes smoothly, sometimes in sudden jolts.
             This chapter is about variability: what it is, where it comes from,
             and how to measure it.
-            In this chapter, we ....
-            [TODO] We work through the main measures of variability (range,
-            variance, standard deviation, interquartile range, and least
-            squares) using life expectancy data from African countries as our
-            running example.
-            By the end of the chapter, you will be able to choose the right
-            measure for a given situation, interpret what it tells you, and
-            explain what it does not.
+            In this chapter, we work through the main measures of variability
+            using life expectancy data from African countries as our running
+            example.
+            Each measure answers the question a little differently, and we look
+            at what each one picks up and what it misses.
         </p>
     </introduction>
 
@@ -30,8 +28,7 @@
 
         <introduction>
             <p>
-                In Kenya's capital city, Nairobi, streets are regularly
-                gridlocked.
+                In Nairobi, streets are regularly gridlocked.
                 News reports claim that commutes regularly exceed two hours each
                 way.
                 But is that consistently the case, and for whom is that the case
@@ -56,24 +53,28 @@
 
             <p>
                 But another major survey, conducted in the same year by JICA,
-                found a (mean) average commute time of 49 minutes — nearly twice
-                the World Bank figure.
+                found an average commute time of 49 minutes — nearly twice the
+                World Bank figure.
                 Both surveys measured the same city in the same year.
-                The difference came down to who was sampled: the JICA survey had
-                oversampled car-owning households, who tend to have longer
-                motorised commutes, while the World Bank survey was more
-                representative of the full population — most of whom walk or
-                take a matatu.
+                The difference largely came down to two things: Firstly, who was
+                sampled: the JICA survey had oversampled car-owning households,
+                who tend to have longer motorised commutes, while the World Bank
+                survey was more representative of the full population — most of
+                whom walk or take a matatu.
                 Measure the same thing differently, and you get a different
                 answer.
+                Secondly, Salon and Gulyani (2019) reported a mean, while the
+                JICA survey reported a median.
+                The mean is more sensitive to outliers, so the two numbers
+                aren't directly comparable.
             </p>
 
             <insight>
-                <title>Which Measurement -- TODO: better title.</title>
+                <title>Which Measurement of Spread?</title>
 
                 <p>
-                    Part of the difference between JICA and the World Bank is
-                    simply mean versus median.
+                    Part of the difference between JICA and the World Bank
+                    results is mean versus median.
                     The mean can be influenced by extreme values.
                     Here, the small number of commuters with very long journeys
                     pulls the average upward, while the median remains more
@@ -87,8 +88,8 @@
             <p>
                 Even within the World Bank survey, the variation is substantial.
                 Matatu commuters in Nairobi spent roughly twice as long
-                travelling as walk commuters making similar trips in the same
-                city.
+                travelling as pedestrian commuters who made a similar trip in
+                the city.
                 The median commute time conceals the fact that some people's
                 journeys are short and some are long — and who experiences which
                 depends on how they travel, where they live, and what time they
@@ -107,6 +108,46 @@
                 about what the data actually shows.
                 This chapter introduces the tools for observing and measuring
                 variability.
+            </p>
+
+            <figure xml:id="fig-commute-histogram-example">
+                <caption>
+                    A histogram of 500 simulated commuting times.
+                    The solid red line marks the mean and the dashed blue line
+                    marks the median.
+                    A few very long commutes pull the mean above the median.
+                </caption>
+
+                <image source="images/ch9_example.png" width="90%">
+                    <description>
+                        <p>
+                            A histogram titled "Commuting times are
+                            right-skewed".
+                            The horizontal axis shows commuting time in minutes,
+                            from 0 to about 160, and the vertical axis shows the
+                            number of commuters.
+                            Most bars are tall and cluster between about 15 and
+                            50 minutes, peaking at around 30 minutes.
+                            The bars then fall away gradually, forming a long
+                            tail to the right, with a few isolated commuters
+                            taking over 100 minutes.
+                            A dashed blue vertical line marks the median at
+                            about 34 minutes, and a solid red line marks the
+                            mean at about 39 minutes, just to the right of the
+                            median.
+                        </p>
+                    </description>
+                </image>
+            </figure>
+
+            <p>
+                <xref ref="fig-commute-histogram-example"/> uses simulated data
+                to illustrate what a distribution looks like.
+                The mean sits to the right of the median because a few very long
+                commutes pull it upwards.
+                Two surveys reporting these different measures of the average
+                could describe the same commuters and still give different
+                numbers.
             </p>
         </introduction>
 
@@ -135,8 +176,8 @@
                 One of the simplest ways to measure variability is the
                 <term>range</term>: the difference between the largest and
                 smallest values.
-                Here, the range of journey times across the day is roughly
-                <c>37 - 18 = 19</c>.
+                Here, a 10km journey across the day ranges from roughly
+                <c>37 - 18 = 19</c> minutes.
                 This is a very useful starting point to gauge an overall idea
                 about the variability.
             </p>
@@ -147,8 +188,8 @@
                 It does not say anything about a typical journey, or how much
                 most journeys deviate from the average.
                 And it is sensitive to unusual extremes: one exceptionally bad
-                hour can make the range look larger than it really is for most
-                people.
+                hour can increase the range, and hence make the variability
+                larger.
             </p>
 
             <p>
@@ -156,15 +197,12 @@
                 entirety of 2025, the average Nairobi driver lost more than four
                 and a half days (109 hours) sitting in traffic beyond what those
                 same journeys would have taken at free-flow speeds.
-                That 109 hours is itself a summary of accumulated variability
-                across the whole year: some days the roads flow freely, some
-                days they do not, and the total adds up.
             </p>
 
             <p>
                 Variability can also be captured through various graphics; for
                 example, <xref ref="fig-tomtom-heatmap-week"/> shows the average
-                journey times every day of the week in 2025.
+                journey times every two hours and every day of the week in 2025.
                 Each cell represents one two-hour slot on one day of the week;
                 darker red means longer journey times, lighter pink means
                 shorter.
@@ -203,6 +241,25 @@
                     </description>
                 </image>
             </figure>
+
+            <insight>
+                <title>If there were no variability</title>
+
+                <p>
+                    How would this graphic look if there were no variability?
+                    If a 10 kilometre journey took exactly the same time at
+                    every hour of every day, every cell would be the same
+                    colour.
+                    There would be no dark band in the evenings and no light
+                    patch on Sunday mornings.
+                    The heatmap would be one flat block of colour, and it would
+                    tell you nothing more than the average already did.
+                    The patterns you can see in
+                    <xref ref="fig-tomtom-heatmap-week"/> exist because journey
+                    times vary, and the more they vary, the more the colours
+                    differ.
+                </p>
+            </insight>
 
             <p>
                 The same variation can be viewed spatially.
@@ -281,9 +338,9 @@
                 underlying variability in Nairobi journey times.
                 Each measurement reveals something the others do not.
                 The average gives you a centre; the range tells you how far the
-                extremes are from each other; the heatmap shows you where in the
-                day variation is concentrated; the spatial map shows you where
-                in the city it is concentrated.
+                minimum and maximum are from each other; the heatmap shows you
+                variation over time; the spatial map shows you where the
+                variation in the city it is concentrated.
                 The rest of this chapter introduces the formal measures that
                 complement these visual summaries, and considers when to use
                 each one.
@@ -307,8 +364,8 @@
                 <p>
                     This is a general principle that applies to any dataset: the
                     variation you observe depends partly on what is actually
-                    varying in the world, and partly on what you chose to
-                    measure and what you left out.
+                    varying, and partly on what you chose to measure and what
+                    you left out.
                     Keeping that in mind when comparing summaries from different
                     sources is important in data analysis.
                 </p>
@@ -349,8 +406,8 @@
 
         <introduction>
             <p>
-                The previous section introduced the idea of variability its
-                importance, and how to observe it.
+                <xref ref="sec-variability-how-much"/> introduced the idea of
+                variability its importance, and how to observe it.
                 This section works through how to measure it.
                 We will start with some data, then build up through several
                 measures of variability, each one revealing something slightly
@@ -366,7 +423,7 @@
 
             <program language="r">
                 <code>
-        library(tidyverse)
+        library(dplyr)
         library(gapminder)
 
         africa &lt;- gapminder %&gt;% dplyr::filter(continent == "Africa")
@@ -385,19 +442,23 @@
             </program>
 
             <p>
-                Each row gives the life expectancy at birth ( <c>lifeExp</c> ),
-                the population ( <c>pop</c> ), and the GDP per capita (
-                <c>gdpPercap</c> ) for a single country from 1952 to 2007.
-                Data is given for 12 years, every five years, for 52 African
-                countries.
-                The variable we will focus on is the life expectancy at birth,
-                in years ( <c>lifeExp</c> ).
+                Each row gives the life expectancy at birth in years (
+                <c>lifeExp</c> ), the population ( <c>pop</c> ), and the GDP per
+                capita ( <c>gdpPercap</c> ) for a single country from 1952 to
+                2007.
+                Data is given every five years for 52 African countries <ndash/>
+                giving 12 data points for each country.
+                The variable we focus on in this example is life expectancy at
+                birth, in years ( <c>lifeExp</c> ).
+            </p>
+
+            <p>
                 A quick summary of <c>lifeExp</c> shows from 1952 to 2007,
                 across all African countries, the minimum life expectancy is
                 23.6 years; and the maximum is 76.4 years.
                 The mean is 48.9 years.
-                Those three numbers alone do not tell you much about the shape
-                of the variation.
+                Those three numbers show some variability, but do not tell you
+                much about the shape of the variation.
                 That is what the rest of this section is for.
             </p>
 
@@ -417,8 +478,8 @@
                 The simplest measure of variability is the <term>range</term>:
                 the difference between the largest and smallest values in the
                 dataset.
-                In R, we can compute the range of life expectancy for each year
-                across all African countries like this:
+                In R, we can compute the range of life expectancy across all
+                African countries for each year:
             </p>
 
             <program language="r">
@@ -429,20 +490,20 @@
                   max_lifeExp = max(lifeExp),
                   min_lifeExp = min(lifeExp))
       #&gt; # A tibble: 12 x 4
-      #&gt;     year range max_lifeExp min_lifeExp
-      #&gt;    &lt;int&gt; &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
-      #&gt;  1  1952  21.4        52.7        31.3
-      #&gt;  2  1957  22.1        58.1        36.0
-      #&gt;  3  1962  26.9        60.2        33.3
-      #&gt;  4  1967  24.2        64.4        40.2
-      #&gt;  5  1972  26.1        65.0        38.8
-      #&gt;  6  1977  28.9        67.1        38.2
-      #&gt;  7  1982  33.4        70.0        36.7
-      #&gt;  8  1987  36.5        71.9        35.4
-      #&gt;  9  1992  52.5        73.6        23.6
-      #&gt; 10  1997  40.9        74.8        36.1
-      #&gt; 11  2002  43.1        75.7        39.2
-      #&gt; 12  2007  40.0        76.4        39.6
+    year range max_lifeExp min_lifeExp
+   &lt;int&gt; &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+ 1  1952  22.7        52.7        30  
+ 2  1957  26.5        58.1        31.6
+ 3  1962  27.5        60.2        32.8
+ 4  1967  27.4        61.6        34.1
+ 5  1972  28.9        64.3        35.4
+ 6  1977  30.3        67.1        36.8
+ 7  1982  31.4        69.9        38.4
+ 8  1987  32.0        71.9        39.9
+ 9  1992  50.0        73.6        23.6
+10  1997  38.7        74.8        36.1
+11  2002  36.6        75.7        39.2
+12  2007  36.8        76.4        39.6
                 </code>
             </program>
 
@@ -450,6 +511,8 @@
                 The range is straightforward to understand and to compute.
                 In 1952, the gap between the country with the highest life
                 expectancy and the lowest was 21.4 years.
+                The range is generally increasing every five years as we go from
+                1952 to 2007.
                 By 2007 that had grown to 40 years — meaning one African country
                 had a life expectancy more than 40 years longer than another.
                 We can find out which countries sit at each extreme:
@@ -471,19 +534,29 @@ africa %&gt;%
 #&gt; # A tibble: 2 x 6
 #&gt;    year max_country max_lifeExp min_country min_lifeExp range
 #&gt;   &lt;int&gt; &lt;chr&gt;             &lt;dbl&gt; &lt;chr&gt;             &lt;dbl&gt; &lt;dbl&gt;
-#&gt; 1  1952 Reunion            52.7 Sierra Leone       30.3  21.4
-#&gt; 2  2007 Reunion            76.4 Swaziland          39.6  40.0
+#&gt; 1  1952 Reunion            52.7 Gambia             30.0  22.7
+#&gt; 2  2007 Reunion            76.4 Swaziland          39.6  36.8
                 </code>
             </program>
+
+            <p>
+                In 2007, life expectancy in Eswatini (then called Swaziland) was
+                39.6 years, while in Réunion it was 76.4 years.
+                That is a gap of almost 37 years, with people in Réunion living
+                nearly twice as long on average.
+                To put into perspective, In 2007, a person born in Réunion could
+                expect to live 76.4 years.
+                In Eswatini (then Swaziland), it was just 39.6.
+            </p>
         </subsection>
 
         <subsection xml:id="ss-boxplot-variability">
-            <title>Visualising Variability: the Boxplot</title>
+            <title>Visualising Variability: A Boxplot</title>
 
             <p>
                 The range captures the full extent of the data, but it is built
                 from the only two values and tells you nothing about what
-                happens in between.
+                happens in between them.
                 While useful, it does not show the shape of the distribution:
                 are most countries clustered near the middle, or spread evenly
                 across the full range?
@@ -500,15 +573,18 @@ africa %&gt;%
                 minimum, first quartile (Q1), median, third quartile (Q3), and
                 maximum as a box with whiskers.
                 It additionally marks any outliers as individual points.
-                Here is the boxplot for life expectancy across African countries
-                in 2007:
+                Here is the boxplot for life expectancy across all African
+                countries in 2007:
             </p>
 
             <figure xml:id="fig-ch9-africa-boxplot-2007">
                 <caption>
                     Life expectancy across African countries in 2007, shown as a
                     boxplot with the five-number summary labelled.
-                    The dot below the lower whisker is Swaziland (now Eswatini).
+                    The dots above the upper whisker is Reunion.
+                    (Note that this is only occurring here as we set a stricter
+                    definition for an outlier, to illustrate an outlier in the
+                    data)
                 </caption>
 
                 <image source="images/ch9_africa_boxplot_2007.png" width="70%">
@@ -516,12 +592,11 @@ africa %&gt;%
                         <p>
                             A vertical boxplot showing life expectancy in years
                             on the y-axis.
-                            The box spans from Q1 (57.2 years) to Q3 (76.4
-                            years), with a median line at 71.9 years.
+                            The box spans from Q1 (47.8 years) to Q3 (59.4
+                            years), with a median line at 76.4 years.
                             Labelled arrows point to each of the five summary
                             statistics.
-                            A single outlier point appears below the lower
-                            whisker, labelled as the minimum value (39.6 years).
+                            The minimum is at 39.6 years.
                         </p>
                     </description>
                 </image>
@@ -530,22 +605,49 @@ africa %&gt;%
             <p>
                 The boxplot shows the range from 39.6 to 76.4 years, but it also
                 gives much more.
-                The box itself spans from Q1 (57.2 years) to Q3 (76.4 years),
+                The box itself spans from Q1 (47.8 years) to Q3 (59.4 years),
                 meaning half of all African countries had life expectancies
                 within that range in 2007.
-                The median sits at 71.9 years.
+                The median sits at 52.9 years.
                 The whiskers extend to the most extreme values that are not
                 considered outliers.
-                And the single dot below the lower whisker is a country whose
-                life expectancy is so far below the rest of the distribution
-                that it registers as an outlier.
+                And there is one dot above the upper whisker, which show a
+                country whose life expectancy is so far above the rest of the
+                distribution that they register as outliers.
                 An outlier means simply that the value is unusually far from the
                 bulk of the data, given the spread of the rest of the
                 distribution.
             </p>
 
             <p>
-                We can verify which country is this outlier:
+                We can verify which countries are towards the top of the plot,
+                including our outlier:
+            </p>
+
+            <program language="r">
+                <code>
+        africa_2007 &lt;- gapminder %&gt;% filter(continent == "Africa", 
+                                             year == 2007)
+
+        africa_2007 %&gt;%
+          arrange(desc(lifeExp)) %&gt;%
+          select(country, lifeExp) %&gt;%
+          head(10)
+        #&gt; # A tibble: 5 x 2
+        #&gt;   country                  lifeExp
+        #&gt;   &lt;fct&gt;                      &lt;dbl&gt;
+        #&gt; 1 Reunion                  76.4
+        #&gt; 2 Libya                    74.0
+        #&gt; 3 Tunisia                  73.9
+        #&gt; 4 Mauritius                72.8
+        #&gt; 5 Algeria                  72.3
+        #&gt; 6 Egypt                    71.3
+        #&gt; 7 Morocco                  71.2
+                </code>
+            </program>
+
+            <p>
+                We can verify which countries are at the bottom too:
             </p>
 
             <program language="r">
@@ -604,20 +706,28 @@ africa %&gt;%
 
                 <p>
                     Eswatini's life expectancy of 39.6 years in 2007 is an
-                    outlier in the same sense.
+                    outlier, but a genuine one.
                     Eswatini was one of the countries most severely affected by
                     the HIV/AIDS epidemic.
                     By 2007, adult HIV prevalence was estimated at over 25%,
                     among the highest in the world, and life expectancy had
                     fallen dramatically from what it had been two decades
-                    earlier.
+                    earlier.<fn> Since 2007, the situation in Eswatini has changed a great deal.
+                        As antiretroviral treatment expanded, life expectancy recovered
+                        to around 57 years by 2022.
+                        In 2020, Eswatini reported becoming the first country in Africa to
+                        reach the UN's 95-95-95 targets: 95% of people living with HIV
+                        knowing their status, 95% of those diagnosed receiving treatment,
+                        and 95% of those on treatment having a suppressed viral load.
+                    </fn>
                     The value is shocking precisely because it is true.
                     Removing it would make the distribution look tidier and the
                     standard deviation smaller, but it would erase the HIV/AIDS
                     epidemic in Eswatini from the data entirely.
                     The right response to an outlier is always to ask why it is
-                    there: It can be an error, but it can also be an important
-                    part of the story.
+                    there.
+                    It can be an error, but it can also be an important part of
+                    the story.
                 </p>
             </insight>
 
@@ -741,6 +851,78 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
                 By 2007, Kenya is back above the continental median, but not
                 recovered to its 1992 levels.
             </p>
+
+            <insight xml:id="insight-beyond-2007">
+                <title>Going beyond 2007</title>
+
+                <p>
+                    It is a shame that the Gapminder data ends in 2007, as 20
+                    years has passed since then!
+                    To see what happened next, we can use more recent data from
+                    the World Bank's World Development Indicators (WDI).
+                    This is slightly different data from Gapminder, so the
+                    numbers will not match exactly.
+                    For example, GDP per capita here is measured in constant
+                    2015 US dollars.
+                </p>
+
+                <p>
+                    We have put this data in the <c>statsdata</c> package as
+                    <c>gapminder_modern</c>, with the same columns as Gapminder:
+                    <c>country</c>, <c>year</c>, <c>lifeExp</c>,
+                    <c>gdpPercap</c> and <c>pop</c>.
+                    Here is Kenya's life expectancy from 1960 to 2024:
+                </p>
+
+                <program language="r">
+                    <code>
+library(statsdata)
+
+kenya_modern &lt;- gapminder_modern %&gt;%
+  filter(country == "Kenya")
+
+ggplot(kenya_modern, aes(x = year, y = lifeExp)) +
+  geom_point()
+                    </code>
+                </program>
+
+                <figure xml:id="fig-kenya-life-expectancy-modern">
+                    <caption>
+                        Life expectancy at birth in Kenya, 1960 to 2024.
+                        Source: World Bank World Development Indicators.
+                    </caption>
+
+                    <image source="images/ch9_kenya_modern.png" width="60%">
+                        <description>
+                            <p>
+                                A scatterplot of Kenya's life expectancy at
+                                birth, with year on the horizontal axis from
+                                1960 to 2024 and years of life expectancy on the
+                                vertical axis from 48 to 64.
+                                Life expectancy rises steadily from about 48
+                                years in 1960 to a peak of about 61 years in the
+                                mid-1980s.
+                                It then falls to a low of about 55 years in the
+                                late 1990s, before climbing again to nearly 63
+                                years by 2019.
+                                There is a small dip to about 61 years in 2020
+                                and 2021, after which it rises to about 64 years
+                                in 2024.
+                            </p>
+                        </description>
+                    </image>
+                </figure>
+
+                <p>
+                    Now we can see Kenya recover.
+                    The fall from the 1980s into the late 1990s is the period of
+                    the HIV/AIDS epidemic, and the climb afterwards follows the
+                    expansion of treatment.
+                    The small dip in 2020 and 2021 coincides with COVID-19.
+                    A single number such as the average life expectancy over
+                    this whole period would hide all of this.
+                </p>
+            </insight>
         </subsection>
 
         <subsection xml:id="ss-iqr">
@@ -1442,6 +1624,7 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
             </p>
         </subsection>
     </section>
+
     <exercises xml:id="exercises-ch9">
         <title>Exercises</title>
 
