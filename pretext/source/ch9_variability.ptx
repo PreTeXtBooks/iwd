@@ -871,43 +871,54 @@ ggplot(africa, aes(y = lifeExp, x = factor(year))) +
                     <c>gapminder_modern</c>, with the same columns as Gapminder:
                     <c>country</c>, <c>year</c>, <c>lifeExp</c>,
                     <c>gdpPercap</c> and <c>pop</c>.
-                    Here is Kenya's life expectancy from 1960 to 2024:
+                    Here is Kenya's life expectancy from 1960 to 2024 in black,
+                    with the Gapminder values on top in red:
                 </p>
 
                 <program language="r">
                     <code>
 library(statsdata)
+data(gapminder_modern)
 
-kenya_modern &lt;- gapminder_modern %&gt;%
-  filter(country == "Kenya")
+gapminder_kenya &lt;- gapminder %&gt;%
+  dplyr::filter(country == "Kenya")
 
-ggplot(kenya_modern, aes(x = year, y = lifeExp)) +
-  geom_point()
+gapminder_modern_kenya &lt;- gapminder_modern %&gt;%
+  dplyr::filter(country == "Kenya")
+
+ggplot(gapminder_modern_kenya, aes(x = year, y = lifeExp)) +
+  geom_point() +
+  labs(x = "Year") +
+  theme_minimal() +
+  geom_point(data = gapminder_kenya,
+             aes(x = year, y = lifeExp), colour = "red")
                     </code>
                 </program>
 
                 <figure xml:id="fig-kenya-life-expectancy-modern">
                     <caption>
-                        Life expectancy at birth in Kenya, 1960 to 2024.
-                        Source: World Bank World Development Indicators.
+                        Life expectancy at birth in Kenya.
+                        Black points are from the World Bank (1960 to 2024) and
+                        red points are from Gapminder (1952 to 2007).
                     </caption>
 
-                    <image source="images/ch9_kenya_modern.png" width="60%">
+                    <image source="images/ch9_kenya_modern.png" width="100%">
                         <description>
                             <p>
                                 A scatterplot of Kenya's life expectancy at
                                 birth, with year on the horizontal axis from
-                                1960 to 2024 and years of life expectancy on the
-                                vertical axis from 48 to 64.
-                                Life expectancy rises steadily from about 48
-                                years in 1960 to a peak of about 61 years in the
-                                mid-1980s.
-                                It then falls to a low of about 55 years in the
-                                late 1990s, before climbing again to nearly 63
-                                years by 2019.
-                                There is a small dip to about 61 years in 2020
-                                and 2021, after which it rises to about 64 years
-                                in 2024.
+                                1950 to 2024 and years on the vertical axis from
+                                about 42 to 64.
+                                Black points, one per year from 1960, rise from
+                                about 48 years to a peak of about 61 in the
+                                mid-1980s, fall to about 55 in the late 1990s,
+                                and then climb to nearly 64 by 2024, with a
+                                small dip in 2020 and 2021.
+                                Red points, one every five years from 1952 to
+                                2007, follow a similar shape but mostly sit
+                                below the black points.
+                                The gap is small in the 1990s and widens to
+                                about five years in 2002 and 2007.
                             </p>
                         </description>
                     </image>
@@ -919,8 +930,25 @@ ggplot(kenya_modern, aes(x = year, y = lifeExp)) +
                     the HIV/AIDS epidemic, and the climb afterwards follows the
                     expansion of treatment.
                     The small dip in 2020 and 2021 coincides with COVID-19.
-                    A single number such as the average life expectancy over
-                    this whole period would hide all of this.
+                </p>
+
+                <p>
+                    As a side note, look closely at the overlap between 1960 and
+                    2007.
+                    The two sources do not agree.
+                    They tell the same broad story, but the red points sit below
+                    the black points for most years, and by 2007 the difference
+                    is around five years.
+                    That is because the two datasets come from different
+                    sources, and so use different definitions, estimates and
+                    methods.
+                    This is why we cannot simply append the post-2007 data to
+                    the Gapminder data to get one long series, as we did with
+                    appending in <xref ref="ss-shapes-append"/>.
+                    The columns might have the same names and the same shape,
+                    but they do not measure exactly the same thing!
+                    Just a fun illustration of combining two data sets from
+                    different sources seen in <xref ref="ss-shapes-append"/>.
                 </p>
             </insight>
         </subsection>
