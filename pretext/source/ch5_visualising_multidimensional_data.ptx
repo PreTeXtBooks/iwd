@@ -1865,7 +1865,7 @@ ggplot(gapminder, aes(x = gdpPercap,
     </exercise>
   </exercises>
 
-  <exercise>
+  <exercises>
     <title>Working with the Grammar of Graphics</title>
 
     <introduction>
@@ -1897,11 +1897,35 @@ ggplot(gapminder, aes(x = gdpPercap,
       </p>
     </introduction>
 
-    <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Facets-I.xml" label="stk-visualisation-1"/>
-    <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Facets-II.xml" label="stk-visualisation-2"/>
-    <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Facets-III.xml" label="stk-visualisation-3"/>
-    <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Visualising Multidimensionality I.xml" label="stk-visualisation-4"/>
-    <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Visualising Multidimensionality II.xml" label="stk-visualisation-5"/>
-    <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Visualising Multidimensionality III.xml" label="stk-visualisation-6"/>
-  </exercise>
+    <exercise>
+      <title>Facets I</title>
+
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Facets-I.xml" label="stk-visualisation-1"/>
+    </exercise>
+    <exercise>
+      <title>Facets II</title>
+
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Facets-II.xml" label="stk-visualisation-2"/>
+    </exercise>
+    <exercise>
+      <title>Facets III</title>
+
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Facets-III.xml" label="stk-visualisation-3"/>
+    </exercise>
+    <exercise>
+      <title>Visualising Multidimensionality I</title>
+
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/3-1-1-Visualising-Multidimensionality-I.xml" label="stk-visualisation-4"/>
+    </exercise>
+    <exercise>
+      <title>Visualising Multidimensionality II</title>
+
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/3-1-2-Visualising-Multidimensionality-II.xml" label="stk-visualisation-5"/>
+    </exercise>
+    <exercise>
+      <title>Visualising Multidimensionality III</title>
+
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/3-1-3-Visualising-Multidimensionality-III.xml" label="stk-visualisation-6"/>
+    </exercise>
+  </exercises>
 </chapter>
