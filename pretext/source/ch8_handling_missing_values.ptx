@@ -656,6 +656,7 @@
 
     <exercise>
       <title>Finding Correlation</title>
+
       <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Correlation-with-Data-III-(Missing-Values).xml" label="stk-ch8-correlation-nas"/>
     </exercise>
   </section>
@@ -1188,6 +1189,111 @@ africa_indicators %&gt;%
           Missing values become more common in the later years of the dataset.
           This could partly reflect delays in collecting, processing, or
           publishing education statistics.
+        </p>
+
+        <p>
+          But this chart only tells us <em>how many</em> countries are missing
+          each year.
+          It doesn't tell us <em>which</em> ones.
+          Are 40% of countries missing in 2020 because lots of countries each
+          skipped a year here and there?
+          Or is it the same handful of countries, year after year?
+          Those are really quite different stories, and the bar chart can't tell
+          them apart.
+        </p>
+
+        <p>
+          To find out, we can draw one tile for every country-year, and colour
+          it by whether the enrolment figure is missing.
+          We sort the countries so that the ones with the most gaps are at the
+          top.
+        </p>
+
+        <program language="r">
+          <code>
+africa_indicators %&gt;%
+  mutate(
+    status = ifelse(is.na(primary_enrolment), "Missing", "Recorded")
+  ) %&gt;%
+  group_by(country) %&gt;%
+  mutate(n_missing = sum(status == "Missing")) %&gt;%
+  ungroup() %&gt;%
+  ggplot(aes(x = year, y = reorder(country, n_missing), fill = status)) +
+  geom_tile(colour = "white") +
+  scale_fill_manual(values = c(Missing = "#F37021", Recorded = "grey85")) +
+  labs(x = "Year", y = NULL, fill = NULL) +
+  theme_minimal() +
+  theme(legend.position = "top", panel.grid = element_blank())
+          </code>
+        </program>
+
+        <figure xml:id="fig-africa-enrolment-country-year">
+          <caption>
+            Which country-years are missing primary enrolment figures.
+            Countries with the most gaps are at the top.
+          </caption>
+
+          <image source="images/ch-missing-enrolment-country-year.png" width="90%">
+            <description>
+              <p>
+                A grid with one row per country and one column per year from
+                2010 to 2023.
+                Each tile is orange if the primary enrolment figure is missing
+                and grey if it is recorded.
+                Libya and Djibouti are missing every year, and Somalia,
+                Guinea-Bissau, South Sudan and Gabon are missing almost every
+                year.
+                A group of countries including Equatorial Guinea, the Central
+                African Republic, Zambia and Sudan have figures in the early
+                years but are missing most years after a certain point.
+                Further down, countries such as Kenya and Ghana have one or two
+                scattered gaps, and the bottom twelve countries, including
+                Algeria, Tanzania and South Africa, have no gaps at all.
+              </p>
+            </description>
+          </image>
+        </figure>
+
+        <p>
+          Look at <xref ref="fig-africa-enrolment-country-year"/>.
+          The missing values aren't spread evenly across Africa.
+          Twelve countries, including Algeria, Tanzania and South Africa, have
+          an enrolment figure for every single year.
+          At the other end, Libya and Djibouti have none, and Somalia,
+          Guinea-Bissau, South Sudan and Gabon are missing almost every year.
+        </p>
+
+        <p>
+          In between, we can see a few different shapes.
+          Some countries, like Kenya and Ghana, have the odd gap here and there.
+          Others, like Zambia, Sudan and Sao Tome and Principe, have figures for
+          the early years and then stop.
+          It's this second group that drives the rise we saw in
+          <xref ref="fig-africa-enrolment-year"/>.
+          In the later years, a particular set of countries has stopped
+          reporting.
+        </p>
+
+        <p>
+          This plot also changes how we should read the income-group table from
+          earlier.
+          It looked as though upper-middle-income countries were the worst for
+          missing enrolment figures, with 41% of their observations missing.
+          But there are only eight upper-middle-income countries in the data,
+          and 44 of those 46 missing values come from just four of them: Libya,
+          Gabon, Equatorial Guinea and Botswana.
+          Algeria and South Africa have no gaps at all.
+          So it isn't really that upper-middle-income countries in general don't
+          report enrolment.
+          It's that four particular countries mostly don't, and the group is
+          small enough for them to dominate the percentage.
+        </p>
+
+        <p>
+          This is why it's worth looking at missingness at the level of
+          individual observations, and not just in summary tables.
+          A percentage can hide whether we're dealing with a little bit missing
+          everywhere, or a lot missing in a few places.
         </p>
 
         <p>
@@ -2605,8 +2711,8 @@ kenya_accidents_2016 %&gt;%
       <task xml:id="ex-challenger-missing-d">
         <statement>
           <p>
-            No amount of extra data
-            collected the same way could fix Wald's problem.
+            No amount of extra data collected the same way could fix Wald's
+            problem.
             Is the Challenger case the same?
             What would it have taken to fix it?
           </p>

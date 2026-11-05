@@ -43,11 +43,11 @@
         for them — I had lost wifi in the chaos of the streets and could not
         track them through the app.
         The same thing happened with a second driver.
-        When I finally got wifi, the second driver agreed to pick me up from a
-        hotel across the road, but had to turn around first because of the
-        one-way street.
-        I waited twenty minutes on that pavement, surrounded by cars, and could
-        not find them anywhere.
+        When I finally got wifi, the second driver informed me they had gone up
+        the road, and agreed to pick me up from a hotel across the road, but had
+        to turn around first because of the one-way street.
+        I waited 30 minutes on that pavement, surrounded by cars, and could not
+        find them anywhere.
         It was completely gridlocked, and he was still turning around.
       </p>
 
@@ -59,11 +59,10 @@
         She sat me down, connected me to the wifi, and gave me a moment to
         think.
         Without that kindness I am not sure what I would have done.
-        I caught the flight.
       </p>
 
       <p>
-        The app said the third taxi was ten minutes away.
+        I found a driver and the app said the third taxi was ten minutes away.
         It took forty-five.
         The app had estimated ten minutes — and I had believed it, because I had
         no reason not to.
@@ -85,9 +84,9 @@
         In the previous chapter, we measured variability — how spread out values
         are, and how to summarise that spread in a single number.
         But measuring variability and understanding it are two different things.
-        My taxi journey was not just variable.
-        It was variable for reasons — some of which I should have known, some of
-        which I could not have known, and some of which were simply random.
+        My taxi journey was variable for reasons — some of which I should have
+        known, some of which I could not have known, and some of which were
+        simply random.
         This chapter is about separating those three things.
       </p>
 
@@ -99,7 +98,8 @@
         Every day, you would treat each journey as if it were identical to every
         other — and you would be wrong, repeatedly, in ways that cost you time,
         money, and patience.
-        You would book the same amount of time for a 7am ride and a 5pm ride.
+        You would schedule the same amount of time for a 7am ride and a 5pm
+        ride.
         You would be surprised, every single Friday afternoon, by the traffic.
         You would have no way to plan.
       </p>
@@ -107,8 +107,8 @@
       <p>
         Now imagine you know one thing: rush hour is slower.
         Suddenly you can plan.
-        You leave earlier on the days that matter, and book less time for the
-        quiet morning run.
+        You leave earlier on the days that matter, and schedule more time when
+        needed.
         You may still be wrong sometimes — you cannot know about the accident on
         Ngong Road, or the blocked junction in town — but you are systematically
         less wrong than before.
@@ -119,19 +119,28 @@
       </p>
 
       <p>
-        This is what statisticians mean by the three types of variability.
+        This is what I mean by the three types of variability.
+      </p>
+
+      <p>
         Some variation is <term>accounted-for variability</term>: you know what
         causes it, you have measured it, and you can use it to make better
         predictions.
         Time of day is exactly this — once you know it is 5pm on a Friday in
         Nairobi's CBD, you already know something useful about the journey
         ahead.
+      </p>
+
+      <p>
         Some variation is <term>unaccounted-for variability</term>: other things
         affect the journey — accidents, roadworks, the school term starting —
         but you have not measured them and cannot include them in your
         predictions.
         They are real causes of variation, making your predictions less reliable
         even when you have accounted for everything else you can.
+      </p>
+
+      <p>
         And some variation is just <term>natural variability</term>: the
         boda-boda rider caught a green light, or took a slightly different line
         through the roundabout.
@@ -173,7 +182,7 @@
         The pattern is immediately visible: weekday mornings and evenings are
         dark, weekend days are lighter, and the middle of the night is the
         lightest of all.
-        This is <term>accounted-for variability</term> made visible: the
+        Time is <term>accounted-for variability</term> made visible: the
         variation that follows a predictable pattern, week after week, and that
         anyone who knows Nairobi already carries in their head.
         If I had looked at this chart before ordering my Uber on that Friday
@@ -201,7 +210,7 @@
       <p>
         But even knowing the time of day and the location is not enough to
         predict any specific journey perfectly.
-        The fourth image illustrates why.
+        <xref ref="fig-tomtom-live-congestion"/> illustrates why.
         This is a screenshot I have just taken showing live congestion in
         Nairobi right now <fn>25th August 2026, 18:48 EAT</fn>, against the
         usual congestion level for the same time slot.
@@ -227,29 +236,6 @@
         And some of it is just <term>natural variability</term>: small
         fluctuations that remain even after everything predictable has been
         accounted for.
-        The chart shows all three types of variability at once: the repeating
-        pattern (accounted for), the unaccounted for spike above it (unaccounted
-        for), and the jagged noise around both lines (natural).
-      </p>
-
-      <p>
-        <xref ref="fig-tomtom-live-congestion"/> displays a live congestion
-        chart from TomTom.
-        This makes all three types of variability visible in a single image.
-        The dotted yellow line shows the usual congestion level for each time
-        slot — the pattern that repeats week after week, the part that is
-        accounted for.
-        The orange line shows what actually happened on a particular Monday and
-        Tuesday.
-        The gap between the two lines is the part the usual pattern could not
-        predict: something happened on those specific days that pushed
-        congestion above its normal level.
-        An accident, perhaps.
-        A road closure.
-        Something real, but unaccounted for.
-        And the jagged noise around both lines — the small moment-to-moment
-        fluctuations — is natural variability: irreducible randomness that would
-        remain even if we knew everything measurable.
       </p>
 
       <figure xml:id="fig-tomtom-live-congestion">
@@ -285,253 +271,12 @@
       </figure>
 
       <p>
-        Similar patterns have been documented in Kampala, Uganda, where analysis
-        of close to a million boda-boda trips found significant variation in
-        travel speed across different periods of the day.
-        The accounted-for variation — the time-of-day pattern — was strong and
-        consistent.
-        But within any given time slot, individual trips still varied,
-        reflecting the unaccounted-for and natural variability that no amount of
-        time-of-day information could eliminate (Saddier, 2025).
-      </p>
-
-      <p>
         <term>Sources:</term> TomTom Traffic Index 2025.
         Nairobi city profile.
         Available at:
         <url href="https://www.tomtom.com/traffic-index/city/nairobi/" visual="tomtom.com/traffic-index/city/nairobi"/>.
-        Saddier, S.
-        (2025).
-        <q>Are motorcycle taxis competing with 
-      collective public transport?</q>
-        <em>Research in Transportation Economics</em>, 111, 101562.
-        <url href="https://doi.org/10.1016/j.retrec.2025.101562"/>.
       </p>
     </subsection>
-  </section>
-
-  <section xml:id="sec-ch9-variability-illustration">
-    <title>Illustration of Variability</title>
-
-    <p>
-      Before measuring variability, it helps to see what the different types
-      actually look like.
-      We can build them up from scratch, starting with a dataset that has no
-      variability at all.
-    </p>
-
-    <paragraphs>
-      <title>No variability</title>
-
-      <p>
-        If <m>y</m> is always the same value regardless of anything else, there
-        is nothing to explain and nothing to measure.
-        Every point sits on a flat horizontal line.
-      </p>
-    </paragraphs>
-
-    <program language="r">
-      <code>
-      x &lt;- 1:10
-      y &lt;- rep(1, 10)
-      df0 &lt;- data.frame(x, y)
-
-      ggplot(df0, aes(x = x, y = y)) +
-        geom_point() +
-        geom_line() +
-        labs(title = "No variability: y is always 1",
-             y = "y", x = "x") +
-        theme_bw()
-      </code>
-    </program>
-
-    <figure xml:id="fig-ch9-no-variability">
-      <caption>
-        No variability.
-        <m>y = 1</m> regardless of <m>x</m>.
-        There is nothing to account for, and nothing to measure.
-      </caption>
-
-      <image source="images/ch9_no_variability.png" width="70%">
-        <description>
-          <p>
-            A scatter plot with x on the horizontal axis and y on the vertical
-            axis.
-            All ten points sit at exactly y = 1, connected by a flat horizontal
-            line.
-            There is no spread in the y values at all.
-          </p>
-        </description>
-      </image>
-    </figure>
-
-    <paragraphs>
-      <title>Accounted-for variability only</title>
-
-      <p>
-        Now let <m>y = x</m>.
-        There is variability in <m>y</m> — the values change — but all of it is
-        accounted for by <m>x</m>.
-        As <m>x</m> increases, <m>y</m> increases by exactly the same amount.
-        No randomness, no surprises.
-      </p>
-    </paragraphs>
-
-    <program language="r">
-      <code>
-      x &lt;- 1:10
-      y &lt;- x
-      df1 &lt;- data.frame(x, y)
-
-      ggplot(df1, aes(x = x, y = y)) +
-        geom_point() +
-        geom_line() +
-        labs(title = "Accounted for variability only: y = x",
-             y = "y", x = "x") +
-        theme_bw()
-      </code>
-    </program>
-
-    <figure xml:id="fig-ch9-accounted-for-only">
-      <caption>
-        Accounted for variability only.
-        <m>y = x</m>: all variability in <m>y</m> is accounted for by <m>x</m>.
-      </caption>
-
-      <image source="images/ch9_accounted for_only.png" width="70%">
-        <description>
-          <p>
-            A scatter plot where all ten points fall exactly on a straight
-            diagonal line from the lower left to the upper right.
-            There is no scatter around the line.
-          </p>
-        </description>
-      </image>
-    </figure>
-
-    <paragraphs>
-      <title>Accounted for and natural variability</title>
-
-      <p>
-        Now add some random noise.
-        The relationship between <m>x</m> and <m>y</m> is still there.
-        <m>y</m> still tends to increase with <m>x</m>, but the points no longer
-        fall exactly on the line.
-        Some additional randomness is pushing them above or below where the line
-        would predict.
-        This is natural variability: noise that remains even after <m>x</m> is
-        accounted for.
-      </p>
-    </paragraphs>
-
-    <program language="r">
-      <code>
-      x &lt;- 1:10
-      y &lt;- x + rnorm(10)
-      df2 &lt;- data.frame(x, y)
-
-      ggplot(df2, aes(x = x, y = y)) +
-        geom_point() +
-        geom_line(data = df1, aes(x = x, y = y),
-                  linetype = "dashed", colour = "grey50") +
-        labs(title = "Accounted for + natural variability: y = x + error",
-             subtitle = "Dashed line shows y = x",
-             y = "y", x = "x") +
-        theme_bw()
-      </code>
-    </program>
-
-    <figure xml:id="fig-ch9-accounted-for-natural">
-      <caption>
-        accounted for and natural variability.
-        <m>y = x + \varepsilon</m>: points scatter around the line <m>y = x</m>
-        (shown dashed) due to random noise.
-        The trend is still visible but no longer perfect.
-      </caption>
-
-      <image source="images/ch9_accounted for_natural.png" width="70%">
-        <description>
-          <p>
-            A scatter plot where the ten points are scattered around a dashed
-            diagonal line representing y = x.
-            Some points are above the line and some below, with no obvious
-            pattern to the deviations.
-            The overall upward trend is still visible.
-          </p>
-        </description>
-      </image>
-    </figure>
-
-    <paragraphs>
-      <title>Accounted for, unaccounted-for, and natural variability</title>
-
-      <p>
-        Finally, introduce a second variable <m>z</m> that also influences
-        <m>y</m>, but which we do not have in our dataset.
-        In the code below, <m>z</m> takes the value 1 for the first five
-        observations and 10 for the last five.
-        We can see the effect it has: the points no longer scatter evenly around
-        the line, but jump up noticeably in the second half.
-        But if we did not know <m>z</m> existed, we would have no way to explain
-        that jump.
-        It would simply look like unusually large random variation.
-      </p>
-    </paragraphs>
-
-    <program language="r">
-      <code>
-      x  &lt;- 1:10
-      z  &lt;- c(rep(1, 5), rep(10, 5))  # hidden variable
-      y  &lt;- x + z + rnorm(10)
-      df3 &lt;- data.frame(x, y)
-
-      ggplot(df3, aes(x = x, y = y)) +
-        geom_point() +
-        geom_smooth(method = "lm", se = FALSE,
-                    colour = "#44575E", linewidth = 0.8) +
-        labs(title = "Accounted for, unaccounted-for, and natural variability",
-             subtitle = "The line fits poorly because z is not in the data",
-             y = "y", x = "x") +
-        theme_bw()
-      </code>
-    </program>
-
-    <figure xml:id="fig-ch9-all-variability">
-      <caption>
-        Accounted for, unaccounted for, and natural variability.
-        <m>y = x + z + \varepsilon</m>, but <m>z</m> is not in the data.
-        The line of best fit through <m>x</m> alone fits poorly — the points in
-        the second half jump above the line because of <m>z</m>, which we cannot
-        see.
-      </caption>
-
-      <image source="images/ch9_all_variability.png" width="70%">
-        <description>
-          <p>
-            A scatter plot where the first five points scatter around the lower
-            part of a fitted line and the last five points scatter around a
-            noticeably higher position.
-            The fitted line is a poor summary of the data because it cannot
-            account for the jump caused by the hidden variable z.
-            The residuals are large and systematically patterned rather than
-            randomly scattered.
-          </p>
-        </description>
-      </image>
-    </figure>
-
-    <p>
-      This last scenario is the most realistic.
-      In the real world, we never have all the variables.
-      There will always be something we have not measured that is influencing
-      the outcome.
-      The question is how much of the variability we can account for with what
-      we do have — and how honest we are about what remains unaccounted for.
-      The Nairobi traffic data is exactly this: time of day accounts for some of
-      the variability in journey time, but unknown events (accidents, roadworks,
-      broken-down matatus) account for more, and pure randomness accounts for
-      the rest.
-    </p>
   </section>
 
   <section xml:id="sec-ch10-stack">
@@ -557,6 +302,222 @@
         variable accounts for, and the part that remains.
       </p>
 
+      <insight xml:id="sec-ch9-variability-illustration">
+        <title>Illustration of Variability</title>
+
+        <p>
+          Before measuring variability, it helps to see what the different types
+          actually look like.
+          We will use a simple example throughout: investigating the
+          relationship between a person's height and weight.
+          We will start with a dataset that has no variability at all, then
+          gradually introduce different sources of variability.
+          These are deliberately simplified examples to help us understand the
+          concepts.
+        </p>
+
+        <p>
+          <term>No variability</term> Imagine measuring the heights and weights
+          of ten people.
+          In our first example, everyone weighs exactly 65 kg, regardless of
+          their height.
+          Although the people have different heights, there is no variability in
+          their weights.
+          Every point sits on a horizontal line.
+          There is nothing to explain about why some people weigh more than
+          others, because nobody does.
+        </p>
+
+        <figure xml:id="fig-ch9-no-variability">
+          <caption>
+            No variability in weight: Everyone weighs exactly 65 kg, regardless
+            of their height.
+          </caption>
+
+          <image source="images/ch9_no_variability.png" width="70%">
+            <description>
+              <p>
+                A scatter plot of height against weight.
+                All ten points sit at exactly 65 kg, forming a horizontal line.
+                There is no variability in weight.
+              </p>
+            </description>
+          </image>
+        </figure>
+
+        <p>
+          <term>Accounted-for variability only</term> Now imagine that weight
+          depends entirely on height.
+          Taller people weigh more, and for every additional centimetre of
+          height, weight increases by exactly 0.8 kg.
+          There is now variability in weight: some people weigh more than
+          others.
+          But all of this variability can be accounted for by height.
+          If we know someone's height, we can predict their weight exactly.
+          There are no surprises and no additional variability around the
+          relationship.
+        </p>
+
+        <figure xml:id="fig-ch9-accounted-for-only">
+          <caption>
+            Accounted-for variability only.
+            Weight increases with height, and every point falls exactly on the
+            same line.
+            All variability in weight is accounted for by height.
+          </caption>
+
+          <image source="images/ch9_accounted for_only.png" width="70%">
+            <description>
+              <p>
+                A scatter plot of height against weight.
+                All ten points fall exactly on an upward-sloping straight line.
+                There is variability in weight, but no scatter around the
+                relationship with height.
+              </p>
+            </description>
+          </image>
+        </figure>
+
+        <p>
+          <term>Accounted-for and natural variability</term> Of course, in
+          reality, two people of the same height will not necessarily weigh the
+          same.
+          Let's introduce some random variation into our example.
+          Taller people still tend to weigh more, but their weights no longer
+          follow the relationship perfectly.
+          Some people weigh a little more than we would predict from their
+          height, and others weigh a little less.
+          Height still accounts for some of the variability in weight.
+          However, there is now additional variability around the relationship,
+          which we are representing here using random noise.
+          This variation that remains even after we have accounted for height is
+          the natural variability in our simplified example.
+        </p>
+
+        <figure xml:id="fig-ch9-accounted-for-natural">
+          <caption>
+            Accounted-for and natural variability.
+            Height accounts for the overall upward trend, while random variation
+            causes individual weights to fall above or below the expected
+            relationship (shown by the dashed line).
+          </caption>
+
+          <image source="images/ch9_accounted for_natural.png" width="70%">
+            <description>
+              <p>
+                A scatter plot of height against weight.
+                Ten points are scattered around an upward-sloping dashed line.
+                The relationship between height and weight remains visible, but
+                the points no longer fall exactly on the line.
+              </p>
+            </description>
+          </image>
+        </figure>
+
+        <p>
+          <term>Accounted-for, unaccounted-for, and natural variability</term>
+          Finally, imagine that we have another variable influencing weight:
+          sex.
+          In this simplified example, we will assume that males weigh, on
+          average, 10 kg more than females of the same height.
+          This is an illustrative assumption, rather than a rule about
+          individual people's weights!
+          However, suppose our dataset only contains height and weight.
+          We have not recorded sex.
+          If we analyse weight using height alone, we can still see the general
+          relationship: taller people tend to weigh more.
+          But we cannot explain all the differences between people's weights.
+          Some of those differences are systematic: they are associated with
+          sex, a variable we have not included in our analysis.
+          Other differences are the random variation we introduced earlier.
+          This gives us our three sources of variability: variability accounted
+          for by height, variability associated with sex that we have not
+          accounted for, and natural variability around these relationships.
+        </p>
+
+        <figure xml:id="fig-ch9-all-variability">
+          <caption>
+            Accounted-for, unaccounted-for, and natural variability.
+            Height explains some of the differences in weight, but the points
+            also vary around the fitted line.
+            Some of this remaining variability is associated with sex, which was
+            not recorded in the dataset, while some comes from random variation.
+          </caption>
+
+          <image source="images/ch9_all_variability.png" width="70%">
+            <description>
+              <p>
+                A scatter plot of height against weight with an upward-sloping
+                fitted regression line.
+                The points are more widely scattered around the line than in the
+                previous example.
+                The analyst cannot distinguish the effect of sex from random
+                variation using the available variables alone.
+              </p>
+            </description>
+          </image>
+        </figure>
+
+        <p>
+          <term>What happens when we include sex?</term> What if we now discover
+          that sex was recorded after all?
+          We can plot exactly the same data again, but this time colour the
+          points according to sex.
+          We can also fit separate lines for males and females.
+          Notice that the points now form two groups, with males tending to have
+          higher weights than females of the same height.
+          The separate lines help us see a relationship that was hidden in the
+          previous graph.
+          Some of the variability that was previously unaccounted for can now be
+          accounted for by sex.
+          However, the points still do not fall perfectly on their respective
+          lines.
+          There is still some variability remaining.
+        </p>
+
+        <figure xml:id="fig-ch9-sex-revealed">
+          <caption>
+            The same height and weight data as in
+            <xref ref="fig-ch9-all-variability"/>, now coloured by sex.
+            Separate fitted lines reveal that males tend to weigh more than
+            females of the same height in this simulated dataset.
+            Accounting for sex explains some of the variability that was
+            previously unaccounted for.
+          </caption>
+
+          <image source="images/ch9_sex_revealed.png" width="70%">
+            <description>
+              <p>
+                A scatter plot of height against weight, using the same ten
+                observations as the previous graph.
+                Points are coloured by sex, with separate upward-sloping fitted
+                lines for males and females.
+                The male line is generally above the female line.
+                Some scatter remains around both lines.
+              </p>
+            </description>
+          </image>
+        </figure>
+
+        <p>
+          This final example illustrates an important distinction.
+          Just because we cannot explain some variability does not mean it is
+          random.
+          When we only had height and weight, the differences around the fitted
+          line appeared unexplained.
+          But once we included sex, we could account for some of those
+          differences.
+          In real datasets, we rarely have every variable that might influence
+          an outcome.
+          Other factors, such as age, diet, or physical activity, might also
+          help explain differences in weight.
+          The aim is not necessarily to explain every difference between
+          observations, but to understand how much variability we can account
+          for with the information available, and recognise what remains
+          unexplained.
+        </p>
+      </insight>
+
       <p>
         We use the same Gapminder data from <xref ref="sec-gapminder"/>.
         Load it if you have not already:
@@ -564,6 +525,7 @@
 
       <program language="r">
         <code>
+          # load in the data
         library(gapminder)
         library(ggplot2)
         library(dplyr)
@@ -578,53 +540,14 @@
       <title>A numerical variable: GDP per capita</title>
 
       <p>
-        We start with a simple question: how much of the variation in life
-        expectancy across countries and years can be accounted for by GDP per
-        capita?
+        We start with a question: how much of the variation in life expectancy
+        across countries and years can be accounted for by GDP per capita?
         Wealthier countries tend to have longer life expectancies, but how much
         of the total spread does that relationship actually account for?
       </p>
 
-      <program language="r">
-        <code>
-        mod &lt;- lm(lifeExp ~ gdpPercap, data = gapminder)
-        anova(mod)
-        #&gt; Analysis of Variance Table
-        #&gt;
-        #&gt; Response: lifeExp
-        #&gt;            Df  Sum Sq Mean Sq F value    Pr(&gt;F)
-        #&gt; gdpPercap   1   96813   96813  879.58 &lt;2.2e-16 ***
-        #&gt; Residuals 1702  187335     110
-        #&gt; Total     1703  284148     167
-        </code>
-      </program>
-
       <p>
-        The ANOVA table partitions the total variability in life expectancy into
-        two rows.
-        The first row is the variability that GDP per capita accounts for:
-        96,813 units of squared variation.
-        The second row is the variability left over after accounting for GDP:
-        187,335 units.
-        The total is 96,813 + 187,335 = 284,148.
-      </p>
-
-      <p>
-        The fraction accounted for is:
-      </p>
-
-      <program language="r">
-        <code>
-        96813 / (96813 + 187335)
-        #&gt; [1] 0.341
-        </code>
-      </program>
-
-      <p>
-        GDP per capita accounts for 34.1% of the variability in life expectancy.
-        That is already substantial: knowing a country's wealth tells you
-        something real about how long its people live.
-        But recall from <xref ref="sec-gapminder"/>, shown in
+        Recall from <xref ref="sec-gapminder"/>, shown in
         <xref ref="fig-ch10-gdp-raw"/> that the relationship between GDP and
         life expectancy is not linear, it curves, and a log scale makes it much
         cleaner.
@@ -660,6 +583,10 @@
         </image>
       </figure>
 
+      <p>
+        After log-transforming <c>gdpPercap</c>, we fit an ANOVA.
+      </p>
+
       <program language="r">
         <code>
         gapminder &lt;- gapminder %&gt;%
@@ -677,8 +604,13 @@
       </program>
 
       <p>
-        With the log transformation, GDP per capita now accounts for 185,335 out
-        of 284,149 total units of variability:
+        The ANOVA table partitions the total variability in life expectancy into
+        two rows.
+        The first row is the variability that GDP per capita accounts for:
+        185,335 units of squared variation.
+        The second row is the variability left over after accounting for GDP:
+        98,814 units.
+        The total is 185,335 + 98,814 = 284,149.
       </p>
 
       <program language="r">
@@ -689,6 +621,7 @@
       </program>
 
       <p>
+        That's 65.2%!
         65.2% of the variability in life expectancy is accounted for by log GDP
         per capita.
         That is a striking number: Simply knowing how wealthy a country is, on a
@@ -701,7 +634,8 @@
         The first shows the <term>total sum of squares</term>: the orange
         segments are the distances from each country's life expectancy to the
         overall mean (the horizontal line).
-        This is all the variability we are trying to account for.
+        This is all the variability we are trying to account for <ndash/> and
+        sums to that 284,149 in the ANOVA table.
       </p>
 
       <figure xml:id="fig-ch10-total-ss">
@@ -732,7 +666,23 @@
         data point.
         This is the variability that log GDP per capita accounts for.
         The reduction in spread achieved by using the line rather than the mean.
+        This sums to that 185,335 value.
       </p>
+
+      <insight>
+        <title>Linking to Chapter 9</title>
+
+        <p>
+          The reduction in square area from left to right in
+          <xref ref="fig-ch9-least-squares-comparison"/>, from the flat line to
+          the line of best fit — is exactly what the ANOVA table's accounted for
+          sum of squares measures.
+          The flat line at the mean is the world with nothing accounted for:
+          total SS only.
+          The line of best fit reduces that area by the accounted for SS,
+          leaving the residual SS in the smaller squares that remain.
+        </p>
+      </insight>
 
       <figure xml:id="fig-ch10-accounted-for-ss">
         <caption>
@@ -761,9 +711,25 @@
         leftover (residual) sums of squares.
         This gives the distances for each point from the line of best fit to the
         overall mean.
-        These are the residuals — the variability that log GDP per capita cannot
-        account for.
+        These are the residuals — the variability that log GDP per capita does
+        not account for.
+        This sum equals that 98,814 value from the ANOVA table.
       </p>
+
+      <insight>
+        <title>Linking to Chapter 9</title>
+
+        <p>
+          The squares shrinking as the line rotates in
+          <xref ref="fig-ch9-least-squares-animation"/> from horizontal to its
+          best position are the residuals — the variability the line cannot
+          account for.
+          A small total squared error at the end of the animation means the line
+          accounts for most of the variability; a large one means much of the
+          variability is still unaccounted for.
+          The ANOVA table puts a number on exactly that.
+        </p>
+      </insight>
 
       <program language="r">
         <code>
@@ -815,6 +781,52 @@
         The ANOVA table reports exactly these three values, and the fraction
         accounted for by the variable is 65.2%.
       </p>
+
+      <insight>
+        <title>What if we did not log-transform? (Advanced)</title>
+
+        <program language="r">
+          <code>
+        mod &lt;- lm(lifeExp ~ gdpPercap, data = gapminder)
+        anova(mod)
+        #&gt; Analysis of Variance Table
+        #&gt;
+        #&gt; Response: lifeExp
+        #&gt;            Df  Sum Sq Mean Sq F value    Pr(&gt;F)
+        #&gt; gdpPercap   1   96813   96813  879.58 &lt;2.2e-16 ***
+        #&gt; Residuals 1702  187335     110
+        #&gt; Total     1703  284148     167
+          </code>
+        </program>
+
+        <p>
+          The ANOVA table partitions the total variability in life expectancy
+          into two rows.
+          The first row is the variability that GDP per capita accounts for:
+          96,813 units of squared variation.
+          The second row is the variability left over after accounting for GDP:
+          187,335 units.
+          The total is 96,813 + 187,335 = 284,148.
+        </p>
+
+        <p>
+          The fraction accounted for is:
+        </p>
+
+        <program language="r">
+          <code>
+        96813 / (96813 + 187335)
+        #&gt; [1] 0.341
+          </code>
+        </program>
+
+        <p>
+          GDP per capita accounts for 34.1% of the variability in life
+          expectancy.
+          That is already substantial: knowing a country's wealth tells you
+          something real about how long its people live.
+        </p>
+      </insight>
     </subsection>
 
     <subsection xml:id="ss-anova-continent">
@@ -865,7 +877,7 @@
         <caption>
           Accounted for sum of squares for the continent model.
           Each orange segment shows the distance from a country-year's continent
-          mean (short horizontal line) to their life expectancy point.
+          mean (black horizontal line) to their life expectancy point.
         </caption>
 
         <image source="images/ch10_continent_accountedfor.png" width="90%">
@@ -1018,8 +1030,7 @@
         even if we had measured everything measurable.
         The ANOVA table cannot separate these two.
         That distinction requires domain knowledge; for example, knowing that
-        Rwanda in 1992 is not noise but history, from our data explorations and
-        visualisations.
+        Rwanda in 1992 is explained by the troubles in Rwanda.
       </p>
 
       <insight xml:id="insight-anova-residual">
@@ -1030,8 +1041,8 @@
           have accounted for what they can.
           It is tempting to call this noise and move on, but the residual
           contains two very different things: genuine random variation that no
-          variable would ever account for, and real variation caused by things that
-          were not measured or not included.
+          variable would ever account for, and real variation caused by things
+          that were not measured or not included.
           Rwanda's life expectancy in 1992 sits in the residual of any model
           that does not include a variable for genocide.
           The ANOVA table reports its squared distance from the fitted value as
@@ -1052,7 +1063,8 @@
         The same is true of year: life expectancy in Kenya changes as year
         increases, and year accounts for a large fraction of that variability.
         But the year ticking over from 1987 to 1992 did not cause life
-        expectancy to fall. Other factors, such as the HIV/AIDS epidemic, did.
+        expectancy to fall.
+        Other factors, such as the HIV/AIDS epidemic, did.
         Year is a proxy for all the things that changed over time (medicine,
         sanitation, nutrition, disease) none of which are in this dataset.
       </p>
@@ -1129,100 +1141,60 @@
           </cell>
         </row>
       </tabular>
+
+      <insight xml:id="insight-boxplot-variability-types">
+        <title>Two kinds of variability in one chart</title>
+
+        <p>
+          The chart in <xref ref="fig-ch9-africa-boxplot-years"/> shows two
+          distinct kinds of variability at the same time, and it is worth
+          separating them.
+        </p>
+
+        <p>
+          The first is
+          <term>variability across countries within a single 
+  year</term>,
+          shown by the height of each box.
+          In any given year, some African countries have life expectancies well
+          above the median and some well below.
+          What drives this?
+          Some of it could in principle be accounted for — if we had data on
+          each country's wealth, access to healthcare, sanitation
+          infrastructure, or disease burden, we could account for some of why
+          one country sits above the box and another sits below it.
+          The gapminder dataset gives us GDP per capita as a rough proxy for
+          some of those things, but not all.
+          Some drivers are harder to capture in data at all, and would hence be
+          unaccounted for; e.g., governance quality, geography, the strength of
+          public health systems, the legacy of particular conflicts.
+          And some of the remaining variation between countries is simply
+          natural: even two countries that look identical on every variable we
+          can measure will not have exactly the same life expectancy.
+        </p>
+
+        <p>
+          The second is <term>variability across years within Kenya</term>,
+          illustrated by the rise and fall of the teal line.
+          Kenya's life expectancy in 1952 was around 42 years; by 1987 it had
+          risen to nearly 60; by 2002 it had fallen back to around 51, before
+          recovering again.
+          Again, some of it could in principle be accounted for.
+          If we had data on improvements in medicine, sanitation, and nutrition
+          over time, or on the spread of the HIV/AIDS epidemic, we could account
+          for much of the rise and the subsequent dip.
+          But we do not have those variables here.
+          Some drivers are harder to capture in data at all; e.g., droughts,
+          political instability, or specific health policy decisions in
+          particular years.
+          These all affected Kenyan life expectancy but are rarely available as
+          measured variables.
+          And some is natural: even in a stable period, life expectancy
+          fluctuates slightly from year to year for reasons no dataset would
+          ever fully capture.
+        </p>
+      </insight>
     </subsection>
-  </section>
-
-  <section xml:id="sec-accounting-callbacks">
-    <title>Connecting Back to Chapter 9</title>
-
-    <p>
-      In <xref ref="ch-variability"/> we introduced several ways of measuring
-      variability without yet asking what causes it.
-      Now that we have the language of accounted-for, unaccounted-for, and
-      natural variability, it is worth revisiting three things from that chapter
-      with fresh eyes.
-    </p>
-
-    <p>
-      First, the boxplot of African life expectancy over time (
-      <xref ref="fig-ch9-africa-boxplot-years"/> ).
-      That chart showed two distinct kinds of variability simultaneously, and we
-      can now name them properly.
-    </p>
-
-    <insight xml:id="insight-boxplot-variability-types">
-      <title>Two kinds of variability in one chart</title>
-
-      <p>
-        The chart in <xref ref="fig-ch9-africa-boxplot-years"/> shows two
-        distinct kinds of variability at the same time, and it is worth
-        separating them.
-      </p>
-
-      <p>
-        The first is
-        <term>variability across countries within a single 
-  year</term>, shown
-        by the height of each box.
-        In any given year, some African countries have life expectancies well
-        above the median and some well below.
-        What drives this?
-        Some of it could in principle be accounted for — if we had data on each
-        country's wealth, access to healthcare, sanitation infrastructure, or
-        disease burden, we could account for some of why one country sits above
-        the box and another sits below it.
-        The gapminder dataset gives us GDP per capita as a rough proxy for some
-        of those things, but not all.
-        Some drivers are harder to capture in data at all, and would hence be
-        unaccounted for: governance quality, geography, the strength of public
-        health systems, the legacy of particular conflicts.
-        And some of the remaining variation between countries is simply natural:
-        even two countries that look identical on every variable we can measure
-        will not have exactly the same life expectancy.
-      </p>
-
-      <p>
-        The second is <term>variability across years within Kenya</term>,
-        illustrated by the rise and fall of the teal line.
-        Kenya's life expectancy in 1952 was around 42 years; by 1987 it had
-        risen to nearly 60; by 2002 it had fallen back to around 51, before
-        recovering again.
-        Again, some of it could in principle be accounted for.
-        If we had data on improvements in medicine, sanitation, and nutrition
-        over time, or on the spread of the HIV/AIDS epidemic, we could account
-        for much of the rise and the subsequent dip.
-        But we do not have those variables here.
-        Some drivers are harder to capture in data at all: droughts, political
-        instability, specific health policy decisions in particular years.
-        These all affected Kenyan life expectancy but are rarely available as
-        measured variables.
-        And some is natural: even in a stable period, life expectancy fluctuates
-        slightly from year to year for reasons no dataset would ever fully
-        capture.
-      </p>
-    </insight>
-
-    <p>
-      Second, the least squares comparison (
-      <xref ref="fig-ch9-least-squares-comparison"/> ).
-      The reduction in square area from left to right — from the flat line to
-      the line of best fit — is exactly what the ANOVA table's accounted for sum
-      of squares measures.
-      The flat line at the mean is the world with nothing accounted for: total
-      SS only.
-      The line of best fit reduces that area by the accounted for SS, leaving
-      the residual SS in the smaller squares that remain.
-    </p>
-
-    <p>
-      Third, the animation ( <xref ref="fig-ch9-least-squares-animation"/> ).
-      The squares shrinking as the line rotates from horizontal to its best
-      position are the residuals — the variability the line cannot account for.
-      A small total squared error at the end of the animation means the line
-      accounts for most of the variability; a large one means much of the
-      variability is still unaccounted for.
-      The ANOVA table puts a number on exactly that.
-    </p>
   </section>
 
   <exercises xml:id="exercises-ch10">
@@ -1246,14 +1218,6 @@
 
           <li>
             <p>
-              Two students take the same boda-boda route on the same Tuesday
-              morning and arrive at slightly different times, even though
-              nothing unusual happened on either journey.
-            </p>
-          </li>
-
-          <li>
-            <p>
               Life expectancy in several southern African countries dropped
               sharply in the 1990s due to the HIV/AIDS epidemic, but this
               variable was not included in the dataset being analysed.
@@ -1267,124 +1231,7 @@
               also affects yield.
             </p>
           </li>
-        </ol>
-      </statement>
-    </exercise>
-    <exercise xml:id="ex-accounting-rsquared">
-      <statement>
-        <p>
-          Using the <c>gapminder</c> dataset filtered to 2007:
-        </p>
 
-        <ol>
-          <li>
-            <p>
-              Fit a linear model predicting life expectancy from GDP per capita
-              for African countries only.
-              What is the R-squared?
-              How much variability does GDP account for?
-            </p>
-          </li>
-
-          <li>
-            <p>
-              Now fit the same model for Asian countries only.
-              Is the R-squared higher or lower than for Africa?
-              What might account for the difference?
-            </p>
-          </li>
-
-          <li>
-            <p>
-              Which five countries have the largest positive residuals in the
-              African model?
-              Which five have the largest negative residuals?
-              What do the negative residuals have in common?
-            </p>
-          </li>
-        </ol>
-      </statement>
-    </exercise>
-
-    <exercise xml:id="ex-accounting-continent">
-      <statement>
-        <p>
-          Using the full <c>gapminder</c> dataset for 2007, fit a model
-          predicting life expectancy from continent.
-        </p>
-
-        <ol>
-          <li>
-            <p>
-              Produce the ANOVA table.
-              How much of the total variability does continent account for?
-            </p>
-          </li>
-
-          <li>
-            <p>
-              Now add GDP per capita to the model alongside continent.
-              Does adding GDP account for additional variability beyond what
-              continent already accounts for?
-              How much?
-            </p>
-          </li>
-
-          <li>
-            <p>
-              In your own words, explain what the residual sum of squares
-              represents in each model.
-            </p>
-          </li>
-        </ol>
-      </statement>
-    </exercise>
-
-    <exercise xml:id="ex-accounting-kenya">
-      <statement>
-        <p>
-          Filter the gapminder data to Kenya only and fit a linear model
-          predicting life expectancy from year.
-        </p>
-
-        <ol>
-          <li>
-            <p>
-              What is the R-squared?
-              What does it tell you about how much of Kenya's life expectancy
-              variation is accounted for by the passage of time?
-            </p>
-          </li>
-
-          <li>
-            <p>
-              Plot the residuals over time.
-              Is there a pattern, or do they look random?
-              What does any pattern suggest about unaccounted-for variability?
-            </p>
-          </li>
-
-          <li>
-            <p>
-              Which year has the largest negative residual?
-              What historical event can explain it?
-              Is this unaccounted-for variability or natural variability — and
-              how do you know?
-            </p>
-          </li>
-        </ol>
-      </statement>
-    </exercise>
-
-    <exercise xml:id="ex-accounting-three-types">
-      <statement>
-        <p>
-          For each of the following situations, say which type of variability is
-          being described — accounted-for, unaccounted-for, or natural — and
-          explain your reasoning.
-        </p>
-
-        <ol>
           <li>
             <p>
               A model predicting crop yield from rainfall accounts for 65% of
@@ -1401,17 +1248,337 @@
               identifiable factor.
             </p>
           </li>
+        </ol>
+      </statement>
+
+      <solution>
+        <ol>
+          <li>
+            <p>
+              <term>Accounted-for.</term>
+              Day of the week and time of day are things we know and can
+              measure, and the pattern repeats week after week.
+              This is exactly the Friday evening traffic from the start of the
+              chapter: once you know it's Friday evening, you can plan for it.
+            </p>
+          </li>
 
           <li>
             <p>
-              A model predicting Nairobi commute times using time of day
-              accounts for 40% of the variation.
-              A specific Friday's commutes were longer than usual because of an
-              accident on Ngong Road that was not recorded anywhere.
+              <term>Unaccounted-for.</term>
+              The HIV/AIDS epidemic is a very real cause of the drop in life
+              expectancy, so this definitely isn't natural variability.
+              But because it isn't in the dataset, any analysis of that data
+              can't account for it.
+              It ends up in the residual, looking like noise when it really
+              isn't.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              <term>Unaccounted-for</term> (for soil quality).
+              Rainfall is measured, so the part of the yield that rainfall
+              accounts for is accounted-for variability.
+              Soil quality also affects yield, but it hasn't been measured, so
+              the variation it causes is unaccounted-for.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              <term>Accounted-for</term> (the 65%), with the remaining 35% a
+              mix.
+              Rainfall accounts for 65% of the variation in yield.
+              The other 35% isn't all natural, though.
+              Part of it comes from differences in soil quality, which is a
+              real, identifiable cause we just didn't measure, so that part is
+              unaccounted-for.
+              Whatever is left after that would be natural variability.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              <term>Natural.</term>
+              We've accounted for both rainfall and soil quality, and what
+              remains can't be attributed to anything we can identify.
+              Of course, we can never be completely sure that there isn't
+              another factor we haven't thought of!
+              If someone later found one (say, the timing of planting), part of
+              this <q>natural</q> variation would turn out to have been
+              unaccounted-for all along.
+            </p>
+          </li>
+        </ol>
+      </solution>
+    </exercise>
+
+    <exercise xml:id="ex-accounting-rsquared">
+      <statement>
+        <p>
+          Using the <c>gapminder</c> dataset filtered to 2007:
+        </p>
+
+        <ol>
+          <li>
+            <p>
+              Fit an ANOVA predicting life expectancy from GDP per capita for
+              African countries only.
+              What is the R-squared?
+              How much variability does GDP account for?
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Now fit the same ANOVA for Asian countries only.
+              Is the R-squared higher or lower than for Africa?
+              What might account for the difference?
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Which five countries have the largest positive residuals in the
+              African ANOVA?
+              Which five have the largest negative residuals?
+              What do the negative residuals have in common?
+            </p>
+          </li>
+
+          <li>
+            <p>
+              Produce the ANOVA table for all countries.
+              How much of the total variability does continent account for?
+            </p>
+          </li>
+
+          <li>
+            <p>
+              To the ANOVA for all countries, add GDP per capita to it alongside
+              continent.
+              Does adding GDP account for additional variability beyond what
+              continent already accounts for?
+              How much?
             </p>
           </li>
         </ol>
       </statement>
+
+      <solution>
+        <p>
+          First, we filter to 2007 and log-transform GDP per capita, just as we
+          did in <xref ref="ss-anova-gdp"/>.
+        </p>
+
+        <program language="r">
+          <code>
+        gapminder_2007 &lt;- gapminder %&gt;%
+          filter(year == 2007) %&gt;%
+          mutate(log_gdpPercap = log(gdpPercap))
+
+        africa_2007 &lt;- gapminder_2007 %&gt;% filter(continent == "Africa")
+        asia_2007 &lt;- gapminder_2007 %&gt;% filter(continent == "Asia")
+          </code>
+        </program>
+
+        <ol>
+          <li>
+            <program language="r">
+              <code>
+        mod_africa &lt;- lm(lifeExp ~ log_gdpPercap, data = africa_2007)
+        anova(mod_africa)
+        #&gt; Analysis of Variance Table
+        #&gt;
+        #&gt; Response: lifeExp
+        #&gt;               Df Sum Sq Mean Sq F value    Pr(&gt;F)
+        #&gt; log_gdpPercap  1  964.5  964.49  12.806 0.0007793 ***
+        #&gt; Residuals     50 3765.9   75.32
+
+        964.5 / (964.5 + 3765.9)
+        #&gt; [1] 0.204
+              </code>
+            </program>
+
+            <p>
+              The R-squared is 0.204, so log GDP per capita accounts for only
+              about 20% of the variability in life expectancy across African
+              countries in 2007.
+              That's much lower than the 65.2% we found for all countries and
+              all years.
+              Within Africa, knowing how wealthy a country is tells us
+              surprisingly little about how long its people live.
+            </p>
+          </li>
+
+          <li>
+            <program language="r">
+              <code>
+        mod_asia &lt;- lm(lifeExp ~ log_gdpPercap, data = asia_2007)
+        anova(mod_asia)
+        #&gt; Analysis of Variance Table
+        #&gt;
+        #&gt; Response: lifeExp
+        #&gt;               Df  Sum Sq Mean Sq F value    Pr(&gt;F)
+        #&gt; log_gdpPercap  1 1299.99 1299.99  55.244 2.263e-08 ***
+        #&gt; Residuals     31  729.48   23.53
+
+        1299.99 / (1299.99 + 729.48)
+        #&gt; [1] 0.641
+              </code>
+            </program>
+
+            <p>
+              For Asia the R-squared is much higher, at 0.641.
+              GDP accounts for around 64% of the variability, more than three
+              times as much as in Africa.
+            </p>
+
+            <p>
+              Why the difference?
+              In Africa, something other than wealth is pulling some countries
+              a long way from where their GDP would put them.
+              The biggest candidate in 2007 is the HIV/AIDS epidemic, which hit
+              some of the continent's wealthier countries, such as Botswana and
+              South Africa, particularly hard.
+              Conflict is another.
+              Neither of these is in our model, so they sit in the residual as
+              unaccounted-for variability.
+              We'll see this more clearly in the next part.
+              (Asia also has fewer countries in the data, 33 compared with 52,
+              so we should be a little careful comparing the two.)
+            </p>
+          </li>
+
+          <li>
+            <p>
+              We can add the residuals to the data and sort by them.
+            </p>
+
+            <program language="r">
+              <code>
+        africa_2007 %&gt;%
+          mutate(residual = resid(mod_africa)) %&gt;%
+          arrange(desc(residual)) %&gt;%
+          select(country, lifeExp, gdpPercap, residual) %&gt;%
+          head(5)
+        #&gt;   country lifeExp gdpPercap residual
+        #&gt; 1 Reunion  76.442 7670.1226 15.42127
+        #&gt; 2 Tunisia  73.923 7092.9230 13.23562
+        #&gt; 3 Morocco  71.164 3820.1752 13.11325
+        #&gt; 4 Comoros  65.152  986.1479 12.87152
+        #&gt; 5 Algeria  72.301 6223.3675 12.17088
+
+        africa_2007 %&gt;%
+          mutate(residual = resid(mod_africa)) %&gt;%
+          arrange(residual) %&gt;%
+          select(country, lifeExp, gdpPercap, residual) %&gt;%
+          head(5)
+        #&gt;        country lifeExp gdpPercap  residual
+        #&gt; 1    Swaziland  39.613  4513.481 -19.14834
+        #&gt; 2       Angola  42.731  4797.231 -16.29013
+        #&gt; 3 South Africa  49.339  9269.658 -12.48880
+        #&gt; 4     Botswana  50.728 12569.852 -12.39747
+        #&gt; 5      Lesotho  42.592  1569.331 -11.66807
+              </code>
+            </program>
+
+            <p>
+              The largest positive residuals are Reunion, Tunisia, Morocco,
+              Comoros and Algeria.
+              People there live longer than their GDP alone would predict.
+              Three of these are in North Africa, and Reunion is an overseas
+              department of France.
+            </p>
+
+            <p>
+              The largest negative residuals are Swaziland, Angola, South
+              Africa, Botswana and Lesotho.
+              What do they have in common?
+              They are all in southern Africa.
+              Swaziland, South Africa, Botswana and Lesotho had some of the
+              highest HIV prevalence rates in the world in 2007, and Botswana
+              and South Africa are among the wealthiest countries on the
+              continent.
+              So their life expectancy is far below what their GDP would
+              suggest.
+              Angola is a bit different: its civil war only ended in 2002.
+            </p>
+
+            <p>
+              This is the residual not being just noise, exactly as we saw in
+              <xref ref="insight-anova-residual"/>.
+              These five countries aren't randomly unlucky.
+              There are real causes behind their residuals that GDP can't
+              capture.
+            </p>
+          </li>
+
+          <li>
+            <program language="r">
+              <code>
+        mod_continent_2007 &lt;- lm(lifeExp ~ continent, data = gapminder_2007)
+        anova(mod_continent_2007)
+        #&gt; Analysis of Variance Table
+        #&gt;
+        #&gt; Response: lifeExp
+        #&gt;            Df  Sum Sq Mean Sq F value    Pr(&gt;F)
+        #&gt; continent   4 13060.7  3265.2  59.714 &lt; 2.2e-16 ***
+        #&gt; Residuals 137  7491.2    54.7
+
+        13060.7 / (13060.7 + 7491.2)
+        #&gt; [1] 0.635
+              </code>
+            </program>
+
+            <p>
+              Continent accounts for 63.5% of the variability in life
+              expectancy across all countries in 2007.
+            </p>
+          </li>
+
+          <li>
+            <program language="r">
+              <code>
+        mod_both_2007 &lt;- lm(lifeExp ~ continent + log_gdpPercap,
+                            data = gapminder_2007)
+        anova(mod_both_2007)
+        #&gt; Analysis of Variance Table
+        #&gt;
+        #&gt; Response: lifeExp
+        #&gt;                Df  Sum Sq Mean Sq F value    Pr(&gt;F)
+        #&gt; continent       4 13060.7  3265.2  92.880 &lt; 2.2e-16 ***
+        #&gt; log_gdpPercap   1  2710.1  2710.1  77.092 6.136e-15 ***
+        #&gt; Residuals     136  4781.0    35.2
+
+        2710.1 / (13060.7 + 2710.1 + 4781.0)
+        #&gt; [1] 0.132
+
+        (13060.7 + 2710.1) / (13060.7 + 2710.1 + 4781.0)
+        #&gt; [1] 0.767
+              </code>
+            </program>
+
+            <p>
+              Yes, it does.
+              Once continent is in the model, log GDP per capita accounts for
+              another 2,710 units of variability, which is 13.2% of the total.
+              Together, continent and GDP account for 76.7%.
+            </p>
+
+            <p>
+              So GDP still tells us something beyond which continent a country
+              is on.
+              But notice the order matters for how we read the table.
+              Because continent goes in first, the variability that continent
+              and GDP share is credited to continent.
+              The 13.2% is only the <em>extra</em> that GDP accounts for on top
+              of that, just as we saw in <xref ref="ss-anova-combined"/>.
+            </p>
+          </li>
+        </ol>
+      </solution>
     </exercise>
   </exercises>
 </chapter>

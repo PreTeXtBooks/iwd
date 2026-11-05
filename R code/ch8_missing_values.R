@@ -35,3 +35,21 @@ p3 <- africa_indicators %>%
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ggsave(file.path(out, "ch-missing-enrolment-year.png"), p3,
        width = 7, height = 4, dpi = 200)
+
+# Which country-years are missing primary enrolment? Most gaps at the top
+p4 <- africa_indicators %>%
+  mutate(status = ifelse(is.na(primary_enrolment), "Missing", "Recorded")) %>%
+  group_by(country) %>%
+  mutate(n_missing = sum(status == "Missing")) %>%
+  ungroup() %>%
+  ggplot(aes(x = year, y = reorder(country, n_missing), fill = status)) +
+  geom_tile(colour = "white") +
+  scale_fill_manual(values = c(Missing = orange, Recorded = "grey85")) +
+  labs(x = "Year", y = NULL, fill = NULL,
+       title = "Primary school enrolment: which country-years are missing?",
+       subtitle = "Countries with the most gaps at the top") +
+  theme_minimal() +
+  theme(legend.position = "top", panel.grid = element_blank(),
+        axis.text.y = element_text(size = 7))
+ggsave(file.path(out, "ch-missing-enrolment-country-year.png"), p4,
+       width = 8, height = 8, dpi = 200)

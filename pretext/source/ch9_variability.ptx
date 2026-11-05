@@ -1057,7 +1057,7 @@ ggplot(gapminder_modern_kenya, aes(x = year, y = lifeExp)) +
                     (horizontal line).
                     Variance is the average area of all squares.
                     Four countries are highlighted in orange: Botswana, Kenya,
-                    Libya, and Swaziland.
+                    Libya, and Swaziland (now Eswatini).
                 </caption>
 
                 <image source="images/ch9_variance_squares.png" width="100%">
@@ -1293,9 +1293,9 @@ ggplot(gapminder_modern_kenya, aes(x = year, y = lifeExp)) +
                     Neither measure is universally better.
                     The standard deviation captures the full spread of the data,
                     including the impact of extreme values, which matters if
-                    those extremes are real and important as they are here.
+                    those extremes are real and important (as they are here).
                     The IQR gives a more stable summary of where most of the
-                    data sits, unaffected by a single country in crisis.
+                    data sits.
                     The right choice depends on what you are trying to
                     communicate: if Eswatini's situation is the point, use the
                     standard deviation.
@@ -1364,8 +1364,8 @@ ggplot(gapminder_modern_kenya, aes(x = year, y = lifeExp)) +
                 Standard deviation captures all of this in a single number per
                 year, but the number only makes sense if you know what is
                 driving it.
-                That is why the squares matter: they show you not just the size
-                of the variance, but where it is coming from.
+                The squares show you both the size of the variance and where it
+                is coming from.
             </p>
         </subsection>
 
@@ -1373,18 +1373,23 @@ ggplot(gapminder_modern_kenya, aes(x = year, y = lifeExp)) +
             <title>Coefficient of Variation</title>
 
             <p>
-                The standard deviation is useful for comparing variability
-                within the same dataset.
-                But what if you want to compare variability across datasets with
+                The standard deviation is useful for comparing variability, but
+                what if you want to compare variability across datasets with
                 very different means?
-                A standard deviation of 9 years means something very different
-                if the average life expectancy is 38 years versus 54 years,
-                which is exactly the situation we have when comparing 1952 to
-                2007 in <xref ref="fig-ch9-variance-squares"/>.
+                Consider a standard deviation of 9 years.
+                If the average life expectancy is 38 years, then 9 years is
+                quite a large amount of variation relative to that average
+                (around 24%).
+                But if the average life expectancy is 54 years, the same
+                standard deviation of 9 years represents a smaller proportion of
+                the average (around 17%).
+                This is relevant when comparing life expectancy in 1952 and
+                2007.
                 The standard deviation nearly doubled over that period, but the
                 mean increased too.
-                Some of what looks like growing variability might simply reflect
-                the fact that the whole distribution shifted upward.
+                So, although life expectancy became more spread out in absolute
+                terms, we might also want to know whether it became more
+                variable relative to the average life expectancy.
             </p>
 
             <p>
@@ -1439,6 +1444,87 @@ ggplot(gapminder_modern_kenya, aes(x = year, y = lifeExp)) +
                 If close to zero, a small change in the mean produces a large
                 change in the CV, making it an unstable and misleading summary.
             </p>
+
+            <insight xml:id="insight-cv-sahel-rainfall">
+                <title>How reliable is the rain in the Sahel?</title>
+
+                <p>
+                    For farmers in Burkina Faso, Mali and Niger (including those
+                    in the CRFS West Africa community of practice), the question
+                    isn't just how much it rains in a typical year.
+                    It's how much they can count on that rain.
+                    A millet farmer can plan around a dry place, but a place
+                    where one year is wet and the next is a drought is much
+                    harder to farm.
+                </p>
+
+                <p>
+                    The <c>sahel_rainfall_grid</c> data in the <c>statsdata</c>
+                    package splits the three countries into a grid of cells
+                    (each about 11 km across).
+                    For each cell it gives the mean annual rainfall from 1991 to
+                    2020 (<c>rain_mean_mm</c>), the standard deviation of that
+                    rainfall from year to year (<c>rain_sd_mm</c>), and the
+                    coefficient of variation (<c>rain_cv_pct</c>).
+                    The data comes from CHIRPS, which blends satellite
+                    estimates with station records.
+                    We can group the cells by how much rain they usually get,
+                    and compare the two measures of variability:
+                </p>
+
+                <program language="r">
+                    <code>
+library(statsdata)
+data(sahel_rainfall_grid)
+
+sahel_rainfall_grid %&gt;%
+  dplyr::mutate(rain_band = cut(rain_mean_mm,
+                                breaks = c(0, 200, 400, 600, 800, 1000, Inf),
+                                labels = c("0-200", "200-400", "400-600",
+                                           "600-800", "800-1000", "1000+"))) %&gt;%
+  dplyr::group_by(rain_band) %&gt;%
+  dplyr::summarise(cells   = n(),
+                   mean_mm = round(mean(rain_mean_mm)),
+                   SD_mm   = round(mean(rain_sd_mm)),
+                   CV_pct  = round(mean(rain_cv_pct), 1))
+#&gt; # A tibble: 6 x 5
+#&gt;   rain_band cells mean_mm SD_mm CV_pct
+#&gt;   &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+#&gt; 1 0-200     13091      70    17   21.7
+#&gt; 2 200-400    3396     292    54   18.8
+#&gt; 3 400-600    2346     489    77   15.7
+#&gt; 4 600-800    1651     703    96   13.7
+#&gt; 5 800-1000   1415     895   111   12.5
+#&gt; 6 1000+      1098    1102   121   11
+                    </code>
+                </program>
+
+                <p>
+                    Look at the standard deviation first.
+                    It goes up as we move to wetter places, from 17 mm in the
+                    driest cells to 121 mm in the wettest.
+                    Taken on its own, that says the rain is most variable in the
+                    wet south.
+                    But is it really?
+                    A swing of 121 mm in a place that usually gets 1,100 mm is a
+                    fairly normal year.
+                    A swing of 54 mm in a place that usually gets 290 mm can be
+                    a much bigger deal for the crop.
+                </p>
+
+                <p>
+                    The CV tells the opposite (and more useful!) story.
+                    It falls from 21.7% in the driest cells to 11% in the
+                    wettest.
+                    Relative to what they normally get, the driest places have
+                    the least reliable rain.
+                    So the farmers with the least rain are also the ones who can
+                    count on it the least.
+                    This is exactly the situation the CV is built for: the means
+                    are very different, so the standard deviations on their own
+                    can't be compared fairly.
+                </p>
+            </insight>
         </subsection>
 
         <subsection xml:id="ss-least-squares">
@@ -1586,6 +1672,15 @@ ggplot(gapminder_modern_kenya, aes(x = year, y = lifeExp)) +
                     <cell>What it captures</cell>
                     <cell>Sensitive to outliers?</cell>
                     <cell>When to use</cell>
+                </row>
+
+                <row>
+                    <cell><term>Range</term></cell>
+                    <cell>Difference between the maximum and minimum</cell>
+                    <cell>Yes</cell>
+                    <cell>
+                        Quick indication of the overall spread of the data
+                    </cell>
                 </row>
 
                 <row>
