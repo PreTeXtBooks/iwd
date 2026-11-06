@@ -279,12 +279,14 @@
     </subsection>
   </section>
 
-  <section xml:id="sec-ch10-stack">
-    <title>Variability STACK Question</title>
+  <section xml:id="sec-ch9-stack">
+    <title>Practise: Accounting for Variability</title>
 
-    <p>
-      TODO: Insert STACK question on variability here.
-    </p>
+    <exercise xml:id="ex-ch10-ten-minutes-away">
+      <title>Accounting for Variability: Journey Time</title>
+
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Ch10-Ten-Minutes-Away-accounting-for-journey-time.xml" label="stk-ch10-ten-minutes-away"/>
+    </exercise>
   </section>
 
   <section xml:id="sec-anova-r">
@@ -1255,9 +1257,9 @@
         <ol>
           <li>
             <p>
-              <term>Accounted-for.</term>
-              Day of the week and time of day are things we know and can
-              measure, and the pattern repeats week after week.
+              <term>Accounted-for.</term> Day of the week and time of day are
+              things we know and can measure, and the pattern repeats week after
+              week.
               This is exactly the Friday evening traffic from the start of the
               chapter: once you know it's Friday evening, you can plan for it.
             </p>
@@ -1265,9 +1267,9 @@
 
           <li>
             <p>
-              <term>Unaccounted-for.</term>
-              The HIV/AIDS epidemic is a very real cause of the drop in life
-              expectancy, so this definitely isn't natural variability.
+              <term>Unaccounted-for.</term> The HIV/AIDS epidemic is a very real
+              cause of the drop in life expectancy, so this definitely isn't
+              natural variability.
               But because it isn't in the dataset, any analysis of that data
               can't account for it.
               It ends up in the residual, looking like noise when it really
@@ -1300,9 +1302,9 @@
 
           <li>
             <p>
-              <term>Natural.</term>
-              We've accounted for both rainfall and soil quality, and what
-              remains can't be attributed to anything we can identify.
+              <term>Natural.</term> We've accounted for both rainfall and soil
+              quality, and what remains can't be attributed to anything we can
+              identify.
               Of course, we can never be completely sure that there isn't
               another factor we haven't thought of!
               If someone later found one (say, the timing of planting), part of
@@ -1437,8 +1439,8 @@
 
             <p>
               Why the difference?
-              In Africa, something other than wealth is pulling some countries
-              a long way from where their GDP would put them.
+              In Africa, something other than wealth is pulling some countries a
+              long way from where their GDP would put them.
               The biggest candidate in 2007 is the HIV/AIDS epidemic, which hit
               some of the continent's wealthier countries, such as Botswana and
               South Africa, particularly hard.
@@ -1533,8 +1535,8 @@
             </program>
 
             <p>
-              Continent accounts for 63.5% of the variability in life
-              expectancy across all countries in 2007.
+              Continent accounts for 63.5% of the variability in life expectancy
+              across all countries in 2007.
             </p>
           </li>
 

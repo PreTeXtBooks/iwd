@@ -394,11 +394,25 @@
     </section>
 
     <section xml:id="sec-ch9-stack">
-        <title>Variability STACK Question</title>
+        <title>Practise: Observing Variability</title>
 
-        <p>
-            TODO: Insert STACK question on variability here.
-        </p>
+        <exercise xml:id="ex-ch9-observing-nairobi-commute-lab">
+            <title>Nairobi Commute Lab</title>
+
+            <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Observing-Variability---Nairobi-Commute-Lab.xml" label="stk-ch9-observing-nairobi-commute-lab"/>
+        </exercise>
+
+        <exercise xml:id="ex-ch9-observing-harvest-hunt">
+            <title>Harvest Hunt</title>
+
+            <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Observing-Variability---Harvest-Hunt.xml" label="stk-ch9-observing-harvest-hunt"/>
+        </exercise>
+
+        <exercise xml:id="ex-ch9-observing-bumper-crop-battleships">
+            <title>Bumper Crop Battleships</title>
+
+            <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Observing-Variability---Bumper-Crop-Battleships.xml" label="stk-ch9-observing-bumper-crop-battleships"/>
+        </exercise>
     </section>
 
     <section xml:id="sec-measuring-variability-r">
@@ -1466,8 +1480,8 @@ ggplot(gapminder_modern_kenya, aes(x = year, y = lifeExp)) +
                     2020 (<c>rain_mean_mm</c>), the standard deviation of that
                     rainfall from year to year (<c>rain_sd_mm</c>), and the
                     coefficient of variation (<c>rain_cv_pct</c>).
-                    The data comes from CHIRPS, which blends satellite
-                    estimates with station records.
+                    The data comes from CHIRPS, which blends satellite estimates
+                    with station records.
                     We can group the cells by how much rain they usually get,
                     and compare the two measures of variability:
                 </p>
