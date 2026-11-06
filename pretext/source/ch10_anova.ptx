@@ -1580,5 +1580,23 @@
         </ol>
       </solution>
     </exercise>
+
+    <exercise xml:id="ex-ch10-anova-tomato">
+      <title>Filling the ANOVA Table: Two-Year Tomato Data</title>
+
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Fill-ANOVA-table-for-2-year-tomato-data.xml" label="stk-ch10-anova-tomato"/>
+    </exercise>
+
+    <exercise xml:id="ex-ch10-anova-millet">
+      <title>Filling the ANOVA Table: Millet Experiment</title>
+
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Fill-ANOVA-table-for-a-millet-experiment.xml" label="stk-ch10-anova-millet"/>
+    </exercise>
+
+    <exercise xml:id="ex-ch10-natural-variability-hook">
+      <title>Natural Variability</title>
+
+      <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/10-Natural-Variability-Hook.xml" label="stk-ch10-natural-variability-hook"/>
+    </exercise>
   </exercises>
 </chapter>
