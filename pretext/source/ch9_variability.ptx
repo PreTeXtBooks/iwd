@@ -1909,11 +1909,5 @@ sahel_rainfall_grid %&gt;%
 
             <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Calculating-the-combined-mean-and-standard-deviation-for-two-datasets-presented-as-dotplots.xml" label="stk-ch9-combined-mean-sd"/>
         </exercise>
-
-        <exercise xml:id="ex-ch9-measuring-variability-11">
-            <title>Measuring Variability</title>
-
-            <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Measuring-Variability-(11).xml" label="stk-ch9-measuring-variability-11"/>
-        </exercise>
     </exercises>
 </chapter>
