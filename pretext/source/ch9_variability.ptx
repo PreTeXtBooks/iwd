@@ -1871,5 +1871,35 @@ sahel_rainfall_grid %&gt;%
                 </ol>
             </statement>
         </exercise>
+
+        <exercise xml:id="ex-ch9-estimate-sd-dotplot">
+            <title>Estimating Standard Deviation from a Dotplot</title>
+
+            <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Estimating-standard-deviation-of-data-presented-as-a-dotplot.xml" label="stk-ch9-estimate-sd"/>
+        </exercise>
+
+        <exercise xml:id="ex-ch9-differences-dotplots">
+            <title>Differences Between Two Dotplots</title>
+
+            <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Identify-differences-in-two-datasets-presented-as-dotplots.xml" label="stk-ch9-differences-dotplots"/>
+        </exercise>
+
+        <exercise xml:id="ex-ch9-stacked-dotplot-shape">
+            <title>Shape of a Stacked Dotplot</title>
+
+            <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Giving-a-conclusion-about-the-shape-of-the-distribution-of-a-stacked-dotplot.xml" label="stk-ch9-stacked-shape"/>
+        </exercise>
+
+        <exercise xml:id="ex-ch9-combined-mean-sd">
+            <title>Combined Mean and Standard Deviation</title>
+
+            <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Calculating-the-combined-mean-and-standard-deviation-for-two-datasets-presented-as-dotplots.xml" label="stk-ch9-combined-mean-sd"/>
+        </exercise>
+
+        <exercise xml:id="ex-ch9-measuring-variability-11">
+            <title>Measuring Variability</title>
+
+            <stack source="stack/Statistics-and-Probability-Open-Question-Bank/top/STACK-for-Statistics-and-Probability/Measuring-Variability-(11).xml" label="stk-ch9-measuring-variability-11"/>
+        </exercise>
     </exercises>
 </chapter>
